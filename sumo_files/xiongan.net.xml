@@ -1,0 +1,124 @@
+<net version="1.18">
+    <location netOffset="0.0,0.0" convBoundary="-200.00,-200.00,200.00,200.00" origBoundary="-200.00,-200.00,200.00,200.00" projParameter="!"/>
+    <edge id="N0" from="N0" to="J1" priority="0">
+        <lane id="N0_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="N1" from="J1" to="J2" priority="0">
+        <lane id="N1_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="N2" from="J2" to="J3" priority="0">
+        <lane id="N2_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="N3" from="J3" to="N3" priority="0">
+        <lane id="N3_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-N0" from="N0" to="J1" priority="0">
+        <lane id="-N0_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-N1" from="J1" to="J2" priority="0">
+        <lane id="-N1_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-N2" from="J2" to="J3" priority="0">
+        <lane id="-N2_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-N3" from="J3" to="N3" priority="0">
+        <lane id="-N3_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="E0" from="E0" to="J1" priority="0">
+        <lane id="E0_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="E1" from="J1" to="J4" priority="0">
+        <lane id="E1_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="E2" from="J4" to="J7" priority="0">
+        <lane id="E2_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="E3" from="J7" to="E3" priority="0">
+        <lane id="E3_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-E0" from="E0" to="J1" priority="0">
+        <lane id="-E0_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-E1" from="J1" to="J4" priority="0">
+        <lane id="-E1_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-E2" from="J4" to="J7" priority="0">
+        <lane id="-E2_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-E3" from="J7" to="E3" priority="0">
+        <lane id="-E3_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="S0" from="S0" to="J7" priority="0">
+        <lane id="S0_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="S1" from="J7" to="J6" priority="0">
+        <lane id="S1_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="S2" from="J6" to="J5" priority="0">
+        <lane id="S2_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="S3" from="J5" to="J4" priority="0">
+        <lane id="S3_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-S0" from="S0" to="J7" priority="0">
+        <lane id="-S0_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-S1" from="J7" to="J6" priority="0">
+        <lane id="-S1_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-S2" from="J6" to="J5" priority="0">
+        <lane id="-S2_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-S3" from="J5" to="J4" priority="0">
+        <lane id="-S3_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="W0" from="W0" to="J3" priority="0">
+        <lane id="W0_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="W1" from="J3" to="J2" priority="0">
+        <lane id="W1_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="W2" from="J2" to="J1" priority="0">
+        <lane id="W2_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="W3" from="J1" to="J4" priority="0">
+        <lane id="W3_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-W0" from="W0" to="J3" priority="0">
+        <lane id="-W0_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-W1" from="J3" to="J2" priority="0">
+        <lane id="-W1_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-W2" from="J2" to="J1" priority="0">
+        <lane id="-W2_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <edge id="-W3" from="J1" to="J4" priority="0">
+        <lane id="-W3_0" index="0" speed="13.89" length="100.00" width="3.50"/>
+    </edge>
+    <junction id="J1" type="traffic_light" x="0.0" y="0.0" incLanes="N0_0 E0_0 -S3_0 -W3_0" intLanes="" shape=""/>
+    <junction id="J2" type="traffic_light" x="100.0" y="0.0" incLanes="N1_0 W1_0 -S2_0 -E1_0" intLanes="" shape=""/>
+    <junction id="J3" type="traffic_light" x="200.0" y="0.0" incLanes="N2_0 W0_0 -S1_0 -E2_0" intLanes="" shape=""/>
+    <junction id="J4" type="traffic_light" x="0.0" y="-100.0" incLanes="S3_0 E1_0 -N0_0 -W2_0" intLanes="" shape=""/>
+    <junction id="J5" type="traffic_light" x="100.0" y="-100.0" incLanes="S2_0 E2_0 -N1_0 -W1_0" intLanes="" shape=""/>
+    <junction id="J6" type="traffic_light" x="200.0" y="-100.0" incLanes="S1_0 E3_0 -N2_0 -W0_0" intLanes="" shape=""/>
+    <junction id="J7" type="traffic_light" x="0.0" y="-200.0" incLanes="S0_0 -E0_0 -N3_0 W2_0" intLanes="" shape=""/>
+    <junction id="N0" type="priority" x="0.0" y="100.0" incLanes="" intLanes="N0_0" shape=""/>
+    <junction id="N3" type="priority" x="200.0" y="-100.0" incLanes="-N2_0" intLanes="" shape=""/>
+    <junction id="E0" type="priority" x="-100.0" y="0.0" incLanes="" intLanes="E0_0" shape=""/>
+    <junction id="E3" type="priority" x="300.0" y="-200.0" incLanes="-E3_0" intLanes="" shape=""/>
+    <junction id="S0" type="priority" x="0.0" y="-300.0" incLanes="" intLanes="S0_0" shape=""/>
+    <junction id="W0" type="priority" x="300.0" y="0.0" incLanes="" intLanes="W0_0" shape=""/>
+    <connection from="N0" to="E1" fromLane="0" toLane="0" via="" dir="l" state="M"/>
+    <connection from="N0" to="-W2" fromLane="0" toLane="0" via="" dir="s" state="M"/>
+    <connection from="N0" to="-S3" fromLane="0" toLane="0" via="" dir="r" state="M"/>
+    <connection from="E0" to="-S3" fromLane="0" toLane="0" via="" dir="l" state="M"/>
+    <connection from="E0" to="N1" fromLane="0" toLane="0" via="" dir="s" state="M"/>
+    <connection from="E0" to="-W3" fromLane="0" toLane="0" via="" dir="r" state="M"/>
+    <connection from="-S3" to="-W3" fromLane="0" toLane="0" via="" dir="l" state="M"/>
+    <connection from="-S3" to="-E1" fromLane="0" toLane="0" via="" dir="s" state="M"/>
+    <connection from="-S3" to="N0" fromLane="0" toLane="0" via="" dir="r" state="M"/>
+    <connection from="-W3" to="N0" fromLane="0" toLane="0" via="" dir="l" state="M"/>
+    <connection from="-W3" to="E1" fromLane="0" toLane="0" via="" dir="s" state="M"/>
+    <connection from="-W3" to="-S3" fromLane="0" toLane="0" via="" dir="r" state="M"/>
+</net>

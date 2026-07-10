@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  xiongan-edge:
+    build:
+      context: ../..
+      dockerfile: edge_deploy/docker/Dockerfile
+    container_name: xiongan-edge
+    ports:
+      - "8765:8765"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+    environment:
+      - SUMO_HOME=/usr/share/sumo
+    volumes:
+      - ../../models:/app/models
+      - ../../sumo_files:/app/sumo_files
+    command: python edge_deploy/inference.py --benchmark --n 1000
+
+  xiongan-api:
+    build:
+      context: ../..
+      dockerfile: edge_deploy/docker/Dockerfile
+    container_name: xiongan-api
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+    environment:
+      - SUMO_HOME=/usr/share/sumo
+    volumes:
+      - ../../models:/app/models
+      - ../../sumo_files:/app/sumo_files
+    command: python server/api_server.py
