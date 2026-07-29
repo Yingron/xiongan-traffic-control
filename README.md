@@ -45,6 +45,20 @@ echo 'export PATH="$SUMO_HOME/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
+### Windows team environment
+
+The C-team reproducible Windows environment is documented in
+[`docs/C_环境准备与验证.md`](docs/C_环境准备与验证.md). Before starting a local
+server or a TraCI-based script, run the following from the project root:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+. .\scripts\activate_c_environment.ps1
+```
+
+This sets `SUMO_HOME`, adds SUMO to `PATH`, and enables UTF-8 Python output for
+the current terminal.
+
 ### 3. 安装Python依赖
 
 ```bash
