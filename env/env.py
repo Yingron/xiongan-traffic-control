@@ -1,350 +1,312 @@
-"""
-交通信号控制强化学习环境（基于SUMO和gymnasium）
-
-MDP设计说明：
-1. 状态空间：每个进口道的排队长度 + 每个进口道的等待时间（一维向量）
-2. 动作空间：4个离散动作（选择4个相位之一）
-3. 奖励函数：所有车道的平均排队长度的负值
-
-相位定义（4相位）：
-- 动作0：南北直行（Phase 0）
-- 动作1：南北左转（Phase 1）
-- 动作2：东西直行（Phase 2）
-- 动作3：东西左转（Phase 3）
-"""
+"""Gym环境封装 - 将SUMO封装为兼容gymnasium的环境接口"""
+from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
+from typing import Any, Optional, Tuple
+
 import numpy as np
-import gymnasium as gym
-from gymnasium import spaces
 
-# 添加SUMO工具路径
-if 'SUMO_HOME' in os.environ:
-    tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
-    sys.path.append(tools)
-else:
-    sys.exit("请设置SUMO_HOME环境变量")
+from configs.constants import (
+    INTERSECTION_ORDER,
+    STATE_DIMENSION,
+    FEATURES_PER_INTERSECTION,
+    ACTION_COUNT_PER_INTERSECTION,
+    MIN_GREEN_SECONDS,
+    SUMO_FILES_DIR,
+)
+from env.global_state import get_global_state
+from env.reward_functions import compute_rewards
 
-import traci
 
+class TrafficSignalEnv:
+    """20路口信号控制环境
 
-class TrafficSignalEnv(gym.Env):
+    将SUMO仿真封装为标准的环境接口，支持DQN等强化学习算法训练。
+
+    Observation Space: 440维连续空间 (20路口 × 22特征)
+    Action Space: 20路口 × 4相位 (离散动作)
+
+    用法:
+        env = TrafficSignalEnv(sumo_cfg_path="sumo_files/xiongan.sumocfg")
+        obs, info = env.reset()
+        action = 0  # 选择相位
+        obs, reward, terminated, truncated, info = env.step(action)
+        env.close()
     """
-    单交叉口交通信号控制环境
-    
-    状态空间（8维）：
-    - [0:4]: 四个进口道的排队长度（停止车辆数）
-    - [4:8]: 四个进口道的平均等待时间
-    
-    动作空间（4维离散）：
-    - 0: 南北直行
-    - 1: 南北左转
-    - 2: 东西直行
-    - 3: 东西左转
-    
-    奖励函数：
-    - 基于所有车道的平均排队长度的负值
-    - 排队越长，奖励越低
-    """
-    
-    # 相位定义
-    PHASE_NS_STRAIGHT = 0   # 南北直行
-    PHASE_NS_LEFT = 1       # 南北左转
-    PHASE_EW_STRAIGHT = 2   # 东西直行
-    PHASE_EW_LEFT = 3       # 东西左转
-    
-    # 最小绿灯时间（秒）
-    MIN_GREEN = 15
-    
-    def __init__(self, sumo_cfg_path, use_gui=False, max_steps=3600, delta_time=5):
-        """
-        初始化环境
-        
+
+    def __init__(
+        self,
+        sumo_cfg_path: Optional[str] = None,
+        use_gui: bool = False,
+        max_steps: int = 3600,
+        delta_time: int = 5,
+        seed: Optional[int] = None,
+    ):
+        """初始化环境
+
         Args:
-            sumo_cfg_path: SUMO配置文件路径
+            sumo_cfg_path: SUMO配置文件路径，默认为xiongan.sumocfg
             use_gui: 是否使用GUI模式
-            max_steps: 最大仿真步数
-            delta_time: 每步仿真时间（秒）
+            max_steps: 每个episode的最大步数（秒）
+            delta_time: 每个action之间的仿真步进时间（秒）
+            seed: 随机种子
         """
-        self.sumo_cfg_path = sumo_cfg_path
-        self.use_gui = use_gui
-        self.max_steps = max_steps
-        self.delta_time = delta_time
-        self.current_step = 0
-        self.sumo_running = False
-        
-        # 信号灯和车道信息
-        self.tl_id = "J1"  # 默认信号灯ID
-        self.lane_ids = []  # 四个进口道的车道ID
-        
-        # 状态空间：8维向量 [排队长度×4, 等待时间×4]
-        self.observation_space = spaces.Box(
-            low=0, high=np.inf, shape=(8,), dtype=np.float32
-        )
-        
-        # 动作空间：4个离散动作
-        self.action_space = spaces.Discrete(4)
-        
-        # 记录前一个动作（用于惩罚不必要的切换）
-        self.prev_action = None
-        
-    def _start_sumo(self):
-        """启动SUMO仿真"""
-        if self.sumo_running:
-            return
-            
-        sumo_binary = "sumo-gui" if self.use_gui else "sumo"
-        traci.start([
-            sumo_binary,
-            "-c", self.sumo_cfg_path,
-            "--no-step-log",
-            "--no-warnings",
-            "--time-to-teleport", "-1"
-        ])
-        self.sumo_running = True
-        
-        # 获取信号灯控制的车道
-        self._init_lanes()
-        
-    def _init_lanes(self):
-        """初始化车道信息"""
-        # 获取信号灯控制的所有车道
-        controlled_lanes = traci.trafficlight.getControlledLanes(self.tl_id)
-        
-        # 从四个方向各选择一个代表性车道
-        # 车道格式: N_0, N_1, N_2, S_0, S_1, S_2, E_0, E_1, E_2, W_0, W_1, W_2
-        lane_groups = {}
-        for lane in controlled_lanes:
-            # 提取方向前缀（N, S, E, W）
-            direction = lane.split('_')[0]
-            if direction not in lane_groups:
-                lane_groups[direction] = []
-            if lane not in lane_groups[direction]:
-                lane_groups[direction].append(lane)
-        
-        # 从每个方向选择主车道（直行道，通常是_0）
-        self.lane_ids = []
-        for direction in ['N', 'S', 'E', 'W']:
-            if direction in lane_groups:
-                # 优先选择直行道（通常以_0结尾）
-                for lane in lane_groups[direction]:
-                    if lane.endswith('_0'):
-                        self.lane_ids.append(lane)
-                        break
-                else:
-                    # 如果没有_0车道，取第一个
-                    self.lane_ids.append(lane_groups[direction][0])
-        
-        print(f"选择的车道: {self.lane_ids}")
-        
-    def _get_state(self):
-        """
-        获取当前状态
-        
-        返回8维向量：
-        - [0:4]: 四个进口道的排队长度（停止车辆数）
-        - [4:8]: 四个进口道的平均等待时间（秒）
-        """
-        state = np.zeros(8, dtype=np.float32)
-        
-        for i, lane in enumerate(self.lane_ids):
-            # 排队长度：停止的车辆数
-            queue_length = traci.lane.getLastStepHaltingNumber(lane)
-            state[i] = queue_length
-            
-            # 等待时间：该车道上车辆的平均等待时间
-            wait_time = traci.lane.getLastStepVehicleNumber(lane) * 5  # 简化估计
-            state[4 + i] = wait_time
-        
-        return state
-    
-    def _calculate_reward(self, state, old_action, action):
-        """
-        计算奖励（v2优化版）
-        
-        奖励函数设计：
-        r(s, a) = -avg_queue - switch_penalty - congestion_penalty
-        
-        组成部分：
-        1. -avg_queue: 负平均排队长度（主要驱动）
-        2. switch_penalty: 相位切换惩罚（0.1，仅当相位改变时）
-        3. congestion_penalty: 拥堵惩罚（当排队超过阈值时额外惩罚）
-        
-        Args:
-            state: 当前状态向量
-            old_action: 上一步动作
-            action: 当前执行的动作
-            
-        Returns:
-            reward: 奖励值
-        """
-        # 获取排队长度（前4维）
-        queues = state[:4]
-        
-        # 计算平均排队长度
-        avg_queue = np.mean(queues)
-        
-        # 1. 主奖励：负平均排队长度
-        reward = -avg_queue
-        
-        # 2. 切换惩罚：仅当相位改变时（0.1）
-        if old_action is not None and action != old_action:
-            reward -= 0.1  # 降低切换惩罚，从0.5改为0.1
-        
-        # 3. 拥堵惩罚：当排队超过阈值时给予额外负奖励
-        # 排队超过5辆时开始惩罚，超过越多惩罚越重
-        congestion_threshold = 5
-        max_queue = np.max(queues)
-        if max_queue > congestion_threshold:
-            congestion_penalty = (max_queue - congestion_threshold) * 0.5
-            reward -= congestion_penalty
-        
-        return reward
-    
-    def _apply_action(self, action):
-        """
-        应用动作（切换信号灯相位）
-        
-        Args:
-            action: 0-3的整数，表示选择的相位
-        """
-        # 设置信号灯相位
-        traci.trafficlight.setPhase(self.tl_id, action)
-        self.prev_action = action
-        
-    def step(self, action):
-        """
-        执行一步仿真
-        
-        Args:
-            action: 动作（0-3）
-            
-        Returns:
-            state: 新状态
-            reward: 奖励
-            terminated: 是否终止
-            truncated: 是否截断
-            info: 额外信息
-        """
-        self.current_step += 1
-        terminated = self.current_step >= self.max_steps
-        
-        # 保存当前动作（用于计算奖励中的切换惩罚）
-        old_action = self.prev_action
-        
-        # 应用动作
-        self._apply_action(action)
-        
-        # 推进仿真
-        for _ in range(self.delta_time):
-            traci.simulationStep()
-        
-        # 获取新状态和奖励
-        state = self._get_state()
-        reward = self._calculate_reward(state, old_action, action)
-        
-        # 额外信息
-        info = {
-            'step': self.current_step,
-            'sim_time': traci.simulation.getTime(),
-            'queue_length': np.sum(state[:4]),
-            'avg_queue': np.mean(state[:4]),
-            'reward': reward
-        }
-        
-        if terminated:
-            self.close()
-            
-        return state, reward, terminated, False, info
-    
-    def reset(self, seed=None, options=None):
-        """
-        重置环境
-        
+        if sumo_cfg_path is None:
+            sumo_cfg_path = str(SUMO_FILES_DIR / "xiongan.sumocfg")
+
+        self._sumo_cfg_path = Path(sumo_cfg_path)
+        self._use_gui = use_gui
+        self._max_steps = max_steps
+        self._delta_time = delta_time
+        self._seed = seed
+
+        self._traci = None
+        self._sumo_binary = None
+        self._connected = False
+
+        self._current_actions: dict[str, int] = {}
+        self._previous_actions: dict[str, Optional[int]] = {}
+        self._phase_changed_at: dict[str, float] = {}
+
+        self._step_count = 0
+        self._episode_reward = 0.0
+
+    @property
+    def state_dim(self) -> int:
+        """状态维度"""
+        return STATE_DIMENSION
+
+    @property
+    def action_dim(self) -> int:
+        """动作维度（单路口）"""
+        return ACTION_COUNT_PER_INTERSECTION
+
+    @property
+    def num_intersections(self) -> int:
+        """路口数量"""
+        return len(INTERSECTION_ORDER)
+
+    def _get_sumo_binary(self) -> str:
+        """获取SUMO可执行文件路径"""
+        if self._sumo_binary:
+            return self._sumo_binary
+
+        sumo_home = os.environ.get("SUMO_HOME")
+        if not sumo_home:
+            raise RuntimeError("SUMO_HOME 环境变量未设置")
+
+        sumo_exe = Path(sumo_home) / "bin" / ("sumo-gui.exe" if self._use_gui else "sumo.exe")
+        if not sumo_exe.exists():
+            raise RuntimeError(f"SUMO 可执行文件未找到: {sumo_exe}")
+
+        self._sumo_binary = str(sumo_exe)
+        return self._sumo_binary
+
+    def reset(
+        self, seed: Optional[int] = None, options: Optional[dict] = None
+    ) -> Tuple[np.ndarray, dict]:
+        """重置环境
+
         Args:
             seed: 随机种子
-            options: 其他选项
-            
+            options: 额外选项
+
         Returns:
-            state: 初始状态
-            info: 额外信息
+            (observation, info)
         """
-        super().reset(seed=seed)
-        
-        # 关闭之前的连接
-        if self.sumo_running:
-            traci.close()
-            self.sumo_running = False
-            
-        self.current_step = 0
-        self.prev_action = None
-        
-        # 启动新的仿真
-        self._start_sumo()
-        state = self._get_state()
-        
-        return state, {}
-    
-    def close(self):
+        if seed is not None:
+            self._seed = seed
+
+        self._close_traci()
+
+        import traci
+
+        command = [self._get_sumo_binary(), "-c", str(self._sumo_cfg_path), "--no-step-log"]
+        if self._seed is not None:
+            command.extend(["--seed", str(self._seed)])
+
+        traci.start(command, numRetries=1)
+        self._traci = traci
+        self._connected = True
+
+        self._init_actions()
+
+        self._step_count = 0
+        self._episode_reward = 0.0
+
+        obs = get_global_state(num_intersections=self.num_intersections)
+        info = self._get_info()
+
+        return obs, info
+
+    def _init_actions(self) -> None:
+        """初始化所有路口的动作状态"""
+        sim_time = float(self._traci.simulation.getTime())
+        for tl_id in INTERSECTION_ORDER:
+            self._current_actions[tl_id] = int(self._traci.trafficlight.getPhase(tl_id))
+            self._previous_actions[tl_id] = None
+            self._phase_changed_at[tl_id] = sim_time
+
+    def step(
+        self, action: Any
+    ) -> Tuple[np.ndarray, float, bool, bool, dict]:
+        """执行一步仿真
+
+        Args:
+            action: 动作，可以是:
+                - int: 单个相位（适用于单路口）
+                - dict: {tl_id: phase} 字典（适用于多路口）
+                - np.ndarray: 动作数组
+
+        Returns:
+            (observation, reward, terminated, truncated, info)
+        """
+        traci = self._traci
+        sim_time = float(traci.simulation.getTime())
+
+        current_actions = self._parse_action(action)
+
+        applied_actions = {}
+        action_results = {}
+
+        for tl_id in INTERSECTION_ORDER:
+            requested = current_actions.get(tl_id, 0)
+            current = int(traci.trafficlight.getPhase(tl_id))
+            elapsed = sim_time - self._phase_changed_at.get(tl_id, 0)
+
+            if requested != current and elapsed < MIN_GREEN_SECONDS:
+                applied_actions[tl_id] = current
+                action_results[tl_id] = {
+                    "accepted": False,
+                    "reason": "min_green_constraint",
+                }
+            else:
+                if requested != current:
+                    traci.trafficlight.setPhase(tl_id, requested)
+                    self._phase_changed_at[tl_id] = sim_time
+                applied_actions[tl_id] = requested
+                action_results[tl_id] = {"accepted": True}
+
+        self._previous_actions = self._current_actions.copy()
+        self._current_actions = applied_actions
+
+        for _ in range(self._delta_time):
+            traci.simulationStep()
+
+        self._step_count += 1
+
+        obs = get_global_state(num_intersections=self.num_intersections)
+
+        rewards_dict, breakdowns, global_reward = compute_rewards(
+            obs, self._current_actions, self._previous_actions
+        )
+
+        self._episode_reward += global_reward
+
+        terminated = False
+        truncated = (sim_time + self._delta_time) >= self._max_steps
+
+        info = {
+            "time": float(traci.simulation.getTime()),
+            "rewards_per_intersection": rewards_dict,
+            "breakdowns": breakdowns,
+            "vehicle_count": self._get_vehicle_count(),
+            "applied_actions": applied_actions,
+            "step": self._step_count,
+            "queue_length": self._get_total_queue(),
+        }
+
+        return obs, global_reward, terminated, truncated, info
+
+    def _parse_action(self, action: Any) -> dict[str, int]:
+        """解析动作输入为标准字典格式"""
+        if isinstance(action, dict):
+            return action
+        elif isinstance(action, (int, np.integer)):
+            return {tl_id: int(action) for tl_id in INTERSECTION_ORDER}
+        elif isinstance(action, np.ndarray):
+            if action.ndim == 0:
+                return {tl_id: int(action.item()) for tl_id in INTERSECTION_ORDER}
+            elif action.ndim == 1:
+                if len(action) == self.num_intersections:
+                    return {tl_id: int(a) for tl_id, a in zip(INTERSECTION_ORDER, action)}
+                else:
+                    return {tl_id: int(action[0]) for tl_id in INTERSECTION_ORDER}
+            else:
+                return {tl_id: int(a) for tl_id, a in zip(INTERSECTION_ORDER, action.flatten()[:self.num_intersections])}
+        elif isinstance(action, list):
+            if len(action) == self.num_intersections:
+                return {tl_id: int(a) for tl_id, a in zip(INTERSECTION_ORDER, action)}
+            else:
+                return {tl_id: int(action[0]) for tl_id in INTERSECTION_ORDER}
+        else:
+            return {tl_id: 0 for tl_id in INTERSECTION_ORDER}
+
+    def _get_vehicle_count(self) -> int:
+        """获取当前车辆数量"""
+        if self._traci:
+            return len(self._traci.vehicle.getIDList())
+        return 0
+
+    def _get_total_queue(self) -> float:
+        """获取总排队长度"""
+        if not self._traci:
+            return 0.0
+        total = 0.0
+        for tl_id in INTERSECTION_ORDER:
+            try:
+                controlled_lanes = self._traci.trafficlight.getControlledLanes(tl_id)
+                for lane in controlled_lanes:
+                    total += float(self._traci.lane.getLastStepHaltingNumber(lane))
+            except Exception:
+                pass
+        return total
+
+    def _get_info(self) -> dict:
+        """获取当前环境信息"""
+        return {
+            "time": float(self._traci.simulation.getTime()) if self._traci else 0,
+            "vehicle_count": self._get_vehicle_count(),
+            "queue_length": self._get_total_queue(),
+        }
+
+    def _close_traci(self) -> None:
+        """关闭TraCI连接"""
+        if self._traci and self._connected:
+            try:
+                self._traci.close(False)
+            except Exception:
+                pass
+            self._connected = False
+            self._traci = None
+
+    def close(self) -> None:
         """关闭环境"""
-        if self.sumo_running:
-            traci.close()
-            self.sumo_running = False
-    
-    def render(self, mode='human'):
-        """渲染环境"""
-        if self.use_gui:
-            traci.gui.screenshot("View #0", "screenshot.png")
+        self._close_traci()
 
+    def get_valid_actions(self) -> dict[str, list[int]]:
+        """获取每个路口的合法动作"""
+        valid = {}
+        if not self._traci:
+            return {tl_id: list(range(ACTION_COUNT_PER_INTERSECTION)) for tl_id in INTERSECTION_ORDER}
 
-# ==============================================
-# MDP设计说明文档
-# ==============================================
-"""
-MDP设计说明：
+        sim_time = float(self._traci.simulation.getTime())
 
-一、状态空间设计（8维）
----------------------
-状态向量 s ∈ R^8，包含：
-- s[0]: 北进口道排队长度（停止车辆数）
-- s[1]: 南进口道排队长度（停止车辆数）
-- s[2]: 东进口道排队长度（停止车辆数）
-- s[3]: 西进口道排队长度（停止车辆数）
-- s[4]: 北进口道平均等待时间（秒）
-- s[5]: 南进口道平均等待时间（秒）
-- s[6]: 东进口道平均等待时间（秒）
-- s[7]: 西进口道平均等待时间（秒）
+        for tl_id in INTERSECTION_ORDER:
+            current_phase = self._current_actions.get(tl_id, 0)
+            elapsed = sim_time - self._phase_changed_at.get(tl_id, 0)
 
-设计合理性：
-1. 排队长度直接反映交通拥堵程度
-2. 等待时间反映了车辆延误情况
-3. 8维空间简洁有效，便于DQN学习
+            if elapsed < MIN_GREEN_SECONDS:
+                valid[tl_id] = [current_phase]
+            else:
+                valid[tl_id] = list(range(ACTION_COUNT_PER_INTERSECTION))
 
-二、动作空间设计（4维离散）
--------------------------
-动作 a ∈ {0, 1, 2, 3}，对应：
-- a=0: 南北直行（Phase 0）
-- a=1: 南北左转（Phase 1）
-- a=2: 东西直行（Phase 2）
-- a=3: 东西左转（Phase 3）
+        return valid
 
-设计合理性：
-1. 4相位覆盖了典型交叉口的所有转向需求
-2. 离散动作空间适合DQN算法
-3. 动作空间小，训练效率高
+    def __enter__(self) -> "TrafficSignalEnv":
+        return self
 
-三、奖励函数设计
----------------
-奖励函数 r(s, a) = -avg_queue - switch_penalty
-
-其中：
-- avg_queue: 所有车道的平均排队长度
-- switch_penalty: 相位切换惩罚（0.5）
-
-设计合理性：
-1. 负平均排队长度直接优化目标——减少拥堵
-2. 排队越长，奖励越低，激励智能体寻找最优配时
-3. 切换惩罚避免频繁切换相位，提高安全性
-4. 简单直观，训练收敛快
-"""
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.close()

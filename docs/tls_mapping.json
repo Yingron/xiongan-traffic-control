@@ -1,0 +1,442 @@
+{
+  "J01": {
+    "tls_id": "J01",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 16,
+    "phase_states": [
+      "GGGrrrrrGGGrrrrr",
+      "rrrGrrrrrrrGrrrr",
+      "rrrrGGGrrrrrGGGr",
+      "rrrrrrrGrrrrrrrG"
+    ]
+  },
+  "J02": {
+    "tls_id": "J02",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 16,
+    "phase_states": [
+      "GGGrrrrrGGGrrrrr",
+      "rrrGrrrrrrrGrrrr",
+      "rrrrGGGrrrrrGGGr",
+      "rrrrrrrGrrrrrrrG"
+    ]
+  },
+  "J03": {
+    "tls_id": "J03",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 17,
+    "phase_states": [
+      "GGGGrrrrrGGGrrrrr",
+      "rrrrGrrrrrrrGrrrr",
+      "rrrrrGGGrrrrrGGGr",
+      "rrrrrrrrGrrrrrrrG"
+    ]
+  },
+  "J04": {
+    "tls_id": "J04",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 16,
+    "phase_states": [
+      "GGGrrrrrGGGrrrrr",
+      "rrrGrrrrrrrGrrrr",
+      "rrrrGGGrrrrrGGGr",
+      "rrrrrrrGrrrrrrrG"
+    ]
+  },
+  "J05": {
+    "tls_id": "J05",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 16,
+    "phase_states": [
+      "GGGrrrrrGGGrrrrr",
+      "rrrGrrrrrrrGrrrr",
+      "rrrrGGGrrrrrGGGr",
+      "rrrrrrrGrrrrrrrG"
+    ]
+  },
+  "J06": {
+    "tls_id": "J06",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 17,
+    "phase_states": [
+      "rrrrGGGrrrrrrGGGr",
+      "rrrrrrrGrrrrrrrrG",
+      "GGGrrrrrGGGGrrrrr",
+      "rrrGrrrrrrrrGrrrr"
+    ]
+  },
+  "J07": {
+    "tls_id": "J07",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 18,
+    "phase_states": [
+      "rrrrrGGGrrrrrrGGGr",
+      "rrrrrrrrGrrrrrrrrG",
+      "GGGGrrrrrGGGGrrrrr",
+      "rrrrGrrrrrrrrGrrrr"
+    ]
+  },
+  "J08": {
+    "tls_id": "J08",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "rrrrrGGGGrrrrrrGGGGr",
+      "rrrrrrrrrGrrrrrrrrrG",
+      "GGGGrrrrrrGGGGrrrrrr",
+      "rrrrGrrrrrrrrrGrrrrr"
+    ]
+  },
+  "J09": {
+    "tls_id": "J09",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 18,
+    "phase_states": [
+      "rrrrrGGGrrrrrrGGGr",
+      "rrrrrrrrGrrrrrrrrG",
+      "GGGGrrrrrGGGGrrrrr",
+      "rrrrGrrrrrrrrGrrrr"
+    ]
+  },
+  "J10": {
+    "tls_id": "J10",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 17,
+    "phase_states": [
+      "rrrrrGGGrrrrrGGGr",
+      "rrrrrrrrGrrrrrrrG",
+      "GGGGrrrrrGGGrrrrr",
+      "rrrrGrrrrrrrGrrrr"
+    ]
+  },
+  "J11": {
+    "tls_id": "J11",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 17,
+    "phase_states": [
+      "GGGrrrrrGGGrrrrrr",
+      "rrrGrrrrrrrGrrrrr",
+      "rrrrGGGrrrrrGGGGr",
+      "rrrrrrrGrrrrrrrrG"
+    ]
+  },
+  "J12": {
+    "tls_id": "J12",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 18,
+    "phase_states": [
+      "GGGrrrrrrGGGrrrrrr",
+      "rrrGrrrrrrrrGrrrrr",
+      "rrrrGGGGrrrrrGGGGr",
+      "rrrrrrrrGrrrrrrrrG"
+    ]
+  },
+  "J13": {
+    "tls_id": "J13",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "GGGGrrrrrrGGGGrrrrrr",
+      "rrrrGrrrrrrrrrGrrrrr",
+      "rrrrrGGGGrrrrrrGGGGr",
+      "rrrrrrrrrGrrrrrrrrrG"
+    ]
+  },
+  "J14": {
+    "tls_id": "J14",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 18,
+    "phase_states": [
+      "GGGrrrrrrGGGrrrrrr",
+      "rrrGrrrrrrrrGrrrrr",
+      "rrrrGGGGrrrrrGGGGr",
+      "rrrrrrrrGrrrrrrrrG"
+    ]
+  },
+  "J15": {
+    "tls_id": "J15",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 17,
+    "phase_states": [
+      "GGGrrrrrrGGGrrrrr",
+      "rrrGrrrrrrrrGrrrr",
+      "rrrrGGGGrrrrrGGGr",
+      "rrrrrrrrGrrrrrrrG"
+    ]
+  },
+  "J16": {
+    "tls_id": "J16",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 16,
+    "phase_states": [
+      "rrrrGGGrrrrrGGGr",
+      "rrrrrrrGrrrrrrrG",
+      "GGGrrrrrGGGrrrrr",
+      "rrrGrrrrrrrGrrrr"
+    ]
+  },
+  "J17": {
+    "tls_id": "J17",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 16,
+    "phase_states": [
+      "rrrrGGGrrrrrGGGr",
+      "rrrrrrrGrrrrrrrG",
+      "GGGrrrrrGGGrrrrr",
+      "rrrGrrrrrrrGrrrr"
+    ]
+  },
+  "J18": {
+    "tls_id": "J18",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 17,
+    "phase_states": [
+      "rrrrGGGGrrrrrGGGr",
+      "rrrrrrrrGrrrrrrrG",
+      "GGGrrrrrrGGGrrrrr",
+      "rrrGrrrrrrrrGrrrr"
+    ]
+  },
+  "J19": {
+    "tls_id": "J19",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 16,
+    "phase_states": [
+      "rrrrGGGrrrrrGGGr",
+      "rrrrrrrGrrrrrrrG",
+      "GGGrrrrrGGGrrrrr",
+      "rrrGrrrrrrrGrrrr"
+    ]
+  },
+  "J20": {
+    "tls_id": "J20",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "南北直行及右转",
+      "1": "南北保护左转",
+      "2": "东西直行及右转",
+      "3": "东西保护左转"
+    },
+    "state_length": 16,
+    "phase_states": [
+      "rrrrGGGrrrrrGGGr",
+      "rrrrrrrGrrrrrrrG",
+      "GGGrrrrrGGGrrrrr",
+      "rrrGrrrrrrrGrrrr"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "junction_order": [
+    "J01",
+    "J02",
+    "J03",
+    "J04",
+    "J05",
+    "J06",
+    "J07",
+    "J08",
+    "J09",
+    "J10",
+    "J11",
+    "J12",
+    "J13",
+    "J14",
+    "J15",
+    "J16",
+    "J17",
+    "J18",
+    "J19",
+    "J20"
+  ],
+  "action_count_per_junction": 4,
+  "action_semantics": {
+    "0": "南北直行及右转",
+    "1": "南北保护左转",
+    "2": "东西直行及右转",
+    "3": "东西保护左转"
+  },
+  "global_state_dimension": 440,
+  "state_dimension_per_junction": 22,
+  "lane_mapping_file": "docs/lane_mapping.json",
+  "tls_mapping_file": "docs/tls_mapping.json"
+}

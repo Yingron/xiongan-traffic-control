@@ -1,16 +1,9 @@
-python==3.10
+﻿fastapi>=0.100.0
+uvicorn>=0.23.0
+numpy>=1.24.0
+traci
+pydantic>=2.0.0
 torch>=2.0.0
 stable-baselines3>=2.0.0
-gymnasium>=0.29.0
-numpy>=1.24.0
-pandas>=2.0.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
-sumo-rl @ git+https://github.com/LucasAlegre/sumo-rl.git
-onnx>=1.14.0
-onnxruntime>=1.15.0
-psutil>=5.9.0
-fastapi>=0.100.0
-uvicorn>=0.23.0
-websockets>=12.0
-pydantic>=2.0.0
+gymnasium>=0.26.0
+pyyaml>=6.0
