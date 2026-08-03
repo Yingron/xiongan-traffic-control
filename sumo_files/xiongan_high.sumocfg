@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+    <input>
+        <net-file value="xiongan_20.net.xml"/>
+        <route-files value="xiongan_high.rou.xml"/>
+    </input>
+    <output>
+        <tripinfo-output value="tripinfo_high.xml"/>
+        <summary-output value="summary_high.xml"/>
+        <emission-output value="emissions_high.xml"/>
+    </output>
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+        <step-length value="1"/>
+    </time>
+    <processing>
+        <lateral-resolution value="0.5"/>
+    </processing>
+</configuration>
