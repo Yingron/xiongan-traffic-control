@@ -226,25 +226,32 @@ def train_dqn(
         except ImportError:
             vec_env_cls = None
 
+        # Monitor包装工厂 - 确保每个worker都写monitor.csv
+        # 注意：SubprocVecEnv下会自动创建worker_0, worker_1等子目录
+        from stable_baselines3.common.vec_env import VecMonitor
+        def _make_env_with_monitor(rank):
+            _env = make_env_factory(
+                intersection_id=intersection_id,
+                multi=multi,
+                sumo_cfg_path=sumo_cfg_path,
+                max_steps=720,
+                delta_time=5,
+                rank=rank,
+            )()
+            return _env
+
         if vec_env_cls is not None:
             print(f"[INFO] 使用 SubprocVecEnv 启动 {ne} 个并行环境...", flush=True)
-            env_fns = [
-                make_env_factory(
-                    intersection_id=intersection_id,
-                    multi=multi,
-                    sumo_cfg_path=sumo_cfg_path,
-                    max_steps=720,
-                    delta_time=5,
-                    rank=i,
-                )
-                for i in range(ne)
-            ]
+            env_fns = [lambda r=i: _make_env_with_monitor(r) for i in range(ne)]
             env = vec_env_cls(env_fns)
+            # VecMonitor会汇总所有worker的episode，写入monitor.csv（带worker_前缀）
+            env = VecMonitor(env, filename=str(log_dir / "monitor"))
+            ne_used = ne
         else:
             print(f"[WARN] SubprocVecEnv不可用，回退单环境", flush=True)
             env = make_env_factory(intersection_id, multi, sumo_cfg_path, 720, 5, 0)()
             env = Monitor(env, str(log_dir))
-            ne = 1
+            ne_used = 1
     else:
         print(f"[INFO] 单环境训练模式", flush=True)
         from env.single_intersection_env import SingleIntersectionEnv, MultiIntersectionSharedEnv
@@ -262,6 +269,7 @@ def train_dqn(
                 seed=seed,
             )
         env = Monitor(env, str(log_dir))
+        ne_used = 1
 
     # ========== 构建DQN模型 ==========
     t_init_start = time.time()
@@ -502,15 +510,32 @@ def plot_training_curve(log_dir: Path, save_path: Path, env_name: str, timesteps
     import pandas as pd
 
     csv_file = log_dir / "monitor.csv"
-    if not csv_file.exists():
-        # 尝试在子目录中查找
-        for sub in log_dir.iterdir():
-            if sub.is_dir() and (sub / "monitor.csv").exists():
-                csv_file = sub / "monitor.csv"
-                break
-    if not csv_file.exists():
+    csv_candidates = []
+    if csv_file.exists():
+        csv_candidates.append(csv_file)
+    # 递归搜索所有子目录（VecMonitor/Subproc会在worker_x、dqn_perf_x等嵌套目录下）
+    # VecMonitor(filename="...") 会生成 ...monitor.csv，搜索 pattern *monitor.csv
+    for pattern in ["monitor.csv", "*monitor.csv"]:
+        for f in log_dir.rglob(pattern):
+            if f.is_file() and f not in csv_candidates:
+                csv_candidates.append(f)
+    # 选择行数最多（数据最全）的monitor.csv
+    best_csv = None
+    best_rows = -1
+    for candidate in csv_candidates:
+        try:
+            with open(candidate, "r", encoding="utf-8") as fh:
+                rows = sum(1 for _ in fh)
+            if rows > best_rows:
+                best_rows = rows
+                best_csv = candidate
+        except Exception:
+            pass
+    if best_csv is None:
         print("  无训练数据可绘图")
         return
+    csv_file = best_csv
+    print(f"  读取训练日志: {csv_file} (rows≈{best_rows})")
 
     try:
         df = pd.read_csv(csv_file, skiprows=1)
