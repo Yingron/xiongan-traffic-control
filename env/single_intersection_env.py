@@ -90,10 +90,20 @@ class SingleIntersectionEnv(_EnvBase):
             raise FileNotFoundError(f"SUMO configuration not found: {self.sumo_cfg_path}")
         import traci
 
-        command = [self._sumo_binary(), "-c", str(self.sumo_cfg_path), "--no-step-log", "true"]
+        # 性能优化：完全静默SUMO输出 + 关闭线程安全检查 + 禁用duration-log
+        command = [
+            self._sumo_binary(),
+            "-c", str(self.sumo_cfg_path),
+            "--no-step-log", "true",
+            "--no-warnings", "true",
+            "--duration-log.disable", "true",
+            "--device.emissions.probability", "0.0",
+            "--no-internal-links", "true",
+            "--threads", "1",
+        ]
         if self.seed_value is not None:
             command.extend(["--seed", str(self.seed_value)])
-        traci.start(command, numRetries=1)
+        traci.start(command, numRetries=1, label=f"env_{os.getpid()}_{id(self)}")
         self._traci = traci
         traci.trafficlight.setProgram(self.intersection_id, "rl4")
         self._previous_action = int(traci.trafficlight.getPhase(self.intersection_id))

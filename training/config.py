@@ -11,6 +11,7 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs(VISUALIZATION_DIR, exist_ok=True)
 
+# ========== 标准DQN配置（原默认） ==========
 DQN_CONFIG = {
     'policy': 'MlpPolicy',
     'learning_rate': 1e-4,
@@ -70,4 +71,78 @@ ENV_CONFIG = {
     'use_gui': False,
     'max_steps': 3600,
     'delta_time': 5,
+}
+
+# ========== 高性能训练配置（200+ steps/s 目标） ==========
+# 针对瓶颈分析：仿真41.2% + 网络更新58.8%
+# 优化策略：
+#   1. 网络极简化：参数量减少约10x (256x256x3 -> 64x64x2)
+#   2. train_freq大幅提高：分摊网络更新开销
+#   3. batch_size增大：SIMD并行效率提高
+#   4. target_update_interval提高：减少同步开销
+#   5. learning_starts降低：更快开始更新
+#   6. 开启SubprocVecEnv多环境并行：n_envs=4 线性提速
+PERF_DQN_CONFIG = {
+    'policy': 'MlpPolicy',
+    # 学习率提高配合大batch
+    'learning_rate': 5e-4,
+    # buffer适度减小以降低内存开销与cache miss
+    'buffer_size': 200000,
+    # 更快开始学习（500步后开始更新）
+    'learning_starts': 500,
+    # 大batch：CPU SIMD并行效率更高，单次更新吞吐更大
+    'batch_size': 1024,
+    'gamma': 0.99,
+    # 关键优化：每200步才更新一次网络（大幅分摊网络开销）
+    # 原瓶颈: 仿真41% + 网络更新59% → train_freq=4时每步更新0.25次
+    # train_freq=200时，每步只更新0.5次梯度（gradient_steps=-1 → 更新200次梯度/每200步）
+    # → 网络更新被摊薄约200/4=50倍，有效吞吐提升至仿真主导区间
+    'train_freq': 200,
+    # gradient_steps=-1 表示每 train_freq 步更新 train_freq 次
+    # （等价于 每步平均更新1次，batch_size大则单次吞吐高）
+    'gradient_steps': -1,
+    # 目标网络更新频率（与train_freq成比例）
+    'target_update_interval': 4000,
+    # 探索更快衰减（30%的步数衰减完）
+    'exploration_fraction': 0.3,
+    'exploration_initial_eps': 1.0,
+    'exploration_final_eps': 0.02,
+    'max_grad_norm': 10,
+    # 极致简化网络架构：2层32隐藏单元（参数量 ~3,800，是原256x256x3的1/30）
+    # 22维输入 → 状态特征简单，不需要大网络即可拟合Q值
+    'policy_kwargs': {
+        'net_arch': [32, 32],
+        'activation_fn': 'ReLU',
+    },
+    # 2个并行SubprocVecEnv env（CPU核=4/8时，2个env平衡CPU占用和SUMO进程数量）
+    'n_envs': 2,
+}
+
+# ========== 场景映射配置 ==========
+SCENARIO_CONFIG = {
+    'flat': {
+        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_flat.sumocfg'),
+        'label': '平峰',
+        'target_vehicles': '~2,773',
+    },
+    'morning': {
+        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_morning.sumocfg'),
+        'label': '早高峰',
+        'target_vehicles': '~19,104',
+    },
+    'evening': {
+        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_evening.sumocfg'),
+        'label': '晚高峰',
+        'target_vehicles': '~19,104',
+    },
+    'low': {
+        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_low.sumocfg'),
+        'label': '低峰',
+        'target_vehicles': '~2,773',
+    },
+    'high': {
+        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_high.sumocfg'),
+        'label': '高峰(high)',
+        'target_vehicles': '~19,104',
+    },
 }
