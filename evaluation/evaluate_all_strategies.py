@@ -84,7 +84,7 @@ def run_strategy_with_metrics(
             total_reward += reward
 
             # 采集指标
-            collector.collect(env._traci)
+            collector.collect(env._traci, incidents=info.get("incidents"))
 
             step += 1
             done = terminated or truncated
@@ -101,7 +101,7 @@ def run_strategy_with_metrics(
 
     metric_fields = [
         "queue_length", "waiting_time", "travel_time", "throughput",
-        "fuel_consumption", "co2_emission", "stop_count", "time_loss",
+        "fuel_consumption", "co2_emission", "stop_count", "time_loss", "collisions", "teleports",
     ]
 
     for field_name in metric_fields:
@@ -140,7 +140,8 @@ def max_pressure_action(obs, env, step):
         env._mp_controller = MaxPressureController()
     sim_time = float(env._traci.simulation.getTime())
     elapsed = sim_time - env._phase_changed_at
-    return env._mp_controller.get_action(obs, env._current_phase, elapsed)
+    current_phase = int(env._traci.trafficlight.getPhase(env.intersection_id))
+    return env._mp_controller.get_action(obs, current_phase, elapsed)
 
 
 def make_dqn_action(model_path: str):
@@ -159,6 +160,15 @@ def make_dqn_action(model_path: str):
 # 主函数
 # ============================================================
 def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Evaluate traffic-control strategies on identical SUMO seeds.")
+    parser.add_argument("--model-path", type=Path, default=None, help="DQN zip model to evaluate")
+    parser.add_argument("--episodes", type=int, default=5)
+    parser.add_argument("--intersection", type=str, default="J01")
+    parser.add_argument("--max-steps", type=int, default=720)
+    args = parser.parse_args()
+
     save_dir = PROJECT_ROOT / "models" / "dqn"
     save_dir.mkdir(parents=True, exist_ok=True)
 
@@ -174,9 +184,9 @@ def main():
     ]
 
     # DQN模型
-    model_path = save_dir / "dqn_J01_50000steps.zip"
+    model_path = args.model_path or (save_dir / "dqn_multi_shared_5000steps.zip")
     if model_path.exists():
-        strategies.append(("DQN(50k)", make_dqn_action(str(model_path))))
+        strategies.append((f"DQN({model_path.stem})", make_dqn_action(str(model_path))))
     else:
         print(f"  Warning: DQN model not found at {model_path}", flush=True)
 
@@ -185,7 +195,13 @@ def main():
     for name, action_fn in strategies:
         print(f"\n[{len(all_results)+1}/{len(strategies)}] Running {name}...", flush=True)
         t0 = time.time()
-        result = run_strategy_with_metrics(name, action_fn, episodes=5)
+        result = run_strategy_with_metrics(
+            name,
+            action_fn,
+            episodes=args.episodes,
+            intersection_id=args.intersection,
+            max_steps=args.max_steps,
+        )
         elapsed = time.time() - t0
 
         print(f"  Reward:      {result['reward']['mean']:.4f} ± {result['reward']['std']:.4f}", flush=True)
@@ -195,6 +211,8 @@ def main():
         print(f"  Fuel:        {result['fuel_consumption']['mean']:.4f} mL/s", flush=True)
         print(f"  CO2:         {result['co2_emission']['mean']:.4f} mg/s", flush=True)
         print(f"  Stops:       {result['stop_count']['mean']:.1f}", flush=True)
+        print(f"  Collisions:  {result['collisions']['total']:.0f}", flush=True)
+        print(f"  Teleports:   {result['teleports']['total']:.0f}", flush=True)
         print(f"  Elapsed:     {elapsed:.1f}s", flush=True)
 
         all_results.append(result)
@@ -209,7 +227,7 @@ def main():
     csv_path = save_dir / "multi_metrics_comparison.csv"
     metric_names = [
         "reward", "queue_length", "waiting_time", "travel_time",
-        "throughput", "fuel_consumption", "co2_emission", "stop_count", "time_loss",
+        "throughput", "fuel_consumption", "co2_emission", "stop_count", "time_loss", "collisions", "teleports",
     ]
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
@@ -256,7 +274,7 @@ def main():
             print(f"  {val:>15.4f}", end="", flush=True)
         print(flush=True)
 
-    print(f"\n✅ Multi-dimension evaluation complete!", flush=True)
+    print("\n[OK] Multi-dimension evaluation complete!", flush=True)
 
 
 def plot_comparison_chart(results: List[Dict], save_dir: Path):

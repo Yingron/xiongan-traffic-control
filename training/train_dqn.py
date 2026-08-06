@@ -112,6 +112,7 @@ def train_dqn(
         exploration_final_eps=0.05,
         train_freq=4,
         target_update_interval=500,
+        device="cuda",
         verbose=1,
         seed=seed,
         tensorboard_log=str(log_dir),
@@ -248,6 +249,7 @@ def main():
     parser.add_argument("--lr", type=float, default=1e-3, help="学习率")
     parser.add_argument("--net-arch", type=str, default="256,256", help="网络架构，如 '256,256,256'")
     parser.add_argument("--seed", type=int, default=42, help="随机种子")
+    parser.add_argument("--save-dir", type=str, default="models/dqn", help="模型与评估结果保存目录")
     parser.add_argument("--eval-only", action="store_true", help="仅评估已有模型")
     parser.add_argument("--model-path", type=str, default=None, help="已有模型路径")
     args = parser.parse_args()
@@ -272,6 +274,7 @@ def main():
         multi=args.multi,
         learning_rate=args.lr,
         seed=args.seed,
+        save_dir=args.save_dir,
         net_arch=net_arch,
     )
 

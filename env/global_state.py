@@ -1,7 +1,10 @@
 """全局状态提取模块 - 从TraCI提取440维全局状态向量"""
 from __future__ import annotations
 
+import json
 import math
+from functools import lru_cache
+from pathlib import Path
 from typing import Any, Optional
 import numpy as np
 
@@ -10,9 +13,27 @@ from configs.constants import (
     FEATURES_PER_INTERSECTION,
     STATE_DIMENSION,
     DIRECTIONS,
+    DOCS_DIR,
 )
 
 DEBUG = False
+
+
+@lru_cache(maxsize=1)
+def _load_lane_mapping() -> dict[str, dict[str, list[str]]]:
+    """Load the validated physical lane mapping generated with the SUMO net.
+
+    The generated 20-intersection network uses internal edge names in some
+    places, so inferring N/S/E/W from a lane-ID prefix is not reliable.
+    """
+    path = Path(DOCS_DIR) / "lane_mapping.json"
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return {str(junction): {str(direction): list(lanes) for direction, lanes in directions.items()} for junction, directions in data.items()}
+    except (OSError, ValueError, TypeError):
+        return {}
 
 
 def _get_representative_lane(controlled_lanes: list[str], direction: str) -> Optional[str]:
@@ -79,25 +100,29 @@ def _extract_intersection_state(traci: Any, tl_id: str) -> np.ndarray:
     state = np.zeros(FEATURES_PER_INTERSECTION, dtype=np.float32)
     controlled_lanes = traci.trafficlight.getControlledLanes(tl_id)
 
-    lane_mapping = {d: [] for d in DIRECTIONS}
-    for lane in controlled_lanes:
-        if len(lane) > 0:
-            direction = lane[0].upper()
-            if direction in lane_mapping:
-                lane_mapping[direction].append(lane)
+    controlled_set = set(controlled_lanes)
+    configured_mapping = _load_lane_mapping().get(tl_id, {})
+    if configured_mapping:
+        lane_mapping = {
+            direction: [lane for lane in configured_mapping.get(direction, []) if lane in controlled_set]
+            for direction in DIRECTIONS
+        }
+    else:
+        lane_mapping = {d: [] for d in DIRECTIONS}
+        for lane in controlled_lanes:
+            if lane:
+                direction = lane[0].upper()
+                if direction in lane_mapping:
+                    lane_mapping[direction].append(lane)
 
     for dir_idx, direction in enumerate(DIRECTIONS):
         lanes = lane_mapping[direction]
         if not lanes:
             continue
 
-        representative = _get_representative_lane(lanes, direction)
-        if representative is None:
-            continue
-
-        queue_len = _get_queue_length(traci, representative)
-        wait_time = _get_avg_wait_time(traci, representative)
-        occupancy = _get_occupancy(traci, representative)
+        queue_len = sum(_get_queue_length(traci, lane) for lane in lanes)
+        wait_time = float(np.mean([_get_avg_wait_time(traci, lane) for lane in lanes]))
+        occupancy = float(np.mean([_get_occupancy(traci, lane) for lane in lanes]))
 
         state[dir_idx] = _normalize(queue_len, max_val=15.0)
         state[4 + dir_idx] = _normalize(wait_time, max_val=120.0)

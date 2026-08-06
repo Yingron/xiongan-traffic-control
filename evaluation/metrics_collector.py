@@ -39,6 +39,8 @@ class TrafficMetrics:
     # Safety
     stop_count: int = 0             # 停车次数（速度<0.1m/s的车辆数）
     time_loss: float = 0.0          # 时间损失（秒）
+    collisions: int = 0
+    teleports: int = 0
 
 
 class MetricsCollector:
@@ -57,8 +59,10 @@ class MetricsCollector:
         self._total_fuel: float = 0.0
         self._total_co2: float = 0.0
         self._vehicle_departure: Dict[str, float] = {}
+        self._active_approach_vehicles: set[str] = set()
+        self._completed_travel_times: List[float] = []
 
-    def collect(self, traci_conn=None) -> TrafficMetrics:
+    def collect(self, traci_conn=None, incidents: Optional[Dict[str, int]] = None) -> TrafficMetrics:
         """采集当前步的所有指标
 
         Args:
@@ -73,9 +77,11 @@ class MetricsCollector:
         # ---- Mobility指标 ----
         # 排队长度：所有进口道的车辆数之和
         queue_counts = []
+        approach_vehicles: set[str] = set()
         for e in self.edge_ids:
             try:
                 queue_counts.append(traci_conn.edge.getLastStepVehicleNumber(e))
+                approach_vehicles.update(traci_conn.edge.getLastStepVehicleIDs(e))
             except Exception:
                 queue_counts.append(0)
         metrics.queue_length = float(np.mean(queue_counts)) if queue_counts else 0.0
@@ -89,17 +95,21 @@ class MetricsCollector:
                 wait_times.append(0.0)
         metrics.waiting_time = float(np.sum(wait_times)) if wait_times else 0.0
 
-        # 行程时间：所有进口道的平均行程时间
-        travel_times = []
-        for e in self.edge_ids:
-            try:
-                travel_times.append(traci_conn.edge.getTravelTime(e))
-            except Exception:
-                travel_times.append(0.0)
-        metrics.travel_time = float(np.mean(travel_times)) if travel_times else 0.0
+        now = float(traci_conn.simulation.getTime())
+        for vehicle_id in approach_vehicles - self._active_approach_vehicles:
+            self._vehicle_departure[vehicle_id] = now
+        exited = self._active_approach_vehicles - approach_vehicles
+        completed = []
+        for vehicle_id in exited:
+            entered = self._vehicle_departure.pop(vehicle_id, None)
+            if entered is not None:
+                completed.append(now - entered)
+        self._active_approach_vehicles = approach_vehicles
+        self._completed_travel_times.extend(completed)
+        metrics.travel_time = float(np.mean(completed)) if completed else 0.0
 
-        # 通行量：当前步所有进口道的车辆数之和
-        metrics.throughput = int(np.sum(queue_counts)) if queue_counts else 0
+        # Throughput counts vehicles leaving the monitored approaches.
+        metrics.throughput = len(exited)
         self._total_throughput += metrics.throughput
 
         # ---- Environment指标 ----
@@ -139,6 +149,13 @@ class MetricsCollector:
         # 时间损失：使用 tripinfo 的 timeLoss（近似为等待时间-最小行程时间）
         # 简化：用等待时间作为近似
         metrics.time_loss = metrics.waiting_time
+        if incidents is None:
+            incidents = {
+                "collisions": len(traci_conn.simulation.getCollidingVehiclesIDList()),
+                "teleports": len(traci_conn.simulation.getStartingTeleportIDList()),
+            }
+        metrics.collisions = int(incidents.get("collisions", 0))
+        metrics.teleports = int(incidents.get("teleports", 0))
 
         self.history.append(metrics)
         return metrics
@@ -152,6 +169,16 @@ class MetricsCollector:
         for field_name in TrafficMetrics.__dataclass_fields__.keys():
             values = [getattr(m, field_name) for m in self.history]
             summary[field_name] = {
+                'mean': float(np.mean(values)),
+                'std': float(np.std(values)),
+                'min': float(np.min(values)),
+                'max': float(np.max(values)),
+                'total': float(np.sum(values)),
+            }
+
+        if self._completed_travel_times:
+            values = self._completed_travel_times
+            summary['travel_time'] = {
                 'mean': float(np.mean(values)),
                 'std': float(np.std(values)),
                 'min': float(np.min(values)),
@@ -186,6 +213,8 @@ class MetricsCollector:
         self._total_fuel = 0.0
         self._total_co2 = 0.0
         self._vehicle_departure.clear()
+        self._active_approach_vehicles.clear()
+        self._completed_travel_times.clear()
 
 
 def get_approach_edges(tl_id: str, traci_conn=None) -> List[str]:

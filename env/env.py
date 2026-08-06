@@ -14,6 +14,7 @@ from configs.constants import (
     FEATURES_PER_INTERSECTION,
     ACTION_COUNT_PER_INTERSECTION,
     MIN_GREEN_SECONDS,
+    YELLOW_TRANSITION_SECONDS,
     SUMO_FILES_DIR,
 )
 from env.global_state import get_global_state
@@ -131,6 +132,9 @@ class TrafficSignalEnv:
         self._traci = traci
         self._connected = True
 
+        for tl_id in INTERSECTION_ORDER:
+            traci.trafficlight.setProgram(tl_id, "rl4")
+
         self._init_actions()
 
         self._step_count = 0
@@ -148,6 +152,19 @@ class TrafficSignalEnv:
             self._current_actions[tl_id] = int(self._traci.trafficlight.getPhase(tl_id))
             self._previous_actions[tl_id] = None
             self._phase_changed_at[tl_id] = sim_time
+
+    def _set_yellow_transition(self, tl_id: str, target_phase: int) -> None:
+        """Apply a transient yellow state without expanding the four RL actions."""
+        current_state = self._traci.trafficlight.getRedYellowGreenState(tl_id)
+        logic = next(
+            (candidate for candidate in self._traci.trafficlight.getAllProgramLogics(tl_id) if candidate.programID == "rl4"),
+            None,
+        )
+        if logic is None or len(logic.phases) != ACTION_COUNT_PER_INTERSECTION:
+            raise RuntimeError(f"{tl_id} has no valid four-action rl4 program")
+        target_state = logic.phases[target_phase].state
+        yellow_state = "".join("y" if old in "Gg" and new == "r" else "r" for old, new in zip(current_state, target_state))
+        self._traci.trafficlight.setRedYellowGreenState(tl_id, yellow_state)
 
     def step(
         self, action: Any
@@ -170,6 +187,7 @@ class TrafficSignalEnv:
 
         applied_actions = {}
         action_results = {}
+        phase_changes: list[tuple[str, int]] = []
 
         for tl_id in INTERSECTION_ORDER:
             requested = current_actions.get(tl_id, 0)
@@ -184,15 +202,24 @@ class TrafficSignalEnv:
                 }
             else:
                 if requested != current:
-                    traci.trafficlight.setPhase(tl_id, requested)
-                    self._phase_changed_at[tl_id] = sim_time
+                    phase_changes.append((tl_id, requested))
                 applied_actions[tl_id] = requested
                 action_results[tl_id] = {"accepted": True}
 
         self._previous_actions = self._current_actions.copy()
         self._current_actions = applied_actions
 
-        for _ in range(self._delta_time):
+        yellow_steps = min(YELLOW_TRANSITION_SECONDS, self._delta_time) if phase_changes else 0
+        for tl_id, requested in phase_changes:
+            self._set_yellow_transition(tl_id, requested)
+        for _ in range(yellow_steps):
+            traci.simulationStep()
+        for tl_id, requested in phase_changes:
+            traci.trafficlight.setProgram(tl_id, "rl4")
+            traci.trafficlight.setPhase(tl_id, requested)
+            # Count minimum-green time only after the yellow clearance ends.
+            self._phase_changed_at[tl_id] = sim_time + yellow_steps
+        for _ in range(self._delta_time - yellow_steps):
             traci.simulationStep()
 
         self._step_count += 1

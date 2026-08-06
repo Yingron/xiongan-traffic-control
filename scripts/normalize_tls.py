@@ -36,7 +36,10 @@ def main():
     tls_nodes={j.get('id'):j for j in root.findall('junction') if j.get('id') in expected}
     missing=[j for j in expected if j not in conns_by_tls]
     if missing: raise SystemExit(f'缺少受控连接的信号灯: {missing}')
-    existing={tl.get('id'):tl for tl in root.findall('tlLogic')}
+    existing={tl.get('id'):tl for tl in root.findall('tlLogic') if tl.get('programID') == 'rl4'}
+    for tl in list(root.findall('tlLogic')):
+        if tl.get('programID') == 'static_safe':
+            root.remove(tl)
     lane_mapping={}; tls_mapping={}
     for jid in expected:
         jxy=coords[jid]
@@ -53,7 +56,7 @@ def main():
                 action=1 if turn=='l' else 0
             else:
                 action=3 if turn=='l' else 2
-            groups[action].append(idx)
+            groups[action].append((idx, turn))
         absent=[a for a,v in approaches.items() if not v]
         empty=[a for a,v in groups.items() if not v]
         if absent: raise SystemExit(f'{jid} 缺少进口方向: {absent}')
@@ -62,7 +65,12 @@ def main():
         states=[]
         for action in range(4):
             s=['r']*n
-            for idx in groups[action]: s[idx]='G'
+            # Straight and protected-left movements receive protected green.
+            # Right turns and U-turns share the same action but must yield to
+            # pedestrians / conflicting movements, otherwise SUMO flags unsafe
+            # green links at the outgoing-lane merge.
+            for idx, turn in groups[action]:
+                s[idx] = 'g' if turn in {'r', 't'} else 'G'
             states.append(''.join(s))
         tl=existing.get(jid)
         if tl is None:
@@ -75,6 +83,7 @@ def main():
         durations=[30,12,30,12]
         for i,state in enumerate(states):
             ET.SubElement(tl,'phase',{'duration':str(durations[i]),'state':state,'name':f'action_{i}'})
+
         lane_counts={e.get('id'):len(e.findall('lane')) for e in root.findall('edge') if e.get('function') is None}
         lane_mapping[jid]={
             k: sorted(f'{e}_{lane}' for e in v for lane in range(lane_counts[e]))

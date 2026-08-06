@@ -9,7 +9,7 @@ def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--net',required=True); ap.add_argument('--lane-mapping',required=True); ap.add_argument('--report',required=True); a=ap.parse_args()
     root=ET.parse(a.net).getroot(); expected=[f'J{i:02d}' for i in range(1,21)]
     junctions={j.get('id'):j for j in root.findall('junction')}
-    tls={x.get('id'):x for x in root.findall('tlLogic')}
+    tls={x.get('id'):x for x in root.findall('tlLogic') if x.get('programID') == 'rl4'}
     if set(expected)-set(junctions): fail('缺少核心路口 '+str(sorted(set(expected)-set(junctions))))
     bad_type=[j for j in expected if junctions[j].get('type')!='traffic_light']
     if bad_type: fail('非 traffic_light 路口 '+str(bad_type))

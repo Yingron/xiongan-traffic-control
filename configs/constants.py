@@ -10,6 +10,7 @@ ACTION_COUNT_PER_INTERSECTION = 4
 ACTION_NAMES = ("NS_Straight", "NS_Left", "EW_Straight", "EW_Left")
 DIRECTIONS = ("N", "S", "E", "W")
 MIN_GREEN_SECONDS = 15
+YELLOW_TRANSITION_SECONDS = 3
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SUMO_FILES_DIR = PROJECT_ROOT / "sumo_files"

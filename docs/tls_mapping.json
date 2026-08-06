@@ -13,12 +13,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 16,
+    "state_length": 20,
     "phase_states": [
-      "GGGrrrrrGGGrrrrr",
-      "rrrGrrrrrrrGrrrr",
-      "rrrrGGGrrrrrGGGr",
-      "rrrrrrrGrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J02": {
@@ -35,12 +35,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 16,
+    "state_length": 20,
     "phase_states": [
-      "GGGrrrrrGGGrrrrr",
-      "rrrGrrrrrrrGrrrr",
-      "rrrrGGGrrrrrGGGr",
-      "rrrrrrrGrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J03": {
@@ -57,12 +57,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 17,
+    "state_length": 20,
     "phase_states": [
-      "GGGGrrrrrGGGrrrrr",
-      "rrrrGrrrrrrrGrrrr",
-      "rrrrrGGGrrrrrGGGr",
-      "rrrrrrrrGrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J04": {
@@ -79,12 +79,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 16,
+    "state_length": 20,
     "phase_states": [
-      "GGGrrrrrGGGrrrrr",
-      "rrrGrrrrrrrGrrrr",
-      "rrrrGGGrrrrrGGGr",
-      "rrrrrrrGrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J05": {
@@ -101,12 +101,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 16,
+    "state_length": 20,
     "phase_states": [
-      "GGGrrrrrGGGrrrrr",
-      "rrrGrrrrrrrGrrrr",
-      "rrrrGGGrrrrrGGGr",
-      "rrrrrrrGrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J06": {
@@ -123,12 +123,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 17,
+    "state_length": 20,
     "phase_states": [
-      "rrrrGGGrrrrrrGGGr",
-      "rrrrrrrGrrrrrrrrG",
-      "GGGrrrrrGGGGrrrrr",
-      "rrrGrrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J07": {
@@ -145,12 +145,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 18,
+    "state_length": 20,
     "phase_states": [
-      "rrrrrGGGrrrrrrGGGr",
-      "rrrrrrrrGrrrrrrrrG",
-      "GGGGrrrrrGGGGrrrrr",
-      "rrrrGrrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J08": {
@@ -169,10 +169,10 @@
     },
     "state_length": 20,
     "phase_states": [
-      "rrrrrGGGGrrrrrrGGGGr",
-      "rrrrrrrrrGrrrrrrrrrG",
-      "GGGGrrrrrrGGGGrrrrrr",
-      "rrrrGrrrrrrrrrGrrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J09": {
@@ -189,12 +189,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 18,
+    "state_length": 20,
     "phase_states": [
-      "rrrrrGGGrrrrrrGGGr",
-      "rrrrrrrrGrrrrrrrrG",
-      "GGGGrrrrrGGGGrrrrr",
-      "rrrrGrrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J10": {
@@ -211,12 +211,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 17,
+    "state_length": 20,
     "phase_states": [
-      "rrrrrGGGrrrrrGGGr",
-      "rrrrrrrrGrrrrrrrG",
-      "GGGGrrrrrGGGrrrrr",
-      "rrrrGrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J11": {
@@ -233,12 +233,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 17,
+    "state_length": 20,
     "phase_states": [
-      "GGGrrrrrGGGrrrrrr",
-      "rrrGrrrrrrrGrrrrr",
-      "rrrrGGGrrrrrGGGGr",
-      "rrrrrrrGrrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J12": {
@@ -255,12 +255,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 18,
+    "state_length": 20,
     "phase_states": [
-      "GGGrrrrrrGGGrrrrrr",
-      "rrrGrrrrrrrrGrrrrr",
-      "rrrrGGGGrrrrrGGGGr",
-      "rrrrrrrrGrrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J13": {
@@ -279,10 +279,10 @@
     },
     "state_length": 20,
     "phase_states": [
-      "GGGGrrrrrrGGGGrrrrrr",
-      "rrrrGrrrrrrrrrGrrrrr",
-      "rrrrrGGGGrrrrrrGGGGr",
-      "rrrrrrrrrGrrrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J14": {
@@ -299,12 +299,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 18,
+    "state_length": 20,
     "phase_states": [
-      "GGGrrrrrrGGGrrrrrr",
-      "rrrGrrrrrrrrGrrrrr",
-      "rrrrGGGGrrrrrGGGGr",
-      "rrrrrrrrGrrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J15": {
@@ -321,12 +321,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 17,
+    "state_length": 20,
     "phase_states": [
-      "GGGrrrrrrGGGrrrrr",
-      "rrrGrrrrrrrrGrrrr",
-      "rrrrGGGGrrrrrGGGr",
-      "rrrrrrrrGrrrrrrrG"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J16": {
@@ -343,12 +343,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 16,
+    "state_length": 20,
     "phase_states": [
-      "rrrrGGGrrrrrGGGr",
-      "rrrrrrrGrrrrrrrG",
-      "GGGrrrrrGGGrrrrr",
-      "rrrGrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J17": {
@@ -365,12 +365,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 16,
+    "state_length": 20,
     "phase_states": [
-      "rrrrGGGrrrrrGGGr",
-      "rrrrrrrGrrrrrrrG",
-      "GGGrrrrrGGGrrrrr",
-      "rrrGrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J18": {
@@ -387,12 +387,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 17,
+    "state_length": 20,
     "phase_states": [
-      "rrrrGGGGrrrrrGGGr",
-      "rrrrrrrrGrrrrrrrG",
-      "GGGrrrrrrGGGrrrrr",
-      "rrrGrrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J19": {
@@ -409,12 +409,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 16,
+    "state_length": 20,
     "phase_states": [
-      "rrrrGGGrrrrrGGGr",
-      "rrrrrrrGrrrrrrrG",
-      "GGGrrrrrGGGrrrrr",
-      "rrrGrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   },
   "J20": {
@@ -431,12 +431,12 @@
       "2": "东西直行及右转",
       "3": "东西保护左转"
     },
-    "state_length": 16,
+    "state_length": 20,
     "phase_states": [
-      "rrrrGGGrrrrrGGGr",
-      "rrrrrrrGrrrrrrrG",
-      "GGGrrrrrGGGrrrrr",
-      "rrrGrrrrrrrGrrrr"
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
     ]
   }
 }
