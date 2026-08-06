@@ -1,0 +1,33 @@
+# --- Train route and signal networks jointly from scratch ---
+
+action_selector: "epsilon_greedy"
+epsilon_start: 1.0
+epsilon_finish: 0.1
+epsilon_anneal_time: 80000
+
+target_update_interval: 100
+
+agent: "rnn_dual_function"
+agent_output_type: "q"
+learner: "q_learner"
+double_q: True
+mixer: "qmix"
+mixing_embed_dim: 32
+hypernet_layers: 2
+hypernet_embed: 64
+grad_norm_clip: 10
+
+env_args:
+  trajectory_entropy_enabled: False
+
+
+train_action_heads: [0, 1]
+explore_action_heads: [0, 1]
+force_noop_action_heads: []
+freeze_route_net: False
+freeze_signal_net: False
+skip_optimizer_load: True
+
+t_max: 150000
+
+name: "qmix_dual_scratch"
