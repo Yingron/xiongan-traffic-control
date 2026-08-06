@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    <vType id="passenger" vClass="passenger" accel="2.6" decel="4.5" sigma="0.5" length="5.0" minGap="2.5" maxSpeed="13.89" color="0.2,0.5,1.0"/>
+    <vType id="bus" vClass="bus" accel="1.2" decel="4.0" sigma="0.3" length="12.0" minGap="3.0" maxSpeed="11.11" color="1.0,0.6,0.0"/>
+    <vType id="delivery" vClass="delivery" accel="1.8" decel="4.2" sigma="0.4" length="6.5" minGap="2.8" maxSpeed="12.50" color="0.6,0.2,0.8"/>
+    <route id="row1_WE" edges="W_J01_from_W_J01 W_J02_from_J01 W_J03_from_J02 W_J04_from_J03 W_J05_from_J04 W_E_J05_from_J05"/>
+    <route id="row1_EW" edges="E_J05_from_E_J05 E_J04_from_J05 E_J03_from_J04 E_J02_from_J03 E_J01_from_J02 E_W_J01_from_J01"/>
+    <route id="row2_WE" edges="W_J06_from_W_J06 W_J07_from_J06 W_J08_from_J07 W_J09_from_J08 W_J10_from_J09 W_E_J10_from_J10"/>
+    <route id="row2_EW" edges="E_J10_from_E_J10 E_J09_from_J10 E_J08_from_J09 E_J07_from_J08 E_J06_from_J07 E_W_J06_from_J06"/>
+    <route id="row3_WE" edges="W_J11_from_W_J11 W_J12_from_J11 W_J13_from_J12 W_J14_from_J13 W_J15_from_J14 W_E_J15_from_J15"/>
+    <route id="row3_EW" edges="E_J15_from_E_J15 E_J14_from_J15 E_J13_from_J14 E_J12_from_J13 E_J11_from_J12 E_W_J11_from_J11"/>
+    <route id="row4_WE" edges="W_J16_from_W_J16 W_J17_from_J16 W_J18_from_J17 W_J19_from_J18 W_J20_from_J19 W_E_J20_from_J20"/>
+    <route id="row4_EW" edges="E_J20_from_E_J20 E_J19_from_J20 E_J18_from_J19 E_J17_from_J18 E_J16_from_J17 E_W_J16_from_J16"/>
+    <route id="col1_NS" edges="N_J01_from_N_J01 N_J06_from_J01 N_J11_from_J06 N_J16_from_J11 N_S_J16_from_J16"/>
+    <route id="col1_SN" edges="S_J16_from_S_J16 S_J11_from_J16 S_J06_from_J11 S_J01_from_J06 S_N_J01_from_J01"/>
+    <route id="col2_NS" edges="N_J02_from_N_J02 N_J07_from_J02 N_J12_from_J07 N_J17_from_J12 N_S_J17_from_J17"/>
+    <route id="col2_SN" edges="S_J17_from_S_J17 S_J12_from_J17 S_J07_from_J12 S_J02_from_J07 S_N_J02_from_J02"/>
+    <route id="col3_NS" edges="N_J03_from_N_J03 N_J08_from_J03 N_J13_from_J08 N_J18_from_J13 N_S_J18_from_J18"/>
+    <route id="col3_SN" edges="S_J18_from_S_J18 S_J13_from_J18 S_J08_from_J13 S_J03_from_J08 S_N_J03_from_J03"/>
+    <route id="col4_NS" edges="N_J04_from_N_J04 N_J09_from_J04 N_J14_from_J09 N_J19_from_J14 N_S_J19_from_J19"/>
+    <route id="col4_SN" edges="S_J19_from_S_J19 S_J14_from_J19 S_J09_from_J14 S_J04_from_J09 S_N_J04_from_J04"/>
+    <route id="col5_NS" edges="N_J05_from_N_J05 N_J10_from_J05 N_J15_from_J10 N_J20_from_J15 N_S_J20_from_J20"/>
+    <route id="col5_SN" edges="S_J20_from_S_J20 S_J15_from_J20 S_J10_from_J15 S_J05_from_J10 S_N_J05_from_J05"/>
+    <route id="turn_W06_to_S18" edges="W_J06_from_W_J06 W_J07_from_J06 W_J08_from_J07 N_J13_from_J08 N_J18_from_J13 N_S_J18_from_J18"/>
+    <route id="turn_N03_to_E15" edges="N_J03_from_N_J03 N_J08_from_J03 N_J13_from_J08 W_J14_from_J13 W_J15_from_J14 W_E_J15_from_J15"/>
+    <route id="turn_W11_to_N03" edges="W_J11_from_W_J11 W_J12_from_J11 W_J13_from_J12 S_J08_from_J13 S_J03_from_J08 S_N_J03_from_J03"/>
+    <route id="turn_S17_to_E10" edges="S_J17_from_S_J17 S_J12_from_J17 S_J07_from_J12 W_J08_from_J07 W_J09_from_J08 W_J10_from_J09 W_E_J10_from_J10"/>
+    <route id="turn_E05_to_S20" edges="E_J05_from_E_J05 N_J10_from_J05 N_J15_from_J10 N_J20_from_J15 N_S_J20_from_J20"/>
+    <route id="turn_N01_to_E15" edges="N_J01_from_N_J01 N_J06_from_J01 N_J11_from_J06 W_J12_from_J11 W_J13_from_J12 W_J14_from_J13 W_J15_from_J14 W_E_J15_from_J15"/>
+    <flow id="f000_row1_WE_passenger" type="passenger" route="row1_WE" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f001_row1_WE_bus" type="bus" route="row1_WE" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f002_row1_WE_delivery" type="delivery" route="row1_WE" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f003_row1_EW_passenger" type="passenger" route="row1_EW" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f004_row1_EW_bus" type="bus" route="row1_EW" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f005_row1_EW_delivery" type="delivery" route="row1_EW" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f006_row2_WE_passenger" type="passenger" route="row2_WE" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f007_row2_WE_bus" type="bus" route="row2_WE" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f008_row2_WE_delivery" type="delivery" route="row2_WE" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f009_row2_EW_passenger" type="passenger" route="row2_EW" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f010_row2_EW_bus" type="bus" route="row2_EW" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f011_row2_EW_delivery" type="delivery" route="row2_EW" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f012_row3_WE_passenger" type="passenger" route="row3_WE" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f013_row3_WE_bus" type="bus" route="row3_WE" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f014_row3_WE_delivery" type="delivery" route="row3_WE" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f015_row3_EW_passenger" type="passenger" route="row3_EW" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f016_row3_EW_bus" type="bus" route="row3_EW" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f017_row3_EW_delivery" type="delivery" route="row3_EW" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f018_row4_WE_passenger" type="passenger" route="row4_WE" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f019_row4_WE_bus" type="bus" route="row4_WE" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f020_row4_WE_delivery" type="delivery" route="row4_WE" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f021_row4_EW_passenger" type="passenger" route="row4_EW" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f022_row4_EW_bus" type="bus" route="row4_EW" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f023_row4_EW_delivery" type="delivery" route="row4_EW" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f024_col1_NS_passenger" type="passenger" route="col1_NS" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f025_col1_NS_bus" type="bus" route="col1_NS" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f026_col1_NS_delivery" type="delivery" route="col1_NS" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f027_col1_SN_passenger" type="passenger" route="col1_SN" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f028_col1_SN_bus" type="bus" route="col1_SN" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f029_col1_SN_delivery" type="delivery" route="col1_SN" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f030_col2_NS_passenger" type="passenger" route="col2_NS" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f031_col2_NS_bus" type="bus" route="col2_NS" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f032_col2_NS_delivery" type="delivery" route="col2_NS" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f033_col2_SN_passenger" type="passenger" route="col2_SN" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f034_col2_SN_bus" type="bus" route="col2_SN" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f035_col2_SN_delivery" type="delivery" route="col2_SN" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f036_col3_NS_passenger" type="passenger" route="col3_NS" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f037_col3_NS_bus" type="bus" route="col3_NS" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f038_col3_NS_delivery" type="delivery" route="col3_NS" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f039_col3_SN_passenger" type="passenger" route="col3_SN" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f040_col3_SN_bus" type="bus" route="col3_SN" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f041_col3_SN_delivery" type="delivery" route="col3_SN" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f042_col4_NS_passenger" type="passenger" route="col4_NS" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f043_col4_NS_bus" type="bus" route="col4_NS" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f044_col4_NS_delivery" type="delivery" route="col4_NS" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f045_col4_SN_passenger" type="passenger" route="col4_SN" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f046_col4_SN_bus" type="bus" route="col4_SN" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f047_col4_SN_delivery" type="delivery" route="col4_SN" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f048_col5_NS_passenger" type="passenger" route="col5_NS" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f049_col5_NS_bus" type="bus" route="col5_NS" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f050_col5_NS_delivery" type="delivery" route="col5_NS" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f051_col5_SN_passenger" type="passenger" route="col5_SN" begin="0" end="7200" vehsPerHour="45" departLane="best" departSpeed="max"/>
+    <flow id="f052_col5_SN_bus" type="bus" route="col5_SN" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f053_col5_SN_delivery" type="delivery" route="col5_SN" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f054_turn_W06_to_S18_passenger" type="passenger" route="turn_W06_to_S18" begin="0" end="7200" vehsPerHour="15" departLane="best" departSpeed="max"/>
+    <flow id="f055_turn_W06_to_S18_bus" type="bus" route="turn_W06_to_S18" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f056_turn_W06_to_S18_delivery" type="delivery" route="turn_W06_to_S18" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f057_turn_N03_to_E15_passenger" type="passenger" route="turn_N03_to_E15" begin="0" end="7200" vehsPerHour="15" departLane="best" departSpeed="max"/>
+    <flow id="f058_turn_N03_to_E15_bus" type="bus" route="turn_N03_to_E15" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f059_turn_N03_to_E15_delivery" type="delivery" route="turn_N03_to_E15" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f060_turn_W11_to_N03_passenger" type="passenger" route="turn_W11_to_N03" begin="0" end="7200" vehsPerHour="15" departLane="best" departSpeed="max"/>
+    <flow id="f061_turn_W11_to_N03_bus" type="bus" route="turn_W11_to_N03" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f062_turn_W11_to_N03_delivery" type="delivery" route="turn_W11_to_N03" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f063_turn_S17_to_E10_passenger" type="passenger" route="turn_S17_to_E10" begin="0" end="7200" vehsPerHour="15" departLane="best" departSpeed="max"/>
+    <flow id="f064_turn_S17_to_E10_bus" type="bus" route="turn_S17_to_E10" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f065_turn_S17_to_E10_delivery" type="delivery" route="turn_S17_to_E10" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f066_turn_E05_to_S20_passenger" type="passenger" route="turn_E05_to_S20" begin="0" end="7200" vehsPerHour="15" departLane="best" departSpeed="max"/>
+    <flow id="f067_turn_E05_to_S20_bus" type="bus" route="turn_E05_to_S20" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f068_turn_E05_to_S20_delivery" type="delivery" route="turn_E05_to_S20" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+    <flow id="f069_turn_N01_to_E15_passenger" type="passenger" route="turn_N01_to_E15" begin="0" end="7200" vehsPerHour="15" departLane="best" departSpeed="max"/>
+    <flow id="f070_turn_N01_to_E15_bus" type="bus" route="turn_N01_to_E15" begin="0" end="7200" vehsPerHour="4" departLane="best" departSpeed="max"/>
+    <flow id="f071_turn_N01_to_E15_delivery" type="delivery" route="turn_N01_to_E15" begin="0" end="7200" vehsPerHour="3" departLane="best" departSpeed="max"/>
+</routes>

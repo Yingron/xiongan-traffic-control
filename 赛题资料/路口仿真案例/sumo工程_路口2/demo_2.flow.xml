@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2025-04-12 22:47:53 by Eclipse SUMO netedit Version 1.18.0
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- 定义车辆类型 -->
+    <vType id="car" maxSpeed="37" vClass="passenger"/>
+
+
+	<flow id="SN_car" type="car" from="-E2" begin="0" end="3600" number="322"/>
+	<flow id="NS_car" type="car" from="-E1" begin="0" end="3600" number="368"/>
+	<flow id="WE_car" type="car" from="E0" begin="0" end="3600" number="316"/>
+	
+	
+</routes>

@@ -9,7 +9,11 @@ import numpy as np
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from stable_baselines3 import DQN, D3QN
+from stable_baselines3 import DQN
+try:
+    from stable_baselines3 import D3QN
+except ImportError:
+    D3QN = DQN  # 兼容旧版本
 from env.xiongan_env import XionganEnv
 from training.config import ENV_CONFIG, DISTILL_CONFIG, MODEL_DIR
 

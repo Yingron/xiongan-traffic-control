@@ -1,0 +1,4025 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-05-23T11:22:10.567502+08:00 by Eclipse SUMO jtrrouter 1.26.0
+<jtrrouterConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/jtrrouterConfiguration.xsd">
+
+    <input>
+        <net-file value="demo_4.net.xml"/>
+        <route-files value="demo_4.flow.xml"/>
+        <turn-ratio-files value="demo_4.turn.xml"/>
+    </input>
+
+    <output>
+        <output-file value="demo_4.rou.xml"/>
+    </output>
+
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+    </time>
+
+</jtrrouterConfiguration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vType id="car" maxSpeed="37.00" vClass="passenger"/>
+    <vehicle id="EW_car.0" type="car" depart="0.00">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.0" type="car" depart="0.00">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.0" type="car" depart="0.00">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.0" type="car" depart="0.00">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.1" type="car" depart="10.32">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.1" type="car" depart="10.56">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.1" type="car" depart="11.01">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.1" type="car" depart="11.39">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.2" type="car" depart="20.63">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.2" type="car" depart="21.11">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.2" type="car" depart="22.02">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.2" type="car" depart="22.78">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.3" type="car" depart="30.95">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.3" type="car" depart="31.67">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.3" type="car" depart="33.03">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.3" type="car" depart="34.18">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.4" type="car" depart="41.26">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.4" type="car" depart="42.23">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.4" type="car" depart="44.04">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.4" type="car" depart="45.57">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.5" type="car" depart="51.58">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.5" type="car" depart="52.79">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.5" type="car" depart="55.05">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.5" type="car" depart="56.96">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.6" type="car" depart="61.89">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.6" type="car" depart="63.34">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.6" type="car" depart="66.05">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.6" type="car" depart="68.35">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.7" type="car" depart="72.21">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.7" type="car" depart="73.90">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.7" type="car" depart="77.06">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.7" type="car" depart="79.74">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.8" type="car" depart="82.52">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.8" type="car" depart="84.46">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.8" type="car" depart="88.07">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.8" type="car" depart="91.14">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.9" type="car" depart="92.84">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.9" type="car" depart="95.01">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.9" type="car" depart="99.08">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.9" type="car" depart="102.53">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.10" type="car" depart="103.15">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.10" type="car" depart="105.57">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.10" type="car" depart="110.09">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.11" type="car" depart="113.47">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.10" type="car" depart="113.92">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.11" type="car" depart="116.13">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.11" type="car" depart="121.10">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.12" type="car" depart="123.78">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.11" type="car" depart="125.31">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.12" type="car" depart="126.68">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.12" type="car" depart="132.11">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.13" type="car" depart="134.10">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.12" type="car" depart="136.70">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.13" type="car" depart="137.24">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.13" type="car" depart="143.12">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.14" type="car" depart="144.41">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.14" type="car" depart="147.80">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.13" type="car" depart="148.10">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.14" type="car" depart="154.13">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.15" type="car" depart="154.73">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.15" type="car" depart="158.36">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.14" type="car" depart="159.49">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.16" type="car" depart="165.04">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.15" type="car" depart="165.14">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.16" type="car" depart="168.91">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.15" type="car" depart="170.88">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.17" type="car" depart="175.36">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.16" type="car" depart="176.14">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.17" type="car" depart="179.47">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.16" type="car" depart="182.27">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.18" type="car" depart="185.67">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.17" type="car" depart="187.15">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.18" type="car" depart="190.03">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.17" type="car" depart="193.66">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.19" type="car" depart="195.99">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.18" type="car" depart="198.16">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.19" type="car" depart="200.58">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.18" type="car" depart="205.06">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.20" type="car" depart="206.30">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.19" type="car" depart="209.17">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.20" type="car" depart="211.14">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.19" type="car" depart="216.45">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.21" type="car" depart="216.62">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.20" type="car" depart="220.18">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.21" type="car" depart="221.70">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.22" type="car" depart="226.93">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.20" type="car" depart="227.84">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.21" type="car" depart="231.19">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.22" type="car" depart="232.25">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.23" type="car" depart="237.25">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.21" type="car" depart="239.23">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.22" type="car" depart="242.20">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.23" type="car" depart="242.81">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.24" type="car" depart="247.56">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.22" type="car" depart="250.62">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.23" type="car" depart="253.21">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.24" type="car" depart="253.37">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.25" type="car" depart="257.88">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.23" type="car" depart="262.02">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.25" type="car" depart="263.93">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.24" type="car" depart="264.22">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.26" type="car" depart="268.19">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.24" type="car" depart="273.41">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.26" type="car" depart="274.48">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.25" type="car" depart="275.23">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.27" type="car" depart="278.51">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.25" type="car" depart="284.80">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.27" type="car" depart="285.04">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.26" type="car" depart="286.23">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.28" type="car" depart="288.82">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.28" type="car" depart="295.60">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.26" type="car" depart="296.19">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.27" type="car" depart="297.24">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.29" type="car" depart="299.14">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.29" type="car" depart="306.15">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.27" type="car" depart="307.58">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.28" type="car" depart="308.25">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.30" type="car" depart="309.45">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.30" type="car" depart="316.71">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.28" type="car" depart="318.98">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.29" type="car" depart="319.26">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.31" type="car" depart="319.77">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.31" type="car" depart="327.27">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.32" type="car" depart="330.08">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.30" type="car" depart="330.27">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.29" type="car" depart="330.37">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.32" type="car" depart="337.82">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.33" type="car" depart="340.40">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.31" type="car" depart="341.28">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.30" type="car" depart="341.76">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.33" type="car" depart="348.38">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.34" type="car" depart="350.71">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.32" type="car" depart="352.29">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.31" type="car" depart="353.15">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.34" type="car" depart="358.94">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.35" type="car" depart="361.03">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.33" type="car" depart="363.30">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.32" type="car" depart="364.54">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.35" type="car" depart="369.50">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.36" type="car" depart="371.34">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.34" type="car" depart="374.31">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.33" type="car" depart="375.94">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.36" type="car" depart="380.05">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.37" type="car" depart="381.66">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.35" type="car" depart="385.32">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.34" type="car" depart="387.33">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.37" type="car" depart="390.61">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.38" type="car" depart="391.97">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.36" type="car" depart="396.32">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.35" type="car" depart="398.72">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.38" type="car" depart="401.17">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.39" type="car" depart="402.29">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.37" type="car" depart="407.33">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.36" type="car" depart="410.11">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.39" type="car" depart="411.72">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.40" type="car" depart="412.60">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.38" type="car" depart="418.34">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.37" type="car" depart="421.50">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.40" type="car" depart="422.28">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.41" type="car" depart="422.92">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.39" type="car" depart="429.35">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.41" type="car" depart="432.84">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.38" type="car" depart="432.90">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.42" type="car" depart="433.23">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.40" type="car" depart="440.36">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.42" type="car" depart="443.39">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.43" type="car" depart="443.55">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.39" type="car" depart="444.29">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.41" type="car" depart="451.37">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.44" type="car" depart="453.86">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.43" type="car" depart="453.95">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.40" type="car" depart="455.68">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.42" type="car" depart="462.38">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.45" type="car" depart="464.18">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.44" type="car" depart="464.51">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.41" type="car" depart="467.07">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.43" type="car" depart="473.39">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.46" type="car" depart="474.49">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.45" type="car" depart="475.07">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.42" type="car" depart="478.46">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.44" type="car" depart="484.40">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.47" type="car" depart="484.81">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.46" type="car" depart="485.62">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.43" type="car" depart="489.86">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.48" type="car" depart="495.12">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.45" type="car" depart="495.41">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.47" type="car" depart="496.18">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.44" type="car" depart="501.25">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.49" type="car" depart="505.44">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.46" type="car" depart="506.41">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.48" type="car" depart="506.74">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.45" type="car" depart="512.64">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.50" type="car" depart="515.75">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.49" type="car" depart="517.29">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.47" type="car" depart="517.42">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.46" type="car" depart="524.03">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.51" type="car" depart="526.07">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.50" type="car" depart="527.85">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.48" type="car" depart="528.43">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.47" type="car" depart="535.42">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.52" type="car" depart="536.38">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.51" type="car" depart="538.41">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.49" type="car" depart="539.44">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.53" type="car" depart="546.70">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.48" type="car" depart="546.82">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.52" type="car" depart="548.96">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.50" type="car" depart="550.45">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.54" type="car" depart="557.01">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.49" type="car" depart="558.21">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.53" type="car" depart="559.52">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.51" type="car" depart="561.46">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.55" type="car" depart="567.33">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.50" type="car" depart="569.60">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.54" type="car" depart="570.08">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.52" type="car" depart="572.47">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.56" type="car" depart="577.64">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.55" type="car" depart="580.64">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.51" type="car" depart="580.99">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.53" type="car" depart="583.48">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.57" type="car" depart="587.96">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.56" type="car" depart="591.19">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.52" type="car" depart="592.38">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.54" type="car" depart="594.49">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.58" type="car" depart="598.27">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.57" type="car" depart="601.75">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.53" type="car" depart="603.78">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.55" type="car" depart="605.50">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.59" type="car" depart="608.59">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.58" type="car" depart="612.31">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.54" type="car" depart="615.17">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.56" type="car" depart="616.50">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.60" type="car" depart="618.90">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.59" type="car" depart="622.86">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.55" type="car" depart="626.56">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.57" type="car" depart="627.51">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.61" type="car" depart="629.22">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.60" type="car" depart="633.42">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.56" type="car" depart="637.95">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.58" type="car" depart="638.52">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.62" type="car" depart="639.53">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.61" type="car" depart="643.98">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.57" type="car" depart="649.34">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.59" type="car" depart="649.53">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.63" type="car" depart="649.85">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.62" type="car" depart="654.53">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.64" type="car" depart="660.16">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.60" type="car" depart="660.54">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.58" type="car" depart="660.74">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.63" type="car" depart="665.09">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.65" type="car" depart="670.48">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.61" type="car" depart="671.55">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.59" type="car" depart="672.13">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.64" type="car" depart="675.65">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.66" type="car" depart="680.79">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.62" type="car" depart="682.56">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.60" type="car" depart="683.52">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.65" type="car" depart="686.21">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.67" type="car" depart="691.11">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.63" type="car" depart="693.57">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.61" type="car" depart="694.91">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.66" type="car" depart="696.76">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.68" type="car" depart="701.42">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.64" type="car" depart="704.58">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.62" type="car" depart="706.30">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.67" type="car" depart="707.32">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.69" type="car" depart="711.74">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.65" type="car" depart="715.59">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.63" type="car" depart="717.70">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.68" type="car" depart="717.88">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.70" type="car" depart="722.05">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.66" type="car" depart="726.59">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.69" type="car" depart="728.43">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.64" type="car" depart="729.09">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.71" type="car" depart="732.37">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.67" type="car" depart="737.60">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.70" type="car" depart="738.99">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.65" type="car" depart="740.48">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.72" type="car" depart="742.68">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.68" type="car" depart="748.61">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.71" type="car" depart="749.55">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.66" type="car" depart="751.87">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.73" type="car" depart="753.00">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.69" type="car" depart="759.62">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.72" type="car" depart="760.10">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.67" type="car" depart="763.26">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.74" type="car" depart="763.31">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.70" type="car" depart="770.63">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.73" type="car" depart="770.66">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.75" type="car" depart="773.63">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.68" type="car" depart="774.66">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.74" type="car" depart="781.22">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.71" type="car" depart="781.64">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.76" type="car" depart="783.94">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.69" type="car" depart="786.05">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.75" type="car" depart="791.78">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.72" type="car" depart="792.65">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.77" type="car" depart="794.26">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.70" type="car" depart="797.44">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.76" type="car" depart="802.33">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.73" type="car" depart="803.66">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.78" type="car" depart="804.57">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.71" type="car" depart="808.83">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.77" type="car" depart="812.89">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.74" type="car" depart="814.67">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.79" type="car" depart="814.89">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.72" type="car" depart="820.22">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.78" type="car" depart="823.45">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.80" type="car" depart="825.20">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.75" type="car" depart="825.68">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.73" type="car" depart="831.62">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.79" type="car" depart="834.00">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.81" type="car" depart="835.52">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.76" type="car" depart="836.68">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.74" type="car" depart="843.01">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.80" type="car" depart="844.56">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.82" type="car" depart="845.83">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.77" type="car" depart="847.69">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.75" type="car" depart="854.40">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.81" type="car" depart="855.12">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.83" type="car" depart="856.15">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.78" type="car" depart="858.70">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.82" type="car" depart="865.67">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.76" type="car" depart="865.79">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.84" type="car" depart="866.46">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.79" type="car" depart="869.71">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.83" type="car" depart="876.23">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.85" type="car" depart="876.78">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.77" type="car" depart="877.18">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.80" type="car" depart="880.72">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.84" type="car" depart="886.79">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.86" type="car" depart="887.09">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.78" type="car" depart="888.58">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.81" type="car" depart="891.73">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.85" type="car" depart="897.35">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.87" type="car" depart="897.41">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.79" type="car" depart="899.97">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.82" type="car" depart="902.74">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.88" type="car" depart="907.72">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.86" type="car" depart="907.90">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.80" type="car" depart="911.36">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.83" type="car" depart="913.75">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.89" type="car" depart="918.04">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.87" type="car" depart="918.46">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.81" type="car" depart="922.75">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.84" type="car" depart="924.76">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.90" type="car" depart="928.35">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.88" type="car" depart="929.02">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.82" type="car" depart="934.14">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.85" type="car" depart="935.77">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.91" type="car" depart="938.67">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.89" type="car" depart="939.57">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.83" type="car" depart="945.54">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.86" type="car" depart="946.77">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.92" type="car" depart="948.98">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.90" type="car" depart="950.13">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.84" type="car" depart="956.93">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.87" type="car" depart="957.78">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.93" type="car" depart="959.30">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.91" type="car" depart="960.69">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.85" type="car" depart="968.32">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.88" type="car" depart="968.79">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.94" type="car" depart="969.61">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.92" type="car" depart="971.24">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.86" type="car" depart="979.71">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.89" type="car" depart="979.80">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.95" type="car" depart="979.93">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.93" type="car" depart="981.80">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.96" type="car" depart="990.24">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.90" type="car" depart="990.81">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.87" type="car" depart="991.10">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.94" type="car" depart="992.36">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.97" type="car" depart="1000.56">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.91" type="car" depart="1001.82">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.88" type="car" depart="1002.50">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.95" type="car" depart="1002.92">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.98" type="car" depart="1010.87">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.92" type="car" depart="1012.83">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.96" type="car" depart="1013.47">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.89" type="car" depart="1013.89">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.99" type="car" depart="1021.19">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.93" type="car" depart="1023.84">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.97" type="car" depart="1024.03">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.90" type="car" depart="1025.28">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.100" type="car" depart="1031.50">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.98" type="car" depart="1034.59">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.94" type="car" depart="1034.85">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.91" type="car" depart="1036.67">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.101" type="car" depart="1041.82">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.99" type="car" depart="1045.14">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.95" type="car" depart="1045.86">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.92" type="car" depart="1048.06">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.102" type="car" depart="1052.13">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.100" type="car" depart="1055.70">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.96" type="car" depart="1056.86">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.93" type="car" depart="1059.46">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.103" type="car" depart="1062.45">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.101" type="car" depart="1066.26">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.97" type="car" depart="1067.87">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.94" type="car" depart="1070.85">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.104" type="car" depart="1072.76">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.102" type="car" depart="1076.81">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.98" type="car" depart="1078.88">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.95" type="car" depart="1082.24">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.105" type="car" depart="1083.08">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.103" type="car" depart="1087.37">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.99" type="car" depart="1089.89">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.106" type="car" depart="1093.39">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.96" type="car" depart="1093.63">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.104" type="car" depart="1097.93">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.100" type="car" depart="1100.90">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.107" type="car" depart="1103.71">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.97" type="car" depart="1105.02">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.105" type="car" depart="1108.49">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.101" type="car" depart="1111.91">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.108" type="car" depart="1114.02">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.98" type="car" depart="1116.42">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.106" type="car" depart="1119.04">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.102" type="car" depart="1122.92">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.109" type="car" depart="1124.34">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.99" type="car" depart="1127.81">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.107" type="car" depart="1129.60">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.103" type="car" depart="1133.93">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.110" type="car" depart="1134.65">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.100" type="car" depart="1139.20">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.108" type="car" depart="1140.16">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.104" type="car" depart="1144.94">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.111" type="car" depart="1144.97">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.101" type="car" depart="1150.59">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.109" type="car" depart="1150.71">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.112" type="car" depart="1155.28">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.105" type="car" depart="1155.95">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.110" type="car" depart="1161.27">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.102" type="car" depart="1161.98">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.113" type="car" depart="1165.60">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.106" type="car" depart="1166.95">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.111" type="car" depart="1171.83">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.103" type="car" depart="1173.38">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.114" type="car" depart="1175.91">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.107" type="car" depart="1177.96">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.112" type="car" depart="1182.38">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.104" type="car" depart="1184.77">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.115" type="car" depart="1186.23">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.108" type="car" depart="1188.97">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.113" type="car" depart="1192.94">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.105" type="car" depart="1196.16">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.116" type="car" depart="1196.54">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.109" type="car" depart="1199.98">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.114" type="car" depart="1203.50">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.117" type="car" depart="1206.86">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.106" type="car" depart="1207.55">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.110" type="car" depart="1210.99">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.115" type="car" depart="1214.06">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.118" type="car" depart="1217.17">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.107" type="car" depart="1218.94">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.111" type="car" depart="1222.00">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.116" type="car" depart="1224.61">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.119" type="car" depart="1227.49">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.108" type="car" depart="1230.34">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.112" type="car" depart="1233.01">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.117" type="car" depart="1235.17">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.120" type="car" depart="1237.80">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.109" type="car" depart="1241.73">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.113" type="car" depart="1244.02">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.118" type="car" depart="1245.73">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.121" type="car" depart="1248.12">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.110" type="car" depart="1253.12">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.114" type="car" depart="1255.03">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.119" type="car" depart="1256.28">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.122" type="car" depart="1258.43">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.111" type="car" depart="1264.51">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.115" type="car" depart="1266.04">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.120" type="car" depart="1266.84">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.123" type="car" depart="1268.75">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.112" type="car" depart="1275.90">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.116" type="car" depart="1277.04">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.121" type="car" depart="1277.40">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.124" type="car" depart="1279.06">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.113" type="car" depart="1287.30">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.122" type="car" depart="1287.95">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.117" type="car" depart="1288.05">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.125" type="car" depart="1289.38">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.123" type="car" depart="1298.51">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.114" type="car" depart="1298.69">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.118" type="car" depart="1299.06">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.126" type="car" depart="1299.69">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.124" type="car" depart="1309.07">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.127" type="car" depart="1310.01">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.119" type="car" depart="1310.07">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.115" type="car" depart="1310.08">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.125" type="car" depart="1319.63">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.128" type="car" depart="1320.32">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.120" type="car" depart="1321.08">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.116" type="car" depart="1321.47">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.126" type="car" depart="1330.18">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.129" type="car" depart="1330.64">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.121" type="car" depart="1332.09">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.117" type="car" depart="1332.86">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.127" type="car" depart="1340.74">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.130" type="car" depart="1340.95">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.122" type="car" depart="1343.10">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.118" type="car" depart="1344.26">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.131" type="car" depart="1351.27">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.128" type="car" depart="1351.30">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.123" type="car" depart="1354.11">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.119" type="car" depart="1355.65">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.132" type="car" depart="1361.58">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.129" type="car" depart="1361.85">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.124" type="car" depart="1365.12">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.120" type="car" depart="1367.04">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.133" type="car" depart="1371.90">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.130" type="car" depart="1372.41">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.125" type="car" depart="1376.13">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.121" type="car" depart="1378.43">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.134" type="car" depart="1382.21">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.131" type="car" depart="1382.97">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.126" type="car" depart="1387.13">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.122" type="car" depart="1389.82">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.135" type="car" depart="1392.53">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.132" type="car" depart="1393.52">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.127" type="car" depart="1398.14">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.123" type="car" depart="1401.22">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.136" type="car" depart="1402.84">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.133" type="car" depart="1404.08">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.128" type="car" depart="1409.15">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.124" type="car" depart="1412.61">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.137" type="car" depart="1413.16">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.134" type="car" depart="1414.64">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.129" type="car" depart="1420.16">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.138" type="car" depart="1423.47">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.125" type="car" depart="1424.00">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.135" type="car" depart="1425.20">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.130" type="car" depart="1431.17">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.139" type="car" depart="1433.79">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.126" type="car" depart="1435.39">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.136" type="car" depart="1435.75">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.131" type="car" depart="1442.18">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.140" type="car" depart="1444.10">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.137" type="car" depart="1446.31">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.127" type="car" depart="1446.78">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.132" type="car" depart="1453.19">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.141" type="car" depart="1454.42">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.138" type="car" depart="1456.87">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.128" type="car" depart="1458.18">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.133" type="car" depart="1464.20">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.142" type="car" depart="1464.73">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.139" type="car" depart="1467.42">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.129" type="car" depart="1469.57">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.143" type="car" depart="1475.05">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.134" type="car" depart="1475.21">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.140" type="car" depart="1477.98">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.130" type="car" depart="1480.96">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.144" type="car" depart="1485.36">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.135" type="car" depart="1486.22">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.141" type="car" depart="1488.54">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.131" type="car" depart="1492.35">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.145" type="car" depart="1495.68">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.136" type="car" depart="1497.22">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.142" type="car" depart="1499.09">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.132" type="car" depart="1503.74">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.146" type="car" depart="1505.99">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.137" type="car" depart="1508.23">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.143" type="car" depart="1509.65">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.133" type="car" depart="1515.14">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.147" type="car" depart="1516.31">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.138" type="car" depart="1519.24">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.144" type="car" depart="1520.21">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.134" type="car" depart="1526.53">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.148" type="car" depart="1526.62">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.139" type="car" depart="1530.25">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.145" type="car" depart="1530.77">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.149" type="car" depart="1536.94">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.135" type="car" depart="1537.92">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.140" type="car" depart="1541.26">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.146" type="car" depart="1541.32">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.150" type="car" depart="1547.25">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.136" type="car" depart="1549.31">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.147" type="car" depart="1551.88">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.141" type="car" depart="1552.27">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.151" type="car" depart="1557.57">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.137" type="car" depart="1560.70">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.148" type="car" depart="1562.44">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.142" type="car" depart="1563.28">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.152" type="car" depart="1567.88">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.138" type="car" depart="1572.10">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.149" type="car" depart="1572.99">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.143" type="car" depart="1574.29">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.153" type="car" depart="1578.20">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.139" type="car" depart="1583.49">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.150" type="car" depart="1583.55">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.144" type="car" depart="1585.30">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.154" type="car" depart="1588.51">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.151" type="car" depart="1594.11">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.140" type="car" depart="1594.88">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.145" type="car" depart="1596.31">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.155" type="car" depart="1598.83">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.152" type="car" depart="1604.66">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.141" type="car" depart="1606.27">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.146" type="car" depart="1607.31">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.156" type="car" depart="1609.14">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.153" type="car" depart="1615.22">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.142" type="car" depart="1617.66">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.147" type="car" depart="1618.32">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.157" type="car" depart="1619.46">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.154" type="car" depart="1625.78">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.143" type="car" depart="1629.06">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.148" type="car" depart="1629.33">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.158" type="car" depart="1629.77">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.155" type="car" depart="1636.34">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.159" type="car" depart="1640.09">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.149" type="car" depart="1640.34">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.144" type="car" depart="1640.45">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.156" type="car" depart="1646.89">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.160" type="car" depart="1650.40">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.150" type="car" depart="1651.35">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.145" type="car" depart="1651.84">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.157" type="car" depart="1657.45">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.161" type="car" depart="1660.72">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.151" type="car" depart="1662.36">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.146" type="car" depart="1663.23">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.158" type="car" depart="1668.01">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.162" type="car" depart="1671.03">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.152" type="car" depart="1673.37">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.147" type="car" depart="1674.62">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.159" type="car" depart="1678.56">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.163" type="car" depart="1681.35">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.153" type="car" depart="1684.38">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.148" type="car" depart="1686.02">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.160" type="car" depart="1689.12">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.164" type="car" depart="1691.66">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.154" type="car" depart="1695.39">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.149" type="car" depart="1697.41">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.161" type="car" depart="1699.68">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.165" type="car" depart="1701.98">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.155" type="car" depart="1706.40">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.150" type="car" depart="1708.80">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.162" type="car" depart="1710.23">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.166" type="car" depart="1712.29">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.156" type="car" depart="1717.40">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.151" type="car" depart="1720.19">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.163" type="car" depart="1720.79">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.167" type="car" depart="1722.61">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.157" type="car" depart="1728.41">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.164" type="car" depart="1731.35">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.152" type="car" depart="1731.58">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.168" type="car" depart="1732.92">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.158" type="car" depart="1739.42">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.165" type="car" depart="1741.91">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.153" type="car" depart="1742.98">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.169" type="car" depart="1743.24">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.159" type="car" depart="1750.43">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.166" type="car" depart="1752.46">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.170" type="car" depart="1753.55">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.154" type="car" depart="1754.37">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.160" type="car" depart="1761.44">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.167" type="car" depart="1763.02">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.171" type="car" depart="1763.87">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.155" type="car" depart="1765.76">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.161" type="car" depart="1772.45">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.168" type="car" depart="1773.58">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.172" type="car" depart="1774.18">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.156" type="car" depart="1777.15">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.162" type="car" depart="1783.46">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.169" type="car" depart="1784.13">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.173" type="car" depart="1784.50">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.157" type="car" depart="1788.54">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.163" type="car" depart="1794.47">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.170" type="car" depart="1794.69">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.174" type="car" depart="1794.81">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.158" type="car" depart="1799.94">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.175" type="car" depart="1805.13">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.171" type="car" depart="1805.25">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.164" type="car" depart="1805.48">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.159" type="car" depart="1811.33">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.176" type="car" depart="1815.44">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.172" type="car" depart="1815.80">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.165" type="car" depart="1816.49">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.160" type="car" depart="1822.72">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.177" type="car" depart="1825.76">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.173" type="car" depart="1826.36">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.166" type="car" depart="1827.49">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.161" type="car" depart="1834.11">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.178" type="car" depart="1836.07">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.174" type="car" depart="1836.92">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.167" type="car" depart="1838.50">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.162" type="car" depart="1845.50">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.179" type="car" depart="1846.39">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.175" type="car" depart="1847.48">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.168" type="car" depart="1849.51">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.180" type="car" depart="1856.70">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.163" type="car" depart="1856.90">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.176" type="car" depart="1858.03">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.169" type="car" depart="1860.52">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.181" type="car" depart="1867.02">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.164" type="car" depart="1868.29">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.177" type="car" depart="1868.59">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.170" type="car" depart="1871.53">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.182" type="car" depart="1877.33">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.178" type="car" depart="1879.15">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.165" type="car" depart="1879.68">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.171" type="car" depart="1882.54">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.183" type="car" depart="1887.65">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.179" type="car" depart="1889.70">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.166" type="car" depart="1891.07">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.172" type="car" depart="1893.55">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.184" type="car" depart="1897.96">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.180" type="car" depart="1900.26">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.167" type="car" depart="1902.46">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.173" type="car" depart="1904.56">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.185" type="car" depart="1908.28">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.181" type="car" depart="1910.82">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.168" type="car" depart="1913.86">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.174" type="car" depart="1915.57">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.186" type="car" depart="1918.59">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.182" type="car" depart="1921.37">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.169" type="car" depart="1925.25">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.175" type="car" depart="1926.58">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.187" type="car" depart="1928.91">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.183" type="car" depart="1931.93">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.170" type="car" depart="1936.64">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.176" type="car" depart="1937.58">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.188" type="car" depart="1939.22">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.184" type="car" depart="1942.49">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.171" type="car" depart="1948.03">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.177" type="car" depart="1948.59">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.189" type="car" depart="1949.54">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.185" type="car" depart="1953.05">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.172" type="car" depart="1959.42">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.178" type="car" depart="1959.60">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.190" type="car" depart="1959.85">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.186" type="car" depart="1963.60">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.191" type="car" depart="1970.17">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.179" type="car" depart="1970.61">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.173" type="car" depart="1970.82">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.187" type="car" depart="1974.16">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.192" type="car" depart="1980.48">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.180" type="car" depart="1981.62">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.174" type="car" depart="1982.21">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.188" type="car" depart="1984.72">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.193" type="car" depart="1990.80">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.181" type="car" depart="1992.63">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.175" type="car" depart="1993.60">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.189" type="car" depart="1995.27">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.194" type="car" depart="2001.11">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.182" type="car" depart="2003.64">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.176" type="car" depart="2004.99">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.190" type="car" depart="2005.83">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.195" type="car" depart="2011.43">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.183" type="car" depart="2014.65">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.177" type="car" depart="2016.38">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.191" type="car" depart="2016.39">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.196" type="car" depart="2021.74">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.184" type="car" depart="2025.66">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.192" type="car" depart="2026.94">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.178" type="car" depart="2027.78">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.197" type="car" depart="2032.06">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.185" type="car" depart="2036.67">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.193" type="car" depart="2037.50">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.179" type="car" depart="2039.17">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.198" type="car" depart="2042.37">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.186" type="car" depart="2047.67">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.194" type="car" depart="2048.06">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.180" type="car" depart="2050.56">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.199" type="car" depart="2052.69">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.195" type="car" depart="2058.62">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.187" type="car" depart="2058.68">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.181" type="car" depart="2061.95">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.200" type="car" depart="2063.00">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.196" type="car" depart="2069.17">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.188" type="car" depart="2069.69">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.201" type="car" depart="2073.32">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.182" type="car" depart="2073.34">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.197" type="car" depart="2079.73">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.189" type="car" depart="2080.70">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.202" type="car" depart="2083.63">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.183" type="car" depart="2084.74">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.198" type="car" depart="2090.29">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.190" type="car" depart="2091.71">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.203" type="car" depart="2093.95">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.184" type="car" depart="2096.13">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.199" type="car" depart="2100.84">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.191" type="car" depart="2102.72">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.204" type="car" depart="2104.26">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.185" type="car" depart="2107.52">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.200" type="car" depart="2111.40">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.192" type="car" depart="2113.73">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.205" type="car" depart="2114.58">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.186" type="car" depart="2118.91">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.201" type="car" depart="2121.96">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.193" type="car" depart="2124.74">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.206" type="car" depart="2124.89">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.187" type="car" depart="2130.30">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.202" type="car" depart="2132.51">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.207" type="car" depart="2135.21">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.194" type="car" depart="2135.75">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.188" type="car" depart="2141.70">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.203" type="car" depart="2143.07">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.208" type="car" depart="2145.52">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.195" type="car" depart="2146.76">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.189" type="car" depart="2153.09">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.204" type="car" depart="2153.63">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.209" type="car" depart="2155.84">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.196" type="car" depart="2157.76">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.205" type="car" depart="2164.19">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.190" type="car" depart="2164.48">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.210" type="car" depart="2166.15">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.197" type="car" depart="2168.77">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.206" type="car" depart="2174.74">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.191" type="car" depart="2175.87">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.211" type="car" depart="2176.47">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.198" type="car" depart="2179.78">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.207" type="car" depart="2185.30">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.212" type="car" depart="2186.78">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.192" type="car" depart="2187.26">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.199" type="car" depart="2190.79">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.208" type="car" depart="2195.86">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.213" type="car" depart="2197.10">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.193" type="car" depart="2198.66">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.200" type="car" depart="2201.80">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.209" type="car" depart="2206.41">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.214" type="car" depart="2207.41">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.194" type="car" depart="2210.05">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.201" type="car" depart="2212.81">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.210" type="car" depart="2216.97">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.215" type="car" depart="2217.73">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.195" type="car" depart="2221.44">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.202" type="car" depart="2223.82">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.211" type="car" depart="2227.53">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.216" type="car" depart="2228.04">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.196" type="car" depart="2232.83">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.203" type="car" depart="2234.83">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.212" type="car" depart="2238.08">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.217" type="car" depart="2238.36">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.197" type="car" depart="2244.22">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.204" type="car" depart="2245.84">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.213" type="car" depart="2248.64">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.218" type="car" depart="2248.67">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.198" type="car" depart="2255.62">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.205" type="car" depart="2256.85">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.219" type="car" depart="2258.99">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.214" type="car" depart="2259.20">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.199" type="car" depart="2267.01">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.206" type="car" depart="2267.85">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.220" type="car" depart="2269.30">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.215" type="car" depart="2269.76">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.200" type="car" depart="2278.40">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.207" type="car" depart="2278.86">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.221" type="car" depart="2279.62">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.216" type="car" depart="2280.31">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.201" type="car" depart="2289.79">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.208" type="car" depart="2289.87">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.222" type="car" depart="2289.93">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.217" type="car" depart="2290.87">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.223" type="car" depart="2300.25">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.209" type="car" depart="2300.88">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.202" type="car" depart="2301.18">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.218" type="car" depart="2301.43">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.224" type="car" depart="2310.56">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.210" type="car" depart="2311.89">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.219" type="car" depart="2311.98">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.203" type="car" depart="2312.58">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.225" type="car" depart="2320.88">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.220" type="car" depart="2322.54">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.211" type="car" depart="2322.90">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.204" type="car" depart="2323.97">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.226" type="car" depart="2331.19">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.221" type="car" depart="2333.10">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.212" type="car" depart="2333.91">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.205" type="car" depart="2335.36">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.227" type="car" depart="2341.51">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.222" type="car" depart="2343.65">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.213" type="car" depart="2344.92">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.206" type="car" depart="2346.75">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.228" type="car" depart="2351.82">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.223" type="car" depart="2354.21">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.214" type="car" depart="2355.93">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.207" type="car" depart="2358.14">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.229" type="car" depart="2362.14">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.224" type="car" depart="2364.77">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.215" type="car" depart="2366.94">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.208" type="car" depart="2369.54">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.230" type="car" depart="2372.45">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.225" type="car" depart="2375.33">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.216" type="car" depart="2377.94">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.209" type="car" depart="2380.93">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.231" type="car" depart="2382.77">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.226" type="car" depart="2385.88">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.217" type="car" depart="2388.95">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.210" type="car" depart="2392.32">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.232" type="car" depart="2393.08">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.227" type="car" depart="2396.44">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.218" type="car" depart="2399.96">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.233" type="car" depart="2403.40">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.211" type="car" depart="2403.71">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.228" type="car" depart="2407.00">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.219" type="car" depart="2410.97">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.234" type="car" depart="2413.71">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.212" type="car" depart="2415.10">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.229" type="car" depart="2417.55">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.220" type="car" depart="2421.98">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.235" type="car" depart="2424.03">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.213" type="car" depart="2426.50">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.230" type="car" depart="2428.11">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.221" type="car" depart="2432.99">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.236" type="car" depart="2434.34">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.214" type="car" depart="2437.89">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.231" type="car" depart="2438.67">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.222" type="car" depart="2444.00">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.237" type="car" depart="2444.66">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.232" type="car" depart="2449.22">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.215" type="car" depart="2449.28">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.238" type="car" depart="2454.97">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.223" type="car" depart="2455.01">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.233" type="car" depart="2459.78">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.216" type="car" depart="2460.67">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.239" type="car" depart="2465.29">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.224" type="car" depart="2466.02">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.234" type="car" depart="2470.34">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.217" type="car" depart="2472.06">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.240" type="car" depart="2475.60">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.225" type="car" depart="2477.03">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.235" type="car" depart="2480.90">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.218" type="car" depart="2483.46">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.241" type="car" depart="2485.92">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.226" type="car" depart="2488.03">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.236" type="car" depart="2491.45">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.219" type="car" depart="2494.85">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.242" type="car" depart="2496.23">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.227" type="car" depart="2499.04">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.237" type="car" depart="2502.01">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.220" type="car" depart="2506.24">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.243" type="car" depart="2506.55">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.228" type="car" depart="2510.05">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.238" type="car" depart="2512.57">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.244" type="car" depart="2516.86">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.221" type="car" depart="2517.63">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.229" type="car" depart="2521.06">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.239" type="car" depart="2523.12">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.245" type="car" depart="2527.18">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.222" type="car" depart="2529.02">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.230" type="car" depart="2532.07">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.240" type="car" depart="2533.68">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.246" type="car" depart="2537.49">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.223" type="car" depart="2540.42">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.231" type="car" depart="2543.08">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.241" type="car" depart="2544.24">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.247" type="car" depart="2547.81">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.224" type="car" depart="2551.81">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.232" type="car" depart="2554.09">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.242" type="car" depart="2554.79">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.248" type="car" depart="2558.12">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.225" type="car" depart="2563.20">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.233" type="car" depart="2565.10">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.243" type="car" depart="2565.35">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.249" type="car" depart="2568.44">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.226" type="car" depart="2574.59">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.244" type="car" depart="2575.91">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.234" type="car" depart="2576.11">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.250" type="car" depart="2578.75">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.227" type="car" depart="2585.98">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.245" type="car" depart="2586.47">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.235" type="car" depart="2587.12">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.251" type="car" depart="2589.07">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.246" type="car" depart="2597.02">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.228" type="car" depart="2597.38">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.236" type="car" depart="2598.12">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.252" type="car" depart="2599.38">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.247" type="car" depart="2607.58">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.229" type="car" depart="2608.77">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.237" type="car" depart="2609.13">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.253" type="car" depart="2609.70">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.248" type="car" depart="2618.14">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.254" type="car" depart="2620.01">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.238" type="car" depart="2620.14">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.230" type="car" depart="2620.16">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.249" type="car" depart="2628.69">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.255" type="car" depart="2630.33">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.239" type="car" depart="2631.15">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.231" type="car" depart="2631.55">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.250" type="car" depart="2639.25">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.256" type="car" depart="2640.64">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.240" type="car" depart="2642.16">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.232" type="car" depart="2642.94">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.251" type="car" depart="2649.81">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.257" type="car" depart="2650.96">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.241" type="car" depart="2653.17">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.233" type="car" depart="2654.34">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.252" type="car" depart="2660.36">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.258" type="car" depart="2661.27">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.242" type="car" depart="2664.18">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.234" type="car" depart="2665.73">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.253" type="car" depart="2670.92">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.259" type="car" depart="2671.59">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.243" type="car" depart="2675.19">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.235" type="car" depart="2677.12">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.254" type="car" depart="2681.48">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.260" type="car" depart="2681.90">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.244" type="car" depart="2686.20">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.236" type="car" depart="2688.51">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.255" type="car" depart="2692.04">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.261" type="car" depart="2692.22">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.245" type="car" depart="2697.21">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.237" type="car" depart="2699.90">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.262" type="car" depart="2702.53">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.256" type="car" depart="2702.59">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.246" type="car" depart="2708.21">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.238" type="car" depart="2711.30">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.263" type="car" depart="2712.85">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.257" type="car" depart="2713.15">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.247" type="car" depart="2719.22">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.239" type="car" depart="2722.69">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.264" type="car" depart="2723.16">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.258" type="car" depart="2723.71">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.248" type="car" depart="2730.23">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.265" type="car" depart="2733.48">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.240" type="car" depart="2734.08">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.259" type="car" depart="2734.26">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.249" type="car" depart="2741.24">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.266" type="car" depart="2743.79">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.260" type="car" depart="2744.82">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.241" type="car" depart="2745.47">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.250" type="car" depart="2752.25">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.267" type="car" depart="2754.11">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.261" type="car" depart="2755.38">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.242" type="car" depart="2756.86">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.251" type="car" depart="2763.26">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.268" type="car" depart="2764.42">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.262" type="car" depart="2765.93">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.243" type="car" depart="2768.26">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.252" type="car" depart="2774.27">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.269" type="car" depart="2774.74">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.263" type="car" depart="2776.49">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.244" type="car" depart="2779.65">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.270" type="car" depart="2785.05">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.253" type="car" depart="2785.28">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.264" type="car" depart="2787.05">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.245" type="car" depart="2791.04">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.271" type="car" depart="2795.37">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.254" type="car" depart="2796.29">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.265" type="car" depart="2797.61">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.246" type="car" depart="2802.43">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.272" type="car" depart="2805.68">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.255" type="car" depart="2807.30">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.266" type="car" depart="2808.16">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.247" type="car" depart="2813.82">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.273" type="car" depart="2816.00">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.256" type="car" depart="2818.30">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.267" type="car" depart="2818.72">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.248" type="car" depart="2825.22">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.274" type="car" depart="2826.31">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.268" type="car" depart="2829.28">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.257" type="car" depart="2829.31">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.249" type="car" depart="2836.61">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.275" type="car" depart="2836.63">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.269" type="car" depart="2839.83">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.258" type="car" depart="2840.32">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.276" type="car" depart="2846.94">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.250" type="car" depart="2848.00">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.270" type="car" depart="2850.39">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.259" type="car" depart="2851.33">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.277" type="car" depart="2857.26">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.251" type="car" depart="2859.39">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.271" type="car" depart="2860.95">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.260" type="car" depart="2862.34">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.278" type="car" depart="2867.57">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.252" type="car" depart="2870.78">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.272" type="car" depart="2871.50">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.261" type="car" depart="2873.35">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.279" type="car" depart="2877.89">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.273" type="car" depart="2882.06">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.253" type="car" depart="2882.18">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.262" type="car" depart="2884.36">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.280" type="car" depart="2888.20">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.274" type="car" depart="2892.62">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.254" type="car" depart="2893.57">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.263" type="car" depart="2895.37">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.281" type="car" depart="2898.52">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.275" type="car" depart="2903.18">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.255" type="car" depart="2904.96">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.264" type="car" depart="2906.38">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.282" type="car" depart="2908.83">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.276" type="car" depart="2913.73">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.256" type="car" depart="2916.35">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.265" type="car" depart="2917.39">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.283" type="car" depart="2919.15">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.277" type="car" depart="2924.29">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.257" type="car" depart="2927.74">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.266" type="car" depart="2928.39">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.284" type="car" depart="2929.46">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.278" type="car" depart="2934.85">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.258" type="car" depart="2939.14">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.267" type="car" depart="2939.40">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.285" type="car" depart="2939.78">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.279" type="car" depart="2945.40">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.286" type="car" depart="2950.09">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.268" type="car" depart="2950.41">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.259" type="car" depart="2950.53">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.280" type="car" depart="2955.96">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.287" type="car" depart="2960.41">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.269" type="car" depart="2961.42">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.260" type="car" depart="2961.92">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.281" type="car" depart="2966.52">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.288" type="car" depart="2970.72">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.270" type="car" depart="2972.43">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.261" type="car" depart="2973.31">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.282" type="car" depart="2977.07">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.289" type="car" depart="2981.04">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.271" type="car" depart="2983.44">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.262" type="car" depart="2984.70">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.283" type="car" depart="2987.63">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.290" type="car" depart="2991.35">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.272" type="car" depart="2994.45">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.263" type="car" depart="2996.10">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.284" type="car" depart="2998.19">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.291" type="car" depart="3001.67">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.273" type="car" depart="3005.46">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.264" type="car" depart="3007.49">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.285" type="car" depart="3008.75">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.292" type="car" depart="3011.98">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.274" type="car" depart="3016.47">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.265" type="car" depart="3018.88">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.286" type="car" depart="3019.30">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.293" type="car" depart="3022.30">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.275" type="car" depart="3027.48">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.287" type="car" depart="3029.86">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.266" type="car" depart="3030.27">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.294" type="car" depart="3032.61">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.276" type="car" depart="3038.48">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.288" type="car" depart="3040.42">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.267" type="car" depart="3041.66">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.295" type="car" depart="3042.93">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.277" type="car" depart="3049.49">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.289" type="car" depart="3050.97">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.268" type="car" depart="3053.06">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.296" type="car" depart="3053.24">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.278" type="car" depart="3060.50">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.290" type="car" depart="3061.53">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.297" type="car" depart="3063.56">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.269" type="car" depart="3064.45">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.279" type="car" depart="3071.51">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.291" type="car" depart="3072.09">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.298" type="car" depart="3073.87">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.270" type="car" depart="3075.84">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.280" type="car" depart="3082.52">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.292" type="car" depart="3082.64">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.299" type="car" depart="3084.19">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.271" type="car" depart="3087.23">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.293" type="car" depart="3093.20">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.281" type="car" depart="3093.53">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.300" type="car" depart="3094.50">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.272" type="car" depart="3098.62">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.294" type="car" depart="3103.76">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.282" type="car" depart="3104.54">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.301" type="car" depart="3104.82">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.273" type="car" depart="3110.02">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.295" type="car" depart="3114.32">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.302" type="car" depart="3115.13">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.283" type="car" depart="3115.55">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.274" type="car" depart="3121.41">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.296" type="car" depart="3124.87">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.303" type="car" depart="3125.45">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.284" type="car" depart="3126.56">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.275" type="car" depart="3132.80">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.297" type="car" depart="3135.43">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.304" type="car" depart="3135.76">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.285" type="car" depart="3137.57">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.276" type="car" depart="3144.19">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.298" type="car" depart="3145.99">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.305" type="car" depart="3146.08">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.286" type="car" depart="3148.57">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.277" type="car" depart="3155.58">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.306" type="car" depart="3156.39">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.299" type="car" depart="3156.54">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.287" type="car" depart="3159.58">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.307" type="car" depart="3166.71">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.278" type="car" depart="3166.98">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.300" type="car" depart="3167.10">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.288" type="car" depart="3170.59">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.308" type="car" depart="3177.02">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.301" type="car" depart="3177.66">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.279" type="car" depart="3178.37">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.289" type="car" depart="3181.60">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.309" type="car" depart="3187.34">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.302" type="car" depart="3188.21">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.280" type="car" depart="3189.76">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.290" type="car" depart="3192.61">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.310" type="car" depart="3197.65">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.303" type="car" depart="3198.77">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.281" type="car" depart="3201.15">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.291" type="car" depart="3203.62">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.311" type="car" depart="3207.97">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.304" type="car" depart="3209.33">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.282" type="car" depart="3212.54">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.292" type="car" depart="3214.63">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.312" type="car" depart="3218.28">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.305" type="car" depart="3219.89">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.283" type="car" depart="3223.94">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.293" type="car" depart="3225.64">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.313" type="car" depart="3228.60">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.306" type="car" depart="3230.44">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.284" type="car" depart="3235.33">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.294" type="car" depart="3236.65">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.314" type="car" depart="3238.91">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.307" type="car" depart="3241.00">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.285" type="car" depart="3246.72">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.295" type="car" depart="3247.66">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.315" type="car" depart="3249.23">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.308" type="car" depart="3251.56">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.286" type="car" depart="3258.11">
+        <route edges="-E1 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.296" type="car" depart="3258.66">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.316" type="car" depart="3259.54">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.309" type="car" depart="3262.11">
+        <route edges="E0 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.287" type="car" depart="3269.50">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.297" type="car" depart="3269.67">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.317" type="car" depart="3269.86">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.310" type="car" depart="3272.67">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.318" type="car" depart="3280.17">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.298" type="car" depart="3280.68">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.288" type="car" depart="3280.90">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.311" type="car" depart="3283.23">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.319" type="car" depart="3290.49">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.299" type="car" depart="3291.69">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.289" type="car" depart="3292.29">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.312" type="car" depart="3293.78">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.320" type="car" depart="3300.80">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.300" type="car" depart="3302.70">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.290" type="car" depart="3303.68">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.313" type="car" depart="3304.34">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.321" type="car" depart="3311.12">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="NS_car.301" type="car" depart="3313.71">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.314" type="car" depart="3314.90">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.291" type="car" depart="3315.07">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.322" type="car" depart="3321.43">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.302" type="car" depart="3324.72">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.315" type="car" depart="3325.46">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.292" type="car" depart="3326.46">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.323" type="car" depart="3331.75">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.303" type="car" depart="3335.73">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.316" type="car" depart="3336.01">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.293" type="car" depart="3337.86">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.324" type="car" depart="3342.06">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.317" type="car" depart="3346.57">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.304" type="car" depart="3346.74">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.294" type="car" depart="3349.25">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.325" type="car" depart="3352.38">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.318" type="car" depart="3357.13">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.305" type="car" depart="3357.75">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.295" type="car" depart="3360.64">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.326" type="car" depart="3362.69">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.319" type="car" depart="3367.68">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.306" type="car" depart="3368.75">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="EW_car.296" type="car" depart="3372.03">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.327" type="car" depart="3373.01">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.320" type="car" depart="3378.24">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.307" type="car" depart="3379.76">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.328" type="car" depart="3383.32">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.297" type="car" depart="3383.42">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.321" type="car" depart="3388.80">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.308" type="car" depart="3390.77">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.329" type="car" depart="3393.64">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.298" type="car" depart="3394.82">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.322" type="car" depart="3399.35">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.309" type="car" depart="3401.78">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.330" type="car" depart="3403.95">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.299" type="car" depart="3406.21">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.323" type="car" depart="3409.91">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.310" type="car" depart="3412.79">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.331" type="car" depart="3414.27">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.300" type="car" depart="3417.60">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.324" type="car" depart="3420.47">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.311" type="car" depart="3423.80">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="SN_car.332" type="car" depart="3424.58">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.301" type="car" depart="3428.99">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.325" type="car" depart="3431.03">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.312" type="car" depart="3434.81">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.333" type="car" depart="3434.90">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.302" type="car" depart="3440.38">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="WE_car.326" type="car" depart="3441.58">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.334" type="car" depart="3445.21">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.313" type="car" depart="3445.82">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.303" type="car" depart="3451.78">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.327" type="car" depart="3452.14">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.335" type="car" depart="3455.53">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.314" type="car" depart="3456.83">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.328" type="car" depart="3462.70">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.304" type="car" depart="3463.17">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.336" type="car" depart="3465.84">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.315" type="car" depart="3467.84">
+        <route edges="-E3 E2"/>
+    </vehicle>
+    <vehicle id="WE_car.329" type="car" depart="3473.25">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.305" type="car" depart="3474.56">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.337" type="car" depart="3476.16">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.316" type="car" depart="3478.84">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.330" type="car" depart="3483.81">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.306" type="car" depart="3485.95">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="SN_car.338" type="car" depart="3486.47">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="NS_car.317" type="car" depart="3489.85">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.331" type="car" depart="3494.37">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.339" type="car" depart="3496.79">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.307" type="car" depart="3497.34">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.318" type="car" depart="3500.86">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.332" type="car" depart="3504.92">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.340" type="car" depart="3507.10">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.308" type="car" depart="3508.74">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.319" type="car" depart="3511.87">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.333" type="car" depart="3515.48">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.341" type="car" depart="3517.42">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.309" type="car" depart="3520.13">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.320" type="car" depart="3522.88">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.334" type="car" depart="3526.04">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.342" type="car" depart="3527.73">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.310" type="car" depart="3531.52">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.321" type="car" depart="3533.89">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.335" type="car" depart="3536.60">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.343" type="car" depart="3538.05">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.311" type="car" depart="3542.91">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.322" type="car" depart="3544.90">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.336" type="car" depart="3547.15">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.344" type="car" depart="3548.36">
+        <route edges="-E2 E1"/>
+    </vehicle>
+    <vehicle id="EW_car.312" type="car" depart="3554.30">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.323" type="car" depart="3555.91">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.337" type="car" depart="3557.71">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.345" type="car" depart="3558.68">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.313" type="car" depart="3565.70">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.324" type="car" depart="3566.92">
+        <route edges="-E3 -E0"/>
+    </vehicle>
+    <vehicle id="WE_car.338" type="car" depart="3568.27">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.346" type="car" depart="3568.99">
+        <route edges="-E2 -E0"/>
+    </vehicle>
+    <vehicle id="EW_car.314" type="car" depart="3577.09">
+        <route edges="-E1 E2"/>
+    </vehicle>
+    <vehicle id="NS_car.325" type="car" depart="3577.93">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.339" type="car" depart="3578.82">
+        <route edges="E0 E3"/>
+    </vehicle>
+    <vehicle id="SN_car.347" type="car" depart="3579.31">
+        <route edges="-E2 E3"/>
+    </vehicle>
+    <vehicle id="EW_car.315" type="car" depart="3588.48">
+        <route edges="-E1 E3"/>
+    </vehicle>
+    <vehicle id="NS_car.326" type="car" depart="3588.93">
+        <route edges="-E3 E1"/>
+    </vehicle>
+    <vehicle id="WE_car.340" type="car" depart="3589.38">
+        <route edges="E0 E1"/>
+    </vehicle>
+    <vehicle id="SN_car.348" type="car" depart="3589.62">
+        <route edges="-E2 E3"/>
+    </vehicle>
+</routes>

@@ -29,23 +29,19 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from env.reward_functions import compute_reward
-
+from configs.constants import (
+    INTERSECTION_ORDER,
+    ACTION_NAMES,
+    FEATURES_PER_INTERSECTION,
+    STATE_DIMENSION,
+    MIN_GREEN_SECONDS,
+    DEFAULT_SUMO_CONFIG,
+)
 
 API_PREFIX = "/api/v1"
 STATE_LAYOUT_VERSION = "v1-20x22"
 REWARD_VERSION = "v3"
-INTERSECTION_ORDER = tuple(f"J{index:02d}" for index in range(1, 21))
-ACTION_NAMES = ("NS_Straight", "NS_Left", "EW_Straight", "EW_Left")
-FEATURES_PER_INTERSECTION = 22
-STATE_DIMENSION = len(INTERSECTION_ORDER) * FEATURES_PER_INTERSECTION
-MIN_GREEN_SECONDS = 15
-DEFAULT_NETWORK_ROOT = PROJECT_ROOT.parent / "xiongan_rongdong_20" / "sumo_files"
-DEFAULT_CONFIG_PATH = Path(
-    os.environ.get(
-        "XIONGAN_SUMO_CONFIG",
-        str(DEFAULT_NETWORK_ROOT / "xiongan.sumocfg" if DEFAULT_NETWORK_ROOT.exists() else PROJECT_ROOT / "sumo_files" / "xiongan.sumocfg"),
-    )
-).resolve()
+DEFAULT_CONFIG_PATH = DEFAULT_SUMO_CONFIG
 
 
 class ApiError(Exception):

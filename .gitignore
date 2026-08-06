@@ -41,4 +41,8 @@ models/
 
 .vscode/
 .idea/
-*.swp
+*.swp"__pycache__/" 
+"*.pyc" 
+"venv/" 
+"env/" 
+".venv/" 

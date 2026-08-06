@@ -1,21 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <input>
-        <net-file value="xiongan.net.xml"/>
-        <route-files value="xiongan.rou.xml"/>
-        <additional-files value="signal.add.xml,detectors.add.xml"/>
+        <net-file value="xiongan_20.net.xml"/>
+        <route-files value="xiongan_20.rou.xml"/>
     </input>
-    <output>
-        <tripinfo-output value="tripinfo.xml"/>
-        <emission-output value="emissions.xml"/>
-        <summary-output value="summary.xml"/>
-        <queue-output value="queues.xml"/>
-    </output>
-    <time>
-        <begin value="0"/>
-        <end value="3600"/>
-        <step-length value="1"/>
-    </time>
-    <gui_only>
-        <gui-settings-file value="view.settings.xml"/>
-    </gui_only>
+    <time><begin value="0"/><end value="3600"/><step-length value="1"/></time>
+    <processing><time-to-teleport value="-1"/><collision.action value="warn"/></processing>
+    <report><verbose value="true"/><no-step-log value="false"/></report>
 </configuration>
