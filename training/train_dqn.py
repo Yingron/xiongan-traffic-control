@@ -25,6 +25,10 @@ import sys
 import time
 from pathlib import Path
 
+# Windows GBK encoding fix - reconfigure stdout to UTF-8
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -606,7 +610,7 @@ def main():
     )
 
     print(f"\n{'='*68}")
-    print(f" ▶ 训练完成报告")
+    print(f" >>> 训练完成报告")
     print(f"{'='*68}")
     print(f"  场景       : {stats.get('scenario', '-')}")
     print(f"  模式       : {'高性能' if stats.get('perf_mode') else '标准'}")

@@ -1,0 +1,36 @@
+# --- Train signal control only (no vehicle routing) ---
+# 单智能体信号控制专用配置
+
+action_selector: "epsilon_greedy"
+epsilon_start: 1.0
+epsilon_finish: 0.1
+epsilon_anneal_time: 80000
+
+target_update_interval: 100
+
+agent: "rnn"
+agent_output_type: "q"
+learner: "q_learner"
+double_q: True
+mixer: "qmix"
+mixing_embed_dim: 32
+hypernet_layers: 2
+hypernet_embed: 64
+grad_norm_clip: 10
+
+env_args:
+  trajectory_entropy_enabled: False
+  action_dims: [1, 2]  # 车辆路径动作=1(NoOp), 信号动作=2(Keep/Switch)
+  reward_stage: 2  # 仅使用信号奖励
+
+# 只训练和探索信号动作头（索引1）
+train_action_heads: [1]
+explore_action_heads: [1]
+force_noop_action_heads: [0]  # 强制车辆路径动作为NoOp
+freeze_route_net: True  # 冻结车辆路径网络
+freeze_signal_net: False
+skip_optimizer_load: True
+
+t_max: 150000
+
+name: "qmix_signal_only"

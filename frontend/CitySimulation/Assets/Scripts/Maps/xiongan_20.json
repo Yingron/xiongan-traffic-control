@@ -1,0 +1,3569 @@
+{
+  "snapshot": {
+    "roads": [
+      {
+        "id": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 100.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "656345c8-0841-413b-a028-dbd89dbd26ae",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 300.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "94d34d89-a5d2-441e-a954-cf46213ca8a7",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 500.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "78acb080-47c0-49e8-ae23-475bf926f257",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 700.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "32b05253-c12d-4361-891d-f67e6caa429d",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 900.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 1000,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "81d1988f-8e49-494d-ab70-03b3a2ccd3c4",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 100.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "1c57d4b2-4593-4f44-9b54-01149cb802d5",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 300.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "fbf143f2-4d90-406d-bc6c-74fad757b163",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 500.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "c7c141fe-fba9-4f50-ba8f-ce666135cf00",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 700.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "b7f627e1-5300-4674-9f25-60976a966ab5",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 900.0,
+          "y": 0,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 1000,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 100.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "894bab61-84ed-473d-aecf-fdce355f732b",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 300.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "439d4f32-dbd0-4e00-b85c-7825fc980042",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 500.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "b212801a-4adb-4324-a99b-55c12ab62ac6",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 700.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "257ee8d3-4eeb-45ea-9a6a-53d9f0fe985e",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 900.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 1000,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "96051a12-098d-4196-8103-d25a6343c2ad",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 100.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "11a838e6-fe65-47cc-8c43-bcc4b5adb635",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 300.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "6f57a561-edea-44c7-86a2-4b1bef9c4151",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 500.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "ee742b76-1fbe-4d6e-a883-c9d8675029b0",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 700.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "52229c55-7081-44c5-bafb-fc85c57c2b1d",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 900.0,
+          "y": 0,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 1000,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 100.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "6744bd16-4335-416c-b148-d02b2bbc3063",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 300.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "b1a533c4-7515-4002-8a9f-068c5e9c0115",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 500.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "aa1eabc7-94c9-4c45-8922-7a2b1e28069d",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 700.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "39305b5b-2298-46f6-89fc-0f2185bfaf48",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 900.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 1000,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "237c3d7a-ea31-4645-9da3-a1d855bbdb77",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 100.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "f2443b69-2d6e-4fbc-b30a-dcf16fde1c7a",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 300.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "1b975256-b3d8-4ebf-afcc-d95a95bc6fd7",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 500.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "f5e635a7-2f03-4eb7-b1d5-7db1e075a39b",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 700.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "c9a04ceb-eb25-49a5-a3a2-cc308de9ea85",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 900.0,
+          "y": 0,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 1000,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "b0477646-262a-4f52-8244-adc02b970b08",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 100.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "39678897-a9fd-4014-9a6e-5670f92445a7",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 300.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "d81dfdfa-f32a-4855-9cf6-2eb8a247d662",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 500.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "1ee22b43-1f32-4506-b76a-5da506dbc3aa",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 700.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "7f3969be-ca54-4f9d-9e6e-48213ca2980f",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 900.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 1000,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "2de8afe9-8fb3-4ad7-80a0-1839cb94675e",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 100.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "c4d8d675-49cd-40a0-a856-fe14842256bd",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 300.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "11ca15b2-8c2a-4cc9-93d1-4380b5e1fce3",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 500.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "b98f8421-b270-40ef-b4fc-b093d22877cb",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 700.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "1d937be5-e2c4-46d2-a47a-556ca738a2bd",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 900.0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 1000,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "4cefca91-5d44-49ee-b07a-41315f0ffdad",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "61b41407-22ab-4d8b-9643-15aca77cde79",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "3030c888-44ca-4b4b-9af3-09fb5b5ef5da",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "3a445c03-b17f-4a19-9b0c-5716f04f79ea",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": -200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "16dc406a-1c0c-44c1-b6bd-f32473c59cf9",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "d8fc8bab-dd6c-450d-b72d-97c2333a0e64",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "3fb751d6-da30-4a6a-93ba-4991dbf9f84d",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "a0799b95-6609-49ae-9727-2c56f6065e80",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 0,
+            "y": 0,
+            "z": -200
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "54afd8a2-a0f7-4f64-b4ef-33ae45e872d7",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "2ca2c75d-8835-4a39-a427-fa0787507068",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "64153fda-5f88-4315-a484-ab65542c87f1",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "770ef03f-ea3e-4b18-97d0-485ff31d6c21",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": -200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "193e929f-46a0-497d-a2db-337c188f773e",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "464d1017-c6d0-4c0c-aab0-5a9aced98138",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "d8382291-58b0-415d-b153-aa51d98b79cc",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "afb8237c-f59d-413c-bb21-6fed28ae5e23",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 200,
+            "y": 0,
+            "z": -200
+          },
+          {
+            "x": 200,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "b180de5d-2a87-4bf6-9a42-0557b4f01e89",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "7fe1787f-5bcf-4b1d-b194-8fd7be2a360a",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "44fd156b-aa29-443f-9366-5ac18564362f",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "52a4561a-2d2b-49e4-a687-ee2aa85fdb68",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": -200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "4590d095-9ff7-4ed5-83a3-452ee098a59a",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "481670e3-fed3-4d0a-bc3c-3826398be204",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "3406e03a-f8c2-4e41-be65-90a21d383bf6",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "94e792cb-cb04-4afd-98ab-6a7c4496f619",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 400,
+            "y": 0,
+            "z": -200
+          },
+          {
+            "x": 400,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "e3e73727-381d-4ef8-b05d-a6040344c195",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "5ec43adc-bea8-4494-acf1-1d96a2b6b12c",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "10d5cce7-1e44-46a5-8895-45f8376052c5",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "b560522b-d049-46bc-b810-d3224302d07e",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": -200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "a6537273-0111-4956-8514-06d44d7e178b",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "bdb5519b-2062-47ff-b603-216b1eb9a1f9",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "ef593c25-8857-4860-90f1-982df492f963",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "3b3d7751-b0ef-4d7a-a2fb-b4600a7c78f2",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 600,
+            "y": 0,
+            "z": -200
+          },
+          {
+            "x": 600,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "35f8515e-8e2a-4ae2-9d5e-bd0cbbca5a12",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 800,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 600
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "0838f0ce-9316-4ed5-b685-1035e6a24dd3",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 800,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "0901665f-768b-4497-9fb7-dc88f50b478b",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 800,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "f185f605-284a-4353-a1d0-8b728cc6d1ef",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 800,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": -200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "a220ad2a-fe46-42ba-a676-885820e31088",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 800,
+          "y": 0,
+          "z": 500.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 400
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 600
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "313cabf4-8110-478b-8f14-8760d8ae9f41",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 800,
+          "y": 0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 200
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 400
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "d1b514b1-cdd2-415f-a3e3-6bb29c0dbe9d",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 800,
+          "y": 0,
+          "z": 100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": 0
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 200
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      },
+      {
+        "id": "f9e4f107-05c9-48b6-830e-afdddfe4c53e",
+        "category": 1,
+        "styleId": "section",
+        "position": {
+          "x": 800,
+          "y": 0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlPoints": [
+          {
+            "x": 800,
+            "y": 0,
+            "z": -200
+          },
+          {
+            "x": 800,
+            "y": 0,
+            "z": 0
+          }
+        ],
+        "width": 6,
+        "speedLimit": 50
+      }
+    ],
+    "trafficLights": [
+      {
+        "id": "J01",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 0,
+          "y": 5,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+          "81d1988f-8e49-494d-ab70-03b3a2ccd3c4"
+        ],
+        "currentGreenRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J02",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 200,
+          "y": 5,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+          "656345c8-0841-413b-a028-dbd89dbd26ae"
+        ],
+        "currentGreenRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J03",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 400,
+          "y": 5,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "656345c8-0841-413b-a028-dbd89dbd26ae",
+          "94d34d89-a5d2-441e-a954-cf46213ca8a7"
+        ],
+        "currentGreenRoadId": "656345c8-0841-413b-a028-dbd89dbd26ae",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J04",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 600,
+          "y": 5,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "94d34d89-a5d2-441e-a954-cf46213ca8a7",
+          "78acb080-47c0-49e8-ae23-475bf926f257"
+        ],
+        "currentGreenRoadId": "94d34d89-a5d2-441e-a954-cf46213ca8a7",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J05",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 800,
+          "y": 5,
+          "z": 600
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "78acb080-47c0-49e8-ae23-475bf926f257",
+          "32b05253-c12d-4361-891d-f67e6caa429d"
+        ],
+        "currentGreenRoadId": "78acb080-47c0-49e8-ae23-475bf926f257",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J06",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 0,
+          "y": 5,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+          "96051a12-098d-4196-8103-d25a6343c2ad"
+        ],
+        "currentGreenRoadId": "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J07",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 200,
+          "y": 5,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+          "894bab61-84ed-473d-aecf-fdce355f732b"
+        ],
+        "currentGreenRoadId": "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J08",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 400,
+          "y": 5,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "894bab61-84ed-473d-aecf-fdce355f732b",
+          "439d4f32-dbd0-4e00-b85c-7825fc980042"
+        ],
+        "currentGreenRoadId": "894bab61-84ed-473d-aecf-fdce355f732b",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J09",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 600,
+          "y": 5,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "439d4f32-dbd0-4e00-b85c-7825fc980042",
+          "b212801a-4adb-4324-a99b-55c12ab62ac6"
+        ],
+        "currentGreenRoadId": "439d4f32-dbd0-4e00-b85c-7825fc980042",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J10",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 800,
+          "y": 5,
+          "z": 400
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "b212801a-4adb-4324-a99b-55c12ab62ac6",
+          "257ee8d3-4eeb-45ea-9a6a-53d9f0fe985e"
+        ],
+        "currentGreenRoadId": "b212801a-4adb-4324-a99b-55c12ab62ac6",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J11",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 0,
+          "y": 5,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+          "237c3d7a-ea31-4645-9da3-a1d855bbdb77"
+        ],
+        "currentGreenRoadId": "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J12",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 200,
+          "y": 5,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+          "6744bd16-4335-416c-b148-d02b2bbc3063"
+        ],
+        "currentGreenRoadId": "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J13",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 400,
+          "y": 5,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "6744bd16-4335-416c-b148-d02b2bbc3063",
+          "b1a533c4-7515-4002-8a9f-068c5e9c0115"
+        ],
+        "currentGreenRoadId": "6744bd16-4335-416c-b148-d02b2bbc3063",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J14",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 600,
+          "y": 5,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "b1a533c4-7515-4002-8a9f-068c5e9c0115",
+          "aa1eabc7-94c9-4c45-8922-7a2b1e28069d"
+        ],
+        "currentGreenRoadId": "b1a533c4-7515-4002-8a9f-068c5e9c0115",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J15",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 800,
+          "y": 5,
+          "z": 200
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "aa1eabc7-94c9-4c45-8922-7a2b1e28069d",
+          "39305b5b-2298-46f6-89fc-0f2185bfaf48"
+        ],
+        "currentGreenRoadId": "aa1eabc7-94c9-4c45-8922-7a2b1e28069d",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J16",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 0,
+          "y": 5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "b0477646-262a-4f52-8244-adc02b970b08",
+          "2de8afe9-8fb3-4ad7-80a0-1839cb94675e"
+        ],
+        "currentGreenRoadId": "b0477646-262a-4f52-8244-adc02b970b08",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J17",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 200,
+          "y": 5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "b0477646-262a-4f52-8244-adc02b970b08",
+          "39678897-a9fd-4014-9a6e-5670f92445a7"
+        ],
+        "currentGreenRoadId": "b0477646-262a-4f52-8244-adc02b970b08",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J18",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 400,
+          "y": 5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "39678897-a9fd-4014-9a6e-5670f92445a7",
+          "d81dfdfa-f32a-4855-9cf6-2eb8a247d662"
+        ],
+        "currentGreenRoadId": "39678897-a9fd-4014-9a6e-5670f92445a7",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J19",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 600,
+          "y": 5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "d81dfdfa-f32a-4855-9cf6-2eb8a247d662",
+          "1ee22b43-1f32-4506-b76a-5da506dbc3aa"
+        ],
+        "currentGreenRoadId": "d81dfdfa-f32a-4855-9cf6-2eb8a247d662",
+        "timeInPhase": 0
+      },
+      {
+        "id": "J20",
+        "category": 4,
+        "styleId": "Empty_TrafficLight",
+        "position": {
+          "x": 800,
+          "y": 5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "controlledRoadIds": [
+          "1ee22b43-1f32-4506-b76a-5da506dbc3aa",
+          "7f3969be-ca54-4f9d-9e6e-48213ca2980f"
+        ],
+        "currentGreenRoadId": "1ee22b43-1f32-4506-b76a-5da506dbc3aa",
+        "timeInPhase": 0
+      }
+    ],
+    "buildings": [],
+    "vehicles": [
+      {
+        "id": "5d75f2bb-cb2c-40c9-a1a7-a31af87f3628",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 50.0,
+          "y": 0,
+          "z": 650.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "3d675db6-5309-442a-8df9-895929656455",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 250.0,
+          "y": 0,
+          "z": 650.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "8777baee-68a3-4226-a36d-30095c4aac48",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 450.0,
+          "y": 0,
+          "z": 650.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "656345c8-0841-413b-a028-dbd89dbd26ae",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "b5b7a44b-f4c9-4585-9663-f6be49e2a98c",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 650.0,
+          "y": 0,
+          "z": 650.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "94d34d89-a5d2-441e-a954-cf46213ca8a7",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "83be9c4b-ea78-4b85-888d-7093e6c707d1",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 850.0,
+          "y": 0,
+          "z": 650.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "78acb080-47c0-49e8-ae23-475bf926f257",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "90bec644-ea8c-4278-b373-197dc8823ebf",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 50.0,
+          "y": 0,
+          "z": 450.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "4de12013-6bf6-4907-8746-55b845a4d9e3",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 250.0,
+          "y": 0,
+          "z": 450.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "fb18e9b5-e228-4d4c-945a-d08832604ed3",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 450.0,
+          "y": 0,
+          "z": 450.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "656345c8-0841-413b-a028-dbd89dbd26ae",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "ae67bf82-96ef-4e23-bd51-6171a83bc2e9",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 650.0,
+          "y": 0,
+          "z": 450.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "94d34d89-a5d2-441e-a954-cf46213ca8a7",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "677852ff-adb5-4827-9f2d-c7d4ca85bf41",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 850.0,
+          "y": 0,
+          "z": 450.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "78acb080-47c0-49e8-ae23-475bf926f257",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "c4b6cda6-9c89-4d2a-b514-49270c711aa9",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 50.0,
+          "y": 0,
+          "z": 250.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "119467a3-bdd7-41c7-bf47-600cabeacc08",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 250.0,
+          "y": 0,
+          "z": 250.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "0498b83e-a1b1-4219-8f96-4cd4a9155fb6",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 450.0,
+          "y": 0,
+          "z": 250.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "894bab61-84ed-473d-aecf-fdce355f732b",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "7f49a855-3e32-48d4-a23b-4beab9110a13",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 650.0,
+          "y": 0,
+          "z": 250.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "439d4f32-dbd0-4e00-b85c-7825fc980042",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "ee7b31b0-b276-4f9b-aa42-d3a732a96da4",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 850.0,
+          "y": 0,
+          "z": 250.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "b212801a-4adb-4324-a99b-55c12ab62ac6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "3c9a6b6e-9f65-492d-84af-61ba9c296392",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 50.0,
+          "y": 0,
+          "z": 50.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "b5a119e0-6a01-462f-b15e-9c1cd598f210",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 250.0,
+          "y": 0,
+          "z": 50.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "fd900a21-5624-4fbd-90a2-22ee3a0f5db7",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 450.0,
+          "y": 0,
+          "z": 50.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "6744bd16-4335-416c-b148-d02b2bbc3063",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "68b35b18-6c1e-48fe-9817-42abdcdabf79",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 650.0,
+          "y": 0,
+          "z": 50.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "b1a533c4-7515-4002-8a9f-068c5e9c0115",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "f3376d50-835e-4ef8-8e00-33d7cf5f1f49",
+        "category": 3,
+        "styleId": "Police",
+        "position": {
+          "x": 850.0,
+          "y": 0,
+          "z": 50.0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 1,
+        "currentRoadId": "aa1eabc7-94c9-4c45-8922-7a2b1e28069d",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "6aa9e0a2-e307-4277-abf1-dba8ef45d2a5",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 66.66666666666667,
+          "y": 0,
+          "z": 666.6666666666666
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "a250c337-f00b-4d54-aa59-1bb85c75e9f2",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 76.66666666666667,
+          "y": 0,
+          "z": 476.6666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "b4d2e684-4368-4790-a0d9-b6eb7a663314",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 66.66666666666667,
+          "y": 0,
+          "z": 266.6666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "f3d79a7d-a751-4709-a097-1f615083cd4a",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 76.66666666666667,
+          "y": 0,
+          "z": 76.66666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "3eda55f7-4387-4773-a10b-1840d68982c0",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 266.6666666666667,
+          "y": 0,
+          "z": 666.6666666666666
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "c12aa191-044a-443b-83d8-9c9d554eb657",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 276.6666666666667,
+          "y": 0,
+          "z": 476.6666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "21450471-ae24-49c9-b5c9-17284f8aa6d6",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "52fd02ee-be9f-4d36-80c5-1f9bdcfdd0e5",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 266.6666666666667,
+          "y": 0,
+          "z": 266.6666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "2d9f793c-4262-4d18-b0bc-c2ac5d786f1e",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "97058c1c-8471-4e4c-a119-ffa8af9db5c5",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 276.6666666666667,
+          "y": 0,
+          "z": 76.66666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "62f7d4b0-6b41-45a1-b96d-937d002e4e78",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "c36b84a6-5794-4738-b55f-8474032f3e89",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 466.6666666666667,
+          "y": 0,
+          "z": 666.6666666666666
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "656345c8-0841-413b-a028-dbd89dbd26ae",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "9c62b552-ef4a-45aa-a7e1-e4a9c40c0b05",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 476.6666666666667,
+          "y": 0,
+          "z": 476.6666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "656345c8-0841-413b-a028-dbd89dbd26ae",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "e0a60e66-534a-4e71-9d90-235d48042c51",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 466.6666666666667,
+          "y": 0,
+          "z": 266.6666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "894bab61-84ed-473d-aecf-fdce355f732b",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "381d40dd-337f-4312-a842-1e4df84d4152",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 476.6666666666667,
+          "y": 0,
+          "z": 76.66666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "6744bd16-4335-416c-b148-d02b2bbc3063",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "2c7f83bb-d9d6-4f0f-8b3e-34c6ad4f208e",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 666.6666666666666,
+          "y": 0,
+          "z": 666.6666666666666
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "94d34d89-a5d2-441e-a954-cf46213ca8a7",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "d39f3557-1f31-40c0-8f55-855d46d17b9b",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 676.6666666666666,
+          "y": 0,
+          "z": 476.6666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "94d34d89-a5d2-441e-a954-cf46213ca8a7",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      },
+      {
+        "id": "7e972c41-f9e3-419c-85a6-62ebbc35ecc0",
+        "category": 3,
+        "styleId": "Truck_color03",
+        "position": {
+          "x": 666.6666666666666,
+          "y": 0,
+          "z": 266.6666666666667
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "vehicleType": 0,
+        "currentRoadId": "439d4f32-dbd0-4e00-b85c-7825fc980042",
+        "targetPointId": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "gameStatus": 0
+      }
+    ],
+    "targetPoints": [
+      {
+        "id": "4c1af51e-a9a8-4598-b63b-0af37b3e15a2",
+        "category": 0,
+        "styleId": "red_sphere",
+        "position": {
+          "x": 400,
+          "y": 0,
+          "z": 300
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        }
+      }
+    ]
+  }
+}
