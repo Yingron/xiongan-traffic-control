@@ -1,0 +1,24 @@
+{
+  "input_image": "D:\\unity\\CitySimulation\\Assets\\Scripts\\AI\\RoadGen\\history\\20260304_223608\\sample.jpg",
+  "extra_prompt": "",
+  "params": {
+    "lower_hsv": [
+      0,
+      0,
+      180
+    ],
+    "upper_hsv": [
+      180,
+      60,
+      255
+    ],
+    "morph_ksize": 11,
+    "simplify_eps": 200.0,
+    "resample_step": 400.0,
+    "target_points_min": 5,
+    "target_points_max": 7,
+    "min_branch_len": 10.0,
+    "unity_scale": 1.0
+  },
+  "prompt_template": "D:\\unity\\CitySimulation\\Assets\\Scripts\\AI\\RoadGen\\prompts/map_json_prompt.txt"
+}
