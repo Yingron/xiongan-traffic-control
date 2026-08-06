@@ -1,219 +1,300 @@
+"""20-intersection WebSocket transport for the REST/TraCI session manager.
+
+The WebSocket endpoint deliberately shares the same session manager as the
+REST API.  It does not load a policy or generate actions: callers must submit
+all twenty actions explicitly until A delivers a versioned DQN artifact.
+"""
+
+from __future__ import annotations
+
 import asyncio
 import json
-import os
-import sys
 import time
-import numpy as np
+from dataclasses import dataclass
+from typing import Any, Iterable
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import websockets
-
-from env.xiongan_env import XionganEnv
-from training.config import ENV_CONFIG
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from pydantic import ValidationError
 
 
-class SimulationServer:
-    def __init__(self, host='localhost', port=8765):
-        self.host = host
-        self.port = port
-        self.env = None
-        self.state = None
-        self.running = False
-        self.clients = set()
-        self.simulation_time = 0
-        self.total_vehicles = 0
-        self.passed_vehicles = 0
+ALLOWED_CHANNELS = frozenset({"state", "reward"})
 
-    async def handle_client(self, websocket, path):
-        print(f"Client connected: {websocket.remote_address}")
-        self.clients.add(websocket)
 
+@dataclass(frozen=True)
+class Subscription:
+    session_id: str
+    channels: frozenset[str]
+
+
+class WebSocketHub:
+    """Manage subscribers and translate WebSocket messages to manager calls."""
+
+    def __init__(
+        self,
+        manager: Any,
+        actions_request_type: type,
+        api_error_type: type[Exception],
+        *,
+        heartbeat_seconds: float = 10.0,
+    ) -> None:
+        self.manager = manager
+        self.actions_request_type = actions_request_type
+        self.api_error_type = api_error_type
+        self.heartbeat_seconds = heartbeat_seconds
+        self._subscriptions: dict[WebSocket, Subscription] = {}
+        self._send_locks: dict[WebSocket, asyncio.Lock] = {}
+
+    @property
+    def connection_count(self) -> int:
+        return len(self._subscriptions)
+
+    def register(self, app: FastAPI, path: str) -> None:
+        @app.websocket(path)
+        async def websocket_endpoint(websocket: WebSocket) -> None:
+            await self.handle(websocket)
+
+    async def handle(self, websocket: WebSocket) -> None:
+        await websocket.accept()
+        self._send_locks[websocket] = asyncio.Lock()
+        heartbeat = asyncio.create_task(self._heartbeat_loop(websocket))
         try:
-            async for message in websocket:
-                await self.handle_message(websocket, message)
+            while True:
+                raw_message = await websocket.receive_text()
+                await self._handle_message(websocket, raw_message)
+        except WebSocketDisconnect:
+            pass
         finally:
-            print(f"Client disconnected: {websocket.remote_address}")
-            self.clients.remove(websocket)
-
-    async def handle_message(self, websocket, message):
-        try:
-            data = json.loads(message)
-            
-            if data.get('action') == 'start':
-                await self.start_simulation()
-            
-            elif data.get('action') == 'stop':
-                await self.stop_simulation()
-            
-            elif data.get('action') == 'step':
-                steps = data.get('steps', 1)
-                await self.run_steps(steps)
-            
-            elif data.get('action') == 'reset':
-                await self.reset_simulation()
-            
-            elif data.get('action') == 'predict':
-                action = data.get('action_value', 0)
-                await self.execute_action(action)
-            
-            elif data.get('action') == 'get_state':
-                state_data = self.get_state_data()
-                await websocket.send(json.dumps(state_data))
-            
-            elif data.get('action') == 'set_scenario':
-                scenario = data.get('scenario', 'morning_peak')
-                await self.set_scenario(scenario)
-
-        except json.JSONDecodeError:
-            print(f"Invalid JSON message: {message}")
-
-    async def start_simulation(self):
-        if self.env is None:
-            env_config = ENV_CONFIG.copy()
-            env_config['use_gui'] = False
-            self.env = XionganEnv(**env_config)
-            self.state, _ = self.env.reset()
-        
-        self.running = True
-        print("Simulation started")
-        
-        await self.broadcast_state()
-
-    async def stop_simulation(self):
-        self.running = False
-        
-        if self.env is not None:
-            self.env.close()
-            self.env = None
-        
-        print("Simulation stopped")
-
-    async def reset_simulation(self):
-        if self.env is not None:
-            self.state, _ = self.env.reset()
-            self.simulation_time = 0
-            self.total_vehicles = 0
-            self.passed_vehicles = 0
-            await self.broadcast_state()
-            print("Simulation reset")
-
-    async def run_steps(self, steps=1):
-        if self.env is None or not self.running:
-            return
-
-        for _ in range(steps):
-            action = 0
-            self.state, reward, done, _, info = self.env.step(action)
-            self.simulation_time = info.get('sim_time', 0)
-            
-            if done:
-                self.running = False
-                break
-
-        await self.broadcast_state()
-
-    async def execute_action(self, action):
-        if self.env is None or not self.running:
-            return
-
-        self.state, reward, done, _, info = self.env.step(action)
-        self.simulation_time = info.get('sim_time', 0)
-        
-        if done:
-            self.running = False
-
-        await self.broadcast_state()
-
-    async def broadcast_state(self):
-        state_data = self.get_state_data()
-        message = json.dumps(state_data)
-        
-        for client in self.clients:
+            heartbeat.cancel()
+            self._remove(websocket)
             try:
-                await client.send(message)
-            except websockets.exceptions.ConnectionClosed:
+                await heartbeat
+            except asyncio.CancelledError:
                 pass
 
-    def get_state_data(self):
-        if self.state is None:
-            return {
-                'timestamp': int(time.time()),
-                'simulation_time': 0,
-                'intersections': [],
-                'vehicles': [],
-                'metrics': {
-                    'avg_travel_time': 0,
-                    'avg_queue_length': 0,
-                    'throughput': 0,
-                    'total_vehicles': 0,
-                    'avg_speed': 0
+    async def _handle_message(self, websocket: WebSocket, raw_message: str) -> None:
+        request_id: Any = None
+        try:
+            message = json.loads(raw_message)
+            if not isinstance(message, dict):
+                raise ValueError("message must be a JSON object")
+            request_id = message.get("request_id")
+        except (json.JSONDecodeError, ValueError) as error:
+            await self._send_error(
+                websocket,
+                "INVALID_MESSAGE",
+                "WebSocket messages must be JSON objects.",
+                details={"reason": str(error)},
+            )
+            return
+
+        message_type = message.get("type")
+        if message_type == "subscribe":
+            await self._subscribe(websocket, message)
+        elif message_type == "simulation.actions":
+            await self._execute_actions(websocket, message)
+        elif message_type == "ping":
+            await self._send(
+                websocket,
+                {"type": "pong", "request_id": request_id, "timestamp": int(time.time() * 1000)},
+            )
+        else:
+            await self._send_error(
+                websocket,
+                "UNSUPPORTED_MESSAGE",
+                "Supported message types are subscribe, simulation.actions, and ping.",
+                request_id=request_id,
+                details={"received_type": message_type},
+            )
+
+    async def _subscribe(self, websocket: WebSocket, message: dict[str, Any]) -> None:
+        request_id = message.get("request_id")
+        session_id = message.get("session_id")
+        channels = message.get("channels", ["state", "reward"])
+        if not isinstance(session_id, str) or not session_id:
+            await self._send_error(
+                websocket,
+                "INVALID_SUBSCRIPTION",
+                "session_id must be a non-empty string.",
+                request_id=request_id,
+            )
+            return
+        if (
+            not isinstance(channels, list)
+            or not channels
+            or any(not isinstance(channel, str) for channel in channels)
+        ):
+            await self._send_error(
+                websocket,
+                "INVALID_SUBSCRIPTION",
+                "channels must be a non-empty array containing state and/or reward.",
+                request_id=request_id,
+            )
+            return
+        normalized_channels = frozenset(channels)
+        unknown_channels = normalized_channels - ALLOWED_CHANNELS
+        if unknown_channels:
+            await self._send_error(
+                websocket,
+                "INVALID_SUBSCRIPTION",
+                "Only state and reward channels are supported.",
+                request_id=request_id,
+                details={"unsupported_channels": sorted(unknown_channels)},
+            )
+            return
+
+        try:
+            snapshot = await self.manager.stream_snapshot(session_id, normalized_channels)
+        except self.api_error_type as error:
+            await self._send_api_error(websocket, error, request_id)
+            return
+
+        self._subscriptions[websocket] = Subscription(session_id, normalized_channels)
+        await self._send(
+            websocket,
+            {
+                "type": "subscription.confirmed",
+                "request_id": request_id,
+                "session_id": session_id,
+                "channels": sorted(normalized_channels),
+            },
+        )
+        await self._send(websocket, snapshot)
+
+    async def _execute_actions(self, websocket: WebSocket, message: dict[str, Any]) -> None:
+        request_id = message.get("request_id")
+        try:
+            request = self.actions_request_type(
+                session_id=message.get("session_id"),
+                expected_transition_id=message.get("expected_transition_id"),
+                actions=message.get("actions"),
+                step_seconds=message.get("step_seconds", 5),
+            )
+            result = await self.manager.actions(request)
+        except ValidationError as error:
+            validation_errors = [
+                {
+                    "loc": list(item.get("loc", ())),
+                    "msg": item.get("msg"),
+                    "type": item.get("type"),
                 }
-            }
+                for item in error.errors()
+            ]
+            await self._send_error(
+                websocket,
+                "INVALID_ACTION_SET",
+                "Actions must contain exactly J01 through J20 with integer values from 0 to 3.",
+                request_id=request_id,
+                details={"validation_errors": validation_errors},
+            )
+            return
+        except self.api_error_type as error:
+            await self._send_api_error(websocket, error, request_id)
+            return
 
-        phase = int(self.state[0])
-        queues = {
-            'north': float(self.state[4]),
-            'south': float(self.state[5]),
-            'east': float(self.state[6]),
-            'west': float(self.state[7])
-        }
-        wait_times = {
-            'north': float(self.state[8]),
-            'south': float(self.state[9]),
-            'east': float(self.state[10]),
-            'west': float(self.state[11])
-        }
-        occupancy = {
-            'north': float(self.state[16]),
-            'south': float(self.state[17]),
-            'east': float(self.state[18]),
-            'west': float(self.state[19])
-        }
+        await self._send(
+            websocket,
+            {"type": "simulation.action_result", "request_id": request_id, **result},
+        )
+        await self.broadcast_snapshot(request.session_id)
 
-        return {
-            'timestamp': int(time.time()),
-            'simulation_time': int(self.simulation_time),
-            'intersections': [{
-                'id': 'J1',
-                'phase': phase,
-                'phase_name': self.get_phase_name(phase),
-                'queues': queues,
-                'wait_times': wait_times,
-                'occupancy': occupancy
-            }],
-            'vehicles': [],
-            'metrics': {
-                'avg_travel_time': 0,
-                'avg_queue_length': float(np.mean(self.state[4:8])),
-                'throughput': 0,
-                'total_vehicles': 0,
-                'avg_speed': 0
-            }
-        }
+    async def broadcast_snapshot(self, session_id: str) -> None:
+        recipients = [
+            (websocket, subscription)
+            for websocket, subscription in list(self._subscriptions.items())
+            if subscription.session_id == session_id
+        ]
+        for websocket, subscription in recipients:
+            try:
+                snapshot = await self.manager.stream_snapshot(session_id, subscription.channels)
+                await self._send(websocket, snapshot)
+            except self.api_error_type as error:
+                try:
+                    await self._send_api_error(websocket, error)
+                except (WebSocketDisconnect, RuntimeError):
+                    self._remove(websocket)
+            except (WebSocketDisconnect, RuntimeError):
+                self._remove(websocket)
 
-    def get_phase_name(self, phase):
-        phase_names = {
-            0: 'NS_Straight',
-            1: 'NS_LeftTurn',
-            2: 'EW_Straight',
-            3: 'EW_LeftTurn'
-        }
-        return phase_names.get(phase, 'Unknown')
+    async def broadcast_event(self, session_id: str, payload: dict[str, Any], *, unsubscribe: bool = False) -> None:
+        recipients = [
+            websocket
+            for websocket, subscription in list(self._subscriptions.items())
+            if subscription.session_id == session_id
+        ]
+        for websocket in recipients:
+            try:
+                await self._send(websocket, payload)
+            except (WebSocketDisconnect, RuntimeError):
+                self._remove(websocket)
+            if unsubscribe:
+                self._subscriptions.pop(websocket, None)
 
-    async def set_scenario(self, scenario):
-        print(f"Setting scenario: {scenario}")
+    async def _heartbeat_loop(self, websocket: WebSocket) -> None:
+        while True:
+            await asyncio.sleep(self.heartbeat_seconds)
+            try:
+                await self._send(websocket, {"type": "heartbeat", "timestamp": int(time.time() * 1000)})
+            except (WebSocketDisconnect, RuntimeError):
+                return
 
-    async def start(self):
-        async with websockets.serve(self.handle_client, self.host, self.port):
-            print(f"WebSocket server started on ws://{self.host}:{self.port}")
-            await asyncio.Future()
+    async def _send_api_error(self, websocket: WebSocket, error: Any, request_id: Any = None) -> None:
+        await self._send_error(
+            websocket,
+            error.code,
+            error.message,
+            request_id=request_id,
+            details=error.details,
+        )
+
+    async def _send_error(
+        self,
+        websocket: WebSocket,
+        code: str,
+        message: str,
+        *,
+        request_id: Any = None,
+        details: dict[str, Any] | None = None,
+    ) -> None:
+        await self._send(
+            websocket,
+            {
+                "type": "error",
+                "request_id": request_id,
+                "error": {"code": code, "message": message, "details": details or {}},
+            },
+        )
+
+    async def _send(self, websocket: WebSocket, payload: dict[str, Any]) -> None:
+        lock = self._send_locks.setdefault(websocket, asyncio.Lock())
+        async with lock:
+            await websocket.send_json(payload)
+
+    def _remove(self, websocket: WebSocket) -> None:
+        self._subscriptions.pop(websocket, None)
+        self._send_locks.pop(websocket, None)
 
 
-async def main():
-    server = SimulationServer()
-    await server.start()
-
-
-if __name__ == '__main__':
-    asyncio.run(main())
+def snapshot_payload(
+    state: dict[str, Any],
+    rewards: dict[str, Any] | None,
+    channels: Iterable[str],
+) -> dict[str, Any]:
+    """Build the documented C-to-D push payload from manager responses."""
+    selected = frozenset(channels)
+    payload: dict[str, Any] = {
+        "type": "simulation.state",
+        "session_id": state["session_id"],
+        "transition_id": state["transition_id"],
+        "timestamp": state["timestamp"],
+        "simulation_time": state["simulation_time"],
+        "state_layout_version": state["state_layout_version"],
+        "intersection_order": state["intersection_order"],
+    }
+    if "state" in selected:
+        payload["state_vector"] = state["state_vector"]
+        payload["intersections"] = state["intersections"]
+    if "reward" in selected and rewards is not None:
+        payload["reward_version"] = rewards["reward_version"]
+        payload["rewards"] = rewards["rewards"]
+        payload["global_reward"] = rewards["global_reward"]
+    return payload

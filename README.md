@@ -52,19 +52,19 @@ xiongan_rl_project/
 ## 快速开始
 
 ### 1. 环境准备
-`ash
+`bash
 pip install -r requirements.txt
 # 设置SUMO_HOME环境变量
 `
 
 ### 2. 启动API服务
-`ash
+`bash
 python src/api/api_server.py
 # 访问 http://localhost:8000/docs
 `
 
 ### 3. 测试接口
-`ash
+`bash
 # 创建会话
 curl -X POST http://localhost:8000/api/v1/simulation/start
 
