@@ -29,6 +29,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from env.reward_functions import compute_reward
+from server.model_service import ModelServiceError, SB3ModelService
 from configs.constants import (
     INTERSECTION_ORDER,
     ACTION_NAMES,
@@ -472,6 +473,31 @@ class TraCISessionManager:
                 payload["breakdown"] = session.last_breakdowns
             return payload
 
+    async def stream_snapshot(self, session_id: str, channels: set[str] | frozenset[str]) -> dict[str, Any]:
+        """Return one lock-consistent WebSocket snapshot for the selected channels."""
+        from server.websocket_server import snapshot_payload
+
+        async with self.lock:
+            session = self._require_session(session_id)
+            state = self._state_response(session, self._traci())
+            rewards: dict[str, Any] | None = None
+            if "reward" in channels:
+                rewards = {
+                    "reward_version": REWARD_VERSION,
+                    "rewards": session.last_rewards,
+                    "global_reward": float(np.mean(list(session.last_rewards.values()))),
+                }
+            return snapshot_payload(state, rewards, channels)
+
+    async def inference_state(self, session_id: str) -> tuple[int, np.ndarray]:
+        """Return the transition id and a copy of the real 440-dimensional state."""
+        async with self.lock:
+            session = self._require_session(session_id)
+            raw_ids = self._validate_intersections(self._traci())
+            state = self._ordered_global_state(raw_ids)
+            session.last_state = state
+            return session.transition_id, state.copy()
+
     async def close(self) -> None:
         async with self.lock:
             if self.session is not None:
@@ -493,6 +519,10 @@ def _json_value(value: Any) -> Any:
 
 
 manager = TraCISessionManager()
+model_service = SB3ModelService(
+    registry_path=PROJECT_ROOT / "configs" / "model_registry.json",
+    project_root=PROJECT_ROOT,
+)
 app = FastAPI(title="Xiongan Traffic Control API", version="2.0.0")
 app.add_middleware(
     CORSMiddleware,
@@ -501,6 +531,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from server.websocket_server import WebSocketHub
+
+websocket_hub = WebSocketHub(manager, ActionsRequest, ApiError)
+websocket_hub.register(app, f"{API_PREFIX}/ws")
 
 
 @app.exception_handler(ApiError)
@@ -563,17 +598,36 @@ async def health_check() -> dict[str, Any]:
 
 @app.post(f"{API_PREFIX}/simulation/start", status_code=201)
 async def start_simulation(request: StartRequest) -> dict[str, Any]:
-    return await manager.start(request)
+    result = await manager.start(request)
+    await websocket_hub.broadcast_snapshot(result["session_id"])
+    return result
 
 
 @app.post(f"{API_PREFIX}/simulation/stop")
 async def stop_simulation(request: SessionRequest) -> dict[str, Any]:
-    return await manager.stop(request.session_id)
+    result = await manager.stop(request.session_id)
+    await websocket_hub.broadcast_event(
+        request.session_id,
+        {"type": "simulation.stopped", **result},
+        unsubscribe=True,
+    )
+    return result
 
 
 @app.post(f"{API_PREFIX}/simulation/reset")
 async def reset_simulation(request: ResetRequest) -> dict[str, Any]:
-    return await manager.reset(request)
+    result = await manager.reset(request)
+    await websocket_hub.broadcast_event(
+        request.session_id,
+        {
+            "type": "simulation.reset",
+            "previous_session_id": request.session_id,
+            "session_id": result["session_id"],
+            "transition_id": result["transition_id"],
+        },
+        unsubscribe=True,
+    )
+    return result
 
 
 @app.get(f"{API_PREFIX}/simulation/state")
@@ -583,7 +637,9 @@ async def get_state(session_id: str) -> dict[str, Any]:
 
 @app.post(f"{API_PREFIX}/simulation/actions")
 async def execute_actions(request: ActionsRequest) -> dict[str, Any]:
-    return await manager.actions(request)
+    result = await manager.actions(request)
+    await websocket_hub.broadcast_snapshot(request.session_id)
+    return result
 
 
 @app.get(f"{API_PREFIX}/simulation/rewards")
@@ -597,13 +653,24 @@ async def get_rewards(
 
 @app.post(f"{API_PREFIX}/model/predict")
 async def predict_model_action(request: ModelPredictRequest) -> dict[str, Any]:
-    manager._require_session(request.session_id)
-    raise ApiError(
-        503,
-        "MODEL_NOT_LOADED",
-        "Model inference will be enabled after A supplies a versioned shared-DQN artifact.",
-        {"model_id": request.model_id, "deterministic": request.deterministic},
-    )
+    transition_id, state = await manager.inference_state(request.session_id)
+    try:
+        prediction = model_service.predict(
+            request.model_id,
+            state,
+            INTERSECTION_ORDER,
+            deterministic=request.deterministic,
+        )
+    except ModelServiceError as error:
+        raise ApiError(error.status_code, error.code, error.message, error.details) from error
+    return {
+        "session_id": request.session_id,
+        "model_id": request.model_id,
+        "transition_id": transition_id,
+        "state_layout_version": STATE_LAYOUT_VERSION,
+        "deterministic": request.deterministic,
+        **prediction,
+    }
 
 
 if __name__ == "__main__":

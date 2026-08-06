@@ -1,0 +1,20 @@
+{
+  "registry_version": "1.0",
+  "models": {
+    "shared-dqn-generalization-100k-v1": {
+      "status": "waiting_for_A",
+      "format": "stable-baselines3-dqn",
+      "artifact_path": "models/dqn/dqn_multi_shared_100000steps.zip",
+      "sha256": null,
+      "training_steps": 100000,
+      "observation_dimension": 22,
+      "observation_dtype": "float32",
+      "action_count": 4,
+      "normalization": "pending_A_confirmation",
+      "state_layout_version": "v1-20x22",
+      "model_contract_version": "shared-dqn-22x4-v1",
+      "deterministic_inference_supported": true,
+      "handoff_note": "Set status=ready, normalization=none (or provide normalization artifacts), and sha256 after A delivers the real SB3 model."
+    }
+  }
+}
