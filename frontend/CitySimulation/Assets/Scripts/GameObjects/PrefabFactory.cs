@@ -105,6 +105,19 @@ namespace CitySimulation.GameObjects
                 ApplyRoadVisual(go, road.controlPoints);
             }
 
+            // Post-process: 为信号灯挂载4相位动画器
+            if (entity is TrafficLightEntity tlEntity)
+            {
+                // 注意: JSON 坐标约定为 (x=网格列, y=高度, z=网格行)
+                // 直接映射到 Unity (X, Y, Z)。交通灯 y=5 是灯柱高度，无需修改。
+
+                var animator = go.GetComponent<TrafficLightAnimator>();
+                if (animator == null)
+                {
+                    animator = go.AddComponent<TrafficLightAnimator>();
+                }
+            }
+
             return entity;
         }
 

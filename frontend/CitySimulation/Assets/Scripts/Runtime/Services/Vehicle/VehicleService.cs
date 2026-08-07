@@ -184,7 +184,7 @@ namespace CitySimulation.Runtime.Services.Vehicle
             TrySwitchRoadAtTurningPoint(vehicle, previousPosition);
         }
 
-        void RefreshVehicles()
+        public void RefreshVehicles()
         {
             vehicles.Clear();
             emergencyVehicles.Clear();

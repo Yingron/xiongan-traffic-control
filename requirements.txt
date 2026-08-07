@@ -10,3 +10,4 @@ pyyaml>=6.0
 sympy==1.13.1
 pandas>=2.0.0
 matplotlib>=3.7.0
+websockets>=12.0

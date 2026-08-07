@@ -7,6 +7,7 @@ traffic-signal interface used by the full-network environment.
 """
 from __future__ import annotations
 
+import gc
 import os
 from pathlib import Path
 from typing import Any, Optional
@@ -57,6 +58,8 @@ class SingleIntersectionEnv(_EnvBase):
         max_steps: int = 720,
         delta_time: int = 5,
         seed: int | None = None,
+        rank: int | None = None,
+        restart_every: int = 50,
     ) -> None:
         if intersection_id not in INTERSECTION_ORDER:
             raise ValueError(f"Unknown intersection: {intersection_id}")
@@ -66,9 +69,13 @@ class SingleIntersectionEnv(_EnvBase):
         self.max_steps = max_steps
         self.delta_time = delta_time
         self.seed_value = seed
+        self.rank = rank
+        self.restart_every = restart_every
+        self._episode_count = 0
         self.action_space = spaces.Discrete(ACTION_COUNT_PER_INTERSECTION)
         self.observation_space = spaces.Box(low=-1.0, high=1.0, shape=(FEATURES_PER_INTERSECTION,), dtype=np.float32)
         self._traci: Any | None = None
+        self._sumo_proc: Any | None = None
         self._previous_action: int | None = None
         self._phase_changed_at = 0.0
         self._step_count = 0
@@ -85,7 +92,10 @@ class SingleIntersectionEnv(_EnvBase):
         if seed is not None:
             self.seed_value = seed
             np.random.seed(seed)
+        self._episode_count += 1
         self.close()
+        # 强制垃圾回收，防止SUMO/TraCI对象累积导致内存泄漏
+        gc.collect()
         if not self.sumo_cfg_path.exists():
             raise FileNotFoundError(f"SUMO configuration not found: {self.sumo_cfg_path}")
         import traci
@@ -103,7 +113,63 @@ class SingleIntersectionEnv(_EnvBase):
         ]
         if self.seed_value is not None:
             command.extend(["--seed", str(self.seed_value)])
-        traci.start(command, numRetries=1, label=f"env_{os.getpid()}_{id(self)}")
+        # 多进程端口冲突修复：
+        # 1. 根据rank/seed预分配唯一基础端口 (8870 + rank*37 % 5000)
+        # 2. 两步启动：先启动指定端口的SUMO子进程，再用traci.connect连接
+        #    避免traci.start()在多进程竞态下"自动分配端口"碰撞
+        import subprocess as _sp
+        rank = getattr(self, "rank", 0) or 0
+        seed_offset = int(self.seed_value or 0) & 0xFFF
+        base_port = 8870 + ((rank * 127 + seed_offset) % 4900)
+        max_port_try = 20
+        sumo_proc = None
+        traci_conn = None
+        for try_i in range(max_port_try):
+            port = base_port + try_i
+            cmd_with_port = command + ["--remote-port", str(port)]
+            try:
+                sumo_proc = _sp.Popen(
+                    cmd_with_port,
+                    stdout=_sp.DEVNULL,
+                    stderr=_sp.DEVNULL,
+                    creationflags=getattr(_sp, "CREATE_NO_WINDOW", 0),
+                )
+            except Exception as _e:
+                continue
+            # 等待SUMO启动
+            import time as _t
+            connected = False
+            for _wait in range(40):
+                _t.sleep(0.1)
+                try:
+                    traci_conn = traci.connect(port, numRetries=1, label=f"r{rank}_p{os.getpid()}_{id(self) & 0xFFFF}")
+                    connected = True
+                    break
+                except traci.exceptions.TraCIException:
+                    # 端口还没就绪或已被占用，继续等/下一个端口
+                    continue
+                except Exception:
+                    break
+            if connected and traci_conn is not None:
+                self._sumo_proc = sumo_proc
+                self._traci = traci_conn
+                break
+            # 连接失败，杀掉启动的sumo再试
+            try:
+                sumo_proc.terminate()
+                sumo_proc.wait(timeout=3)
+            except Exception:
+                try:
+                    sumo_proc.kill()
+                except Exception:
+                    pass
+        if traci_conn is None:
+            raise RuntimeError(
+                f"Failed to start SUMO after {max_port_try} attempts (rank={rank}, base_port={base_port}). "
+                "请关闭其他SUMO进程后重试。"
+            )
+        self._traci = traci_conn
+        traci = traci_conn  # 兼容后续引用绑定
         self._traci = traci
         traci.trafficlight.setProgram(self.intersection_id, "rl4")
         self._previous_action = int(traci.trafficlight.getPhase(self.intersection_id))
@@ -188,11 +254,34 @@ class SingleIntersectionEnv(_EnvBase):
         return state, reward, terminated, truncated, info
 
     def close(self) -> None:
+        # 先关闭TraCI连接（让SUMO正常退出）
         if self._traci is not None:
             try:
                 self._traci.close()
+            except Exception:
+                pass
             finally:
                 self._traci = None
+        # 强制回收SUMO子进程（防止残留占用端口和内存）
+        proc = getattr(self, "_sumo_proc", None)
+        if proc is not None:
+            try:
+                if proc.poll() is None:
+                    proc.terminate()
+                    try:
+                        proc.wait(timeout=5)
+                    except Exception:
+                        try:
+                            proc.kill()
+                            proc.wait(timeout=2)
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+            self._sumo_proc = None
+        # 额外清理：确保所有引用的TraCI对象被释放
+        self._previous_action = None
+        self._step_count = 0
 
 
 class MultiIntersectionSharedEnv(SingleIntersectionEnv):
