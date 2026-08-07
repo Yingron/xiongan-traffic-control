@@ -18,15 +18,30 @@ namespace CitySimulation.Global
 
         public static RoadService RoadService { get; private set; }
         public static TrafficService TrafficService { get; private set; }
-        public static BackendClinet BackendClinet { get; private set; }
+        public static BackendClinet BackendClinet { get; set; }
         public static VehicleService VehicleService { get; private set; }
+
+        /// <summary>Bridge server host for TCP connection (set before RegisterRuntimeServices).</summary>
+        public static string BridgeHost { get; set; } = "127.0.0.1";
+        /// <summary>Bridge server port for TCP connection.</summary>
+        public static int BridgePort { get; set; } = 5000;
+        /// <summary>Whether to use real BridgeClient (true) or TestMock (false).</summary>
+        public static bool UseBridgeBackend { get; set; } = false;
 
         public static void RegisterRuntimeServices()
         {
             RoadService ??= new RoadService();
             TrafficService ??= new TrafficService();
-            BackendClinet ??= new BackendClinet();
             VehicleService ??= new VehicleService();
+
+            if (BackendClinet == null)
+            {
+                BackendClinet = new BackendClinet();
+                var mode = UseBridgeBackend
+                    ? BackendClinet.BackendMode.BridgeTcp
+                    : BackendClinet.BackendMode.TestMock;
+                BackendClinet.Initialize(mode, BridgeHost, BridgePort);
+            }
         }
 
         public static void ReleaseRuntimeServices()
@@ -35,6 +50,7 @@ namespace CitySimulation.Global
             TrafficService?.Release();
             RoadService?.Release();
             BackendClinet?.Release();
+            BackendClinet?.Dispose();
 
             VehicleService = null;
             TrafficService = null;

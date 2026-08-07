@@ -119,30 +119,46 @@ PERF_DQN_CONFIG = {
 }
 
 # ========== 场景映射配置 ==========
+# high_traffic 场景需要降低并行度和缓冲区以避免内存溢出
 SCENARIO_CONFIG = {
     'flat': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_flat.sumocfg'),
         'label': '平峰',
         'target_vehicles': '~2,773',
+        'high_traffic': False,
+        'n_envs_override': None,
+        'buffer_size_override': None,
     },
     'morning': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_morning.sumocfg'),
         'label': '早高峰',
         'target_vehicles': '~19,104',
+        'high_traffic': True,
+        'n_envs_override': 1,
+        'buffer_size_override': 100000,
     },
     'evening': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_evening.sumocfg'),
         'label': '晚高峰',
         'target_vehicles': '~19,104',
+        'high_traffic': True,
+        'n_envs_override': 1,
+        'buffer_size_override': 100000,
     },
     'low': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_low.sumocfg'),
         'label': '低峰',
         'target_vehicles': '~2,773',
+        'high_traffic': False,
+        'n_envs_override': None,
+        'buffer_size_override': None,
     },
     'high': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_high.sumocfg'),
         'label': '高峰(high)',
         'target_vehicles': '~19,104',
+        'high_traffic': True,
+        'n_envs_override': 1,
+        'buffer_size_override': 100000,
     },
 }
