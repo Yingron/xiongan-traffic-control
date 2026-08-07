@@ -1,0 +1,107 @@
+using CitySimulation.Builder;
+using CitySimulation.GameObjects;
+using CitySimulation.Global;
+using UnityEngine;
+
+namespace CitySimulation.Bootstrap
+{
+    /// <summary>
+    /// Scene bootstrapper: drop this into Scenes/City.unity as a GameObject and
+    /// it will automatically build the xiongan 20-intersection road network
+    /// on scene Awake (right after GameServices initializes ObjectManager).
+    ///
+    /// To use:
+    ///   1. Open Scenes/City.unity in Unity
+    ///   2. Create a new empty GameObject named "XionganRoadBootstrap"
+    ///   3. Drag this script as a component
+    ///   4. (Optional) Tick "Build On Awake" to auto-build.
+    ///   5. Press Play — road network + 20 traffic lights will appear.
+    ///
+    /// Or trigger via the menu 雄安路网 / 构建 xiongan_20 ... instead.
+    /// </summary>
+    [DisallowMultipleComponent]
+    public class XionganRoadBootstrap : MonoBehaviour
+    {
+        [Header("Settings")]
+        [Tooltip("Name of the JSON file (without extension) under Assets/Scripts/Maps.")]
+        public string mapId = "xiongan_20";
+
+        [Tooltip("If true, BuildFromJson is invoked on Awake (Play mode).")]
+        public bool buildOnAwake = true;
+
+        [Tooltip("Rebuild every time this component is Enabled in Editor (useful for quick iteration).")]
+        public bool rebuildOnEnableInEditMode = false;
+
+        [Header("Runtime State (read-only)")]
+        [SerializeField] private int _roads;
+        [SerializeField] private int _trafficLights;
+        [SerializeField] private string _statusMessage;
+
+        public int Roads => _roads;
+        public int TrafficLights => _trafficLights;
+        public string StatusMessage => _statusMessage;
+
+        private void Awake()
+        {
+            if (!Application.isPlaying) return;
+            if (buildOnAwake) BuildNow();
+        }
+
+        private void OnEnable()
+        {
+            if (!rebuildOnEnableInEditMode) return;
+            if (Application.isPlaying) return;
+            // Edit-mode build: use standalone ObjectManager so we don't need GameServices
+            BuildNowStandalone();
+        }
+
+        /// <summary>Button-like API: build using GameServices.ObjectManager (Play mode).</summary>
+        [ContextMenu("Build Xiongan 20 (use GameServices)")]
+        public void BuildNow()
+        {
+            var builder = new RoadNetworkBuilder();
+            try
+            {
+                var report = builder.BuildFromJson(mapId);
+                _roads = report.roads;
+                _trafficLights = report.trafficLights;
+                _statusMessage =
+                    $"[OK] map={mapId} roads={_roads} tls={_trafficLights}/{report.intersectionsExpected}";
+            }
+            catch (System.Exception ex)
+            {
+                _statusMessage = $"[FAIL] {ex.Message}";
+                Debug.LogException(ex, this);
+            }
+        }
+
+        /// <summary>Edit-mode safe build (does not require GameServices).</summary>
+        [ContextMenu("Build Xiongan 20 (standalone / edit mode)")]
+        public void BuildNowStandalone()
+        {
+            var builder = new RoadNetworkBuilder();
+            try
+            {
+                var factory = new PrefabFactory();
+                var om = new ObjectManager(factory);
+                var path = RoadNetworkBuilder.ResolveJsonPath(mapId);
+                if (string.IsNullOrEmpty(path))
+                {
+                    _statusMessage = $"[FAIL] Cannot locate {mapId}.json under Assets/Scripts/Maps";
+                    Debug.LogError(_statusMessage, this);
+                    return;
+                }
+                var report = builder.BuildFromJsonFullPath(path, om);
+                _roads = report.roads;
+                _trafficLights = report.trafficLights;
+                _statusMessage =
+                    $"[OK][standalone] map={mapId} roads={_roads} tls={_trafficLights}/{report.intersectionsExpected}";
+            }
+            catch (System.Exception ex)
+            {
+                _statusMessage = $"[FAIL] {ex.Message}";
+                Debug.LogException(ex, this);
+            }
+        }
+    }
+}

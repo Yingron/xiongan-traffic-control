@@ -19,11 +19,16 @@
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import os
 import sys
 import time
 from pathlib import Path
+
+# Windows GBK encoding fix - reconfigure stdout to UTF-8
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
 
 import numpy as np
 
@@ -41,6 +46,7 @@ def make_env_factory(
     max_steps: int = 720,
     delta_time: int = 5,
     rank: int = 0,
+    restart_every: int = 50,
 ):
     """返回用于SubprocVecEnv的工厂函数"""
     def _init():
@@ -53,6 +59,8 @@ def make_env_factory(
                 max_steps=max_steps,
                 delta_time=delta_time,
                 seed=rank,
+                rank=rank,
+                restart_every=restart_every,
             )
         else:
             env = SingleIntersectionEnv(
@@ -61,6 +69,8 @@ def make_env_factory(
                 max_steps=max_steps,
                 delta_time=delta_time,
                 seed=rank,
+                rank=rank,
+                restart_every=restart_every,
             )
         return env
     return _init
@@ -143,11 +153,13 @@ def train_dqn(
     # ========== 解析场景配置 ==========
     sumo_cfg_path = None
     scenario_label = "default"
+    scenario_info = {}
     if scenario is not None:
         if scenario not in SCENARIO_CONFIG:
             raise ValueError(f"未知场景: {scenario}. 可选: {list(SCENARIO_CONFIG.keys())}")
         sumo_cfg_path = SCENARIO_CONFIG[scenario]["sumo_cfg"]
         scenario_label = scenario
+        scenario_info = SCENARIO_CONFIG[scenario]
 
     # ========== 应用高性能配置 ==========
     if perf:
@@ -177,6 +189,31 @@ def train_dqn(
         arch = net_arch or [256, 256, 256]
         activation_fn = nn.Tanh
         ne = n_envs or 1
+
+    # ========== 应用场景特定覆盖（高流量场景降低并行度和缓冲区） ==========
+    if scenario_info.get("high_traffic", False):
+        override_ne = scenario_info.get("n_envs_override")
+        override_bf = scenario_info.get("buffer_size_override")
+        if override_ne is not None and ne > override_ne:
+            print(f"[ADAPT] 高流量场景({scenario})：n_envs {ne} → {override_ne}，降低内存压力", flush=True)
+            ne = override_ne
+        if override_bf is not None and bf > override_bf:
+            print(f"[ADAPT] 高流量场景({scenario})：buffer_size {bf:,} → {override_bf:,}", flush=True)
+            bf = override_bf
+
+    # ========== 系统内存检查与自适应调整 ==========
+    try:
+        import psutil
+        mem = psutil.virtual_memory()
+        mem_pct = mem.percent
+        print(f"[MEMORY] 系统内存使用: {mem_pct:.1f}% (可用: {mem.available / 1024**3:.1f}GB)", flush=True)
+        if mem_pct > 85:
+            print(f"[WARN] 内存使用率过高({mem_pct:.1f}%)，强制降为单环境模式", flush=True)
+            ne = 1
+            if bf > 50000:
+                bf = 50000
+    except ImportError:
+        pass
 
     # 设备优先CUDA，自动回退CPU
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -213,6 +250,9 @@ def train_dqn(
     # ========== 创建环境（支持SubprocVecEnv并行） ==========
     from stable_baselines3.common.env_util import make_vec_env
 
+    # 高流量场景更频繁重启SUMO进程（每20集），普通场景每50集
+    restart_every = 20 if scenario_info.get("high_traffic", False) else 50
+
     if ne > 1 and perf:
         # 多进程并行环境（SubprocVecEnv）- 线性提速
         vec_env_cls = None
@@ -222,32 +262,38 @@ def train_dqn(
         except ImportError:
             vec_env_cls = None
 
+        from stable_baselines3.common.vec_env import VecMonitor
+        def _make_env_with_monitor(rank):
+            _env = make_env_factory(
+                intersection_id=intersection_id,
+                multi=multi,
+                sumo_cfg_path=sumo_cfg_path,
+                max_steps=720,
+                delta_time=5,
+                rank=rank,
+                restart_every=restart_every,
+            )()
+            return _env
+
         if vec_env_cls is not None:
-            print(f"[INFO] 使用 SubprocVecEnv 启动 {ne} 个并行环境...", flush=True)
-            env_fns = [
-                make_env_factory(
-                    intersection_id=intersection_id,
-                    multi=multi,
-                    sumo_cfg_path=sumo_cfg_path,
-                    max_steps=720,
-                    delta_time=5,
-                    rank=i,
-                )
-                for i in range(ne)
-            ]
+            print(f"[INFO] 使用 SubprocVecEnv 启动 {ne} 个并行环境 (restart_every={restart_every})...", flush=True)
+            env_fns = [lambda r=i: _make_env_with_monitor(r) for i in range(ne)]
             env = vec_env_cls(env_fns)
+            env = VecMonitor(env, filename=str(log_dir / "monitor"))
+            ne_used = ne
         else:
             print(f"[WARN] SubprocVecEnv不可用，回退单环境", flush=True)
-            env = make_env_factory(intersection_id, multi, sumo_cfg_path, 720, 5, 0)()
+            env = make_env_factory(intersection_id, multi, sumo_cfg_path, 720, 5, 0, restart_every)()
             env = Monitor(env, str(log_dir))
-            ne = 1
+            ne_used = 1
     else:
-        print(f"[INFO] 单环境训练模式", flush=True)
+        print(f"[INFO] 单环境训练模式 (restart_every={restart_every})", flush=True)
         from env.single_intersection_env import SingleIntersectionEnv, MultiIntersectionSharedEnv
 
         if multi:
             env = MultiIntersectionSharedEnv(
-                sumo_cfg_path=sumo_cfg_path, max_steps=720, delta_time=5, seed=seed
+                sumo_cfg_path=sumo_cfg_path, max_steps=720, delta_time=5,
+                seed=seed, rank=0, restart_every=restart_every,
             )
         else:
             env = SingleIntersectionEnv(
@@ -256,8 +302,11 @@ def train_dqn(
                 max_steps=720,
                 delta_time=5,
                 seed=seed,
+                rank=0,
+                restart_every=restart_every,
             )
         env = Monitor(env, str(log_dir))
+        ne_used = 1
 
     # ========== 构建DQN模型 ==========
     t_init_start = time.time()
@@ -498,15 +547,32 @@ def plot_training_curve(log_dir: Path, save_path: Path, env_name: str, timesteps
     import pandas as pd
 
     csv_file = log_dir / "monitor.csv"
-    if not csv_file.exists():
-        # 尝试在子目录中查找
-        for sub in log_dir.iterdir():
-            if sub.is_dir() and (sub / "monitor.csv").exists():
-                csv_file = sub / "monitor.csv"
-                break
-    if not csv_file.exists():
+    csv_candidates = []
+    if csv_file.exists():
+        csv_candidates.append(csv_file)
+    # 递归搜索所有子目录（VecMonitor/Subproc会在worker_x、dqn_perf_x等嵌套目录下）
+    # VecMonitor(filename="...") 会生成 ...monitor.csv，搜索 pattern *monitor.csv
+    for pattern in ["monitor.csv", "*monitor.csv"]:
+        for f in log_dir.rglob(pattern):
+            if f.is_file() and f not in csv_candidates:
+                csv_candidates.append(f)
+    # 选择行数最多（数据最全）的monitor.csv
+    best_csv = None
+    best_rows = -1
+    for candidate in csv_candidates:
+        try:
+            with open(candidate, "r", encoding="utf-8") as fh:
+                rows = sum(1 for _ in fh)
+            if rows > best_rows:
+                best_rows = rows
+                best_csv = candidate
+        except Exception:
+            pass
+    if best_csv is None:
         print("  无训练数据可绘图")
         return
+    csv_file = best_csv
+    print(f"  读取训练日志: {csv_file} (rows≈{best_rows})")
 
     try:
         df = pd.read_csv(csv_file, skiprows=1)
@@ -606,7 +672,7 @@ def main():
     )
 
     print(f"\n{'='*68}")
-    print(f" ▶ 训练完成报告")
+    print(f" >>> 训练完成报告")
     print(f"{'='*68}")
     print(f"  场景       : {stats.get('scenario', '-')}")
     print(f"  模式       : {'高性能' if stats.get('perf_mode') else '标准'}")

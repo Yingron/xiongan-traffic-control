@@ -1,0 +1,77 @@
+# Unity generated files
+CitySimulation/Library/
+CitySimulation/Temp/
+CitySimulation/Obj/
+CitySimulation/obj/
+CitySimulation/Build/
+CitySimulation/Builds/
+CitySimulation/build/
+CitySimulation/builds/
+CitySimulation/Logs/
+CitySimulation/UserSettings/
+CitySimulation/MemoryCaptures/
+CitySimulation/Recordings/
+CitySimulation/.vs/
+CitySimulation/.vscode/
+CitySimulation/.plastic/
+
+# Unity generated project files and build artifacts
+CitySimulation/*.csproj
+CitySimulation/*.sln
+CitySimulation/*.user
+CitySimulation/*.pidb
+CitySimulation/*.booproj
+CitySimulation/*.svd
+CitySimulation/*.pdb
+CitySimulation/*.mdb
+CitySimulation/*.opendb
+CitySimulation/*.VC.db
+CitySimulation/*.pidb.meta
+CitySimulation/*.pdb.meta
+CitySimulation/*.mdb.meta
+
+# PyMARL generated caches
+pymarl-master/env_export/
+pymarl-master/**/__pycache__/
+pymarl-master/**/*.py[cod]
+pymarl-master/.ipynb_checkpoints/
+pymarl-master/results/models/
+pymarl-master/results/sacred/
+pymarl-master/results/**/__pycache__/
+
+# Python environments and caches
+.venv/
+venv/
+env/
+.env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# LaTeX build outputs
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+.DS_Store

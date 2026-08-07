@@ -1,0 +1,1164 @@
+{
+    "snapshot": {
+        "roads": [
+            {
+                "id": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "category": 1,
+                "styleId": "section",
+                "position": {
+                    "x": -98.4412841796875,
+                    "y": 0.0,
+                    "z": 603.20263671875
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "controlPoints": [
+                    {
+                        "x": -98.4412841796875,
+                        "y": 0.0,
+                        "z": 603.20263671875
+                    },
+                    {
+                        "x": 77.28731536865235,
+                        "y": 0.0,
+                        "z": 238.4353485107422
+                    },
+                    {
+                        "x": 265.4456787109375,
+                        "y": 0.0,
+                        "z": -254.15283203125
+                    }
+                ]
+            },
+            {
+                "id": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "category": 1,
+                "styleId": "section",
+                "position": {
+                    "x": -425.9322204589844,
+                    "y": 0.0,
+                    "z": 82.23145294189453
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "controlPoints": [
+                    {
+                        "x": -425.9322204589844,
+                        "y": 0.0,
+                        "z": 82.23145294189453
+                    },
+                    {
+                        "x": 451.0306396484375,
+                        "y": 0.0,
+                        "z": 420.09002685546877
+                    }
+                ]
+            },
+            {
+                "id": "ef917224-c667-4a3a-b1ba-1faaf317c406",
+                "category": 1,
+                "styleId": "section",
+                "position": {
+                    "x": 81.0115966796875,
+                    "y": 0.0,
+                    "z": 260.5560302734375
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "controlPoints": [
+                    {
+                        "x": 81.0115966796875,
+                        "y": 0.0,
+                        "z": 260.5560302734375
+                    },
+                    {
+                        "x": -166.6162109375,
+                        "y": 0.0,
+                        "z": -262.20068359375
+                    }
+                ]
+            },
+            {
+                "id": "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "category": 1,
+                "styleId": "section",
+                "position": {
+                    "x": -305.9488525390625,
+                    "y": 0.0,
+                    "z": 496.62255859375
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "controlPoints": [
+                    {
+                        "x": -305.9488525390625,
+                        "y": 0.0,
+                        "z": 496.62255859375
+                    },
+                    {
+                        "x": -130.22023010253907,
+                        "y": 0.0,
+                        "z": 68.84992218017578
+                    },
+                    {
+                        "x": 53.49711608886719,
+                        "y": 0.0,
+                        "z": 4.059112548828125
+                    },
+                    {
+                        "x": 283.36090087890627,
+                        "y": 0.0,
+                        "z": 114.09126281738281
+                    },
+                    {
+                        "x": 93.428955078125,
+                        "y": 0.0,
+                        "z": 625.76318359375
+                    },
+                    {
+                        "x": -311.27069091796877,
+                        "y": 0.0,
+                        "z": 474.86932373046877
+                    }
+                ]
+            },
+            {
+                "id": "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                "category": 1,
+                "styleId": "section",
+                "position": {
+                    "x": -301.22705078125,
+                    "y": 0.0,
+                    "z": 234.8727569580078
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "controlPoints": [
+                    {
+                        "x": -301.22705078125,
+                        "y": 0.0,
+                        "z": 234.8727569580078
+                    },
+                    {
+                        "x": -206.45680236816407,
+                        "y": 0.0,
+                        "z": 0.14288330078125
+                    },
+                    {
+                        "x": 97.36763763427735,
+                        "y": 0.0,
+                        "z": -113.2232894897461
+                    },
+                    {
+                        "x": 528.7328491210938,
+                        "y": 0.0,
+                        "z": 16.08856201171875
+                    }
+                ]
+            },
+            {
+                "id": "b891d923-a009-49e4-97b8-147922376210",
+                "category": 1,
+                "styleId": "section",
+                "position": {
+                    "x": 56.611961364746097,
+                    "y": 0.0,
+                    "z": 24.06140899658203
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "controlPoints": [
+                    {
+                        "x": 56.611961364746097,
+                        "y": 0.0,
+                        "z": 24.06140899658203
+                    },
+                    {
+                        "x": 129.2589874267578,
+                        "y": 0.0,
+                        "z": -215.08831787109376
+                    }
+                ]
+            },
+            {
+                "id": "362ee5bc-2b63-4acf-93b0-f65238411508",
+                "category": 1,
+                "styleId": "section",
+                "position": {
+                    "x": -410.42340087890627,
+                    "y": 0.0,
+                    "z": -151.06985473632813
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "controlPoints": [
+                    {
+                        "x": -410.42340087890627,
+                        "y": 0.0,
+                        "z": -151.06985473632813
+                    },
+                    {
+                        "x": -120.77499389648438,
+                        "y": 0.0,
+                        "z": 86.30872344970703
+                    }
+                ]
+            },
+            {
+                "id": "7a4d0423-3810-49dc-a2d1-c739624d964e",
+                "category": 1,
+                "styleId": "section",
+                "position": {
+                    "x": 492.9058837890625,
+                    "y": 0.0,
+                    "z": -13.100616455078125
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "controlPoints": [
+                    {
+                        "x": 492.9058837890625,
+                        "y": 0.0,
+                        "z": -13.100616455078125
+                    },
+                    {
+                        "x": 365.56024169921877,
+                        "y": 0.0,
+                        "z": 474.47918701171877
+                    },
+                    {
+                        "x": 160.2618408203125,
+                        "y": 0.0,
+                        "z": 407.9512939453125
+                    }
+                ]
+            }
+        ],
+        "targetPoints": [
+            {
+                "id": "db47759f-2d7a-4cf1-a3bf-549529f9c4ff",
+                "category": 0,
+                "styleId": "red_sphere",
+                "position": {
+                    "x": 50.27063751220703,
+                    "y": 0.0,
+                    "z": 295.0567321777344
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                }
+            }
+        ],
+        "buildings": [],
+        "vehicles": [
+            {
+                "id": "f9201326-1850-4af9-80c6-fe8e20112c96",
+                "category": 3,
+                "styleId": "Police",
+                "position": {
+                    "x": 127.25431060791016,
+                    "y": 0.0,
+                    "z": 113.2293930053711
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.1814272254705429,
+                    "z": 0.0,
+                    "w": 0.9834043979644775
+                },
+                "vehicleType": 1,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "db47759f-2d7a-4cf1-a3bf-549529f9c4ff",
+                "gameStatus": 0
+            },
+            {
+                "id": "fb9781ab-7565-4be8-9ab8-73b7809eeade",
+                "category": 3,
+                "styleId": "Police",
+                "position": {
+                    "x": -28.295852661132814,
+                    "y": 0.0,
+                    "z": 462.2069396972656
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.22259247303009034,
+                    "z": 0.0,
+                    "w": 0.9749115705490112
+                },
+                "vehicleType": 1,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "db47759f-2d7a-4cf1-a3bf-549529f9c4ff",
+                "gameStatus": 0
+            },
+            {
+                "id": "ab2b2b21-d069-406a-9fd8-c089d01afc58",
+                "category": 3,
+                "styleId": "Police",
+                "position": {
+                    "x": -76.24633026123047,
+                    "y": 0.0,
+                    "z": 47.69445037841797
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.8162687420845032,
+                    "z": 0.0,
+                    "w": 0.5776724219322205
+                },
+                "vehicleType": 1,
+                "currentRoadId": "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "targetPointId": "db47759f-2d7a-4cf1-a3bf-549529f9c4ff",
+                "gameStatus": 0
+            },
+            {
+                "id": "22edd93c-26b0-4c23-b277-23959bce0533",
+                "category": 3,
+                "styleId": "Police",
+                "position": {
+                    "x": -92.35762023925781,
+                    "y": 0.0,
+                    "z": 212.8876495361328
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.8244704008102417,
+                    "z": 0.0,
+                    "w": 0.5659050941467285
+                },
+                "vehicleType": 1,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "db47759f-2d7a-4cf1-a3bf-549529f9c4ff",
+                "gameStatus": 0
+            },
+            {
+                "id": "c96a9c1a-0349-4048-b55f-fba0ff20d4ca",
+                "category": 3,
+                "styleId": "Police",
+                "position": {
+                    "x": 219.5909881591797,
+                    "y": 0.0,
+                    "z": 429.2795715332031
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.8087869882583618,
+                    "z": 0.0,
+                    "w": 0.5881018042564392
+                },
+                "vehicleType": 1,
+                "currentRoadId": "7a4d0423-3810-49dc-a2d1-c739624d964e",
+                "targetPointId": "db47759f-2d7a-4cf1-a3bf-549529f9c4ff",
+                "gameStatus": 0
+            },
+            {
+                "id": "5cb2a7cb-3113-4f1f-b024-9fc4c7fecfa9",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 107.3079605102539,
+                    "y": 0.0,
+                    "z": 165.4478302001953
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.1814272254705429,
+                    "z": 0.0,
+                    "w": 0.9834043979644775
+                },
+                "vehicleType": 0,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "1545c3c0-745d-4cff-b493-42cd7e44703b",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 86.85701751708985,
+                    "y": 0.0,
+                    "z": 207.7775115966797
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.9834043979644775,
+                    "z": 0.0,
+                    "w": 0.1814272254705429
+                },
+                "vehicleType": 0,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "0f342aaf-d05c-484c-91b5-b97e40e60805",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 38.350868225097659,
+                    "y": 0.0,
+                    "z": 175.16859436035157
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.9756366610527039,
+                    "z": 0.0,
+                    "w": -0.21939268708229066
+                },
+                "vehicleType": 0,
+                "currentRoadId": "ef917224-c667-4a3a-b1ba-1faaf317c406",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "208ab7f1-4d98-4b08-b851-b5ae6dc3ea6d",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 84.27079010009766,
+                    "y": 0.0,
+                    "z": 225.7578887939453
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.1814272254705429,
+                    "z": 0.0,
+                    "w": 0.9834043979644775
+                },
+                "vehicleType": 0,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "3251ad4e-c55b-407d-a8cf-317bea778c60",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 96.03080749511719,
+                    "y": 0.0,
+                    "z": 281.1795349121094
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.5659050941467285,
+                    "z": 0.0,
+                    "w": 0.8244704008102417
+                },
+                "vehicleType": 0,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "a0c81b30-d53f-4b56-939b-7ff7eb2ca23e",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 148.6150665283203,
+                    "y": 0.0,
+                    "z": 305.7247619628906
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.8244704008102417,
+                    "z": 0.0,
+                    "w": 0.5659050941467285
+                },
+                "vehicleType": 0,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "0434ae28-0943-4113-842e-54e375ce2a9f",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": -11.061077117919922,
+                    "y": 0.0,
+                    "z": 244.2079315185547
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.8244704008102417,
+                    "z": 0.0,
+                    "w": 0.5659050941467285
+                },
+                "vehicleType": 0,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "0626746a-14c7-488d-924d-e7343aa7189e",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 35.63105392456055,
+                    "y": 0.0,
+                    "z": 257.9099426269531
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.5659050941467285,
+                    "z": 0.0,
+                    "w": 0.8244704008102417
+                },
+                "vehicleType": 0,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "869f8225-05ae-43e3-98a5-22c3b080ca01",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": -4.323576927185059,
+                    "y": 0.0,
+                    "z": 403.23040771484377
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.9749115705490112,
+                    "z": 0.0,
+                    "w": 0.22259247303009034
+                },
+                "vehicleType": 0,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "2a65a897-815d-4a50-a54f-b1252d8f9311",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": -13.126275062561036,
+                    "y": 0.0,
+                    "z": 430.71881103515627
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.22259247303009034,
+                    "z": 0.0,
+                    "w": 0.9749115705490112
+                },
+                "vehicleType": 0,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "dcba3140-4993-43c5-acf2-5a7e0a48bf68",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": -47.27399444580078,
+                    "y": 0.0,
+                    "z": 492.3843994140625
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.9749115705490112,
+                    "z": 0.0,
+                    "w": 0.22259247303009034
+                },
+                "vehicleType": 0,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "4cdb6847-4364-4011-a87c-78c31e188f3e",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 80.50486755371094,
+                    "y": 0.0,
+                    "z": 275.1980285644531
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.5659050941467285,
+                    "z": 0.0,
+                    "w": 0.8244704008102417
+                },
+                "vehicleType": 0,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "761801ab-2eb1-40e2-a0d5-26576e90049c",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 85.58186340332031,
+                    "y": 0.0,
+                    "z": 281.4405822753906
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.8244704008102417,
+                    "z": 0.0,
+                    "w": 0.5659050941467285
+                },
+                "vehicleType": 0,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "5885b83b-5ba8-4b74-b6de-badb1c556c4c",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 39.28444290161133,
+                    "y": 0.0,
+                    "z": 263.60406494140627
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.8244704008102417,
+                    "z": 0.0,
+                    "w": 0.5659050941467285
+                },
+                "vehicleType": 0,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "ff1ab507-80a1-4268-91c6-4efefd845641",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 63.648494720458987,
+                    "y": 0.0,
+                    "z": 228.57337951660157
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.9756366610527039,
+                    "z": 0.0,
+                    "w": -0.21939268708229066
+                },
+                "vehicleType": 0,
+                "currentRoadId": "ef917224-c667-4a3a-b1ba-1faaf317c406",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "187c870a-d809-4fca-814f-b0adfd9fb1ee",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 57.86732864379883,
+                    "y": 0.0,
+                    "z": 216.36898803710938
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.9756366610527039,
+                    "z": 0.0,
+                    "w": -0.21939268708229066
+                },
+                "vehicleType": 0,
+                "currentRoadId": "ef917224-c667-4a3a-b1ba-1faaf317c406",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "2dcc408a-baa3-4623-a5b2-b2697513ec36",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 65.34117126464844,
+                    "y": 0.0,
+                    "z": 222.80299377441407
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.21939268708229066,
+                    "z": 0.0,
+                    "w": 0.9756366610527039
+                },
+                "vehicleType": 0,
+                "currentRoadId": "ef917224-c667-4a3a-b1ba-1faaf317c406",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "ac16888d-a1e3-438c-b369-20ce6b506224",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": 92.74510955810547,
+                    "y": 0.0,
+                    "z": 192.36280822753907
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.9834043979644775,
+                    "z": 0.0,
+                    "w": 0.1814272254705429
+                },
+                "vehicleType": 0,
+                "currentRoadId": "f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "targetPointId": "",
+                "gameStatus": 0
+            },
+            {
+                "id": "3334ad6f-6192-46a2-a54a-0f7da9dadd80",
+                "category": 3,
+                "styleId": "Truck_color03",
+                "position": {
+                    "x": -70.63478088378906,
+                    "y": 0.0,
+                    "z": 221.25657653808595
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.8244704008102417,
+                    "z": 0.0,
+                    "w": 0.5659050941467285
+                },
+                "vehicleType": 0,
+                "currentRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "targetPointId": "",
+                "gameStatus": 0
+            }
+        ],
+        "trafficLights": [
+            {
+                "id": "traffic_6198_27021_eb59f90b-60c1-4128-b2cf-92c0c52889c3_f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 61.982025146484378,
+                    "y": 0.0,
+                    "z": 270.2052001953125
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                    "f2d77b62-587e-43de-bc7a-70aeb35a4210"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_7388_24550_ef917224-c667-4a3a-b1ba-1faaf317c406_f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 73.88174438476563,
+                    "y": 0.0,
+                    "z": 245.50448608398438
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "ef917224-c667-4a3a-b1ba-1faaf317c406",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "ef917224-c667-4a3a-b1ba-1faaf317c406",
+                    "f2d77b62-587e-43de-bc7a-70aeb35a4210"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_-7844_56168_a9d935f7-d38a-4661-92a1-937fa1125f6d_f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": -78.43838500976563,
+                    "y": 0.0,
+                    "z": 561.6817626953125
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                    "f2d77b62-587e-43de-bc7a-70aeb35a4210"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_14930_4992_a9d935f7-d38a-4661-92a1-937fa1125f6d_f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 149.29730224609376,
+                    "y": 0.0,
+                    "z": 49.917144775390628
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                    "f2d77b62-587e-43de-bc7a-70aeb35a4210"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_19988_-8249_65e34c9a-1ce1-481b-950c-4c74f152fed1_f2d77b62-587e-43de-bc7a-70aeb35a4210",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 199.87564086914063,
+                    "y": 0.0,
+                    "z": -82.49409484863281
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                    "f2d77b62-587e-43de-bc7a-70aeb35a4210"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_-17537_17876_a9d935f7-d38a-4661-92a1-937fa1125f6d_eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": -175.37208557128907,
+                    "y": 0.0,
+                    "z": 178.76220703125
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                    "eb59f90b-60c1-4128-b2cf-92c0c52889c3"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_20496_32529_a9d935f7-d38a-4661-92a1-937fa1125f6d_eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 204.96401977539063,
+                    "y": 0.0,
+                    "z": 325.2904357910156
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                    "eb59f90b-60c1-4128-b2cf-92c0c52889c3"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_-26468_14435_65e34c9a-1ce1-481b-950c-4c74f152fed1_eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": -264.6812438964844,
+                    "y": 0.0,
+                    "z": 144.35498046875
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                    "eb59f90b-60c1-4128-b2cf-92c0c52889c3"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_38628_39514_7a4d0423-3810-49dc-a2d1-c739624d964e_eb59f90b-60c1-4128-b2cf-92c0c52889c3",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 386.2807922363281,
+                    "y": 0.0,
+                    "z": 395.1445007324219
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "7a4d0423-3810-49dc-a2d1-c739624d964e",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "7a4d0423-3810-49dc-a2d1-c739624d964e",
+                    "eb59f90b-60c1-4128-b2cf-92c0c52889c3"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_-2704_3246_a9d935f7-d38a-4661-92a1-937fa1125f6d_ef917224-c667-4a3a-b1ba-1faaf317c406",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": -27.036361694335939,
+                    "y": 0.0,
+                    "z": 32.46051025390625
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                    "ef917224-c667-4a3a-b1ba-1faaf317c406"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_-6700_-5189_65e34c9a-1ce1-481b-950c-4c74f152fed1_ef917224-c667-4a3a-b1ba-1faaf317c406",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": -66.99502563476563,
+                    "y": 0.0,
+                    "z": -51.894561767578128
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                    "ef917224-c667-4a3a-b1ba-1faaf317c406"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_6152_790_a9d935f7-d38a-4661-92a1-937fa1125f6d_b891d923-a009-49e4-97b8-147922376210",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 61.521297454833987,
+                    "y": 0.0,
+                    "z": 7.9001617431640629
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                    "b891d923-a009-49e4-97b8-147922376210"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_-13321_7612_362ee5bc-2b63-4acf-93b0-f65238411508_a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": -133.20689392089845,
+                    "y": 0.0,
+                    "z": 76.12030029296875
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "362ee5bc-2b63-4acf-93b0-f65238411508",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "362ee5bc-2b63-4acf-93b0-f65238411508",
+                    "a9d935f7-d38a-4661-92a1-937fa1125f6d"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_17278_41201_7a4d0423-3810-49dc-a2d1-c739624d964e_a9d935f7-d38a-4661-92a1-937fa1125f6d",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 172.77523803710938,
+                    "y": 0.0,
+                    "z": 412.00628662109377
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "7a4d0423-3810-49dc-a2d1-c739624d964e",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "7a4d0423-3810-49dc-a2d1-c739624d964e",
+                    "a9d935f7-d38a-4661-92a1-937fa1125f6d"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_9824_-11296_65e34c9a-1ce1-481b-950c-4c74f152fed1_b891d923-a009-49e4-97b8-147922376210",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 98.23614501953125,
+                    "y": 0.0,
+                    "z": -112.96293640136719
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                    "b891d923-a009-49e4-97b8-147922376210"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_-21129_1212_362ee5bc-2b63-4acf-93b0-f65238411508_65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": -211.29428100585938,
+                    "y": 0.0,
+                    "z": 12.124481201171875
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "362ee5bc-2b63-4acf-93b0-f65238411508",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "362ee5bc-2b63-4acf-93b0-f65238411508",
+                    "65e34c9a-1ce1-481b-950c-4c74f152fed1"
+                ],
+                "gameStatus": 0
+            },
+            {
+                "id": "traffic_48844_401_65e34c9a-1ce1-481b-950c-4c74f152fed1_7a4d0423-3810-49dc-a2d1-c739624d964e",
+                "category": 4,
+                "styleId": "Empty_TrafficLight",
+                "position": {
+                    "x": 488.43719482421877,
+                    "y": 0.0,
+                    "z": 4.009002685546875
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "currentGreenRoadId": "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                "timeInPhase": 0.0,
+                "controlledRoadIds": [
+                    "65e34c9a-1ce1-481b-950c-4c74f152fed1",
+                    "7a4d0423-3810-49dc-a2d1-c739624d964e"
+                ],
+                "gameStatus": 0
+            }
+        ]
+    }
+}

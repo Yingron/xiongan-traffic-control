@@ -1,0 +1,22 @@
+# --- VDN with intersection multi-action heads ---
+
+action_selector: "epsilon_greedy"
+epsilon_start: 1.0
+epsilon_finish: 0.05
+epsilon_anneal_time: 50000
+
+runner: "episode"
+
+buffer_size: 5000
+
+target_update_interval: 200
+
+agent: "rnn"
+agent_output_type: "q"
+learner: "q_learner"
+double_q: True
+mixer: "vdn"
+expert_action_supervised_enabled: False
+expert_action_supervised_coef: 0.2
+
+name: "vdn_two_head"

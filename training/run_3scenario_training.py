@@ -28,6 +28,10 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+# Windows GBK encoding fix - reconfigure stdout to UTF-8
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -82,7 +86,7 @@ def run_single_scenario(
     log_file = log_dir / f"{log_tag}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 
     print(f"\n{'='*72}")
-    print(f" ▶ 启动场景训练: {label} ({scenario})")
+    print(f" >>> 启动场景训练: {label} ({scenario})")
     print(f"    目标车辆 : {vehicles}")
     print(f"    训练步数 : {timesteps:,}")
     print(f"    模式     : {'高性能' if perf else '标准'} | {'参数共享' if multi else '单路口'}")
@@ -101,6 +105,8 @@ def run_single_scenario(
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
+            encoding='utf-8',
+            errors='replace',
             bufsize=1,
             universal_newlines=True,
         )
