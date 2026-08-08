@@ -194,12 +194,20 @@ def train_dqn(
     if scenario_info.get("high_traffic", False):
         override_ne = scenario_info.get("n_envs_override")
         override_bf = scenario_info.get("buffer_size_override")
+        override_bs = scenario_info.get("batch_size_override")
+        override_gs = scenario_info.get("gradient_steps_override")
         if override_ne is not None and ne > override_ne:
             print(f"[ADAPT] 高流量场景({scenario})：n_envs {ne} → {override_ne}，降低内存压力", flush=True)
             ne = override_ne
         if override_bf is not None and bf > override_bf:
             print(f"[ADAPT] 高流量场景({scenario})：buffer_size {bf:,} → {override_bf:,}", flush=True)
             bf = override_bf
+        if override_bs is not None and bs > override_bs:
+            print(f"[ADAPT] 高流量场景({scenario})：batch_size {bs} → {override_bs}", flush=True)
+            bs = override_bs
+        if override_gs is not None and gs != override_gs:
+            print(f"[ADAPT] 高流量场景({scenario})：gradient_steps {gs} → {override_gs}", flush=True)
+            gs = override_gs
 
     # ========== 系统内存检查与自适应调整 ==========
     try:
