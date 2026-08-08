@@ -120,6 +120,7 @@ PERF_DQN_CONFIG = {
 
 # ========== 场景映射配置 ==========
 # high_traffic 场景需要降低并行度和缓冲区以避免内存溢出
+# 同时优化batch_size和gradient_steps以提高训练速度
 SCENARIO_CONFIG = {
     'flat': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_flat.sumocfg'),
@@ -128,6 +129,8 @@ SCENARIO_CONFIG = {
         'high_traffic': False,
         'n_envs_override': None,
         'buffer_size_override': None,
+        'batch_size_override': None,
+        'gradient_steps_override': None,
     },
     'morning': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_morning.sumocfg'),
@@ -136,6 +139,8 @@ SCENARIO_CONFIG = {
         'high_traffic': True,
         'n_envs_override': 1,
         'buffer_size_override': 100000,
+        'batch_size_override': 256,
+        'gradient_steps_override': 10,
     },
     'evening': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_evening.sumocfg'),
@@ -144,6 +149,8 @@ SCENARIO_CONFIG = {
         'high_traffic': True,
         'n_envs_override': 1,
         'buffer_size_override': 100000,
+        'batch_size_override': 256,
+        'gradient_steps_override': 10,
     },
     'low': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_low.sumocfg'),
@@ -152,6 +159,8 @@ SCENARIO_CONFIG = {
         'high_traffic': False,
         'n_envs_override': None,
         'buffer_size_override': None,
+        'batch_size_override': None,
+        'gradient_steps_override': None,
     },
     'high': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_high.sumocfg'),
@@ -160,5 +169,7 @@ SCENARIO_CONFIG = {
         'high_traffic': True,
         'n_envs_override': 1,
         'buffer_size_override': 100000,
+        'batch_size_override': 256,
+        'gradient_steps_override': 10,
     },
 }
