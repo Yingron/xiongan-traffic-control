@@ -1,17 +1,20 @@
 {
   "peak": {
     "rou": "xiongan_real_peak.rou.xml",
-    "total_vehicles": 77164,
-    "window_s": 7200
+    "total_vehicles": 51868,
+    "window_s": 7200,
+    "factor": 0.48
   },
   "offpeak": {
     "rou": "xiongan_real_offpeak.rou.xml",
-    "total_vehicles": 54629,
-    "window_s": 7200
+    "total_vehicles": 44947,
+    "window_s": 7200,
+    "factor": 0.6
   },
   "evening": {
     "rou": "xiongan_real_evening.rou.xml",
-    "total_vehicles": 86526,
-    "window_s": 7200
+    "total_vehicles": 50296,
+    "window_s": 7200,
+    "factor": 0.42
   }
 }

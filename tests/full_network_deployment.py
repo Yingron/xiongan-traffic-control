@@ -38,7 +38,7 @@ def run_full_network_with_dqn(model_path: str, episodes: int = 3):
         print(f"Episode {ep + 1}/{episodes}")
         print(f"{'='*60}")
 
-        sumo_cfg = str(SUMO_FILES_DIR / "xiongan.sumocfg")
+        sumo_cfg = str(SUMO_FILES_DIR / "xiongan_30.sumocfg")
         cmd = ["sumo", "-c", sumo_cfg, "--no-step-log", "--seed", str(42 + ep)]
 
         traci.start(cmd, numRetries=1)

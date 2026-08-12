@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <input>
-        <net-file value="xiongan.net.xml"/>
+        <net-file value="xiongan_30.net.xml"/>
         <route-files value="xiongan_real_peak.rou.xml"/>
     </input>
     <time><begin value="0"/><end value="8400"/><step-length value="1"/></time>

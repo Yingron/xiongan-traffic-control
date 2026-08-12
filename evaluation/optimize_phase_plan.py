@@ -69,8 +69,8 @@ def benchmark_plan(sumo_cfg: Path, source_net: Path, plan: str, durations: tuple
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--sumo-cfg", type=Path, default=Path("sumo_files/xiongan_20.sumocfg"))
-    parser.add_argument("--net", type=Path, default=Path("sumo_files/xiongan_20.net.xml"))
+    parser.add_argument("--sumo-cfg", type=Path, default=Path("sumo_files/xiongan_30.sumocfg"))
+    parser.add_argument("--net", type=Path, default=Path("sumo_files/xiongan_30.net.xml"))
     parser.add_argument("--end", type=int, default=600, help="Simulation seconds per plan")
     parser.add_argument("--output", type=Path, default=Path("logs/phase_tuning_results.json"))
     parser.add_argument("--apply-best", action="store_true", help="Write the selected phase durations to --net")

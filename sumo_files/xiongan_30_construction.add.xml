@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  B-side disturbance scenario: temporary construction speed restriction.
+  The affected edge e_J20_J25 is a southbound approach to J25 (J20 is due north).  Both lanes are
+  slowed between 60 s and 300 s; routes remain connected, so the scenario can
+  be used for robustness and visualization tests without invalidating flows.
+-->
+<additional>
+    <variableSpeedSign id="construction_e_J20_J25"
+                       lanes="e_J20_J25_0 e_J20_J25_1">
+        <step time="0" speed="13.89"/>
+        <step time="60" speed="5.00"/>
+        <step time="300" speed="13.89"/>
+    </variableSpeedSign>
+</additional>

@@ -65,12 +65,13 @@ def validate_network_exists() -> None:
 
     from configs.constants import SUMO_FILES_DIR
     required_files = [
-        "xiongan.nod.xml",
-        "xiongan.edg.xml",
-        "xiongan.rou.xml",
-        "xiongan_morning.rou.xml",
-        "xiongan_flat.rou.xml",
-        "xiongan_evening.rou.xml",
+        "xiongan_30.nod.xml",
+        "xiongan_30.edg.xml",
+        "xiongan_30.rou.xml",
+        "xiongan_30.sumocfg",
+        "xiongan_real_peak.rou.xml",
+        "xiongan_real_offpeak.rou.xml",
+        "xiongan_real_evening.rou.xml",
     ]
 
     for filename in required_files:
@@ -80,16 +81,16 @@ def validate_network_exists() -> None:
         status = f"✅ ({size:,} bytes)" if exists else "❌ 缺失"
         print(f"  {filename}: {status}")
 
-    net_file = SUMO_FILES_DIR / "xiongan.net.xml"
+    net_file = SUMO_FILES_DIR / "xiongan_30.net.xml"
     if net_file.exists():
-        print(f"  xiongan.net.xml: ✅ ({net_file.stat().st_size:,} bytes)")
+        print(f"  xiongan_30.net.xml: ✅ ({net_file.stat().st_size:,} bytes)")
     else:
-        print(f"  xiongan.net.xml: ⚠️ 需要运行build_and_validate.ps1生成")
+        print(f"  xiongan_30.net.xml: ⚠️ 需要运行 netconvert 生成")
 
 
 def main() -> None:
     print("\n" + "#" * 60)
-    print("# 雄安新区20路口车路云一体化协同管控平台 - 验证")
+    print("# 雄安新区30路口车路云一体化协同管控平台 - 验证")
     print("#" * 60 + "\n")
 
     try:

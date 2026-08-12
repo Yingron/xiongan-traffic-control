@@ -1,6 +1,6 @@
 """Single-intersection and parameter-sharing SUMO environments.
 
-Each episode runs the validated 20-intersection SUMO network, while the agent
+Each episode runs the validated 30-intersection SUMO network, while the agent
 observes and controls one selected junction.  This lets a single 22-input,
 4-action DQN share parameters across all junctions without changing the
 traffic-signal interface used by the full-network environment.
@@ -20,6 +20,7 @@ from configs.constants import (
     FIXED_TIME_CONTROL,
     INTERSECTION_ORDER,
     MIN_GREEN_SECONDS,
+    PROJECT_ROOT,
     SUMO_FILES_DIR,
     YELLOW_TRANSITION_SECONDS,
 )
@@ -54,7 +55,7 @@ except ImportError:  # Allows SUMO smoke tests before the ML packages are instal
 
 
 class SingleIntersectionEnv(_EnvBase):
-    """Control one junction in the full 20-intersection SUMO scenario."""
+    """Control one junction in the full 30-intersection SUMO scenario."""
 
     metadata = {"render_modes": [None, "human"]}
 
@@ -72,7 +73,7 @@ class SingleIntersectionEnv(_EnvBase):
         if intersection_id not in INTERSECTION_ORDER:
             raise ValueError(f"Unknown intersection: {intersection_id}")
         self.intersection_id = intersection_id
-        self.sumo_cfg_path = Path(sumo_cfg_path or SUMO_FILES_DIR / "xiongan_20.sumocfg")
+        self.sumo_cfg_path = Path(sumo_cfg_path or SUMO_FILES_DIR / "xiongan_30.sumocfg")
         self.use_gui = use_gui
         self.max_steps = max_steps
         self.delta_time = delta_time
@@ -84,6 +85,7 @@ class SingleIntersectionEnv(_EnvBase):
         self.observation_space = spaces.Box(low=-1.0, high=1.0, shape=(FEATURES_PER_INTERSECTION,), dtype=np.float32)
         self._traci: Any | None = None
         self._sumo_proc: Any | None = None
+        self._sumo_err_file: Any | None = None
         self._previous_action: int | None = None
         self._previous_state: np.ndarray | None = None
         self._phase_changed_at = 0.0
@@ -125,16 +127,23 @@ class SingleIntersectionEnv(_EnvBase):
         if self.seed_value is not None:
             command.extend(["--seed", str(self.seed_value)])
         # 多进程端口冲突修复：
-        # 1. 根据rank/seed预分配唯一基础端口 (8870 + rank*37 % 5000)
+        # 1. 基础端口由 rank/seed 区分同一进程内多worker，再叠加 os.getpid() 进程因子，
+        #    保证不同训练进程（即使seed/rank相同）端口空间互不重叠，
+        #    避免并发训练时一方 close()/spawn 周期误杀另一方的SUMO
         # 2. 两步启动：先启动指定端口的SUMO子进程，再用traci.connect连接
         #    避免traci.start()在多进程竞态下"自动分配端口"碰撞
         import subprocess as _sp
         rank = getattr(self, "rank", 0) or 0
         seed_offset = int(self.seed_value or 0) & 0xFFF
-        base_port = 8870 + ((rank * 127 + seed_offset) % 4900)
+        base_port = 8870 + ((rank * 127 + seed_offset + os.getpid()) % 4900)
         max_port_try = 20
         sumo_proc = None
         traci_conn = None
+        # SUMO stderr 落盘：崩溃时能直接看到SUMO的真实报错，而不是只有 Connection closed
+        self._close_sumo_err_file()
+        sumo_err_path = PROJECT_ROOT / "logs" / f"sumo_stderr_{self.sumo_cfg_path.stem}_pid{os.getpid()}.log"
+        sumo_err_path.parent.mkdir(parents=True, exist_ok=True)
+        self._sumo_err_file = sumo_err_path.open("a", encoding="utf-8", errors="replace")
         for try_i in range(max_port_try):
             port = base_port + try_i
             cmd_with_port = command + ["--remote-port", str(port)]
@@ -142,7 +151,7 @@ class SingleIntersectionEnv(_EnvBase):
                 sumo_proc = _sp.Popen(
                     cmd_with_port,
                     stdout=_sp.DEVNULL,
-                    stderr=_sp.DEVNULL,
+                    stderr=self._sumo_err_file,
                     creationflags=getattr(_sp, "CREATE_NO_WINDOW", 0),
                 )
             except Exception as _e:
@@ -175,6 +184,7 @@ class SingleIntersectionEnv(_EnvBase):
                 except Exception:
                     pass
         if traci_conn is None:
+            self._close_sumo_err_file()
             raise RuntimeError(
                 f"Failed to start SUMO after {max_port_try} attempts (rank={rank}, base_port={base_port}). "
                 "请关闭其他SUMO进程后重试。"
@@ -306,6 +316,16 @@ class SingleIntersectionEnv(_EnvBase):
         info = self._info(breakdown, applied)
         info["incidents"] = incidents
         return state, reward, terminated, truncated, info
+
+    def _close_sumo_err_file(self) -> None:
+        """关闭SUMO stderr日志文件句柄（幂等，可在任何路径安全调用）"""
+        err_file = getattr(self, "_sumo_err_file", None)
+        if err_file is not None:
+            try:
+                err_file.close()
+            except Exception:
+                pass
+            self._sumo_err_file = None
 
     def close(self) -> None:
         # 先关闭TraCI连接（让SUMO正常退出）

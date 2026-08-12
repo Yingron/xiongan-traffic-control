@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <input>
+        <net-file value="xiongan_30.net.xml"/>
+        <route-files value="xiongan_30.rou.xml"/>
+        <additional-files value="xiongan_30_construction.add.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="8400"/>
+    </time>
+</configuration>

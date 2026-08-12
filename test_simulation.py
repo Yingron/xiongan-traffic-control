@@ -14,7 +14,7 @@ import numpy as np
 def test_simulation():
     """测试SUMO仿真和状态提取"""
     sumo_binary = "sumo"
-    sumo_cfg_path = "sumo_files/xiongan.sumocfg"
+    sumo_cfg_path = "sumo_files/xiongan_30.sumocfg"
     
     # 启动SUMO
     traci.start([

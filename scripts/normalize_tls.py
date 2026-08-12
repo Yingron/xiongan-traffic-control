@@ -32,7 +32,7 @@ def main():
         tl=c.get('tl')
         if tl and tl.startswith('J'):
             conns_by_tls.setdefault(tl,[]).append(c)
-    expected=[f'J{i:02d}' for i in range(1,21)]
+    expected=[f'J{i:02d}' for i in range(1,31)]
     tls_nodes={j.get('id'):j for j in root.findall('junction') if j.get('id') in expected}
     missing=[j for j in expected if j not in conns_by_tls]
     if missing: raise SystemExit(f'缺少受控连接的信号灯: {missing}')
@@ -59,7 +59,8 @@ def main():
             groups[action].append((idx, turn))
         absent=[a for a,v in approaches.items() if not v]
         empty=[a for a,v in groups.items() if not v]
-        if absent: raise SystemExit(f'{jid} 缺少进口方向: {absent}')
+        # 30 路口网格边界路口可能缺一侧进口（如 J02 无东向），允许缺一个方向
+        if len(absent) > 1: raise SystemExit(f'{jid} 缺少进口方向过多: {absent}')
         if empty: raise SystemExit(f'{jid} 存在空动作相位: {empty}')
         n=max_index+1
         states=[]
@@ -99,5 +100,5 @@ def main():
     tree.write(net,encoding='UTF-8',xml_declaration=True)
     Path(args.lane_mapping).write_text(json.dumps(lane_mapping,ensure_ascii=False,indent=2),encoding='utf-8')
     Path(args.tls_mapping).write_text(json.dumps(tls_mapping,ensure_ascii=False,indent=2),encoding='utf-8')
-    print('已规范化 J01-J20：每个路口严格 4 个可控相位。')
+    print('已规范化 J01-J30：每个路口严格 4 个可控相位。')
 if __name__=='__main__': main()

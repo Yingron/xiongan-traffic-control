@@ -1,8 +1,8 @@
-"""20-intersection WebSocket transport for the REST/TraCI session manager.
+"""30-intersection WebSocket transport for the REST/TraCI session manager.
 
 The WebSocket endpoint deliberately shares the same session manager as the
 REST API.  It does not load a policy or generate actions: callers must submit
-all twenty actions explicitly until A delivers a versioned DQN artifact.
+all thirty actions explicitly until A delivers a versioned DQN artifact.
 """
 
 from __future__ import annotations
@@ -182,7 +182,7 @@ class WebSocketHub:
             await self._send_error(
                 websocket,
                 "INVALID_ACTION_SET",
-                "Actions must contain exactly J01 through J20 with integer values from 0 to 3.",
+                "Actions must contain exactly J01 through J30 with integer values from 0 to 3.",
                 request_id=request_id,
                 details={"validation_errors": validation_errors},
             )

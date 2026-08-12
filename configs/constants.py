@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-INTERSECTION_ORDER = tuple(f"J{i:02d}" for i in range(1, 21))
-STATE_DIMENSION = 440
+INTERSECTION_ORDER = tuple(f"J{i:02d}" for i in range(1, 31))
+STATE_DIMENSION = 660
 FEATURES_PER_INTERSECTION = 22
 ACTION_COUNT_PER_INTERSECTION = 4
 ACTION_NAMES = ("NS_Straight", "NS_Left", "EW_Straight", "EW_Left")
@@ -24,9 +24,9 @@ DOCS_DIR = PROJECT_ROOT / "docs"
 SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 DATA_DIR = PROJECT_ROOT / "data"
 
-DEFAULT_SUMO_CONFIG = SUMO_FILES_DIR / "xiongan.sumocfg"
-DEFAULT_NET_FILE = SUMO_FILES_DIR / "xiongan.net.xml"
-DEFAULT_ROU_FILE = SUMO_FILES_DIR / "xiongan.rou.xml"
+DEFAULT_SUMO_CONFIG = SUMO_FILES_DIR / "xiongan_30.sumocfg"
+DEFAULT_NET_FILE = SUMO_FILES_DIR / "xiongan_30.net.xml"
+DEFAULT_ROU_FILE = SUMO_FILES_DIR / "xiongan_30.rou.xml"
 
 STATE_LAYOUT_VERSION = "1.0"
 REWARD_VERSION = "v3"

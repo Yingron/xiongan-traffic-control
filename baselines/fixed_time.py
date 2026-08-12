@@ -146,15 +146,34 @@ def parse_phase_name(name: str) -> List[Tuple[str, str]]:
 _DIR_TO_MOVE = {"s": "T", "l": "L", "r": "R"}
 
 
-def load_link_map(net_xml_path: str | Path) -> Dict[str, Dict[int, Tuple[str, str]]]:
-    """解析路网，返回 {路口: {linkIndex: (进口, 转向)}}。
+def load_link_map(net_xml_path: str | Path) -> Dict[str, Dict[int, Tuple[str, str, str, int, int]]]:
+    """解析路网，返回 {路口: {linkIndex: (进口, 转向, 出口边, 出口车道, 进口车道)}}。
 
     信号灯相位状态串第 i 个字符对应 linkIndex=i 的车道组（SUMO 约定），
-    因此按 linkIndex 建立到 (进口, 转向) 的映射即可把真实相位名转成灯组状态。
+    因此按 linkIndex 建立到 (进口, 转向) 的映射即可把真实相位名转成灯组状态；
+    出口边/出口车道/进口车道用于判定合流：同一出口车道同相位至多一个主绿 'G'，
+    其余合流链接标记次要绿 'g'（与路网自带 "0" 程序的 G/g 模式一致）。
+
+    进口方位的推断：新 30 路口路网的边名为 e_{from}_{to}，无法从边名前缀
+    取方位（旧路网边名以 N/S/E/W 开头，frm.split("_")[0] 在旧网上可用）。
+    这里改用节点坐标几何推断：进口边 from 节点相对受控路口的方位。
     """
     tree = ET.parse(str(net_xml_path))
     root = tree.getroot()
-    link_map: Dict[str, Dict[int, Tuple[str, str]]] = {}
+    coords = {j.get("id"): (float(j.get("x")), float(j.get("y")))
+              for j in root.findall("junction") if j.get("x") is not None}
+    edge_from = {e.get("id"): e.get("from")
+                 for e in root.findall("edge") if e.get("function") is None}
+
+    def classify(frm_node: str, to_node: str) -> str:
+        fx, fy = coords[frm_node]
+        tx, ty = coords[to_node]
+        dx, dy = fx - tx, fy - ty
+        if abs(dx) >= abs(dy):
+            return "E" if dx > 0 else "W" if dx < 0 else "?"
+        return "N" if dy > 0 else "S" if dy < 0 else "?"
+
+    link_map: Dict[str, Dict[int, Tuple[str, str, str, int, int]]] = {}
     for conn in root.iter("connection"):
         tl = conn.get("tl")
         li = conn.get("linkIndex")
@@ -162,8 +181,17 @@ def load_link_map(net_xml_path: str | Path) -> Dict[str, Dict[int, Tuple[str, st
             continue
         frm = conn.get("from", "")
         move = _DIR_TO_MOVE.get(conn.get("dir", ""), "T")
-        side = frm.split("_")[0] if frm else "?"
-        link_map.setdefault(tl, {})[int(li)] = (side, move)
+        # 内部边（:J01_0）无坐标/不属于边表，保持旧式前缀兜底（不与 N/S/E/W 匹配）
+        if frm.startswith(":") or frm not in edge_from or tl not in coords:
+            side = frm.split("_")[0] if frm else "?"
+        else:
+            side = classify(edge_from[frm], tl)
+        link_map.setdefault(tl, {})[int(li)] = (
+            side, move,
+            conn.get("to", ""),
+            int(conn.get("toLane", "-1")),
+            int(conn.get("fromLane", "-1")),
+        )
     return link_map
 
 
@@ -216,7 +244,7 @@ class RealFixedTimeController:
             )
         return plan
 
-    def _load_link_map(self) -> Dict[int, Tuple[str, str]]:
+    def _load_link_map(self) -> Dict[int, Tuple[str, str, str, int, int]]:
         if self.net_xml_path is None:
             raise ValueError("net_xml_path 未指定，无法解码 linkIndex → (进口, 转向)")
         link_map = load_link_map(self.net_xml_path)
@@ -247,27 +275,38 @@ class RealFixedTimeController:
                 continue
             movements = parse_phase_name(phase_name)
             state = ["r"] * n_links
+            # (linkIndex, 出口边, 出口车道, 进口车道)：同一出口车道同相位至多一个主绿
+            candidates: List[Tuple[int, str, int, int]] = []
             # 右转随本进口直行相位放行：相位名含某进口的直行（或直左/放行等含 T 的组合）
             # 时，该进口的右转车道一并绿灯——与 rl4 动作表一致，避免右转与对向直行
             # 在同一条出口道上抢行。
             if self.right_with_through:
                 sides_with_through = {side for side, move in movements if move == "T"}
-                for li, (ls, lm) in link_map.items():
+                for li, (ls, lm, to, to_lane, from_lane) in link_map.items():
                     if lm == "R" and ls in sides_with_through:
-                        state[li] = "G"
-            green_links = set()
+                        candidates.append((li, to, to_lane, from_lane))
             for side, move in movements:
-                for li, (ls, lm) in link_map.items():
+                for li, (ls, lm, to, to_lane, from_lane) in link_map.items():
                     if ls == side and lm == move:
-                        state[li] = "G"
-                        green_links.add(li)
-            if not green_links:
+                        candidates.append((li, to, to_lane, from_lane))
+            if not candidates:
                 raise ValueError(
                     f"{self.junction_id} 相位 {phase_name!r} 未映射到任何绿灯车道组 "
                     f"(movements={movements}, net={self.net_xml_path.name})"
                 )
+            # 合流降级：每条出口道同相位只有主链接为 'G'（直行续行 fromLane==toLane 优先），
+            # 其余合流链接标记次要绿 'g'（让行）。否则两条受保护流挤入同一车道，
+            # SUMO 报 "unsafe green" 并在饱和需求下互相等待导致堵死（实测全路网 3600s 崩盘）。
+            by_lane: Dict[Tuple[str, int], List[Tuple[int, str, int, int]]] = {}
+            for cand in candidates:
+                by_lane.setdefault((cand[1], cand[2]), []).append(cand)
+            for lane_links in by_lane.values():
+                lane_links.sort(key=lambda c: (c[3] != c[2], c[0]))
+                for i, (li, _to, _to_lane, _from_lane) in enumerate(lane_links):
+                    state[li] = "G" if i == 0 else "g"
+            green_links = {c[0] for c in candidates}
             green_state = "".join(state)
-            yellow_state = "".join("y" if c == "G" else "r" for c in green_state)
+            yellow_state = "".join("y" if c in ("G", "g") else "r" for c in green_state)
             all_red_state = "r" * n_links
 
             g = int(pdata.get("green", 0))
@@ -342,13 +381,39 @@ def make_real_fixed_time_action(junction_id: str, period: str = "offpeak", **kwa
     return controller.get_action, controller
 
 
+def real_movements(link_map: Dict[str, Dict[int, Tuple[str, str, str, int, int]]], junction_id: str) -> set:
+    """路网中某路口真实存在的 (进口, 转向) 车道组集合（含直行 s/t 归一化）。"""
+    return {(s, m) for s, m, *_ in link_map.get(junction_id, {}).values() if s in "NSEW"}
+
+
+def covered_movements(plan: dict, real: set, right_with_through: bool = True) -> set:
+    """配时方案覆盖的 (进口, 转向)：相位显式放行 + 右转随本进口直行相位放行。"""
+    covered = set()
+    through_sides = set()
+    for name in plan:
+        if name == "cycle" or name.startswith("相位"):
+            continue
+        for side, move in parse_phase_name(name):
+            if (side, move) in real:
+                covered.add((side, move))
+            if move == "T":
+                through_sides.add(side)
+    if right_with_through:
+        for side, move in real:
+            if move == "R" and side in through_sides:
+                covered.add((side, "R"))
+    return covered
+
+
 if __name__ == "__main__":
-    # 离线自检：所有 20 个路口的真实配时能否正确映射到路网车道组
+    # 离线自检：所有 30 个路口的真实配时能否正确映射到路网车道组
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--net", default=str(Path(PROJECT_ROOT) / "sumo_files" / "xiongan.net.xml"))
+    parser.add_argument("--net", default=str(Path(PROJECT_ROOT) / "sumo_files" / "xiongan_30.net.xml"))
     parser.add_argument("--periods", default="peak,offpeak,evening")
+    parser.add_argument("--check-coverage", action="store_true",
+                        help="检查每个路口是否存在路网有连接但配时无绿灯放行的流向")
     args = parser.parse_args()
 
     net_path = Path(args.net)
@@ -368,3 +433,16 @@ if __name__ == "__main__":
             summary = ctrl.plan_summary
             names = " + ".join(f"{p['name']}({p['green']}s)" for p in summary["phases"])
             print(f"[OK] {jid}/{period}: cycle={summary['cycle']}s  {names}")
+
+    if args.check_coverage:
+        print("\n--- 流向覆盖检查（路网车道组 vs 配时放行，右转随直行） ---")
+        for jid in sorted(link_map, key=lambda x: int(x[1:])):
+            real = real_movements(link_map, jid)
+            period = args.periods.split(",")[0]
+            plan = data.get(jid, {}).get(period, {})
+            if not plan:
+                continue
+            uncovered = sorted(real - covered_movements(plan, real))
+            if uncovered:
+                print(f"[WARN] {jid}/{period}: 路网有连接但配时无绿灯 = {uncovered}")
+        print("（无输出 = 全部流向均有绿灯）")

@@ -145,7 +145,7 @@ class RewardCalculator:
         """计算所有20个路口的奖励
 
         Args:
-            global_state: 440维全局状态
+            global_state: 660维全局状态
             current_actions: 当前动作字典
             previous_actions: 上一步动作字典
             previous_states: 上一步局部状态字典

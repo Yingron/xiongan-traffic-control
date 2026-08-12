@@ -1,4 +1,4 @@
-"""基于赛题真实 xlsx 流量数据生成 20 路口训练场景（早/平/晚高峰）
+"""基于赛题真实 xlsx 流量数据生成 30 路口训练场景（早/平/晚高峰）
 
 背景（历史问题）:
 1. 旧脚本 scripts/generate_road_network.py 的 generate_rou_xml 把 xlsx 中
@@ -12,20 +12,29 @@
   三个时段的 15 分钟分时流量（兼容不同行列布局）；
 - 将每个 15 分钟区间的 pcu（× pcu_factor 换算系数）生成独立 flow，
   begin/end 对齐真实时段窗口（早 07:00-09:00 / 平 14:30-16:30 / 晚 17:30-19:30）；
-- 依据 xiongan.nod.xml / xiongan.edg.xml 的路网拓扑，把 (进口方向, 转向)
+- 依据 xiongan_30.nod.xml / xiongan_30.edg.xml 的路网拓扑，把 (进口方向, 转向)
   映射到真实连接 (入口边, 出口边)（中国右侧通行：东进口直行出西/左转出南/右转出北，等）；
+- 新增路口 J21~J30 无真实 xlsx 数据，按 MIRROR_MAP 镜像复用旧路口 J01~J20 的需求，
+  使扩展区域同样产生排队/等待学习信号；
 - 输出 sumo_files/xiongan_real_{peak,offpeak,evening}.rou.xml + .sumocfg，
   可直接被 training/config.py SCENARIO_CONFIG 引用并用于 DQN 训练。
 
-已知坑（已修复）:
-1. SUMO flow 插入缺陷: 若文件中某条 flow 的 begin 晚于其后声明的 flow，
-   后面的 flow 会被静默跳过（整文件只有第一个 flow 产车）。本脚本把所有
-   flow 按 begin 升序输出规避。
-2. J18/J19 是对角路口，xlsx 用 东北/东南/西北/西南 进口标注，通过
-   DIAGONAL_TO_SIDE 映射到合成网格 N/S/E/W（见该常量注释）。
+需求标定（容量匹配法，2026-08 校准）:
+- 网格版路网（6×6 路口、200m 街块、每进口 2 车道）的通行能力低于真实雄安路网。
+  若直接使用 xlsx 原始 pcu（--factor 1.0，约 12 veh/s 总插入率），真实定周期
+  基线会在部分进口左转绿信比过低处（如 J12 南/北左转 9%、J14 北左转 28%、
+  J10 东左转 27%）饱和并向全网回溢死锁。
+- 因此按“真实定周期基线（baselines/fixed_time.py + data/timing_plans.json）
+  全路网可通行能力”等比标定：早/平/晚各取基线尚能持续流通（7200s 全程
+  meanSpeed 最低点 ≥ 2 m/s）的最大需求，即 peak=0.48 / offpeak=0.60 /
+  evening=0.42（约 6.2~7.2 veh/s 总插入率，仍远超手工场景 22~37 倍，
+  路口有真实排队与等待学习信号）。
 
 用法:
-    python scripts/generate_real_demand_scenarios.py [--factor 1.0]
+    # 三个场景统一系数
+    python scripts/generate_real_demand_scenarios.py --factor 0.5
+    # 早/平/晚分别标定（推荐，与 data/timing_plans.json 的容量匹配）
+    python scripts/generate_real_demand_scenarios.py --factor 0.48,0.60,0.42
 """
 from __future__ import annotations
 
@@ -41,9 +50,9 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATA_DIR = PROJECT_ROOT / "赛题资料" / "路口数据"
 SUMO_FILES_DIR = PROJECT_ROOT / "sumo_files"
-NET_FILE = "xiongan.net.xml"
-NOD_FILE = "xiongan.nod.xml"
-EDG_FILE = "xiongan.edg.xml"
+NET_FILE = "xiongan_30.net.xml"
+NOD_FILE = "xiongan_30.nod.xml"
+EDG_FILE = "xiongan_30.edg.xml"
 
 # 中国右侧通行: 进口方向 -> {转向 -> 驶出方向}
 # 例如 东进口(车辆向西驶入) 左转 → 南
@@ -60,6 +69,15 @@ LABEL_TO_SIDE = {"北进口": "N", "南进口": "S", "东进口": "E", "西进�
 #   东北→E（向东进口直行向西 = 原东北→西南直行）等，见 timing_plans 相位"东北、西南放行"。
 DIAGONAL_TO_SIDE = {"东北进口": "E", "东南进口": "S", "西北进口": "N", "西南进口": "W"}
 MOVE_CODE = {"直行": "T", "左转": "L", "右转": "R"}
+
+# 30 路口路网（6×5 网格）在旧 20 路口基础上新增 J21~J30，这些路口没有真实
+# xlsx 数据。按就近/对称原则镜像复用旧路口需求：每个新路口采用其镜像源路口
+# 各时段的 (进口侧, 转向) 分时流量，保证扩展区域同样有排队/等待学习信号。
+# （侧向/转向在目标路口按其自身几何重新映射，见 build_topology + MOVE_EXIT。）
+MIRROR_MAP = {
+    "J21": "J01", "J22": "J03", "J23": "J04", "J24": "J06", "J25": "J08",
+    "J26": "J05", "J27": "J07", "J28": "J09", "J29": "J11", "J30": "J02",
+}
 
 
 def _label_to_side(label: str) -> Optional[str]:
@@ -99,7 +117,7 @@ def _classify_side(from_xy: tuple[float, float], junction_xy: tuple[float, float
 
 
 def build_topology(sumo_files_dir: Path) -> dict:
-    """构建 20 路口的 进口边/出口边 映射（按方位）"""
+    """构建 30 路口的 进口边/出口边 映射（按方位）"""
     nodes = _parse_nodes(sumo_files_dir / NOD_FILE)
     edges = _parse_edges(sumo_files_dir / EDG_FILE)
     junctions = sorted(nid for nid in nodes if re.fullmatch(r"J\d{2}", nid))
@@ -271,7 +289,7 @@ def generate_scenario(
                     f'    <route id="{route_cache[rkey]}" edges="{in_edges[0]} {out_edges[0]}"/>'
                 )
             for idx, (t0, t1) in enumerate(intervals):
-                n = int(round(values[idx])) if idx < len(values) else 0
+                n = int(round(values[idx] * factor)) if idx < len(values) else 0
                 if n <= 0:
                     continue
                 fid = f"f_{j}_{side}_{MOVE_CODE[move]}_{idx}"
@@ -310,8 +328,8 @@ def generate_scenario(
     return rou_path, total_vehicles
 
 
-def parse_all_flow_xlsx(data_dir: Path, factor: float) -> dict[str, dict]:
-    """读取全部 20 个路口 xlsx，按 (路口, 进口, 转向) 聚合到各时段
+def parse_all_flow_xlsx(data_dir: Path) -> dict[str, dict]:
+    """读取全部 20 个路口 xlsx，按 (路口, 进口, 转向) 聚合到各时段（pcu 原始值，factor=1.0）
 
     返回 {period: {"window": (s,e), "intervals": [...], "_flows_by_junction":
         {J01: {(side, move): [每15min车辆数]}}}}
@@ -329,7 +347,14 @@ def parse_all_flow_xlsx(data_dir: Path, factor: float) -> dict[str, dict]:
             print(f"  ⚠️  {d.name} 下无 xlsx", file=sys.stderr)
             continue
         jid = f"J{int(d.name):02d}"
-        per_junction[jid] = _parse_flow_xlsx(xlsx[0], factor)
+        per_junction[jid] = _parse_flow_xlsx(xlsx[0], 1.0)
+
+    # 新增路口 J21~J30 无真实 xlsx 数据：镜像复用旧路口需求（共享解析结果，只读）。
+    for target, source in MIRROR_MAP.items():
+        if source not in per_junction:
+            print(f"  ⚠️  镜像源 {source} 缺失，跳过 {target}", file=sys.stderr)
+            continue
+        per_junction[target] = per_junction[source]
 
     periods = ["peak", "offpeak", "evening"]
     merged: dict[str, dict] = {}
@@ -356,34 +381,52 @@ def parse_all_flow_xlsx(data_dir: Path, factor: float) -> dict[str, dict]:
     return merged
 
 
+def _parse_factors(text: str) -> dict[str, float]:
+    """解析 --factor：单个浮点数（三场景统一）或 'peak,offpeak,evening' 三个值"""
+    parts = [p.strip() for p in text.split(",")]
+    try:
+        if len(parts) == 1:
+            f = float(parts[0])
+            return {"peak": f, "offpeak": f, "evening": f}
+        if len(parts) == 3:
+            return dict(zip(["peak", "offpeak", "evening"], map(float, parts)))
+    except ValueError:
+        pass
+    raise SystemExit(f"--factor 解析失败: {text!r}（应为单个浮点数或 '早,平,晚' 三个值）")
+
+
 def main() -> None:
-    ap = argparse.ArgumentParser(description="基于真实 xlsx 数据生成 20 路口训练场景")
-    ap.add_argument("--factor", type=float, default=1.0,
-                    help="pcu→veh 换算/放大系数（默认 1.0；拥堵不足可加大到 1.5~2.0）")
+    ap = argparse.ArgumentParser(description="基于真实 xlsx 数据生成 30 路口训练场景（早/平/晚）")
+    ap.add_argument("--factor", default="1.0",
+                    help="pcu→veh 换算系数。单个浮点数（三场景统一）或 '早,平,晚' 三个值。"
+                         "容量匹配标定值见本文件头注释：0.48,0.65,0.42")
     ap.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR, help="赛题路口数据目录")
     ap.add_argument("--out-dir", type=Path, default=SUMO_FILES_DIR, help="输出目录（sumo_files）")
     args = ap.parse_args()
+    factors = _parse_factors(args.factor)
 
     print("🔧 读取路网拓扑...")
     topology = build_topology(args.out_dir)
-    print(f"   20 路口拓扑: 进口/出口边按 N/S/E/W 建立完成")
-    for j in ["J01", "J05", "J16"]:
+    print(f"   30 路口拓扑: 进口/出口边按 N/S/E/W 建立完成")
+    for j in ["J01", "J05", "J16", "J21", "J30"]:
         print(f"   {j} 进口: { {s: e[0] for s, e in topology['approach_edges'][j].items()} }")
 
-    print("📥 解析 20 个路口 xlsx 流量（早/平/晚）...")
-    all_flows = parse_all_flow_xlsx(args.data_dir, args.factor)
+    print("📥 解析 20 个真实路口 xlsx 流量 + 10 个镜像路口（早/平/晚）...")
+    all_flows = parse_all_flow_xlsx(args.data_dir)
 
     labels = {"peak": "早高峰(07:00-09:00)", "offpeak": "平峰(14:30-16:30)", "evening": "晚高峰(17:30-19:30)"}
     stats = {}
     for p in ["peak", "offpeak", "evening"]:
-        print(f"\n🚦 生成场景 [{labels[p]}] factor={args.factor}")
-        rou_path, total = generate_scenario(p, all_flows[p], topology, args.out_dir, args.factor)
-        stats[p] = {"rou": str(rou_path.name), "total_vehicles": total, "window_s": all_flows[p]["window"][1]}
+        f = factors[p]
+        print(f"\n🚦 生成场景 [{labels[p]}] factor={f}")
+        rou_path, total = generate_scenario(p, all_flows[p], topology, args.out_dir, f)
+        stats[p] = {"rou": str(rou_path.name), "total_vehicles": total, "window_s": all_flows[p]["window"][1],
+                    "factor": f}
         print(f"   ✅ {rou_path.name}: {total} 辆车 / {all_flows[p]['window'][1]}s")
 
     # 汇总各路口小时需求（取早高峰），便于核对
     print("\n📊 早高峰各路口总需求（pcu/h，2 小时总量 ÷ 2）：")
-    for j in ["J01", "J05", "J10", "J15", "J20"]:
+    for j in ["J01", "J05", "J10", "J15", "J20", "J21", "J25", "J30"]:
         jf = all_flows["peak"]["_flows_by_junction"].get(j, {})
         total_2h = sum(sum(v) for v in jf.values())
         print(f"   {j}: {total_2h / 2:.0f} pcu/h")
