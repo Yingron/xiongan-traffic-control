@@ -47,16 +47,19 @@ MODEL_DIR = PROJECT_ROOT / "models" / "dqn"
 SCENARIO_MODELS = {
     "flat": {
         "model": MODEL_DIR / "dqn_multi_shared_flat_perf_1000000steps.zip",
+        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_flat_anticollapse_500000steps.zip",
         "label": "平峰",
         "sumo_cfg": SCENARIO_CONFIG["flat"]["sumo_cfg"],
     },
     "morning": {
         "model": MODEL_DIR / "dqn_multi_shared_morning_perf_500000steps.zip",
+        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_morning_anticollapse_500000steps.zip",
         "label": "早高峰",
         "sumo_cfg": SCENARIO_CONFIG["morning"]["sumo_cfg"],
     },
     "evening": {
         "model": MODEL_DIR / "dqn_multi_shared_evening_perf_500000steps.zip",
+        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_evening_anticollapse_500000steps.zip",
         "label": "晚高峰",
         "sumo_cfg": SCENARIO_CONFIG["evening"]["sumo_cfg"],
     },
@@ -175,33 +178,39 @@ def evaluate_scenario(
     episodes: int = 3,
     max_steps: int = 720,
 ) -> List[Dict]:
-    """评估一个场景下的 DQN vs Fixed-Time
+    """评估一个场景下的 DQN vs Fixed-Time (可选对比抗坍缩DQN)
 
     Returns:
         所有路口×策略的评估结果列表
     """
     model_path = scenario_info["model"]
+    anticollapse_path = scenario_info.get("anticollapse_model")
     scenario_label = scenario_info["label"]
     sumo_cfg = scenario_info["sumo_cfg"]
 
     print(f"\n{'=' * 70}", flush=True)
     print(f"  场景评估: {scenario_label} ({scenario_key})", flush=True)
-    print(f"  模型: {model_path.name}", flush=True)
+    print(f"  原模型: {model_path.name} {'[存在]' if model_path.exists() else '[不存在]'}", flush=True)
+    if anticollapse_path:
+        print(f"  抗坍缩模型: {anticollapse_path.name} {'[存在]' if anticollapse_path.exists() else '[不存在]'}", flush=True)
     print(f"  SUMO: {Path(sumo_cfg).name}", flush=True)
     print(f"  测试路口: {', '.join(TEST_INTERSECTIONS)}", flush=True)
     print(f"  每路口回合数: {episodes}", flush=True)
     print(f"{'=' * 70}", flush=True)
 
-    # 检查模型文件
-    if not model_path.exists():
-        print(f"  [ERROR] 模型文件不存在: {model_path}", flush=True)
-        return []
+    strategies = [("Fixed-Time", fixed_time_action)]
 
-    dqn_action = make_dqn_action(str(model_path))
-    strategies = [
-        ("Fixed-Time", fixed_time_action),
-        ("DQN", dqn_action),
-    ]
+    if model_path.exists():
+        dqn_action = make_dqn_action(str(model_path))
+        strategies.append(("DQN-Original", dqn_action))
+    else:
+        print(f"  [WARN] 原DQN模型不存在，跳过", flush=True)
+
+    if anticollapse_path and anticollapse_path.exists():
+        ac_action = make_dqn_action(str(anticollapse_path))
+        strategies.append(("DQN-AntiCollapse", ac_action))
+    elif anticollapse_path:
+        print(f"  [INFO] 抗坍缩模型不存在，跳过 (训练后自动出现)", flush=True)
 
     all_results = []
 
@@ -432,30 +441,39 @@ def print_summary(all_results: List[Dict]):
     scenarios = ["flat", "morning", "evening"]
     scenario_labels = ["平峰", "早高峰", "晚高峰"]
 
+    available_strategies = list(set(r["strategy"] for r in all_results))
+    strategy_labels = {
+        "Fixed-Time": "固定配时",
+        "DQN": "DQN(原)",
+        "DQN-Original": "DQN(原)",
+        "DQN-AntiCollapse": "DQN(抗坍缩)",
+    }
+
     for si, scenario in enumerate(scenarios):
         print(f"\n  ── {scenario_labels[si]} ({scenario}) ──", flush=True)
-        print(f"  {'路口':<8} {'策略':<12} {'奖励':>10} {'排队':>8} {'等待(s)':>10} {'行程(s)':>10} {'通行量':>8} {'CO2':>10} {'碰撞':>6}", flush=True)
-        print(f"  {'-' * 8} {'-' * 12} {'-' * 10} {'-' * 8} {'-' * 10} {'-' * 10} {'-' * 8} {'-' * 10} {'-' * 6}", flush=True)
+        header_str = f"  {'路口':<8}"
+        for s in available_strategies:
+            header_str += f" {strategy_labels.get(s, s):<14}"
+        print(header_str + f" {'碰撞':>6} {'传送':>6}", flush=True)
 
         for intersection in TEST_INTERSECTIONS:
-            for strategy in ["Fixed-Time", "DQN"]:
+            line = f"  {intersection:<8}"
+            for strategy in available_strategies:
                 match = [r for r in all_results
                          if r["scenario"] == scenario
                          and r["intersection"] == intersection
                          and r["strategy"] == strategy]
                 if match:
                     r = match[0]
-                    print(
-                        f"  {intersection:<8} {strategy:<12} "
-                        f"{r['reward']['mean']:>10.4f} "
-                        f"{r['queue_length']['mean']:>8.2f} "
-                        f"{r['waiting_time']['mean']:>10.2f} "
-                        f"{r['travel_time']['mean']:>10.2f} "
-                        f"{r['throughput']['total']:>8.0f} "
-                        f"{r['co2_emission']['mean']:>10.2f} "
-                        f"{r['collisions']['total']:>6.0f}",
-                        flush=True,
-                    )
+                    line += f" {r['reward']['mean']:>7.4f} Q={r['queue_length']['mean']:>5.1f} W={r['waiting_time']['mean']:>5.0f}"
+                else:
+                    line += f" {'N/A':<14}"
+            collisions = sum(r['collisions']['total'] for r in all_results
+                            if r["scenario"] == scenario and r["intersection"] == intersection)
+            teleports = sum(r['teleports']['total'] for r in all_results
+                           if r["scenario"] == scenario and r["intersection"] == intersection)
+            line += f" {collisions:>6.0f} {teleports:>6.0f}"
+            print(line, flush=True)
 
     # 改善率汇总
     print(f"\n  ── DQN 相对 Fixed-Time 改善率 ──", flush=True)
@@ -474,24 +492,50 @@ def print_summary(all_results: List[Dict]):
     print(flush=True)
     print(f"  {'-' * 12}" + f"  {'-' * 10}" * len(scenario_labels), flush=True)
 
-    for metric_key, metric_label in metric_labels:
-        print(f"  {metric_label:<12}", end="", flush=True)
-        for scenario in scenarios:
-            ft_vals = [r[metric_key]["mean"] for r in all_results
-                       if r["scenario"] == scenario and r["strategy"] == "Fixed-Time"]
-            dqn_vals = [r[metric_key]["mean"] for r in all_results
-                        if r["scenario"] == scenario and r["strategy"] == "DQN"]
-            if ft_vals and dqn_vals:
-                ft_mean = np.mean(ft_vals)
-                dqn_mean = np.mean(dqn_vals)
-                if ft_mean != 0:
-                    imp = (ft_mean - dqn_mean) / ft_mean * 100
-                    print(f"  {imp:>9.1f}%", end="", flush=True)
+    dqn_strategies_to_compare = [s for s in available_strategies if s != "Fixed-Time"]
+
+    for dqn_strat in dqn_strategies_to_compare:
+        print(f"\n  --- {strategy_labels.get(dqn_strat, dqn_strat)} vs Fixed-Time ---", flush=True)
+        for metric_key, metric_label in metric_labels:
+            print(f"  {metric_label:<12}", end="", flush=True)
+            for scenario in scenarios:
+                ft_vals = [r[metric_key]["mean"] for r in all_results
+                           if r["scenario"] == scenario and r["strategy"] == "Fixed-Time"]
+                dqn_vals = [r[metric_key]["mean"] for r in all_results
+                            if r["scenario"] == scenario and r["strategy"] == dqn_strat]
+                if ft_vals and dqn_vals:
+                    ft_mean = np.mean(ft_vals)
+                    dqn_mean = np.mean(dqn_vals)
+                    if ft_mean != 0:
+                        imp = (ft_mean - dqn_mean) / ft_mean * 100
+                        print(f"  {imp:>9.1f}%", end="", flush=True)
+                    else:
+                        print(f"  {'N/A':>10}", end="", flush=True)
                 else:
                     print(f"  {'N/A':>10}", end="", flush=True)
-            else:
-                print(f"  {'N/A':>10}", end="", flush=True)
-        print(flush=True)
+            print(flush=True)
+
+    # 抗坍缩DQN vs 原DQN对比
+    if "DQN-Original" in available_strategies and "DQN-AntiCollapse" in available_strategies:
+        print(f"\n  --- 抗坍缩DQN vs 原DQN 改善率 ---", flush=True)
+        for metric_key, metric_label in metric_labels:
+            print(f"  {metric_label:<12}", end="", flush=True)
+            for scenario in scenarios:
+                orig_vals = [r[metric_key]["mean"] for r in all_results
+                            if r["scenario"] == scenario and r["strategy"] == "DQN-Original"]
+                ac_vals = [r[metric_key]["mean"] for r in all_results
+                           if r["scenario"] == scenario and r["strategy"] == "DQN-AntiCollapse"]
+                if orig_vals and ac_vals:
+                    orig_mean = np.mean(orig_vals)
+                    ac_mean = np.mean(ac_vals)
+                    if orig_mean != 0:
+                        imp = (orig_mean - ac_mean) / abs(orig_mean) * 100
+                        print(f"  {imp:>9.1f}%", end="", flush=True)
+                    else:
+                        print(f"  {'N/A':>10}", end="", flush=True)
+                else:
+                    print(f"  {'N/A':>10}", end="", flush=True)
+            print(flush=True)
 
     print(f"\n{'=' * 70}", flush=True)
     print("  评估完成!", flush=True)
