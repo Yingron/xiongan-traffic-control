@@ -1,9 +1,16 @@
 """三场景全模型评估脚本
 
-自动加载平峰、早高峰、晚高峰三个场景的 DQN 模型，
-在对应场景下分别运行 DQN 策略与 Fixed-Time 基线策略，
+在三个真实需求场景（真实早高峰/平峰/晚高峰，需求来自赛题 xlsx）下运行
+DQN 策略与真实定周期 Fixed-Time 基线策略（配时来自 data/timing_plans.json），
 采集多维度指标（排队、等待、行程时间、燃油、CO2、停车、碰撞等），
 生成对比报告（JSON + CSV + 图表）。
+
+Fixed-Time 基线说明：
+    旧的 fixed_time_action = (step//5)%4（20s 周期每相位 5s，比 MIN_GREEN 15s 还短）
+    是假基线；现在改为 baselines/fixed_time.py 的 RealFixedTimeController——
+    读取 data/timing_plans.json 的 {路口}/{时段} 真实配时（如 J01 早高峰
+    38/32/32/38、周期 160s），安装真实信号程序后由 SUMO 自主按周期运行，
+    与 DQN 在完全相同的仿真种子下对比。
 
 用法:
     python evaluation/evaluate_3scenarios.py
@@ -34,34 +41,43 @@ if "SUMO_HOME" not in os.environ:
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# 图表含中文标签（真实早高峰等），配置中文字体避免方框乱码
+plt.rcParams["font.sans-serif"] = ["SimHei", "Microsoft YaHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
 
 from env.single_intersection_env import SingleIntersectionEnv
 from evaluation.metrics_collector import MetricsCollector, get_approach_edges
 from training.config import SCENARIO_CONFIG
+from baselines.fixed_time import make_real_fixed_time_action
 
 # ============================================================
 # 配置：场景 → 模型文件
 # ============================================================
 MODEL_DIR = PROJECT_ROOT / "models" / "dqn"
 
+# 三场景固定使用真实需求场景（scripts/generate_real_demand_scenarios.py 生成，
+# 需求来自赛题 xlsx）。period 指定 Fixed-Time 基线读取 timing_plans.json 的时段。
 SCENARIO_MODELS = {
-    "flat": {
-        "model": MODEL_DIR / "dqn_multi_shared_flat_perf_1000000steps.zip",
-        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_flat_anticollapse_500000steps.zip",
-        "label": "平峰",
-        "sumo_cfg": SCENARIO_CONFIG["flat"]["sumo_cfg"],
+    "real_peak": {
+        "model": MODEL_DIR / "dqn_multi_shared_real_peak_perf_1000000steps.zip",
+        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_real_peak_anticollapse_2000000steps.zip",
+        "label": "真实早高峰",
+        "period": "peak",
+        "sumo_cfg": SCENARIO_CONFIG["real_peak"]["sumo_cfg"],
     },
-    "morning": {
-        "model": MODEL_DIR / "dqn_multi_shared_morning_perf_500000steps.zip",
-        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_morning_anticollapse_500000steps.zip",
-        "label": "早高峰",
-        "sumo_cfg": SCENARIO_CONFIG["morning"]["sumo_cfg"],
+    "real_offpeak": {
+        "model": MODEL_DIR / "dqn_multi_shared_real_offpeak_perf_1000000steps.zip",
+        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_real_offpeak_anticollapse_2000000steps.zip",
+        "label": "真实平峰",
+        "period": "offpeak",
+        "sumo_cfg": SCENARIO_CONFIG["real_offpeak"]["sumo_cfg"],
     },
-    "evening": {
-        "model": MODEL_DIR / "dqn_multi_shared_evening_perf_500000steps.zip",
-        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_evening_anticollapse_500000steps.zip",
-        "label": "晚高峰",
-        "sumo_cfg": SCENARIO_CONFIG["evening"]["sumo_cfg"],
+    "real_evening": {
+        "model": MODEL_DIR / "dqn_multi_shared_real_evening_perf_1000000steps.zip",
+        "anticollapse_model": MODEL_DIR / "dqn_multi_shared_real_evening_anticollapse_2000000steps.zip",
+        "label": "真实晚高峰",
+        "period": "evening",
+        "sumo_cfg": SCENARIO_CONFIG["real_evening"]["sumo_cfg"],
     },
 }
 
@@ -72,9 +88,14 @@ TEST_INTERSECTIONS = ["J01", "J05", "J10", "J15", "J20"]
 # ============================================================
 # 策略函数
 # ============================================================
-def fixed_time_action(obs, env, step):
-    """固定配时策略：每5步切换一次相位（周期20秒，每相位5秒）"""
-    return (step // 5) % 4
+def make_fixed_time_action(intersection_id: str, period: str):
+    """真实定周期基线（见 baselines/fixed_time.py）。
+
+    每个 (路口, 时段) 一个控制器；在首个 env 上安装 timing_plans.json 的真实
+    配时程序，之后恒返回 FIXED_TIME_CONTROL 哨兵动作。
+    """
+    action_fn, controller = make_real_fixed_time_action(intersection_id, period)
+    return action_fn, controller
 
 
 def make_dqn_action(model_path: str):
@@ -186,10 +207,12 @@ def evaluate_scenario(
     model_path = scenario_info["model"]
     anticollapse_path = scenario_info.get("anticollapse_model")
     scenario_label = scenario_info["label"]
+    period = scenario_info["period"]
     sumo_cfg = scenario_info["sumo_cfg"]
 
     print(f"\n{'=' * 70}", flush=True)
     print(f"  场景评估: {scenario_label} ({scenario_key})", flush=True)
+    print(f"  Fixed-Time 配时时段: {period} (timing_plans.json)", flush=True)
     print(f"  原模型: {model_path.name} {'[存在]' if model_path.exists() else '[不存在]'}", flush=True)
     if anticollapse_path:
         print(f"  抗坍缩模型: {anticollapse_path.name} {'[存在]' if anticollapse_path.exists() else '[不存在]'}", flush=True)
@@ -198,23 +221,33 @@ def evaluate_scenario(
     print(f"  每路口回合数: {episodes}", flush=True)
     print(f"{'=' * 70}", flush=True)
 
-    strategies = [("Fixed-Time", fixed_time_action)]
-
-    if model_path.exists():
-        dqn_action = make_dqn_action(str(model_path))
-        strategies.append(("DQN-Original", dqn_action))
-    else:
-        print(f"  [WARN] 原DQN模型不存在，跳过", flush=True)
-
-    if anticollapse_path and anticollapse_path.exists():
-        ac_action = make_dqn_action(str(anticollapse_path))
-        strategies.append(("DQN-AntiCollapse", ac_action))
-    elif anticollapse_path:
-        print(f"  [INFO] 抗坍缩模型不存在，跳过 (训练后自动出现)", flush=True)
-
     all_results = []
 
     for intersection_id in TEST_INTERSECTIONS:
+        # Fixed-Time 基线按 (路口, 时段) 取真实配时，需在每个路口内构造 action_fn
+        fixed_time_action, ft_controller = make_fixed_time_action(intersection_id, period)
+        strategies = [("Fixed-Time", fixed_time_action)]
+
+        if model_path.exists():
+            dqn_action = make_dqn_action(str(model_path))
+            strategies.append(("DQN-Original", dqn_action))
+        else:
+            print(f"  [WARN] 原DQN模型不存在，跳过", flush=True)
+
+        if anticollapse_path and anticollapse_path.exists():
+            ac_action = make_dqn_action(str(anticollapse_path))
+            strategies.append(("DQN-AntiCollapse", ac_action))
+        elif anticollapse_path:
+            print(f"  [INFO] 抗坍缩模型不存在，跳过 (训练后自动出现)", flush=True)
+
+        # 打印真实配时摘要
+        ft_summary = ft_controller.plan_summary
+        if ft_summary:
+            plan_phases = " + ".join(
+                f"{p['name']}(绿{p['green']}s)" for p in ft_summary["phases"]
+            )
+            print(f"\n  [Fixed-Time] {intersection_id} 周期={ft_summary['cycle']}s: {plan_phases}", flush=True)
+
         for strategy_name, action_fn in strategies:
             tag = f"{scenario_label}/{intersection_id}/{strategy_name}"
             print(f"\n  [{tag}] 运行中...", flush=True)
@@ -295,10 +328,13 @@ def generate_report(all_results: List[Dict], save_dir: Path):
 def plot_scenario_comparison(all_results: List[Dict], save_dir: Path):
     """生成三场景对比图表"""
 
-    scenarios = ["flat", "morning", "evening"]
-    scenario_labels = ["Flat", "Morning Peak", "Evening Peak"]
-    strategies = ["Fixed-Time", "DQN"]
-    colors = {"Fixed-Time": "#e74c3c", "DQN": "#2ecc71"}
+    scenarios = list(SCENARIO_MODELS.keys())  # real_peak / real_offpeak / real_evening
+    scenario_labels = [SCENARIO_MODELS[s]["label"] for s in scenarios]
+    # 策略取评估结果中实际出现的（Fixed-Time 恒存在；DQN-Original/AntiCollapse 视模型而定）
+    strategies = [s for s in ["Fixed-Time", "DQN-Original", "DQN-AntiCollapse"]
+                  if any(r["strategy"] == s for r in all_results)]
+    palette = ["#e74c3c", "#2ecc71", "#3498db"]
+    colors = {s: palette[i] for i, s in enumerate(strategies)}
 
     metrics_config = [
         ("queue_length", "Avg Queue Length", "vehicles"),
@@ -389,11 +425,14 @@ def plot_scenario_comparison(all_results: List[Dict], save_dir: Path):
 
     for scenario in scenarios:
         row = []
+        # 优先用原DQN模型做对比，缺失时退化为抗坍缩模型
+        dqn_strategy = next((s for s in ["DQN-Original", "DQN-AntiCollapse"]
+                             if any(r["scenario"] == scenario and r["strategy"] == s for r in all_results)), None)
         for metric_key, _ in display_metrics:
             ft_vals = [r[metric_key]["mean"] for r in all_results
                        if r["scenario"] == scenario and r["strategy"] == "Fixed-Time"]
             dqn_vals = [r[metric_key]["mean"] for r in all_results
-                        if r["scenario"] == scenario and r["strategy"] == "DQN"]
+                        if dqn_strategy and r["scenario"] == scenario and r["strategy"] == dqn_strategy]
             if ft_vals and dqn_vals:
                 ft_mean = np.mean(ft_vals)
                 dqn_mean = np.mean(dqn_vals)
@@ -438,10 +477,10 @@ def print_summary(all_results: List[Dict]):
     print("  三场景评估汇总报告", flush=True)
     print(f"{'=' * 70}", flush=True)
 
-    scenarios = ["flat", "morning", "evening"]
-    scenario_labels = ["平峰", "早高峰", "晚高峰"]
+    scenarios = list(SCENARIO_MODELS.keys())  # real_peak / real_offpeak / real_evening
+    scenario_labels = [SCENARIO_MODELS[s]["label"] for s in scenarios]
 
-    available_strategies = list(set(r["strategy"] for r in all_results))
+    available_strategies = list(dict.fromkeys(r["strategy"] for r in all_results))
     strategy_labels = {
         "Fixed-Time": "固定配时",
         "DQN": "DQN(原)",

@@ -230,14 +230,15 @@ def train_dqn(
     net_arch: list | None = None,
     n_envs: int | None = None,
     log_interval: int = 1000,
+    resume_path: str | None = None,
 ) -> dict:
     """运行DQN训练
 
     Args:
-        timesteps: 总训练步数
+        timesteps: 本次运行的训练步数（继续训练时为增量步数）
         intersection_id: 路口ID（单路口模式）
         multi: 是否使用多路口参数共享模式
-        scenario: 场景 flat/morning/evening/low/high
+        scenario: 场景 flat/morning/evening/low/high 或真实场景 real_peak/real_offpeak/real_evening
         perf: 是否启用高性能模式（200+ steps/s 目标）
         anti_collapse: 是否启用抗策略坍缩模式
         learning_rate: 学习率（None则使用默认或高性能配置）
@@ -250,6 +251,8 @@ def train_dqn(
         net_arch: 网络架构列表
         n_envs: 并行环境数（高性能模式默认=4）
         log_interval: 速度日志打印间隔（步）
+        resume_path: 已有模型路径，非None时从该模型继续训练
+            （沿用已保存的网络架构/超参数，本次steps为增量）
 
     Returns:
         训练统计信息
@@ -368,6 +371,8 @@ def train_dqn(
     print(f"  设备      : {device.upper()}")
     print(f"  并行环境  : {ne}")
     print(f"  总步数    : {timesteps:,}")
+    if resume_path is not None:
+        print(f"  继续训练  : 是（恢复自 {resume_path}，本次为增量步数）")
     print(f"  学习率    : {lr}")
     print(f"  网络架构  : {arch} ({activation_fn.__name__})")
     print(f"  Dueling   : {'启用' if dueling else '关闭'}  | Double-Q: {'启用' if double_q else '关闭'}")
@@ -411,7 +416,7 @@ def train_dqn(
             print(f"[INFO] 使用 SubprocVecEnv 启动 {ne} 个并行环境 (restart_every={restart_every})...", flush=True)
             env_fns = [lambda r=i: _make_env_with_monitor(r) for i in range(ne)]
             env = vec_env_cls(env_fns)
-            env = VecMonitor(env, filename=str(log_dir / "monitor"))
+            env = VecMonitor(env, filename=str(log_dir / "monitor"), info_keywords=("cleared_count",))
             ne_used = ne
         else:
             print(f"[WARN] SubprocVecEnv不可用，回退单环境", flush=True)
@@ -437,73 +442,87 @@ def train_dqn(
                 rank=0,
                 restart_every=restart_every,
             )
-        env = Monitor(env, str(log_dir))
+        env = Monitor(env, str(log_dir), info_keywords=("cleared_count",))
         ne_used = 1
 
     # ========== 构建DQN模型 ==========
     t_init_start = time.time()
 
-    policy_kw = dict(
-        net_arch=arch,
-        activation_fn=activation_fn,
-    )
-    if dueling:
-        policy_kw["dueling"] = True
-    if double_q:
-        policy_kw["double_q"] = True
-
-    try:
-        model = DQN(
-            policy="MlpPolicy",
-            env=env,
-            learning_rate=lr,
-            buffer_size=bf,
-            learning_starts=ls,
-            batch_size=bs,
-            gamma=gamma,
-            train_freq=tf,
-            gradient_steps=gs,
-            target_update_interval=tui,
-            exploration_fraction=ef,
-            exploration_final_eps=efe,
-            exploration_initial_eps=1.0,
-            max_grad_norm=10,
-            device=device,
-            verbose=0,
-            seed=seed,
-            tensorboard_log=str(log_dir),
-            policy_kwargs=policy_kw,
+    if resume_path is not None:
+        # 继续训练：加载已有模型，沿用其网络架构/超参数，仅更换环境
+        if not Path(resume_path).exists():
+            raise FileNotFoundError(f"恢复模型不存在: {resume_path}")
+        print(f"[INFO] 继续训练模式: 加载模型 {resume_path}", flush=True)
+        model = DQN.load(resume_path, env=env, device=device)
+        print(
+            f"[INFO] 已恢复: num_timesteps={model.num_timesteps:,}, "
+            f"lr={model.learning_rate}, batch_size={model.batch_size}, "
+            f"net_arch={list(model.policy.net_arch)}, "
+            f"exploration_rate={getattr(model, 'exploration_rate', None):.3f}",
+            flush=True,
         )
-    except TypeError:
-        # 某些 SB3 版本不支持 dueling/double_q，自动降级
-        print("[WARN] 当前 SB3 版本不支持 Dueling/Double-Q，降级为标准 DQN", flush=True)
+    else:
         policy_kw = dict(
             net_arch=arch,
             activation_fn=activation_fn,
         )
-        dueling = False
-        double_q = False
-        model = DQN(
-            policy="MlpPolicy",
-            env=env,
-            learning_rate=lr,
-            buffer_size=bf,
-            learning_starts=ls,
-            batch_size=bs,
-            gamma=gamma,
-            train_freq=tf,
-            gradient_steps=gs,
-            target_update_interval=tui,
-            exploration_fraction=ef,
-            exploration_final_eps=efe,
-            exploration_initial_eps=1.0,
-            max_grad_norm=10,
-            device=device,
-            verbose=0,
-            seed=seed,
-            tensorboard_log=str(log_dir),
-            policy_kwargs=policy_kw,
-        )
+        if dueling:
+            policy_kw["dueling"] = True
+        if double_q:
+            policy_kw["double_q"] = True
+
+        try:
+            model = DQN(
+                policy="MlpPolicy",
+                env=env,
+                learning_rate=lr,
+                buffer_size=bf,
+                learning_starts=ls,
+                batch_size=bs,
+                gamma=gamma,
+                train_freq=tf,
+                gradient_steps=gs,
+                target_update_interval=tui,
+                exploration_fraction=ef,
+                exploration_final_eps=efe,
+                exploration_initial_eps=1.0,
+                max_grad_norm=10,
+                device=device,
+                verbose=0,
+                seed=seed,
+                tensorboard_log=str(log_dir),
+                policy_kwargs=policy_kw,
+            )
+        except TypeError:
+            # 某些 SB3 版本不支持 dueling/double_q，自动降级
+            print("[WARN] 当前 SB3 版本不支持 Dueling/Double-Q，降级为标准 DQN", flush=True)
+            policy_kw = dict(
+                net_arch=arch,
+                activation_fn=activation_fn,
+            )
+            dueling = False
+            double_q = False
+            model = DQN(
+                policy="MlpPolicy",
+                env=env,
+                learning_rate=lr,
+                buffer_size=bf,
+                learning_starts=ls,
+                batch_size=bs,
+                gamma=gamma,
+                train_freq=tf,
+                gradient_steps=gs,
+                target_update_interval=tui,
+                exploration_fraction=ef,
+                exploration_final_eps=efe,
+                exploration_initial_eps=1.0,
+                max_grad_norm=10,
+                device=device,
+                verbose=0,
+                seed=seed,
+                tensorboard_log=str(log_dir),
+                policy_kwargs=policy_kw,
+            )
 
     t_init = time.time() - t_init_start
     total_params = sum(p.numel() for p in model.policy.parameters())
@@ -537,7 +556,7 @@ def train_dqn(
         model.learn(
             total_timesteps=timesteps,
             tb_log_name=f"dqn{perf_tag}",
-            reset_num_timesteps=True,
+            reset_num_timesteps=not resume_path,
             callback=_SB3CombinedCallback(speed_cb, collapse_cb),
             log_interval=None,
             progress_bar=False,
@@ -558,16 +577,18 @@ def train_dqn(
     print(f"{'='*68}")
 
     # ========== 保存模型 ==========
-    model_filename = f"dqn_{env_name}{scenario_tag}{perf_tag}_{timesteps}steps"
+    # 继续训练时以累计总步数命名（如 1M+1M -> 2000000steps）
+    final_total_steps = int(model.num_timesteps)
+    model_filename = f"dqn_{env_name}{scenario_tag}{perf_tag}_{final_total_steps}steps"
     if anti_collapse:
-        model_filename = f"dqn_{env_name}{scenario_tag}_anticollapse_{timesteps}steps"
+        model_filename = f"dqn_{env_name}{scenario_tag}_anticollapse_{final_total_steps}steps"
     model_path = save_path / model_filename
     model.save(str(model_path))
-    print(f"[SAVE] 模型已保存: {model_path}.zip")
+    print(f"[SAVE] 模型已保存: {model_path}.zip (累计 {final_total_steps:,} steps)")
 
     # ========== 评估模型 ==========
     try:
-        stats = evaluate_model(model, env, episodes=5)
+        stats = evaluate_model(model, env, episodes=5, sumo_cfg_path=sumo_cfg_path)
     except Exception as e:
         print(f"[WARN] 评估失败: {e}", flush=True)
         stats = {
@@ -582,6 +603,8 @@ def train_dqn(
     stats["model_path"] = str(model_path) + ".zip"
     stats["scenario"] = scenario_label
     stats["perf_mode"] = perf
+    stats["resumed_from"] = resume_path
+    stats["total_timesteps"] = final_total_steps
     stats["elapsed_seconds"] = elapsed
     stats["steps_per_second"] = speed
     stats["peak_steps_per_second"] = max(speed_cb.speeds) if speed_cb.speeds else 0.0
@@ -604,7 +627,7 @@ def train_dqn(
         import matplotlib
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
-        plot_training_curve(log_dir, save_path, f"{env_name}{scenario_tag}{perf_tag}", timesteps)
+        plot_training_curve(log_dir, save_path, f"{env_name}{scenario_tag}{perf_tag}", final_total_steps)
     except Exception as e:
         print(f"[WARN] 绘图跳过: {e}")
 
@@ -617,8 +640,13 @@ def train_dqn(
     return stats
 
 
-def evaluate_model(model, env, episodes: int = 5) -> dict:
-    """评估模型 - 对VecEnv自动使用单env评估以兼容5-tuple接口"""
+def evaluate_model(model, env, episodes: int = 5, sumo_cfg_path=None) -> dict:
+    """评估模型 - 对VecEnv自动使用单env评估以兼容5-tuple接口
+
+    Args:
+        sumo_cfg_path: 评估所用的场景配置路径。必须与训练时一致，
+            否则模型会在错误的场景下评估（默认场景 vs 训练场景流量差异巨大）。
+    """
     print(f"\n评估模型 ({episodes} episodes)...")
 
     is_vec = hasattr(env, "num_envs")
@@ -629,8 +657,8 @@ def evaluate_model(model, env, episodes: int = 5) -> dict:
         try:
             from env.single_intersection_env import SingleIntersectionEnv, MultiIntersectionSharedEnv
             from stable_baselines3.common.monitor import Monitor
-            # 使用训练时的第一个子env的相同配置
-            eval_env = MultiIntersectionSharedEnv(max_steps=720, delta_time=5)
+            # 使用训练时的第一个子env的相同配置（关键：必须传入训练场景的sumo_cfg_path）
+            eval_env = MultiIntersectionSharedEnv(max_steps=720, delta_time=5, sumo_cfg_path=sumo_cfg_path)
             eval_env = Monitor(eval_env)
             _use_eval_env = True
         except Exception:
@@ -757,7 +785,10 @@ def plot_training_curve(log_dir: Path, save_path: Path, env_name: str, timesteps
 
         df_valid = df[df["r"] < 0] if (df["r"] < 0).any() else df
 
-        fig, axes = plt.subplots(2, 1, figsize=(12, 10), sharex=True)
+        has_throughput = "cleared_count" in df.columns
+        n_rows = 3 if has_throughput else 2
+        fig, axes = plt.subplots(n_rows, 1, figsize=(12, 11 if has_throughput else 10), sharex=True)
+        axes = np.atleast_1d(axes)
 
         axes[0].plot(df_valid.index, df_valid["r"], color="steelblue", linewidth=1.0, alpha=0.6, label="Episode Reward")
 
@@ -771,11 +802,26 @@ def plot_training_curve(log_dir: Path, save_path: Path, env_name: str, timesteps
         axes[0].legend()
         axes[0].grid(True, alpha=0.3)
 
+        next_ax = 1
         if "l" in df_valid.columns:
             axes[1].plot(df_valid.index, df_valid["l"], color="darkorange", linewidth=1, alpha=0.8)
             axes[1].set_ylabel("Episode Length (steps)")
-            axes[1].set_xlabel("Episode Index")
             axes[1].grid(True, alpha=0.3)
+            next_ax = 2
+
+        if has_throughput:
+            # 吞吐量与奖励正负无关，用完整df绘图
+            axes[next_ax].plot(df.index, df["cleared_count"], color="seagreen", linewidth=1, alpha=0.8)
+            if len(df) >= 10:
+                window = max(1, len(df) // 10)
+                rolling_throughput = df["cleared_count"].rolling(window=window, min_periods=1).mean()
+                axes[next_ax].plot(df.index, rolling_throughput, color="red", linewidth=2,
+                                   label=f"Rolling Mean (window={window})")
+            axes[next_ax].set_ylabel("Cleared Vehicles / Episode")
+            axes[next_ax].legend()
+            axes[next_ax].grid(True, alpha=0.3)
+
+        axes[-1].set_xlabel("Episode Index")
 
         plt.tight_layout()
         chart_path = save_path / f"dqn_{env_name}_{timesteps}steps_curve.png"
@@ -794,8 +840,9 @@ def main():
     parser.add_argument("--intersection", type=str, default="J01", help="路口ID (单路口模式)")
     parser.add_argument("--multi", action="store_true", help="多路口参数共享模式（推荐）")
     parser.add_argument("--scenario", type=str, default=None,
-                        choices=["flat", "morning", "evening", "low", "high"],
-                        help="训练场景: 平峰/早高峰/晚高峰/低峰/高峰")
+                        choices=list(SCENARIO_CONFIG.keys()),
+                        help="训练场景: 真实场景(real_peak/real_offpeak/real_evening, 需求来自赛题xlsx) "
+                             "或 flat/morning/evening/low/high")
     parser.add_argument("--perf", action="store_true",
                         help="高性能模式: 极简网络+大train_freq+4x并行 (目标200+ steps/s)")
     parser.add_argument("--anti-collapse", action="store_true",
@@ -809,6 +856,9 @@ def main():
     parser.add_argument("--log-interval", type=int, default=1000, help="速度日志间隔(步)")
     parser.add_argument("--eval-only", action="store_true", help="仅评估已有模型")
     parser.add_argument("--model-path", type=str, default=None, help="已有模型路径")
+    parser.add_argument("--resume", type=str, default=None,
+                        help="从已有模型继续训练（模型路径，--timesteps为本次增量步数，"
+                             "沿用已保存的网络架构/超参数）")
     args = parser.parse_args()
 
     net_arch = None
@@ -825,15 +875,24 @@ def main():
             print("错误: 请指定 --model-path")
             return
         model = DQN.load(args.model_path)
-        from env.single_intersection_env import SingleIntersectionEnv
+        from env.single_intersection_env import SingleIntersectionEnv, MultiIntersectionSharedEnv
         sumo_cfg_path = None
         if args.scenario:
             sumo_cfg_path = SCENARIO_CONFIG[args.scenario]["sumo_cfg"]
-        env = SingleIntersectionEnv(
-            intersection_id=resolved_id,
-            sumo_cfg_path=sumo_cfg_path,
-        )
-        stats = evaluate_model(model, env, episodes=10)
+        if args.multi:
+            # 与训练一致的MultiIntersectionSharedEnv评估（每episode随机采样一个路口）
+            env = MultiIntersectionSharedEnv(
+                sumo_cfg_path=sumo_cfg_path,
+                max_steps=720,
+                delta_time=5,
+                seed=args.seed,
+            )
+        else:
+            env = SingleIntersectionEnv(
+                intersection_id=resolved_id,
+                sumo_cfg_path=sumo_cfg_path,
+            )
+        stats = evaluate_model(model, env, episodes=10, sumo_cfg_path=sumo_cfg_path)
         print(f"\n评估结果:\n{json.dumps(stats, indent=2)}")
         return
 
@@ -851,6 +910,7 @@ def main():
         net_arch=net_arch,
         n_envs=args.n_envs,
         log_interval=args.log_interval,
+        resume_path=args.resume,
     )
 
     print(f"\n{'='*68}")

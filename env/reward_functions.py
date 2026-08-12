@@ -21,17 +21,19 @@ def compute_reward(
     previous_action: Optional[int] = None,
     previous_state: Optional[np.ndarray] = None,
     overflow_weight: float = 2.0,
-    switch_cost_weight: float = 0.05,
+    switch_cost_weight: float = 0.01,
     balance_weight: float = 0.1,
     max_queue_weight: float = 0.6,
     avg_wait_weight: float = 0.4,
     queue_pressure_weight: float = 0.8,
     throughput_weight: float = 0.5,
     wait_reduction_weight: float = 0.3,
-    stagnation_penalty: float = 0.02,
+    stagnation_penalty: float = 0.08,
+    crossed_throughput_weight: float = 2.0,
+    crossed_vehicles: int = 0,
     same_action_count: int = 0,
 ) -> tuple[float, dict]:
-    """计算单个路口的V5奖励（吞吐驱动版）
+    """计算单个路口的V5奖励（吞吐驱动版 + 真实通过量）
 
     奖励公式:
     reward = -(queue_pressure + max_queue_weight*max_queue
@@ -39,12 +41,16 @@ def compute_reward(
               + switch_cost_weight*switch_cost + balance_weight*balance
               + stagnation_penalty*stagnation)
               + throughput_weight*queue_reduction
+              + crossed_throughput_weight*crossed_vehicles
               + wait_reduction_weight*wait_reduction
 
-    核心变化:
-    - 降低惩罚权重，使正向信号(throughput)能主导
-    - 队列减少量 = max(0, prev_queue - curr_queue) 作为通过车辆数代理
-    - 等待时间减少量作为优化目标
+    核心改进 (V5.1):
+    - 新增真实通过量奖励 crossed_throughput_weight*crossed_vehicles：
+      由环境层统计"本步越过停车线的车辆数"，直接驱动单位时间放行车辆数，
+      不受同一步"进一辆出一辆"抵消影响（比 queue_reduction 代理更准）。
+    - 降低切换成本 (0.05 -> 0.01)：切换代价已由损失的有效绿灯时间承担，
+      过高的切换惩罚会把模型压制为"死守相位"。
+    - 提高停滞惩罚 (0.02 -> 0.08)：死守相位不服务车辆时惩罚更明显。
 
     Args:
         local_state: 22维局部状态
@@ -57,9 +63,11 @@ def compute_reward(
         max_queue_weight: 最大排队权重
         avg_wait_weight: 平均等待权重
         queue_pressure_weight: 排队压力权重
-        throughput_weight: 吞吐量正向奖励权重（队列减少量）
+        throughput_weight: 队列减少量（通过车辆代理）正向奖励权重
         wait_reduction_weight: 等待时间减少正向奖励权重
-        stagnation_penalty: 停滞惩罚权重（已大幅降低）
+        stagnation_penalty: 停滞惩罚权重
+        crossed_throughput_weight: 真实通过车辆数正向奖励权重（每辆）
+        crossed_vehicles: 本步越过停车线的车辆数（由环境层统计传入；0表示不启用）
         same_action_count: 连续选择同一动作的步数
 
     Returns:
@@ -109,9 +117,10 @@ def compute_reward(
         + stagnation_penalty * stagnation
     )
 
-    # 正向奖励项
+    # 正向奖励项：队列减少代理 + 真实通过车辆数（环境层统计）+ 等待时间减少
     positive_reward = (
         throughput_weight * queue_reduction
+        + crossed_throughput_weight * float(crossed_vehicles)
         + wait_reduction_weight * wait_reduction
     )
 
@@ -129,6 +138,7 @@ def compute_reward(
         "stagnation": stagnation,
         "same_action_count": same_action_count,
         "queue_reduction": queue_reduction,
+        "crossed_vehicles": int(crossed_vehicles),
         "wait_reduction": wait_reduction,
         "penalty_total": penalty,
         "positive_reward": positive_reward,

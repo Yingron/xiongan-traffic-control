@@ -12,6 +12,12 @@ DIRECTIONS = ("N", "S", "E", "W")
 MIN_GREEN_SECONDS = 15
 YELLOW_TRANSITION_SECONDS = 3
 
+# 真实定周期基线专用哨兵动作：
+# 值为 -1，表示"不干预信号"——由 baselines/fixed_time.py 在 env 上安装的真实配时
+# 程序（data/timing_plans.json）按固定周期自主运行，env.step 不做任何相位覆盖。
+# 见 baselines/fixed_time.py 与 env/single_intersection_env.py::step。
+FIXED_TIME_CONTROL = -1
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SUMO_FILES_DIR = PROJECT_ROOT / "sumo_files"
 DOCS_DIR = PROJECT_ROOT / "docs"

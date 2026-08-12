@@ -14,7 +14,15 @@ from typing import Any, Optional
 
 import numpy as np
 
-from configs.constants import ACTION_COUNT_PER_INTERSECTION, FEATURES_PER_INTERSECTION, INTERSECTION_ORDER, MIN_GREEN_SECONDS, SUMO_FILES_DIR, YELLOW_TRANSITION_SECONDS
+from configs.constants import (
+    ACTION_COUNT_PER_INTERSECTION,
+    FEATURES_PER_INTERSECTION,
+    FIXED_TIME_CONTROL,
+    INTERSECTION_ORDER,
+    MIN_GREEN_SECONDS,
+    SUMO_FILES_DIR,
+    YELLOW_TRANSITION_SECONDS,
+)
 from env.global_state import _extract_intersection_state
 from env.reward_functions import compute_reward
 
@@ -81,6 +89,7 @@ class SingleIntersectionEnv(_EnvBase):
         self._phase_changed_at = 0.0
         self._step_count = 0
         self._same_action_streak = 0
+        self._cleared_count = 0
 
     def _sumo_binary(self) -> str:
         home = os.environ.get("SUMO_HOME")
@@ -178,12 +187,18 @@ class SingleIntersectionEnv(_EnvBase):
         self._phase_changed_at = float(traci.simulation.getTime())
         self._step_count = 0
         self._same_action_streak = 0
+        self._cleared_count = 0
         self._previous_state = None
         return self._state(), self._info()
 
     def _state(self) -> np.ndarray:
         assert self._traci is not None
-        return _extract_intersection_state(self._traci, self.intersection_id)
+        # 传入相位开始时刻，使 state[20] 编码"相位已持续秒数"（见 global_state.py）
+        return _extract_intersection_state(
+            self._traci,
+            self.intersection_id,
+            phase_changed_at=getattr(self, "_phase_changed_at", None),
+        )
 
     def _queue_length(self) -> float:
         assert self._traci is not None
@@ -201,6 +216,7 @@ class SingleIntersectionEnv(_EnvBase):
             "applied_action": applied_action,
             "breakdown": breakdown or {},
             "step": self._step_count,
+            "cleared_count": int(getattr(self, "_cleared_count", 0)),
         }
 
     def _record_incidents(self, incidents: dict[str, int]) -> None:
@@ -225,14 +241,25 @@ class SingleIntersectionEnv(_EnvBase):
     def step(self, action: int) -> tuple[np.ndarray, float, bool, bool, dict]:
         if self._traci is None:
             raise RuntimeError("Call reset() before step().")
-        if not self.action_space.contains(action):
+        if action != FIXED_TIME_CONTROL and not self.action_space.contains(action):
             raise ValueError(f"Action must be in [0, 3], got {action!r}")
         traci = self._traci
         now = float(traci.simulation.getTime())
         current = int(traci.trafficlight.getPhase(self.intersection_id))
-        applied = current if int(action) != current and now - self._phase_changed_at < MIN_GREEN_SECONDS else int(action)
-        yellow_steps = min(YELLOW_TRANSITION_SECONDS, self.delta_time) if applied != current else 0
+        if action == FIXED_TIME_CONTROL:
+            # 真实定周期基线：不干预信号，由 baselines/fixed_time.py 安装的真实配时
+            # 程序按固定周期自主切换（含真实的黄灯/全红间隔），这里只统计指标。
+            applied = current
+            yellow_steps = 0
+        else:
+            applied = current if int(action) != current and now - self._phase_changed_at < MIN_GREEN_SECONDS else int(action)
+            yellow_steps = min(YELLOW_TRANSITION_SECONDS, self.delta_time) if applied != current else 0
         incidents = {"collisions": 0, "teleports": 0}
+        # 记录动作执行前受控进口道上的车辆集合，用于统计本步真实通过量
+        controlled_lanes = traci.trafficlight.getControlledLanes(self.intersection_id)
+        prev_vehicles = set()
+        for lane in controlled_lanes:
+            prev_vehicles.update(traci.lane.getLastStepVehicleIDs(lane))
         if yellow_steps:
             self._set_yellow_transition(applied)
         for _ in range(yellow_steps):
@@ -255,15 +282,27 @@ class SingleIntersectionEnv(_EnvBase):
         else:
             self._same_action_streak = 1
 
+        # 本步越过停车线的车辆数 = 动作前在受控进口道上、动作后已不在的车辆
+        # （比 queue_reduction 更准确的吞吐代理：不受同一步"进一辆出一辆"抵消影响）
+        curr_vehicles = set()
+        for lane in controlled_lanes:
+            curr_vehicles.update(traci.lane.getLastStepVehicleIDs(lane))
+        crossed = len(prev_vehicles - curr_vehicles)
+        self._cleared_count += crossed
+
         reward, breakdown = compute_reward(
             state, applied, self._previous_action,
             previous_state=self._previous_state,
             same_action_count=self._same_action_streak,
+            crossed_vehicles=crossed,
         )
         self._previous_action = applied
         self._previous_state = state.copy()
         terminated = traci.simulation.getMinExpectedNumber() <= 0
-        truncated = float(traci.simulation.getTime()) >= self.max_steps
+        # max_steps 单位是"步"（与 multi_agent_train.py 一致）：episode 时长 =
+        # max_steps × delta_time 仿真秒。此前误把 max_steps 当仿真秒比较，
+        # 导致 max_steps=720/delta=5 时 episode 仅 720s(12min)，真实场景 2h 需求只看到 10%。
+        truncated = self._step_count >= self.max_steps
         info = self._info(breakdown, applied)
         info["incidents"] = incidents
         return state, reward, terminated, truncated, info

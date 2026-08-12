@@ -1,23 +1,21 @@
-"""3场景（早高峰/晚高峰/平峰）DQN参数共享大规模训练脚本
+"""真实3场景（真实早高峰/平峰/晚高峰）DQN参数共享大规模训练脚本
 
-每个场景训练 500,000 steps 参数共享DQN模型。
-默认使用 --perf 高性能模式（目标200+ steps/s）和 --multi 参数共享。
+每个场景训练 1,000,000 steps 参数共享DQN模型（--perf 高性能模式）。
+真实场景（real_peak/real_offpeak/real_evening）需求直接来自赛题 xlsx，
+路口真实排队拥堵，DQN 才有学习信号。
 
 用法:
     # 仅基准测试（每个场景5000步，快速验证速度）
     python training/run_3scenario_training.py --benchmark
 
-    # 顺序执行3个场景各50万步
-    python training/run_3scenario_training.py --order sequential
+    # 顺序执行3个真实场景各100万步
+    python training/run_3scenario_training.py
 
-    # 单独启动平峰50万步（建议先跑平峰，收敛快作为起点）
-    python training/run_3scenario_training.py --scenario flat
-
-    # 单独启动早高峰50万步
-    python training/run_3scenario_training.py --scenario morning
+    # 单独启动真实平峰100万步（建议先跑平峰，收敛快作为起点）
+    python training/run_3scenario_training.py --scenario real_offpeak
 
     # 后台启动（Windows PowerShell，输出重定向到文件）
-    # Start-Process python -ArgumentList "training/run_3scenario_training.py --scenario flat" -RedirectStandardOutput "logs/flat_500k.log" -NoNewWindow
+    # Start-Process python -ArgumentList "training/run_3scenario_training.py --scenario real_offpeak --steps 1000000" -RedirectStandardOutput "logs/real_offpeak_1000k.log" -NoNewWindow
 """
 from __future__ import annotations
 
@@ -39,9 +37,9 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from training.config import SCENARIO_CONFIG
 
-# 3个核心场景
-TARGET_SCENARIOS = ["flat", "morning", "evening"]
-DEFAULT_STEPS = 500_000
+# 3个核心场景：真实需求场景（审查缺口①重建，需求来自赛题 xlsx）
+TARGET_SCENARIOS = ["real_peak", "real_offpeak", "real_evening"]
+DEFAULT_STEPS = 1_000_000
 BENCHMARK_STEPS = 5_000
 
 
@@ -223,8 +221,8 @@ def print_summary(results: list[dict]) -> None:
 def main():
     parser = argparse.ArgumentParser(description="3场景 DQN 大规模训练调度器")
     parser.add_argument("--scenario", type=str, default=None,
-                        choices=TARGET_SCENARIOS + ["low", "high"],
-                        help="只跑单个场景（默认跑全部3个）")
+                        choices=list(SCENARIO_CONFIG.keys()),
+                        help="只跑单个场景（默认跑全部3个真实场景）")
     parser.add_argument("--order", type=str, default="sequential",
                         choices=["sequential"],
                         help="执行顺序（目前仅支持顺序，多开需手动开多个终端）")
