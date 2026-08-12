@@ -1,52 +1,38 @@
-﻿# 雄安新区20路口车路云一体化协同管控平台
+﻿# 雄安新区30路口车路云一体化协同管控平台
 
 ## 项目结构
 
 `
 xiongan_rl_project/
-├── src/                          # 源代码
-│   ├── api/                      # REST API服务
-│   │   └── api_server.py         # FastAPI服务器
-│   ├── env/                      # 环境定义
-│   │   ├── __init__.py
-│   │   ├── global_state.py       # 440维状态提取
-│   │   ├── reward_functions.py   # V3奖励函数
-│   │   ├── env.py                # 基础环境
-│   │   ├── single_env.py         # 单路口环境
-│   │   └── xiongan_env.py        # 20路口环境
-│   ├── services/                 # 服务层
-│   │   └── traci/                # TraCI封装
-│   ├── models/                   # 模型定义
-│   ├── utils/                    # 工具函数
-│   └── config/                   # 配置文件
+├── env/                          # 环境定义
+│   ├── global_state.py           # 660维状态提取 (30路口×22维)
+│   ├── reward_functions.py       # V3奖励函数
+│   ├── single_intersection_env.py# 单路口/多路口参数共享环境
+│   └── xiongan_env.py            # 全局环境
+├── baselines/                    # 基线控制器
+│   └── fixed_time.py             # 真实定周期基线（读取 data/timing_plans.json）
+├── training/                     # 训练
+│   ├── config.py                 # 场景配置（真实早/平/晚高峰）
+│   └── train_dqn.py              # DQN训练脚本
+├── evaluation/                   # 评估
+├── server/                       # Unity可视化 WebSocket 服务
 ├── sumo_files/                   # SUMO路网文件
-│   ├── xiongan.nod.xml           # 节点定义
-│   ├── xiongan.edg.xml           # 边定义
-│   ├── xiongan.net.xml           # 路网文件
-│   ├── xiongan.rou.xml           # 交通流
-│   ├── xiongan.sumocfg           # SUMO配置
-│   ├── xiongan_morning.rou.xml   # 早高峰
-│   ├── xiongan_flat.rou.xml      # 平峰
-│   └── xiongan_evening.rou.xml   # 晚高峰
+│   ├── xiongan_30.nod.xml        # 30路口节点定义
+│   ├── xiongan_30.edg.xml        # 边定义
+│   ├── xiongan_30.net.xml        # 路网文件
+│   ├── xiongan_real_peak.rou.xml     # 真实早高峰需求（赛题xlsx生成）
+│   ├── xiongan_real_offpeak.rou.xml  # 真实平峰需求
+│   └── xiongan_real_evening.rou.xml  # 真实晚高峰需求
 ├── docs/                         # 文档
-│   ├── 接口文档.md               # API规范
-│   ├── state_definition.md       # 状态定义
-│   ├── 路网使用说明.md           # B的README
-│   ├── lane_mapping_source.json  # 车道映射
-│   └── interface_contract.json   # 接口契约
-├── scripts/                      # 脚本
-│   ├── validate_source.py        # 源数据验证
-│   ├── validate_network.py       # 网络验证
-│   ├── normalize_tls.py          # 信号灯规范化
-│   └── build_and_validate.ps1    # 构建脚本
+│   ├── lane_mapping.json         # 30路口车道方向映射
+│   └── state_definition.md       # 状态定义
 ├── data/                         # 数据
-├── tests/                        # 测试
-├── configs/                      # 配置
-├── ChallengeCup-main/            # 比赛框架
-│   ├── CitySimulation/           # Unity仿真
-│   └── pymarl-master/            # PyMARL强化学习
-├── requirements.txt
-└── README.md
+│   └── timing_plans.json         # 真实定周期配时方案
+├── scripts/                      # 脚本
+│   ├── generate_real_demand_scenarios.py  # 真实需求场景生成
+│   └── validate_network.py       # 网络验证
+├── configs/                      # 配置（30路口常量）
+└── requirements.txt
 `
 
 ## 快速开始

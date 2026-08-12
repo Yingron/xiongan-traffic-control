@@ -1,7 +1,8 @@
 """C10 verification for the v1 REST contract.
 
-The integration test uses the generated ``xiongan_rongdong_20`` assets and
-therefore exercises the real SUMO/TraCI path rather than a mocked simulator.
+The integration test uses the local 30-intersection SUMO assets
+(``sumo_files/xiongan_30.*``) and therefore exercises the real SUMO/TraCI
+path rather than a mocked simulator.
 """
 
 from __future__ import annotations
@@ -14,8 +15,8 @@ from fastapi.testclient import TestClient
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SUMO_HOME = PROJECT_ROOT.parent / "tools" / "sumo-1.27.1" / "sumo-1.27.1"
-SUMO_CONFIG = PROJECT_ROOT.parent / "xiongan_rongdong_20" / "sumo_files" / "xiongan.sumocfg"
+SUMO_HOME = Path(os.environ.get("SUMO_HOME", r"C:\Program Files (x86)\Eclipse\Sumo"))
+SUMO_CONFIG = PROJECT_ROOT / "sumo_files" / "xiongan_30.sumocfg"
 
 os.environ.setdefault("SUMO_HOME", str(SUMO_HOME))
 os.environ.setdefault("XIONGAN_SUMO_CONFIG", str(SUMO_CONFIG))
@@ -37,7 +38,7 @@ def test_health_reports_local_sumo(client: TestClient) -> None:
     assert response.json()["active_session_id"] is None
 
 
-def test_actions_require_all_twenty_intersections(client: TestClient) -> None:
+def test_actions_require_all_intersections(client: TestClient) -> None:
     response = client.post(
         "/api/v1/simulation/actions",
         json={"session_id": "missing", "expected_transition_id": 0, "actions": {"J01": 0}},
@@ -51,7 +52,7 @@ def test_actions_require_all_twenty_intersections(client: TestClient) -> None:
 def test_real_sumo_state_action_reward_cycle(client: TestClient) -> None:
     assert SUMO_CONFIG.exists(), f"SUMO config is missing: {SUMO_CONFIG}"
 
-    started = client.post("/api/v1/simulation/start", json={"scenario": "morning_peak", "seed": 20260729})
+    started = client.post("/api/v1/simulation/start", json={"scenario": "real_peak", "seed": 20260729})
     assert started.status_code == 201, started.text
     session_id = started.json()["session_id"]
 

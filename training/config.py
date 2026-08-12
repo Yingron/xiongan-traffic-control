@@ -2,7 +2,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SUMO_CFG_PATH = os.path.join(BASE_DIR, 'sumo_files', 'xiongan.sumocfg')
+SUMO_CFG_PATH = os.path.join(BASE_DIR, 'sumo_files', 'xiongan_30.sumocfg')
 MODEL_DIR = os.path.join(BASE_DIR, 'models')
 LOG_DIR = os.path.join(BASE_DIR, 'training', 'logs')
 VISUALIZATION_DIR = os.path.join(BASE_DIR, 'visualization', 'output')
@@ -143,66 +143,22 @@ ANTICOLLAPSE_DQN_CONFIG = {
 }
 
 # ========== 场景映射配置 ==========
-# high_traffic 场景需要降低并行度和缓冲区以避免内存溢出
-# 同时优化batch_size和gradient_steps以提高训练速度
+# 真实数据场景（scripts/generate_real_demand_scenarios.py 生成）：
+# 需求直接来自赛题 xlsx（每15min pcu，按真实时段窗口 07:00-09:00 / 14:30-16:30 / 17:30-19:30），
+# 路口会真实排队，DQN 才有学习信号。已在 30 路口路网（xiongan_30.net.xml）上重新生成。
+# 需求按“真实定周期基线（data/timing_plans.json）全路网可通行能力”等比标定：
+# 因子 peak=0.48 / offpeak=0.60 / evening=0.42（约 6.2~7.2 veh/s 总插入率，
+# 基线 7200s 全程不堵死、meanSpeed 全程最低 ≥ 2 m/s）。原因：200m 网格路网容量
+# 约为真实雄安路网的 45%~55%，若按 xlsx 原始需求（约 12 veh/s）真实基线会在
+# 低绿信比左转进口（J12/J14/J10 等）饱和回溢死锁。
+# 可复现命令：python scripts/generate_real_demand_scenarios.py --factor 0.48,0.60,0.42
+# 注：flat/morning/evening/low/high 旧手工场景及其 sumocfg 已随 20 路口路网一起删除。
 SCENARIO_CONFIG = {
-    'flat': {
-        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_flat.sumocfg'),
-        'label': '平峰',
-        'target_vehicles': '~2,773',
-        'high_traffic': False,
-        'n_envs_override': None,
-        'buffer_size_override': None,
-        'batch_size_override': None,
-        'gradient_steps_override': None,
-    },
-    'morning': {
-        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_morning.sumocfg'),
-        'label': '早高峰',
-        'target_vehicles': '~19,104',
-        'high_traffic': True,
-        'n_envs_override': 1,
-        'buffer_size_override': 100000,
-        'batch_size_override': 256,
-        'gradient_steps_override': 10,
-    },
-    'evening': {
-        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_evening.sumocfg'),
-        'label': '晚高峰',
-        'target_vehicles': '~19,104',
-        'high_traffic': True,
-        'n_envs_override': 1,
-        'buffer_size_override': 100000,
-        'batch_size_override': 256,
-        'gradient_steps_override': 10,
-    },
-    'low': {
-        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_low.sumocfg'),
-        'label': '低峰',
-        'target_vehicles': '~2,773',
-        'high_traffic': False,
-        'n_envs_override': None,
-        'buffer_size_override': None,
-        'batch_size_override': None,
-        'gradient_steps_override': None,
-    },
-    'high': {
-        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_high.sumocfg'),
-        'label': '高峰(high)',
-        'target_vehicles': '~19,104',
-        'high_traffic': True,
-        'n_envs_override': 1,
-        'buffer_size_override': 100000,
-        'batch_size_override': 256,
-        'gradient_steps_override': 10,
-    },
-    # ========== 真实数据场景（scripts/generate_real_demand_scenarios.py 生成）==========
-    # 需求直接来自赛题 xlsx（每15min pcu，按真实时段窗口 07:00-09:00 / 14:30-16:30 / 17:30-19:30），
-    # 路口会真实排队，DQN 才有学习信号（对比：flat/morning/evening 手工场景需求低 22~37 倍、从不拥堵）。
+    # ========== 真实数据场景 ==========
     'real_peak': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_real_peak.sumocfg'),
         'label': '真实早高峰(07:00-09:00)',
-        'target_vehicles': '~77,164',
+        'target_vehicles': '~51,868',
         'high_traffic': True,
         'n_envs_override': 1,
         'buffer_size_override': 100000,
@@ -212,7 +168,7 @@ SCENARIO_CONFIG = {
     'real_offpeak': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_real_offpeak.sumocfg'),
         'label': '真实平峰(14:30-16:30)',
-        'target_vehicles': '~54,629',
+        'target_vehicles': '~44,947',
         'high_traffic': True,
         'n_envs_override': 1,
         'buffer_size_override': 100000,
@@ -222,7 +178,7 @@ SCENARIO_CONFIG = {
     'real_evening': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_real_evening.sumocfg'),
         'label': '真实晚高峰(17:30-19:30)',
-        'target_vehicles': '~86,526',
+        'target_vehicles': '~50,296',
         'high_traffic': True,
         'n_envs_override': 1,
         'buffer_size_override': 100000,

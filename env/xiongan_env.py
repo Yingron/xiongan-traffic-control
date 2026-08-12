@@ -23,7 +23,7 @@ class XionganEnv(TrafficSignalEnv):
         seed: Optional[int] = None,
     ):
         if sumo_cfg_path is None:
-            sumo_cfg_path = str(SUMO_FILES_DIR / "xiongan.sumocfg")
+            sumo_cfg_path = str(SUMO_FILES_DIR / "xiongan_30.sumocfg")
 
         super().__init__(
             sumo_cfg_path=sumo_cfg_path,

@@ -1,4 +1,4 @@
-"""REST API for the 20-intersection Xiongan traffic-control platform.
+"""REST API for the 30-intersection Xiongan traffic-control platform.
 
 The public contract is defined in ``docs/接口文档.md``.  This module deliberately
 does not fall back to the legacy one-intersection, 26-dimensional environment:
@@ -40,7 +40,7 @@ from configs.constants import (
 )
 
 API_PREFIX = "/api/v1"
-STATE_LAYOUT_VERSION = "v1-20x22"
+STATE_LAYOUT_VERSION = "v1-30x22"
 REWARD_VERSION = "v3"
 DEFAULT_CONFIG_PATH = DEFAULT_SUMO_CONFIG
 
@@ -63,7 +63,7 @@ class ApiError(Exception):
 
 
 class StartRequest(BaseModel):
-    scenario: str = Field(default="morning_peak", min_length=1, max_length=64)
+    scenario: str = Field(default="real_peak", min_length=1, max_length=64)
     use_gui: bool = False
     seed: int | None = Field(default=None, ge=0)
 
@@ -88,7 +88,7 @@ class ActionsRequest(SessionRequest):
         received_ids = set(actions)
         if received_ids != expected_ids:
             raise ValueError(
-                "actions must contain exactly J01 through J20; "
+                "actions must contain exactly J01 through J30; "
                 f"missing={sorted(expected_ids - received_ids)}, "
                 f"unexpected={sorted(received_ids - expected_ids)}"
             )
@@ -209,7 +209,7 @@ class TraCISessionManager:
             raise ApiError(
                 503,
                 "SIMULATION_ASSET_INVALID",
-                "SUMO network does not expose exactly the required traffic lights J01 through J20.",
+                "SUMO network does not expose exactly the required traffic lights J01 through J30.",
                 {
                     "expected_intersections": len(INTERSECTION_ORDER),
                     "actual_intersections": len(traffic_lights),
@@ -229,7 +229,7 @@ class TraCISessionManager:
 
     @staticmethod
     def _ordered_global_state(raw_traffic_light_ids: list[str]) -> np.ndarray:
-        """Extract state and explicitly reorder slices to the public J01..J20 contract."""
+        """Extract state and explicitly reorder slices to the public J01..J30 contract."""
         from env.global_state import get_global_state
 
         raw_state = get_global_state(num_intersections=len(INTERSECTION_ORDER))
@@ -237,7 +237,7 @@ class TraCISessionManager:
             raise ApiError(
                 503,
                 "SIMULATION_STATE_INVALID",
-                "Global state extractor did not return a 440-dimensional state vector.",
+                "Global state extractor did not return a 660-dimensional state vector.",
                 {"actual_dimension": int(raw_state.size), "expected_dimension": STATE_DIMENSION},
             )
         raw_slices = {
@@ -490,7 +490,7 @@ class TraCISessionManager:
             return snapshot_payload(state, rewards, channels)
 
     async def inference_state(self, session_id: str) -> tuple[int, np.ndarray]:
-        """Return the transition id and a copy of the real 440-dimensional state."""
+        """Return the transition id and a copy of the real 660-dimensional state."""
         async with self.lock:
             session = self._require_session(session_id)
             raw_ids = self._validate_intersections(self._traci())
@@ -548,7 +548,7 @@ async def api_error_handler(_: Request, error: ApiError) -> JSONResponse:
 
 @app.exception_handler(RequestValidationError)
 async def request_validation_error_handler(request: Request, error: RequestValidationError) -> JSONResponse:
-    """Keep malformed payloads as 422, but expose invalid 20-action sets as 400."""
+    """Keep malformed payloads as 422, but expose invalid 30-action sets as 400."""
     errors = [
         {"loc": list(validation_error.get("loc", ())), "msg": validation_error.get("msg"), "type": validation_error.get("type")}
         for validation_error in error.errors()
@@ -562,7 +562,7 @@ async def request_validation_error_handler(request: Request, error: RequestValid
             content={
                 "error": {
                     "code": "INVALID_ACTION_SET",
-                    "message": "Actions must contain exactly J01 through J20 with integer values from 0 to 3.",
+                    "message": "Actions must contain exactly J01 through J30 with integer values from 0 to 3.",
                     "details": {"validation_errors": errors},
                 }
             },

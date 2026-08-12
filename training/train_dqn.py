@@ -2,23 +2,23 @@
 
 使用 stable-baselines3 的 DQN 算法：
 - 单路口22维状态 + 4离散动作
-- 训练完成后模型可直接部署到20个路口
-- 支持多场景（flat/morning/evening）
+- 训练完成后模型可直接部署到30个路口
+- 支持多场景（real_peak/real_offpeak/real_evening）
 - 高性能模式：极简网络 + 大train_freq + 多SubprocVecEnv并行
 
 路口ID支持两种格式:
-  - 规范格式: J01 ~ J20
-  - 友好格式: intersection_1 ~ intersection_20 (自动映射)
+  - 规范格式: J01 ~ J30
+  - 友好格式: intersection_1 ~ intersection_30 (自动映射)
 
 用法:
     # 快速基准测试（5000步）
     python training/train_dqn.py --timesteps 5000 --perf
 
-    # 平峰场景50万步训练
-    python training/train_dqn.py --timesteps 500000 --scenario flat --perf --multi
+    # 真实早高峰场景50万步训练
+    python training/train_dqn.py --timesteps 500000 --scenario real_peak --perf --multi
 
-    # 早高峰场景50万步训练
-    python training/train_dqn.py --timesteps 500000 --scenario morning --perf --multi
+    # 真实晚高峰场景50万步训练
+    python training/train_dqn.py --timesteps 500000 --scenario real_evening --perf --multi
 """
 from __future__ import annotations
 
@@ -47,10 +47,10 @@ def resolve_intersection_id(raw_id: str) -> str:
     """将友好名称映射为规范路口ID
 
     支持格式:
-      - J01, J02, ... J20 (直接通过)
-      - intersection_1, intersection_2, ... intersection_20
+      - J01, J02, ... J30 (直接通过)
+      - intersection_1, intersection_2, ... intersection_30
       - intersection1, intersection2, ... (无下划线)
-      - 数字: 1, 2, ... 20
+      - 数字: 1, 2, ... 30
     """
     if raw_id in INTERSECTION_ORDER:
         return raw_id
@@ -60,13 +60,13 @@ def resolve_intersection_id(raw_id: str) -> str:
             num_part = stripped[len(prefix):]
             try:
                 idx = int(num_part)
-                if 1 <= idx <= 20:
+                if 1 <= idx <= 30:
                     return f"J{idx:02d}"
             except ValueError:
                 pass
     try:
         idx = int(stripped)
-        if 1 <= idx <= 20:
+        if 1 <= idx <= 30:
             return f"J{idx:02d}"
     except ValueError:
         pass
@@ -230,6 +230,7 @@ def train_dqn(
     net_arch: list | None = None,
     n_envs: int | None = None,
     log_interval: int = 1000,
+    save_interval: int = 50000,
     resume_path: str | None = None,
 ) -> dict:
     """运行DQN训练
@@ -238,7 +239,7 @@ def train_dqn(
         timesteps: 本次运行的训练步数（继续训练时为增量步数）
         intersection_id: 路口ID（单路口模式）
         multi: 是否使用多路口参数共享模式
-        scenario: 场景 flat/morning/evening/low/high 或真实场景 real_peak/real_offpeak/real_evening
+        scenario: 场景 real_peak/real_offpeak/real_evening（30路口真实需求，见 SCENARIO_CONFIG）
         perf: 是否启用高性能模式（200+ steps/s 目标）
         anti_collapse: 是否启用抗策略坍缩模式
         learning_rate: 学习率（None则使用默认或高性能配置）
@@ -251,6 +252,7 @@ def train_dqn(
         net_arch: 网络架构列表
         n_envs: 并行环境数（高性能模式默认=4）
         log_interval: 速度日志打印间隔（步）
+        save_interval: 周期性checkpoint保存间隔（步），异常中断后可从最近存档续训
         resume_path: 已有模型路径，非None时从该模型继续训练
             （沿用已保存的网络架构/超参数，本次steps为增量）
 
@@ -261,6 +263,7 @@ def train_dqn(
     import torch.nn as nn
     from stable_baselines3 import DQN
     from stable_baselines3.common.monitor import Monitor
+    import traci
 
     # ========== 解析场景配置 ==========
     sumo_cfg_path = None
@@ -363,7 +366,7 @@ def train_dqn(
     log_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 68)
-    print(" DQN训练 - 雄安新区20路口信号控制")
+    print(" DQN训练 - 雄安新区30路口信号控制")
     print("=" * 68)
     print(f"  模式      : {'多路口参数共享' if multi else f'单路口({intersection_id})'}")
     print(f"  场景      : {SCENARIO_CONFIG.get(scenario, {}).get('label', scenario_label) if scenario else '默认'}")
@@ -537,7 +540,7 @@ def train_dqn(
     t_start = time.time()
 
     # SB3 learn callback钩子
-    from stable_baselines3.common.callbacks import BaseCallback
+    from stable_baselines3.common.callbacks import BaseCallback, CheckpointCallback
 
     class _SB3CombinedCallback(BaseCallback):
         def __init__(self, speed_monitor: SpeedMonitorCallback, collapse_monitor: PolicyCollapseMonitorCallback):
@@ -552,17 +555,42 @@ def train_dqn(
 
     collapse_cb = PolicyCollapseMonitorCallback(check_interval=500, window_size=100)
 
+    # 周期性checkpoint：异常中断后可从最近存档 --resume 续训，最多丢失 save_interval 步
+    if save_interval <= 0:
+        raise ValueError(f"--save-interval 必须为正数, got {save_interval}")
+    ckpt_dir = save_path / "checkpoints"
+    ckpt_dir.mkdir(parents=True, exist_ok=True)
+    ckpt_cb = CheckpointCallback(
+        save_freq=save_interval,
+        save_path=str(ckpt_dir),
+        name_prefix=f"dqn_{env_name}{scenario_tag}{perf_tag}",
+        save_vecnormalize=False,
+    )
+    callbacks = [_SB3CombinedCallback(speed_cb, collapse_cb), ckpt_cb]
+
     try:
         model.learn(
             total_timesteps=timesteps,
             tb_log_name=f"dqn{perf_tag}",
             reset_num_timesteps=not resume_path,
-            callback=_SB3CombinedCallback(speed_cb, collapse_cb),
+            callback=callbacks,
             log_interval=None,
             progress_bar=False,
         )
     except KeyboardInterrupt:
         print("\n[WARN] 用户中断训练，保存当前模型...", flush=True)
+    except traci.exceptions.FatalTraCIError as _e:
+        # SUMO连接中断：保存recovery模型后以非零码退出，避免静默丢失进度
+        recovery_path = save_path / f"dqn_{env_name}{scenario_tag}{perf_tag}_recovery_{int(model.num_timesteps)}steps"
+        model.save(str(recovery_path))
+        print(f"\n[FATAL] SUMO连接中断: {_e}", flush=True)
+        print(f"[SAVE] 已保存恢复模型: {recovery_path}.zip (累计 {int(model.num_timesteps):,} steps)", flush=True)
+        resume_cmd = (
+            f"python training/train_dqn.py --scenario {scenario_label} --perf --multi "
+            f"--resume \"{recovery_path}.zip\" --timesteps {timesteps}"
+        )
+        print(f"[RESUME] 建议续训命令: {resume_cmd}", flush=True)
+        sys.exit(1)
 
     elapsed = time.time() - t_start
     speed = timesteps / elapsed if elapsed > 0 else 0
@@ -841,8 +869,7 @@ def main():
     parser.add_argument("--multi", action="store_true", help="多路口参数共享模式（推荐）")
     parser.add_argument("--scenario", type=str, default=None,
                         choices=list(SCENARIO_CONFIG.keys()),
-                        help="训练场景: 真实场景(real_peak/real_offpeak/real_evening, 需求来自赛题xlsx) "
-                             "或 flat/morning/evening/low/high")
+                        help="训练场景: 真实场景(real_peak/real_offpeak/real_evening, 需求来自赛题xlsx)")
     parser.add_argument("--perf", action="store_true",
                         help="高性能模式: 极简网络+大train_freq+4x并行 (目标200+ steps/s)")
     parser.add_argument("--anti-collapse", action="store_true",
@@ -854,6 +881,7 @@ def main():
     parser.add_argument("--seed", type=int, default=42, help="随机种子")
     parser.add_argument("--save-dir", type=str, default="models/dqn", help="模型与评估结果保存目录")
     parser.add_argument("--log-interval", type=int, default=1000, help="速度日志间隔(步)")
+    parser.add_argument("--save-interval", type=int, default=50000, help="周期性checkpoint保存间隔(步)，异常中断后可从最近存档续训")
     parser.add_argument("--eval-only", action="store_true", help="仅评估已有模型")
     parser.add_argument("--model-path", type=str, default=None, help="已有模型路径")
     parser.add_argument("--resume", type=str, default=None,
@@ -910,6 +938,7 @@ def main():
         net_arch=net_arch,
         n_envs=args.n_envs,
         log_interval=args.log_interval,
+        save_interval=args.save_interval,
         resume_path=args.resume,
     )
 

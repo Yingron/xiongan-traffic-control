@@ -8,15 +8,15 @@ from pathlib import Path
 from typing import Any, Optional
 import numpy as np
 
-INTERSECTION_ORDER = tuple(f"J{i:02d}" for i in range(1, 21))
-STATE_DIMENSION = 440
+INTERSECTION_ORDER = tuple(f"J{i:02d}" for i in range(1, 31))
+STATE_DIMENSION = 660
 FEATURES_PER_INTERSECTION = 22
 ACTION_NAMES = ("NS_Straight", "NS_Left", "EW_Straight", "EW_Left")
 MIN_GREEN_SECONDS = 15
 
 
 class TraCIService:
-    """封装SUMO的TraCI接口，提供20路口信号控制功能"""
+    """封装SUMO的TraCI接口，提供30路口信号控制功能"""
 
     def __init__(self, sumo_config_path: Optional[str] = None):
         self._traci: Any = None

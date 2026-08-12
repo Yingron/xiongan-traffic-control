@@ -159,7 +159,7 @@ def compute_rewards(
     """计算所有20个路口的奖励
 
     Args:
-        global_state: 440维全局状态
+        global_state: 660维全局状态
         current_actions: 当前动作字典 {tl_id: action}
         previous_actions: 上一步动作字典 {tl_id: action_or_None}
         previous_states: 上一步的局部状态字典 {tl_id: local_state}

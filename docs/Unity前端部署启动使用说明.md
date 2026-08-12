@@ -2,7 +2,7 @@
 
 本指南面向首次接触本项目的用户，从零开始一步步完成 Unity 前端的部署与启动，最终在 Unity 编辑器中看到交通仿真动画正常运行。
 
-本指南使用的 DQN 模型文件为：`models/dqn/dqn_multi_shared_flat_perf_1000000steps.zip`（平峰场景，100万训练步）。
+本指南使用的 DQN 模型文件为：`models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip`（真实早高峰场景，100万训练步）。
 
 ---
 
@@ -60,7 +60,7 @@ xiongan-traffic-control/
 │   │       └── Camera/              ← 相机控制
 ├── server/visualization_server.py  ← 后端可视化服务
 ├── models/dqn/                     ← DQN 模型文件
-│   └── dqn_multi_shared_flat_perf_1000000steps.zip
+│   └── dqn_multi_shared_real_peak_perf_1000000steps.zip
 ├── sumo_files/                     ← SUMO 路网与场景配置
 └── requirements.txt                ← Python 依赖
 ```
@@ -201,49 +201,46 @@ xiongan-traffic-control/
 
 确认以下模型文件存在：
 ```
-models/dqn/dqn_multi_shared_flat_perf_1000000steps.zip
+models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip
 ```
 
-> 该模型为平峰场景下训练 100 万步的参数共享 DQN，文件大小约 61 KB。
+> 该模型为真实早高峰场景下训练 100 万步的参数共享 DQN，文件大小约 61 KB。
 
 ### 5.2 修改可视化服务配置
 
-> **重要**：后端可视化服务 `visualization_server.py` 中，"平峰（flat）"场景默认加载的是 2 万步模型。我们需要将其修改为 100 万步模型。
+> **说明**：后端可视化服务 `visualization_server.py` 的场景配置已随 30 路口路网迁移，
+> 现为三个真实数据场景（`real_peak` / `real_offpeak` / `real_evening`），
+> 对应 `sumo_files/xiongan_real_{peak,offpeak,evening}.sumocfg`（需求来自赛题 xlsx）。
 
 1. 使用文本编辑器（如 VS Code、Notepad++）打开：
    ```
    server/visualization_server.py
    ```
 
-2. 找到第 34-50 行的 `SCENARIOS` 配置：
+2. 找到 `SCENARIOS` 配置（文件头部）：
    ```python
    SCENARIOS = {
-       "morning": {
-           "label": "早高峰",
-           "sumocfg": SUMO_FILES_DIR / "xiongan_morning.sumocfg",
-           "model": "dqn_multi_shared_morning_perf_1000000steps.zip",
+       "real_peak": {
+           "label": "真实早高峰(07:00-09:00)",
+           "sumocfg": SUMO_FILES_DIR / "xiongan_real_peak.sumocfg",
+           "model": "dqn_multi_shared_real_peak_perf_1000000steps.zip",
        },
-       "evening": {
-           "label": "晚高峰",
-           "sumocfg": SUMO_FILES_DIR / "xiongan_evening.sumocfg",
-           "model": "dqn_multi_shared_evening_perf_5000steps.zip",
+       "real_offpeak": {
+           "label": "真实平峰(14:30-16:30)",
+           "sumocfg": SUMO_FILES_DIR / "xiongan_real_offpeak.sumocfg",
+           "model": "dqn_multi_shared_real_offpeak_perf_1000000steps.zip",
        },
-       "flat": {
-           "label": "平峰",
-           "sumocfg": SUMO_FILES_DIR / "xiongan_flat.sumocfg",
-           "model": "dqn_multi_shared_flat_perf_20000steps.zip",  ← 修改这一行
+       "real_evening": {
+           "label": "真实晚高峰(17:30-19:30)",
+           "sumocfg": SUMO_FILES_DIR / "xiongan_real_evening.sumocfg",
+           "model": "dqn_multi_shared_real_evening_perf_1000000steps.zip",
        },
    }
    ```
 
-3. 将 `flat` 场景的 `model` 改为：
-   ```python
-   "flat": {
-       "label": "平峰",
-       "sumocfg": SUMO_FILES_DIR / "xiongan_flat.sumocfg",
-       "model": "dqn_multi_shared_flat_perf_1000000steps.zip",
-   },
-   ```
+3. `model` 字段指向训练产出的模型文件（`training/train_dqn.py` 按
+   `dqn_multi_shared_{scenario}_perf_{steps}steps.zip` 命名）。
+   模型文件不存在时服务会自动回退到固定配时，不影响启动。
 
 4. 保存文件。
 
@@ -297,17 +294,17 @@ python -c "import traci,stable_baselines3,websockets,numpy; print('OK')"
 **6. 确认关键项目文件存在：**
 ```cmd
 if exist "server\visualization_server.py" (echo [OK] server) else (echo [MISSING] server)
-if exist "sumo_files\xiongan_flat.sumocfg" (echo [OK] flat) else (echo [MISSING] flat)
-if exist "models\dqn\dqn_multi_shared_flat_perf_1000000steps.zip" (echo [OK] model) else (echo [MISSING] model)
+if exist "sumo_files\xiongan_real_peak.sumocfg" (echo [OK] scenario) else (echo [MISSING] scenario)
+if exist "sumo_files\xiongan_30.net.xml" (echo [OK] net) else (echo [MISSING] net)
 ```
 - 三行都应输出 `[OK]`。
 
 ### 6.2 启动可视化服务
 
-在**项目根目录**下执行以下命令（推荐使用平峰场景 flat + 100万步模型）：
+在**项目根目录**下执行以下命令（推荐使用真实早高峰场景 real_peak，模型缺失时自动回退固定配时）：
 
 ```cmd
-python server/visualization_server.py --scenario flat --port 8765
+python server/visualization_server.py --scenario real_peak --port 8765
 ```
 
 启动后，命令行会依次输出以下日志。看到 **"WebSocket 服务器已启动"** 即表示服务就绪：
@@ -315,10 +312,10 @@ python server/visualization_server.py --scenario flat --port 8765
 ```
 [Server] 启动 SUMO (端口 xxxx)...
 [Server] TraCI 连接成功 (端口 xxxx) — 仿真时间: 0.0s
-[Server] SUMO 已启动 — 场景: 平峰 — 车辆数: xx
-[Server] DQN 模型已加载: dqn_multi_shared_flat_perf_1000000steps.zip
+[Server] SUMO 已启动 — 场景: 真实早高峰(07:00-09:00) — 车辆数: xx
+[Server] DQN 模型已加载: dqn_multi_shared_real_peak_perf_1000000steps.zip
 [Server] WebSocket 服务器已启动 — ws://localhost:8765
-[Server] 场景: 平峰
+[Server] 场景: 真实早高峰(07:00-09:00)
 [Server] DQN 模型: 已加载
 [Server] 按 Ctrl+C 停止...
 ```
@@ -327,7 +324,7 @@ python server/visualization_server.py --scenario flat --port 8765
 
 | 参数 | 说明 | 示例 |
 |------|------|------|
-| `--scenario` | 场景选择：`morning` / `evening` / `flat` | `--scenario flat` |
+| `--scenario` | 场景选择：`real_peak` / `real_offpeak` / `real_evening` | `--scenario real_peak` |
 | `--port` | WebSocket 端口（默认 8765） | `--port 8765` |
 | `--no-model` | 不加载 DQN 模型，使用固定配时 | `--no-model` |
 | `--gui` | 启用 SUMO GUI 界面（调试用） | `--gui` |
@@ -336,11 +333,11 @@ python server/visualization_server.py --scenario flat --port 8765
 
 | 场景 | 命令 |
 |------|------|
-| 平峰（推荐） | `python server/visualization_server.py --scenario flat` |
-| 早高峰 | `python server/visualization_server.py --scenario morning` |
-| 晚高峰 | `python server/visualization_server.py --scenario evening` |
-| 无模型（固定配时） | `python server/visualization_server.py --scenario flat --no-model` |
-| 带 SUMO GUI 调试 | `python server/visualization_server.py --scenario flat --gui` |
+| 真实早高峰（推荐） | `python server/visualization_server.py --scenario real_peak` |
+| 真实平峰 | `python server/visualization_server.py --scenario real_offpeak` |
+| 真实晚高峰 | `python server/visualization_server.py --scenario real_evening` |
+| 无模型（固定配时） | `python server/visualization_server.py --scenario real_peak --no-model` |
+| 带 SUMO GUI 调试 | `python server/visualization_server.py --scenario real_peak --gui` |
 
 ### 6.4 验证后端服务运行
 
@@ -629,9 +626,9 @@ python server/visualization_server.py --scenario flat --port 8765
 
 | 场景 | 说明 | 流量特征 |
 |------|------|---------|
-| 早高峰（morning） | 7:00-9:00 | 南北向流量大 |
-| 晚高峰（evening） | 17:00-19:00 | 南向流出为主 |
-| 平峰（flat） | 11:00-14:00 | 流量均衡 |
+| 真实早高峰（real_peak） | 07:00-09:00 | 需求来自赛题 xlsx |
+| 真实平峰（real_offpeak） | 14:30-16:30 | 需求来自赛题 xlsx |
+| 真实晚高峰（real_evening） | 17:30-19:30 | 需求来自赛题 xlsx |
 
 > 切换场景时，后端服务会自动重启 SUMO 并加载对应场景的 DQN 模型。
 > 切换过程约需 3-5 秒，Console 会输出 `[SumoWS] 场景已切换: xxx`。
@@ -692,7 +689,7 @@ python server/visualization_server.py --scenario flat --port 8765
 ```
 
 **解决**：
-- 确认 `models/dqn/dqn_multi_shared_flat_perf_1000000steps.zip` 文件存在。
+- 确认 `models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip` 文件存在。
 - 确认已按 5.2 节修改 `visualization_server.py` 中的模型文件名。
 
 ### 10.5 Unity Console 报错：WebSocket 连接失败
@@ -781,7 +778,7 @@ python server/visualization_server.py --scenario flat --port 8765
    双引号可避免路径中的空格和特殊字符被错误解析。
 4. **避免在路径中使用特殊符号**：如项目路径含括号（如 `C:\Program Files (x86)\...`），务必用双引号包裹整个路径。
 5. **检查 Python 文件编码**：`visualization_server.py` 应保存为 UTF-8（无 BOM）。如怀疑编码问题，可用 VS Code 打开，右下角点击编码 → "Save with Encoding" → UTF-8。
-6. **如仍闪退**：在 cmd 中先执行 `python -u server/visualization_server.py --scenario flat`，`-u` 参数禁用输出缓冲，可立即看到错误堆栈。
+6. **如仍闪退**：在 cmd 中先执行 `python -u server/visualization_server.py --scenario real_peak`，`-u` 参数禁用输出缓冲，可立即看到错误堆栈。
 
 ### 10.12 Python 版本兼容性问题
 
@@ -806,8 +803,8 @@ python server/visualization_server.py --scenario flat --port 8765
 **后端环境：**
 - [ ] 1. SUMO_HOME 环境变量已设置
 - [ ] 2. Python 依赖已安装（`pip install -r requirements.txt`）
-- [ ] 3. `visualization_server.py` 中 flat 场景模型已改为 `dqn_multi_shared_flat_perf_1000000steps.zip`
-- [ ] 4. 后端服务已启动（`python server/visualization_server.py --scenario flat`）
+- [ ] 3. `visualization_server.py` 中真实场景模型已配置为 `dqn_multi_shared_real_peak_perf_1000000steps.zip`
+- [ ] 4. 后端服务已启动（`python server/visualization_server.py --scenario real_peak`）
 - [ ] 5. 后端日志显示"DQN 模型已加载"
 - [ ] 6. 后端日志显示"WebSocket 服务器已启动 — ws://localhost:8765"
 

@@ -1,5 +1,5 @@
 """
-将20路口SUMO路网数据转换为Unity地图JSON格式（兼容MapManager）
+将30路口SUMO路网数据转换为Unity地图JSON格式（兼容MapManager）
 
 格式说明：
 - snapshot结构包含roads, trafficLights, buildings, vehicles, targetPoints
@@ -8,13 +8,28 @@
 """
 import json
 import os
+import re
 import uuid
+from pathlib import Path
+
+def load_junction_positions():
+    """从 xiongan_30.nod.xml 读取信号路口坐标 {jid: (x, y)}"""
+    nod = Path(__file__).resolve().parents[1] / "sumo_files" / "xiongan_30.nod.xml"
+    text = nod.read_text(encoding="utf-8")
+    return {
+        m.group(1): (float(m.group(2)), float(m.group(3)))
+        for m in re.finditer(r'<node id="(J\d{2})" x="([^"]+)" y="([^"]+)"', text)
+    }
 
 def generate_unity_map():
     """生成Unity地图JSON"""
-    rows = 4
+    rows = 6
     cols = 5
     spacing = 200  # 路口间距200m
+    # 新 30 路口路网为 6×5 网格（200m 间距），节点坐标与这里的合成网格一致：
+    # x∈{0..800}，y∈{0..1000}（首行 y=1000）。用真实路口 ID 命名信号灯。
+    junction_pos = load_junction_positions()
+    jid_at = {pos: jid for jid, pos in junction_pos.items()}
     
     unity_map = {
         "snapshot": {
@@ -134,7 +149,7 @@ def generate_unity_map():
                 if len(controlled_roads) >= 2:
                     break
             
-            tl_id = f"J{(row*cols + col + 1):02d}"
+            tl_id = jid_at.get((x, y), f"J{(row*cols + col + 1):02d}")
             
             unity_map["snapshot"]["trafficLights"].append({
                 "id": tl_id,
@@ -237,7 +252,7 @@ def main():
                               'ChallengeCup-main', 'CitySimulation', 'Assets', 'Scripts', 'Maps')
     os.makedirs(output_dir, exist_ok=True)
     
-    output_path = os.path.join(output_dir, 'xiongan_20.json')
+    output_path = os.path.join(output_dir, 'xiongan_30.json')
     
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(unity_map, f, indent=2)
@@ -247,7 +262,7 @@ def main():
     # 在Unity中加载方法：
     print("\n📋 在Unity中加载地图：")
     print("   1. 进入Play模式")
-    print("   2. 在右侧面板输入地图名: xiongan_20")
+    print("   2. 在右侧面板输入地图名: xiongan_30")
     print("   3. 点击 loadMap")
 
 if __name__ == '__main__':

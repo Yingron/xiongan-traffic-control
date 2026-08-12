@@ -1,4 +1,4 @@
-"""全局状态提取模块 - 从TraCI提取440维全局状态向量"""
+"""全局状态提取模块 - 从TraCI提取660维全局状态向量"""
 from __future__ import annotations
 
 import json
@@ -63,11 +63,11 @@ def _get_representative_lane(controlled_lanes: list[str], direction: str) -> Opt
     return matching_lanes[0]
 
 
-def get_global_state(num_intersections: int = 20) -> np.ndarray:
-    """获取完整的440维全局状态向量
+def get_global_state(num_intersections: int = 30) -> np.ndarray:
+    """获取完整的660维全局状态向量
 
     Args:
-        num_intersections: 路口数量，默认为20
+        num_intersections: 路口数量，默认为30
 
     Returns:
         STATE_DIMENSION维的状态向量
