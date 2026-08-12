@@ -196,4 +196,37 @@ SCENARIO_CONFIG = {
         'batch_size_override': 256,
         'gradient_steps_override': 10,
     },
+    # ========== 真实数据场景（scripts/generate_real_demand_scenarios.py 生成）==========
+    # 需求直接来自赛题 xlsx（每15min pcu，按真实时段窗口 07:00-09:00 / 14:30-16:30 / 17:30-19:30），
+    # 路口会真实排队，DQN 才有学习信号（对比：flat/morning/evening 手工场景需求低 22~37 倍、从不拥堵）。
+    'real_peak': {
+        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_real_peak.sumocfg'),
+        'label': '真实早高峰(07:00-09:00)',
+        'target_vehicles': '~77,164',
+        'high_traffic': True,
+        'n_envs_override': 1,
+        'buffer_size_override': 100000,
+        'batch_size_override': 256,
+        'gradient_steps_override': 10,
+    },
+    'real_offpeak': {
+        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_real_offpeak.sumocfg'),
+        'label': '真实平峰(14:30-16:30)',
+        'target_vehicles': '~54,629',
+        'high_traffic': True,
+        'n_envs_override': 1,
+        'buffer_size_override': 100000,
+        'batch_size_override': 256,
+        'gradient_steps_override': 10,
+    },
+    'real_evening': {
+        'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_real_evening.sumocfg'),
+        'label': '真实晚高峰(17:30-19:30)',
+        'target_vehicles': '~86,526',
+        'high_traffic': True,
+        'n_envs_override': 1,
+        'buffer_size_override': 100000,
+        'batch_size_override': 256,
+        'gradient_steps_override': 10,
+    },
 }
