@@ -77,8 +77,10 @@ class SingleIntersectionEnv(_EnvBase):
         self._traci: Any | None = None
         self._sumo_proc: Any | None = None
         self._previous_action: int | None = None
+        self._previous_state: np.ndarray | None = None
         self._phase_changed_at = 0.0
         self._step_count = 0
+        self._same_action_streak = 0
 
     def _sumo_binary(self) -> str:
         home = os.environ.get("SUMO_HOME")
@@ -175,6 +177,8 @@ class SingleIntersectionEnv(_EnvBase):
         self._previous_action = int(traci.trafficlight.getPhase(self.intersection_id))
         self._phase_changed_at = float(traci.simulation.getTime())
         self._step_count = 0
+        self._same_action_streak = 0
+        self._previous_state = None
         return self._state(), self._info()
 
     def _state(self) -> np.ndarray:
@@ -245,8 +249,19 @@ class SingleIntersectionEnv(_EnvBase):
             self._record_incidents(incidents)
         self._step_count += 1
         state = self._state()
-        reward, breakdown = compute_reward(state, applied, self._previous_action)
+
+        if self._previous_action is not None and applied == self._previous_action:
+            self._same_action_streak += 1
+        else:
+            self._same_action_streak = 1
+
+        reward, breakdown = compute_reward(
+            state, applied, self._previous_action,
+            previous_state=self._previous_state,
+            same_action_count=self._same_action_streak,
+        )
         self._previous_action = applied
+        self._previous_state = state.copy()
         terminated = traci.simulation.getMinExpectedNumber() <= 0
         truncated = float(traci.simulation.getTime()) >= self.max_steps
         info = self._info(breakdown, applied)
@@ -281,7 +296,9 @@ class SingleIntersectionEnv(_EnvBase):
             self._sumo_proc = None
         # 额外清理：确保所有引用的TraCI对象被释放
         self._previous_action = None
+        self._previous_state = None
         self._step_count = 0
+        self._same_action_streak = 0
 
 
 class MultiIntersectionSharedEnv(SingleIntersectionEnv):

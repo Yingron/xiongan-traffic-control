@@ -6,6 +6,10 @@
 - 支持多场景（flat/morning/evening）
 - 高性能模式：极简网络 + 大train_freq + 多SubprocVecEnv并行
 
+路口ID支持两种格式:
+  - 规范格式: J01 ~ J20
+  - 友好格式: intersection_1 ~ intersection_20 (自动映射)
+
 用法:
     # 快速基准测试（5000步）
     python training/train_dqn.py --timesteps 5000 --perf
@@ -36,7 +40,37 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from configs.constants import INTERSECTION_ORDER, SUMO_FILES_DIR
-from training.config import PERF_DQN_CONFIG, SCENARIO_CONFIG
+from training.config import PERF_DQN_CONFIG, ANTICOLLAPSE_DQN_CONFIG, SCENARIO_CONFIG
+
+
+def resolve_intersection_id(raw_id: str) -> str:
+    """将友好名称映射为规范路口ID
+
+    支持格式:
+      - J01, J02, ... J20 (直接通过)
+      - intersection_1, intersection_2, ... intersection_20
+      - intersection1, intersection2, ... (无下划线)
+      - 数字: 1, 2, ... 20
+    """
+    if raw_id in INTERSECTION_ORDER:
+        return raw_id
+    stripped = raw_id.strip().lower()
+    for prefix in ("intersection_", "intersection", "int_", "int"):
+        if stripped.startswith(prefix):
+            num_part = stripped[len(prefix):]
+            try:
+                idx = int(num_part)
+                if 1 <= idx <= 20:
+                    return f"J{idx:02d}"
+            except ValueError:
+                pass
+    try:
+        idx = int(stripped)
+        if 1 <= idx <= 20:
+            return f"J{idx:02d}"
+    except ValueError:
+        pass
+    return raw_id
 
 
 def make_env_factory(
@@ -106,12 +140,86 @@ class SpeedMonitorCallback:
             self.last_time = now
 
 
+class PolicyCollapseMonitorCallback:
+    """策略坍缩监控回调 - 检测并警告策略坍缩
+
+    监控指标:
+    1. 动作分布（预测动作中各相位的频率）
+    2. 最近N步的平均奖励趋势
+    3. 探索率变化
+    """
+
+    def __init__(self, check_interval: int = 500, window_size: int = 100):
+        self.check_interval = check_interval
+        self.window_size = window_size
+        self.last_check_steps = 0
+        self.action_counts = [0, 0, 0, 0]
+        self.recent_rewards = []
+        self.collapse_warnings = 0
+        self.action_distribution_log = []
+
+    def on_step(self, model, total_steps: int, env=None) -> None:
+        if total_steps - self.last_check_steps < self.check_interval:
+            return
+
+        self.last_check_steps = total_steps
+
+        if hasattr(model, 'policy') and hasattr(model.policy, 'action_noise'):
+            eps = getattr(model.policy, 'exploration_rate', None)
+        else:
+            eps = None
+
+        action_probs = self._estimate_action_distribution(model)
+
+        dominant_action = np.argmax(action_probs)
+        dominant_pct = action_probs[dominant_action]
+
+        if dominant_pct > 0.9:
+            self.collapse_warnings += 1
+            print(
+                f"[COLLAPSE-WARN #{self.collapse_warnings}] Step {total_steps}: "
+                f"动作分布极度倾斜! Action {dominant_action}占 {dominant_pct:.1%} "
+                f"(分布: {[f'{p:.1%}' for p in action_probs]}, eps={eps})",
+                flush=True,
+            )
+        elif dominant_pct > 0.75:
+            print(
+                f"[COLLAPSE-WATCH] Step {total_steps}: "
+                f"动作分布有偏斜倾向: Action {dominant_action}占 {dominant_pct:.1%} "
+                f"(分布: {[f'{p:.1%}' for p in action_probs]}, eps={eps})",
+                flush=True,
+            )
+
+        if len(self.recent_rewards) >= self.window_size:
+            recent_avg = np.mean(self.recent_rewards[-self.window_size:])
+            if abs(recent_avg) < 0.01:
+                print(
+                    f"[REWARD-WARN] Step {total_steps}: "
+                    f"最近{self.window_size}步平均奖励={recent_avg:.4f}，"
+                    f"奖励接近0可能意味着策略无实质学习",
+                    flush=True,
+                )
+
+    def _estimate_action_distribution(self, model, n_samples: int = 50) -> np.ndarray:
+        """通过采样估计动作分布"""
+        try:
+            action_counts = np.zeros(4)
+            for _ in range(n_samples):
+                dummy_obs = np.random.randn(1, *model.observation_space.shape).astype(np.float32)
+                action, _ = model.predict(dummy_obs, deterministic=False)
+                action_counts[int(action)] += 1
+            return action_counts / n_samples
+        except Exception:
+            return np.array([0.25, 0.25, 0.25, 0.25])
+
+
 def train_dqn(
     timesteps: int = 5000,
     intersection_id: str = "J01",
     multi: bool = False,
     scenario: str | None = None,
     perf: bool = False,
+    anti_collapse: bool = False,
     learning_rate: float | None = None,
     buffer_size: int | None = None,
     batch_size: int | None = None,
@@ -131,6 +239,7 @@ def train_dqn(
         multi: 是否使用多路口参数共享模式
         scenario: 场景 flat/morning/evening/low/high
         perf: 是否启用高性能模式（200+ steps/s 目标）
+        anti_collapse: 是否启用抗策略坍缩模式
         learning_rate: 学习率（None则使用默认或高性能配置）
         buffer_size: 缓冲区大小
         batch_size: 批量大小
@@ -161,21 +270,33 @@ def train_dqn(
         scenario_label = scenario
         scenario_info = SCENARIO_CONFIG[scenario]
 
-    # ========== 应用高性能配置 ==========
-    if perf:
-        lr = learning_rate or PERF_DQN_CONFIG["learning_rate"]
-        bs = batch_size or PERF_DQN_CONFIG["batch_size"]
-        bf = buffer_size or PERF_DQN_CONFIG["buffer_size"]
-        ls = PERF_DQN_CONFIG["learning_starts"]
-        tf = PERF_DQN_CONFIG["train_freq"]
-        gs = PERF_DQN_CONFIG["gradient_steps"]
-        tui = PERF_DQN_CONFIG["target_update_interval"]
-        ef = exploration_fraction or PERF_DQN_CONFIG["exploration_fraction"]
-        efe = PERF_DQN_CONFIG["exploration_final_eps"]
-        arch = net_arch or PERF_DQN_CONFIG["policy_kwargs"]["net_arch"]
-        act_fn_name = PERF_DQN_CONFIG["policy_kwargs"]["activation_fn"]
-        ne = n_envs or PERF_DQN_CONFIG["n_envs"]
+    # ========== 应用配置 ==========
+    active_config = None
+    if anti_collapse:
+        active_config = ANTICOLLAPSE_DQN_CONFIG
+        config_tag = "抗策略坍缩"
+    elif perf:
+        active_config = PERF_DQN_CONFIG
+        config_tag = "高性能"
+    else:
+        config_tag = "标准"
+
+    if active_config:
+        lr = learning_rate or active_config["learning_rate"]
+        bs = batch_size or active_config["batch_size"]
+        bf = buffer_size or active_config["buffer_size"]
+        ls = active_config["learning_starts"]
+        tf = active_config["train_freq"]
+        gs = active_config["gradient_steps"]
+        tui = active_config["target_update_interval"]
+        ef = exploration_fraction or active_config["exploration_fraction"]
+        efe = active_config["exploration_final_eps"]
+        arch = net_arch or active_config["policy_kwargs"]["net_arch"]
+        act_fn_name = active_config["policy_kwargs"]["activation_fn"]
+        ne = n_envs or active_config["n_envs"]
         activation_fn = nn.ReLU if act_fn_name == "ReLU" else nn.Tanh
+        dueling = active_config["policy_kwargs"].get("dueling", False)
+        double_q = active_config["policy_kwargs"].get("double_q", False)
     else:
         lr = learning_rate or 1e-3
         bs = batch_size or 64
@@ -189,6 +310,8 @@ def train_dqn(
         arch = net_arch or [256, 256, 256]
         activation_fn = nn.Tanh
         ne = n_envs or 1
+        dueling = False
+        double_q = False
 
     # ========== 应用场景特定覆盖（高流量场景降低并行度和缓冲区） ==========
     if scenario_info.get("high_traffic", False):
@@ -241,12 +364,13 @@ def train_dqn(
     print("=" * 68)
     print(f"  模式      : {'多路口参数共享' if multi else f'单路口({intersection_id})'}")
     print(f"  场景      : {SCENARIO_CONFIG.get(scenario, {}).get('label', scenario_label) if scenario else '默认'}")
-    print(f"  高性能    : {'开启 (目标200+ steps/s)' if perf else '标准模式'}")
+    print(f"  配置      : {config_tag}模式")
     print(f"  设备      : {device.upper()}")
     print(f"  并行环境  : {ne}")
     print(f"  总步数    : {timesteps:,}")
     print(f"  学习率    : {lr}")
     print(f"  网络架构  : {arch} ({activation_fn.__name__})")
+    print(f"  Dueling   : {'启用' if dueling else '关闭'}  | Double-Q: {'启用' if double_q else '关闭'}")
     print(f"  批量大小  : {bs}  | train_freq={tf}  | gradient_steps={gs}")
     print(f"  缓冲区    : {bf:,}  | learning_starts={ls}")
     print(f"  探索策略  : initial=1.0 → final={efe} (fraction={ef})")
@@ -319,30 +443,67 @@ def train_dqn(
     # ========== 构建DQN模型 ==========
     t_init_start = time.time()
 
-    model = DQN(
-        policy="MlpPolicy",
-        env=env,
-        learning_rate=lr,
-        buffer_size=bf,
-        learning_starts=ls,
-        batch_size=bs,
-        gamma=gamma,
-        train_freq=tf,
-        gradient_steps=gs,
-        target_update_interval=tui,
-        exploration_fraction=ef,
-        exploration_final_eps=efe,
-        exploration_initial_eps=1.0,
-        max_grad_norm=10,
-        device=device,
-        verbose=0,  # 用我们自己的SpeedMonitorCallback替代
-        seed=seed,
-        tensorboard_log=str(log_dir),
-        policy_kwargs=dict(
+    policy_kw = dict(
+        net_arch=arch,
+        activation_fn=activation_fn,
+    )
+    if dueling:
+        policy_kw["dueling"] = True
+    if double_q:
+        policy_kw["double_q"] = True
+
+    try:
+        model = DQN(
+            policy="MlpPolicy",
+            env=env,
+            learning_rate=lr,
+            buffer_size=bf,
+            learning_starts=ls,
+            batch_size=bs,
+            gamma=gamma,
+            train_freq=tf,
+            gradient_steps=gs,
+            target_update_interval=tui,
+            exploration_fraction=ef,
+            exploration_final_eps=efe,
+            exploration_initial_eps=1.0,
+            max_grad_norm=10,
+            device=device,
+            verbose=0,
+            seed=seed,
+            tensorboard_log=str(log_dir),
+            policy_kwargs=policy_kw,
+        )
+    except TypeError:
+        # 某些 SB3 版本不支持 dueling/double_q，自动降级
+        print("[WARN] 当前 SB3 版本不支持 Dueling/Double-Q，降级为标准 DQN", flush=True)
+        policy_kw = dict(
             net_arch=arch,
             activation_fn=activation_fn,
-        ),
-    )
+        )
+        dueling = False
+        double_q = False
+        model = DQN(
+            policy="MlpPolicy",
+            env=env,
+            learning_rate=lr,
+            buffer_size=bf,
+            learning_starts=ls,
+            batch_size=bs,
+            gamma=gamma,
+            train_freq=tf,
+            gradient_steps=gs,
+            target_update_interval=tui,
+            exploration_fraction=ef,
+            exploration_final_eps=efe,
+            exploration_initial_eps=1.0,
+            max_grad_norm=10,
+            device=device,
+            verbose=0,
+            seed=seed,
+            tensorboard_log=str(log_dir),
+            policy_kwargs=policy_kw,
+        )
 
     t_init = time.time() - t_init_start
     total_params = sum(p.numel() for p in model.policy.parameters())
@@ -359,22 +520,26 @@ def train_dqn(
     # SB3 learn callback钩子
     from stable_baselines3.common.callbacks import BaseCallback
 
-    class _SB3SpeedCallback(BaseCallback):
-        def __init__(self, monitor: SpeedMonitorCallback):
+    class _SB3CombinedCallback(BaseCallback):
+        def __init__(self, speed_monitor: SpeedMonitorCallback, collapse_monitor: PolicyCollapseMonitorCallback):
             super().__init__(verbose=0)
-            self.monitor = monitor
+            self.speed_monitor = speed_monitor
+            self.collapse_monitor = collapse_monitor
 
         def _on_step(self) -> bool:
-            self.monitor.on_step(self.model, self.num_timesteps)
+            self.speed_monitor.on_step(self.model, self.num_timesteps)
+            self.collapse_monitor.on_step(self.model, self.num_timesteps, self.training_env)
             return True
+
+    collapse_cb = PolicyCollapseMonitorCallback(check_interval=500, window_size=100)
 
     try:
         model.learn(
             total_timesteps=timesteps,
             tb_log_name=f"dqn{perf_tag}",
             reset_num_timesteps=True,
-            callback=_SB3SpeedCallback(speed_cb),
-            log_interval=None,  # 禁用SB3自带日志
+            callback=_SB3CombinedCallback(speed_cb, collapse_cb),
+            log_interval=None,
             progress_bar=False,
         )
     except KeyboardInterrupt:
@@ -394,6 +559,8 @@ def train_dqn(
 
     # ========== 保存模型 ==========
     model_filename = f"dqn_{env_name}{scenario_tag}{perf_tag}_{timesteps}steps"
+    if anti_collapse:
+        model_filename = f"dqn_{env_name}{scenario_tag}_anticollapse_{timesteps}steps"
     model_path = save_path / model_filename
     model.save(str(model_path))
     print(f"[SAVE] 模型已保存: {model_path}.zip")
@@ -631,6 +798,8 @@ def main():
                         help="训练场景: 平峰/早高峰/晚高峰/低峰/高峰")
     parser.add_argument("--perf", action="store_true",
                         help="高性能模式: 极简网络+大train_freq+4x并行 (目标200+ steps/s)")
+    parser.add_argument("--anti-collapse", action="store_true",
+                        help="抗策略坍缩模式: 更大网络+更长探索+策略坍缩监控")
     parser.add_argument("--lr", type=float, default=None, help="覆盖学习率")
     parser.add_argument("--batch-size", type=int, default=None, help="覆盖batch_size")
     parser.add_argument("--n-envs", type=int, default=None, help="覆盖并行环境数")
@@ -646,6 +815,10 @@ def main():
     if args.net_arch:
         net_arch = [int(x) for x in args.net_arch.split(",")]
 
+    resolved_id = resolve_intersection_id(args.intersection)
+    if resolved_id != args.intersection:
+        print(f"[INFO] 路口ID映射: {args.intersection} → {resolved_id}")
+
     if args.eval_only:
         from stable_baselines3 import DQN
         if not args.model_path:
@@ -657,7 +830,7 @@ def main():
         if args.scenario:
             sumo_cfg_path = SCENARIO_CONFIG[args.scenario]["sumo_cfg"]
         env = SingleIntersectionEnv(
-            intersection_id=args.intersection,
+            intersection_id=resolved_id,
             sumo_cfg_path=sumo_cfg_path,
         )
         stats = evaluate_model(model, env, episodes=10)
@@ -666,10 +839,11 @@ def main():
 
     stats = train_dqn(
         timesteps=args.timesteps,
-        intersection_id=args.intersection,
+        intersection_id=resolved_id,
         multi=args.multi,
         scenario=args.scenario,
         perf=args.perf,
+        anti_collapse=args.anti_collapse,
         learning_rate=args.lr,
         batch_size=args.batch_size,
         seed=args.seed,
