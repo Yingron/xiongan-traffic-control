@@ -19,9 +19,11 @@ from configs.constants import (
     FEATURES_PER_INTERSECTION,
     FIXED_TIME_CONTROL,
     INTERSECTION_ORDER,
+    INTERSECTION_TEMPLATES,
     MIN_GREEN_SECONDS,
     PROJECT_ROOT,
     SUMO_FILES_DIR,
+    TEMPLATE_WEIGHTS,
     YELLOW_TRANSITION_SECONDS,
 )
 from env.global_state import _extract_intersection_state
@@ -361,19 +363,69 @@ class SingleIntersectionEnv(_EnvBase):
 
 
 class MultiIntersectionSharedEnv(SingleIntersectionEnv):
-    """Sample a junction per episode for parameter-shared DQN training."""
+    """Sample a junction per episode for parameter-shared DQN training.
 
-    def __init__(self, intersections: tuple[str, ...] = INTERSECTION_ORDER, **kwargs: Any) -> None:
+    采样策略（template_weights 非 None 时）：按 rl4 相位程序模板分层采样——
+    30 个路口的 4 动作程序有 5 种模板（见 configs.constants.INTERSECTION_TEMPLATES），
+    若按路口均匀采样，模板A(20/30) 会主导梯度，共享策略会把 action_0/3 学成模板A的
+    "主直行相位"，在模板C 等 action_0 几乎全红的路口上误选全红相位。
+    分层采样保证少数模板合计占比 ≥ 30%，模板内路口等概率；可复现（reset(seed=...) 重播种）。
+    template_weights=None 时退化为旧行为：按路口顺序轮询。
+    """
+
+    def __init__(
+        self,
+        intersections: tuple[str, ...] = INTERSECTION_ORDER,
+        template_weights: dict[str, float] | None = TEMPLATE_WEIGHTS,
+        **kwargs: Any,
+    ) -> None:
         if not intersections:
             raise ValueError("intersections cannot be empty")
         self.intersections = tuple(intersections)
         self._episode_index = 0
+        self._template_weights = None
+        self._tpl_junctions: dict[str, list[str]] = {}
+        if template_weights is not None:
+            # 只保留模板中仍属于采样集合的路口，避免调用方传路口子集时覆盖不全
+            self._tpl_junctions = {
+                tpl: [j for j in INTERSECTION_TEMPLATES.get(tpl, ()) if j in self.intersections]
+                for tpl in template_weights
+            }
+            self._tpl_junctions = {tpl: js for tpl, js in self._tpl_junctions.items() if js}
+            covered = {j for js in self._tpl_junctions.values() for j in js}
+            missing = set(self.intersections) - covered
+            if missing:
+                raise ValueError(
+                    f"INTERSECTION_TEMPLATES 未覆盖采样路口: {sorted(missing)}；"
+                    f"请检查 configs/constants.py 的模板分组是否与路网一致"
+                )
+            if len(template_weights) != len(self._tpl_junctions):
+                empty = set(template_weights) - set(self._tpl_junctions)
+                raise ValueError(f"模板权重含空模板（无任何采样路口）: {sorted(empty)}")
+            self._template_weights = dict(template_weights)
+            rng_seed = kwargs.get("seed")
+            self._rng = np.random.default_rng(rng_seed if rng_seed is not None else 0)
         super().__init__(intersection_id=self.intersections[0], **kwargs)
+
+    def _sample_junction(self) -> str:
+        """按模板权重选模板，再在模板内等概率选路口。"""
+        tpl_ids = list(self._template_weights.keys())
+        probs = np.array([self._template_weights[t] for t in tpl_ids], dtype=float)
+        probs /= probs.sum()
+        tpl = str(self._rng.choice(tpl_ids, p=probs))
+        return str(self._rng.choice(self._tpl_junctions[tpl]))
 
     def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None) -> tuple[np.ndarray, dict]:
         if seed is not None:
-            self._episode_index = seed % len(self.intersections)
-        self.intersection_id = self.intersections[self._episode_index % len(self.intersections)]
+            if self._template_weights is not None:
+                # 分层采样用专用 RNG，seed 重播种保证可复现
+                self._rng = np.random.default_rng(seed)
+            else:
+                self._episode_index = seed % len(self.intersections)
+        if self._template_weights is not None:
+            self.intersection_id = self._sample_junction()
+        else:
+            self.intersection_id = self.intersections[self._episode_index % len(self.intersections)]
         self._episode_index += 1
         state, info = super().reset(seed=seed, options=options)
         info["sampled_intersection"] = self.intersection_id
