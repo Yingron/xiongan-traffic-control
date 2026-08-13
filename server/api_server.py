@@ -42,10 +42,6 @@ from configs.constants import (
 )
 
 API_PREFIX = "/api/v1"
-<<<<<<< Updated upstream
-STATE_LAYOUT_VERSION = "v1-20x22"
-=======
->>>>>>> Stashed changes
 REWARD_VERSION = "v3"
 DEFAULT_CONFIG_PATH = DEFAULT_SUMO_CONFIG
 
