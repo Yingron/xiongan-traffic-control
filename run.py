@@ -11,7 +11,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="雄安新区20路口车路云一体化协同管控平台"
+        description="雄安新区30路口车路云一体化协同管控平台"
     )
     subparsers = parser.add_subparsers(dest="command", help="可用命令")
 

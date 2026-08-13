@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80a235ae64a202a49a1550597c511f56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   port: 5000
   autoStart: 1
   maxMainThreadRequestsPerFrame: 8
@@ -952,8 +952,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!1 &1312070093
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,7 +1002,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> Stashed changes
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1016,3 +1013,4 @@ SceneRoots:
   - {fileID: 1165641872}
   - {fileID: 1306265838}
   - {fileID: 145539692}
+  - {fileID: 1312070095}

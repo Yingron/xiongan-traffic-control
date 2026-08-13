@@ -1,14 +1,14 @@
 """可视化 WebSocket 服务器
 
 连接 SUMO 仿真与 Unity 可视化前端：
-  1. 启动 SUMO（支持 早高峰/晚高峰/平峰 三种场景）
+  1. 启动 SUMO（支持 真实早高峰/平峰/晚高峰 三种场景）
   2. 加载 DQN 模型进行信号灯控制推理
   3. 通过 WebSocket 向 Unity 推送车辆位置、信号灯相位、指标数据
   4. 接收 Unity 端的场景切换指令
 
 用法:
-    python server/visualization_server.py --scenario morning --port 8765
-    python server/visualization_server.py --scenario flat --no-model
+    python server/visualization_server.py --scenario real_peak --port 8765
+    python server/visualization_server.py --scenario real_offpeak --no-model
 """
 from __future__ import annotations
 
@@ -30,27 +30,30 @@ sys.path.insert(0, str(PROJECT_ROOT))
 SUMO_FILES_DIR = PROJECT_ROOT / "sumo_files"
 MODEL_DIR = PROJECT_ROOT / "models" / "dqn"
 
+# 30 路口顺序/特征维度统一取自 configs.constants（与训练环境一致）
+from configs.constants import INTERSECTION_ORDER, FEATURES_PER_INTERSECTION
+# 状态提取复用训练环境的全局状态实现（docs/lane_mapping.json 几何映射，30路口×22维）
+from env.global_state import get_global_state
+
 # ── 场景配置 ──
 SCENARIOS = {
-    "morning": {
-        "label": "早高峰",
-        "sumocfg": SUMO_FILES_DIR / "xiongan_morning.sumocfg",
-        "model": "dqn_multi_shared_morning_perf_1000000steps.zip",
+    "real_peak": {
+        "label": "真实早高峰(07:00-09:00)",
+        "sumocfg": SUMO_FILES_DIR / "xiongan_real_peak.sumocfg",
+        "model": "dqn_multi_shared_real_peak_perf_1000000steps.zip",
     },
-    "evening": {
-        "label": "晚高峰",
-        "sumocfg": SUMO_FILES_DIR / "xiongan_evening.sumocfg",
-        "model": "dqn_multi_shared_evening_perf_5000steps.zip",
+    "real_offpeak": {
+        "label": "真实平峰(14:30-16:30)",
+        "sumocfg": SUMO_FILES_DIR / "xiongan_real_offpeak.sumocfg",
+        "model": "dqn_multi_shared_real_offpeak_perf_1000000steps.zip",
     },
-    "flat": {
-        "label": "平峰",
-        "sumocfg": SUMO_FILES_DIR / "xiongan_flat.sumocfg",
-        "model": "dqn_multi_shared_flat_perf_20000steps.zip",
+    "real_evening": {
+        "label": "真实晚高峰(17:30-19:30)",
+        "sumocfg": SUMO_FILES_DIR / "xiongan_real_evening.sumocfg",
+        "model": "dqn_multi_shared_real_evening_perf_1000000steps.zip",
     },
 }
 
-INTERSECTION_ORDER = tuple(f"J{i:02d}" for i in range(1, 21))
-FEATURES_PER_INTERSECTION = 22
 MIN_GREEN_SECONDS = 15
 STEP_SECONDS = 5  # 每次推进的仿真秒数
 
@@ -67,7 +70,7 @@ def find_sumo_binary(use_gui: bool = False) -> str:
 class VisualizationServer:
     """SUMO + DQN + WebSocket 可视化服务器"""
 
-    def __init__(self, scenario: str = "morning", port: int = 8765,
+    def __init__(self, scenario: str = "real_peak", port: int = 8765,
                  use_model: bool = True, use_gui: bool = False) -> None:
         self.scenario = scenario
         self.port = port
@@ -174,7 +177,7 @@ class VisualizationServer:
         model_path = MODEL_DIR / model_file
         if not model_path.exists():
             # 回退到最优模型
-            model_path = MODEL_DIR / "dqn_multi_shared_morning_perf_1000000steps.zip"
+            model_path = MODEL_DIR / "dqn_multi_shared_real_peak_perf_1000000steps.zip"
             if not model_path.exists():
                 print(f"[Server] 未找到 DQN 模型，回退到固定配时")
                 return
@@ -190,55 +193,15 @@ class VisualizationServer:
     # ── 状态提取 ──
 
     def _extract_state(self) -> np.ndarray:
-        """提取 440 维全局状态向量 (20路口 × 22维)"""
-        traci = self._traci
-        state = np.zeros(20 * FEATURES_PER_INTERSECTION, dtype=np.float32)
+        """提取 660 维全局状态向量 (30路口 × 22维)
 
-        for idx, tl_id in enumerate(INTERSECTION_ORDER):
-            offset = idx * FEATURES_PER_INTERSECTION
-            controlled_lanes = traci.trafficlight.getControlledLanes(tl_id)
-
-            # 方向映射: N/S/E/W
-            lane_map: dict[str, list[str]] = {"N": [], "S": [], "E": [], "W": []}
-            for lane in controlled_lanes:
-                if len(lane) > 0:
-                    d = lane[0].upper()
-                    if d in lane_map:
-                        lane_map[d].append(lane)
-
-            for dir_idx, direction in enumerate("NSEW"):
-                lanes = lane_map[direction]
-                if not lanes:
-                    continue
-                rep = lanes[0]
-                for l in lanes:
-                    if l.endswith("_0"):
-                        rep = l
-                        break
-
-                queue = float(traci.lane.getLastStepHaltingNumber(rep))
-                wait = float(traci.lane.getWaitingTime(rep))
-                occ = float(traci.lane.getLastStepOccupancy(rep))
-
-                state[offset + dir_idx] = min(queue / 15.0, 1.0)
-                state[offset + 4 + dir_idx] = min(wait / 120.0, 1.0)
-                state[offset + 8 + dir_idx] = min(occ, 1.0)
-                state[offset + 12 + dir_idx] = min(queue / 15.0, 1.0)
-
-            # 相位 one-hot
-            phase = int(traci.trafficlight.getPhase(tl_id)) % 4
-            state[offset + 16:20] = 0.0
-            state[offset + 16 + phase] = 1.0
-
-            # 时间特征
-            sim_hour = float(traci.simulation.getTime()) / 3600.0
-            state[offset + 20] = float(np.sin(2 * np.pi * sim_hour / 24.0))
-            state[offset + 21] = float(np.cos(2 * np.pi * sim_hour / 24.0))
-
-        return state
+        复用训练环境 env/global_state.get_global_state：按 docs/lane_mapping.json
+        的几何映射聚合每个进口车道的排队/等待/占有率，与 DQN 训练时的状态口径一致。
+        """
+        return get_global_state(num_intersections=len(INTERSECTION_ORDER))
 
     def _get_dqn_actions(self, state: np.ndarray) -> dict[str, int]:
-        """使用 DQN 模型推理得到 20 个路口的动作"""
+        """使用 DQN 模型推理得到 30 个路口的动作"""
         if self._model is None:
             return dict(self._current_actions)
 
@@ -319,7 +282,7 @@ class VisualizationServer:
 
         return {
             "vehicle_count": veh_count,
-            "avg_queue": round(total_queue / max(1, 20), 2),  # 平均每路口排队
+            "avg_queue": round(total_queue / max(1, len(INTERSECTION_ORDER)), 2),  # 平均每路口排队
             "avg_wait": round(total_wait / max(1, veh_count), 2),
             "avg_speed": round(total_speed / max(1, veh_count), 2),
             "total_arrived": arrived,
@@ -419,7 +382,7 @@ class VisualizationServer:
                     msg_type = msg.get("type", "")
                     if msg_type == "switch_scenario":
                         result = await asyncio.get_event_loop().run_in_executor(
-                            None, self._switch_scenario, msg.get("scenario", "morning"))
+                            None, self._switch_scenario, msg.get("scenario", "real_peak"))
                         await ws.send(json.dumps(result, ensure_ascii=False))
                     elif msg_type == "ping":
                         await ws.send(json.dumps({"type": "pong", "timestamp": int(time.time() * 1000)}))
@@ -489,8 +452,8 @@ class VisualizationServer:
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="雄安交通可视化 WebSocket 服务器")
-    parser.add_argument("--scenario", choices=list(SCENARIOS.keys()), default="morning",
-                        help="初始场景 (默认: morning)")
+    parser.add_argument("--scenario", choices=list(SCENARIOS.keys()), default="real_peak",
+                        help="初始场景 (默认: real_peak)")
     parser.add_argument("--port", type=int, default=8765, help="WebSocket 端口 (默认: 8765)")
     parser.add_argument("--no-model", action="store_true", help="不加载 DQN 模型（固定配时）")
     parser.add_argument("--gui", action="store_true", help="使用 SUMO GUI（调试用）")

@@ -22,15 +22,15 @@ from env.reward_functions import compute_rewards
 
 
 class TrafficSignalEnv:
-    """20路口信号控制环境
+    """30路口信号控制环境
 
     将SUMO仿真封装为标准的环境接口，支持DQN等强化学习算法训练。
 
-    Observation Space: 440维连续空间 (20路口 × 22特征)
-    Action Space: 20路口 × 4相位 (离散动作)
+    Observation Space: 660维连续空间 (30路口 × 22特征)
+    Action Space: 30路口 × 4相位 (离散动作)
 
     用法:
-        env = TrafficSignalEnv(sumo_cfg_path="sumo_files/xiongan.sumocfg")
+        env = TrafficSignalEnv(sumo_cfg_path="sumo_files/xiongan_30.sumocfg")
         obs, info = env.reset()
         action = 0  # 选择相位
         obs, reward, terminated, truncated, info = env.step(action)
@@ -48,14 +48,14 @@ class TrafficSignalEnv:
         """初始化环境
 
         Args:
-            sumo_cfg_path: SUMO配置文件路径，默认为xiongan.sumocfg
+            sumo_cfg_path: SUMO配置文件路径，默认为xiongan_30.sumocfg
             use_gui: 是否使用GUI模式
             max_steps: 每个episode的最大步数（秒）
             delta_time: 每个action之间的仿真步进时间（秒）
             seed: 随机种子
         """
         if sumo_cfg_path is None:
-            sumo_cfg_path = str(SUMO_FILES_DIR / "xiongan.sumocfg")
+            sumo_cfg_path = str(SUMO_FILES_DIR / "xiongan_30.sumocfg")
 
         self._sumo_cfg_path = Path(sumo_cfg_path)
         self._use_gui = use_gui
@@ -70,6 +70,8 @@ class TrafficSignalEnv:
         self._current_actions: dict[str, int] = {}
         self._previous_actions: dict[str, Optional[int]] = {}
         self._phase_changed_at: dict[str, float] = {}
+        self._same_action_streaks: dict[str, int] = {}
+        self._previous_states: dict[str, np.ndarray] = {}
 
         self._step_count = 0
         self._episode_reward = 0.0
@@ -152,6 +154,8 @@ class TrafficSignalEnv:
             self._current_actions[tl_id] = int(self._traci.trafficlight.getPhase(tl_id))
             self._previous_actions[tl_id] = None
             self._phase_changed_at[tl_id] = sim_time
+            self._same_action_streaks[tl_id] = 0
+            self._previous_states[tl_id] = np.zeros(FEATURES_PER_INTERSECTION, dtype=np.float32)
 
     def _set_yellow_transition(self, tl_id: str, target_phase: int) -> None:
         """Apply a transient yellow state without expanding the four RL actions."""
@@ -226,9 +230,24 @@ class TrafficSignalEnv:
 
         obs = get_global_state(num_intersections=self.num_intersections)
 
+        for tl_id in INTERSECTION_ORDER:
+            prev = self._previous_actions.get(tl_id)
+            curr = self._current_actions.get(tl_id, 0)
+            if prev is not None and curr == prev:
+                self._same_action_streaks[tl_id] = self._same_action_streaks.get(tl_id, 0) + 1
+            else:
+                self._same_action_streaks[tl_id] = 1
+
         rewards_dict, breakdowns, global_reward = compute_rewards(
-            obs, self._current_actions, self._previous_actions
+            obs, self._current_actions, self._previous_actions,
+            previous_states=self._previous_states,
+            same_action_counts=self._same_action_streaks,
         )
+
+        # 更新每个路口的previous_state
+        for idx, tl_id in enumerate(INTERSECTION_ORDER):
+            offset = idx * FEATURES_PER_INTERSECTION
+            self._previous_states[tl_id] = obs[offset:offset + FEATURES_PER_INTERSECTION].copy()
 
         self._episode_reward += global_reward
 

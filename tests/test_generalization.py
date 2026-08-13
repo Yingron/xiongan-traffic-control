@@ -1,16 +1,16 @@
 """多场景流量泛化压力测试
 
-保持DQN模型权重不变，在低峰/平峰/高峰三种流量场景下进行推理测试。
+保持DQN模型权重不变，在低/中/高三档需求场景下进行推理测试。
 验证模型在不同交通拥堵程度下的泛化能力。
 
-流量场景:
-  - 低峰 (low):    原始流量 × 0.3  (约30%车辆)
-  - 平峰 (medium): 原始流量 × 1.0  (基准)
-  - 高峰 (high):   原始流量 × 2.0  (约200%车辆)
+流量场景（以真实早高峰需求为基准缩放，xiongan_real_peak.rou.xml）:
+  - 低峰 (low):    基准需求 × 0.5
+  - 平峰 (medium): 基准需求 × 1.0（即真实早高峰）
+  - 高峰 (high):   基准需求 × 1.25（真实早高峰已是容量匹配上限，1.25x 用于压力测试）
 
 产出:
-  - xiongan_low.rou.xml / xiongan_high.rou.xml (缩放后的路由文件)
-  - xiongan_low.sumocfg / xiongan_high.sumocfg (场景配置)
+  - sumo_files/xiongan_gen_low.rou.xml / xiongan_gen_high.rou.xml (缩放后的路由文件)
+  - sumo_files/xiongan_gen_low.sumocfg / xiongan_gen_high.sumocfg (场景配置)
   - generalization_test_results.json (详细数据)
   - generalization_performance.png (对比图)
 
@@ -54,7 +54,7 @@ def generate_scaled_route_file(
     Args:
         original_rou_path: 原始路由文件路径
         output_path: 输出路径
-        scale: 流量缩放因子 (0.3=低峰, 2.0=高峰)
+        scale: 流量缩放因子 (0.5=低峰, 1.25=高峰)
     """
     with open(original_rou_path, "r", encoding="utf-8") as f:
         content = f.read()
@@ -78,24 +78,24 @@ def generate_scaled_route_file(
 
 
 def generate_scenario_configs():
-    """生成低峰/高峰场景的sumocfg和rou.xml文件"""
-    original_rou = SUMO_FILES_DIR / "xiongan_20.rou.xml"
-    net_file = "xiongan_20.net.xml"
+    """生成低峰/高峰场景的sumocfg和rou.xml文件（基于真实早高峰需求缩放）"""
+    original_rou = SUMO_FILES_DIR / "xiongan_real_peak.rou.xml"
+    net_file = "xiongan_30.net.xml"
 
     scenarios = {
-        "low": 0.3,
+        "low": 0.5,
         "medium": 1.0,  # 使用原始文件
-        "high": 2.0,
+        "high": 1.25,
     }
 
     config_paths = {}
 
     for name, scale in scenarios.items():
         if name == "medium":
-            config_paths[name] = SUMO_FILES_DIR / "xiongan.sumocfg"
+            config_paths[name] = SUMO_FILES_DIR / "xiongan_real_peak.sumocfg"
             continue
 
-        rou_path = SUMO_FILES_DIR / f"xiongan_{name}.rou.xml"
+        rou_path = SUMO_FILES_DIR / f"xiongan_gen_{name}.rou.xml"
         generate_scaled_route_file(original_rou, rou_path, scale)
 
         cfg_content = f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -106,9 +106,9 @@ def generate_scenario_configs():
         <route-files value="{rou_path.name}"/>
     </input>
     <output>
-        <tripinfo-output value="tripinfo_{name}.xml"/>
-        <summary-output value="summary_{name}.xml"/>
-        <emission-output value="emissions_{name}.xml"/>
+        <tripinfo-output value="tripinfo_gen_{name}.xml"/>
+        <summary-output value="summary_gen_{name}.xml"/>
+        <emission-output value="emissions_gen_{name}.xml"/>
     </output>
     <time>
         <begin value="0"/>
@@ -120,7 +120,7 @@ def generate_scenario_configs():
     </processing>
 </configuration>
 """
-        cfg_path = SUMO_FILES_DIR / f"xiongan_{name}.sumocfg"
+        cfg_path = SUMO_FILES_DIR / f"xiongan_gen_{name}.sumocfg"
         with open(cfg_path, "w", encoding="utf-8") as f:
             f.write(cfg_content)
 
@@ -266,7 +266,7 @@ def main():
     # Step 3: 运行测试
     print("\n[3/4] Running generalization tests...", flush=True)
     scenario_names = ["low", "medium", "high"]
-    scenario_labels = {"low": "Low (0.3x)", "medium": "Medium (1.0x)", "high": "High (2.0x)"}
+    scenario_labels = {"low": "Low (0.5x)", "medium": "Medium (1.0x)", "high": "High (1.25x)"}
 
     all_results = {}  # {scenario: [strategy_results]}
 

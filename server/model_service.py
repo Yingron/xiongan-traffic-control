@@ -42,15 +42,10 @@ class ModelServiceError(Exception):
 def split_global_state(
     state: np.ndarray | list[float],
     *,
-<<<<<<< Updated upstream
-    intersection_count: int = 20,
-    features_per_intersection: int = 22,
-=======
     intersection_count: int = INTERSECTION_COUNT,
     features_per_intersection: int = FEATURES_PER_INTERSECTION,
->>>>>>> Stashed changes
 ) -> np.ndarray:
-    """Validate and split J01..J20 state into a float32 batch of local states."""
+    """Validate and split J01..J30 state into a float32 batch of local states."""
     array = np.asarray(state, dtype=np.float32)
     expected_dimension = intersection_count * features_per_intersection
     if array.shape != (expected_dimension,):

@@ -1,1416 +1,2144 @@
 {
-  "J01": {
-    "peak": {
-      "东西向直行": {
-        "green": 38,
-        "yellow": 3,
-        "red": 2,
-        "total": 43
-      },
-      "东西向左转": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南北向直行": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南北向左转": {
-        "green": 38,
-        "yellow": 3,
-        "red": 2,
-        "total": 43
-      },
-      "cycle": 160
-    },
-    "offpeak": {
-      "东西向直行": {
-        "green": 27,
-        "yellow": 3,
-        "red": 2,
-        "total": 32
-      },
-      "东西向左转": {
-        "green": 33,
-        "yellow": 3,
-        "red": 2,
-        "total": 38
-      },
-      "南北向直行": {
-        "green": 33,
-        "yellow": 3,
-        "red": 2,
-        "total": 38
-      },
-      "南北向左转": {
-        "green": 27,
-        "yellow": 3,
-        "red": 2,
-        "total": 32
-      },
-      "cycle": 140
-    },
-    "evening": {
-      "东西向直行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 42
-      },
-      "东西向左转": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 39
-      },
-      "南北向直行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 42
-      },
-      "南北向左转": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "cycle": 160
-    }
+ "J01": {
+  "peak": {
+   "东西向直行": {
+    "green": 38,
+    "yellow": 3,
+    "red": 2,
+    "total": 43
+   },
+   "东西向左转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "南北向直行": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "南北向左转": {
+    "green": 38,
+    "yellow": 3,
+    "red": 2,
+    "total": 43
+   },
+   "cycle": 160
   },
-  "J02": {
-    "peak": {
-      "南北向直行": {
-        "green": 33,
-        "yellow": 3,
-        "red": 0,
-        "total": 36
-      },
-      "西南向左转": {
-        "green": 41,
-        "yellow": 3,
-        "red": 0,
-        "total": 44
-      },
-      "cycle": 80
-    },
-    "offpeak": {
-      "南北向直行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 0,
-        "total": 40
-      },
-      "西南向左转": {
-        "green": 37,
-        "yellow": 3,
-        "red": 0,
-        "total": 40
-      },
-      "cycle": 80
-    },
-    "evening": {
-      "南北向直行": {
-        "green": 45,
-        "yellow": 3,
-        "red": 0,
-        "total": 48
-      },
-      "西南向左转": {
-        "green": 29,
-        "yellow": 3,
-        "red": 0,
-        "total": 32
-      },
-      "cycle": 80
-    }
+  "offpeak": {
+   "东西向直行": {
+    "green": 27,
+    "yellow": 3,
+    "red": 2,
+    "total": 32
+   },
+   "东西向左转": {
+    "green": 33,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "南北向直行": {
+    "green": 33,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "南北向左转": {
+    "green": 27,
+    "yellow": 3,
+    "red": 2,
+    "total": 32
+   },
+   "cycle": 140
   },
-  "J03": {
-    "peak": {
-      "东西左转直行": {
-        "green": 55,
-        "yellow": 3,
-        "red": 2,
-        "total": 58
-      },
-      "南北左转直行": {
-        "green": 47,
-        "yellow": 3,
-        "red": 2,
-        "total": 50
-      },
-      "相位3": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 108
-    },
-    "offpeak": {
-      "东西左转直行": {
-        "green": 55,
-        "yellow": 3,
-        "red": 2,
-        "total": 58
-      },
-      "南北左转直行": {
-        "green": 47,
-        "yellow": 3,
-        "red": 2,
-        "total": 50
-      },
-      "相位7": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 108
-    },
-    "evening": {
-      "东西左转直行": {
-        "green": 55,
-        "yellow": 3,
-        "red": 2,
-        "total": 58
-      },
-      "南北左转直行": {
-        "green": 47,
-        "yellow": 3,
-        "red": 2,
-        "total": 50
-      },
-      "cycle": 108
-    }
-  },
-  "J04": {
-    "peak": {
-      "南北向直行": {
-        "green": 52,
-        "yellow": 3,
-        "red": 2,
-        "total": 57
-      },
-      "南北向左转": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "西向直左": {
-        "green": 36,
-        "yellow": 3,
-        "red": 2,
-        "total": 41
-      },
-      "东向直左": {
-        "green": 42,
-        "yellow": 3,
-        "red": 2,
-        "total": 47
-      },
-      "cycle": 180
-    },
-    "offpeak": {
-      "南北向直左": {
-        "green": 57,
-        "yellow": 3,
-        "red": 2,
-        "total": 62
-      },
-      "西向直左": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 39
-      },
-      "东向直左": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 39
-      },
-      "cycle": 140
-    },
-    "evening": {
-      "东西向直行": {
-        "green": 45,
-        "yellow": 3,
-        "red": 2,
-        "total": 50
-      },
-      "东西向左转": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "南北向直行": {
-        "green": 48,
-        "yellow": 3,
-        "red": 2,
-        "total": 53
-      },
-      "南北向左转": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 42
-      },
-      "cycle": 180
-    }
-  },
-  "J05": {
-    "peak": {
-      "东西向直左": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南向左右转": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "cycle": 77
-    },
-    "offpeak": {
-      "东西向直左": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南向左右转": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "cycle": 77
-    },
-    "evening": {
-      "东西向直左": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南向左右转": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "cycle": 77
-    }
-  },
-  "J06": {
-    "peak": {
-      "东西直左": {
-        "green": 57,
-        "yellow": 3,
-        "red": 2,
-        "total": 60
-      },
-      "南北左转": {
-        "green": 26,
-        "yellow": 3,
-        "red": 2,
-        "total": 29
-      },
-      "南北直行": {
-        "green": 45,
-        "yellow": 3,
-        "red": 2,
-        "total": 48
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 137
-    },
-    "offpeak": {
-      "东西直左": {
-        "green": 57,
-        "yellow": 3,
-        "red": 2,
-        "total": 60
-      },
-      "南北左转": {
-        "green": 26,
-        "yellow": 3,
-        "red": 2,
-        "total": 29
-      },
-      "南北直行": {
-        "green": 45,
-        "yellow": 3,
-        "red": 2,
-        "total": 48
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 137
-    },
-    "evening": {
-      "东西直左": {
-        "green": 57,
-        "yellow": 3,
-        "red": 2,
-        "total": 60
-      },
-      "南北左转": {
-        "green": 26,
-        "yellow": 3,
-        "red": 2,
-        "total": 29
-      },
-      "南北直行": {
-        "green": 45,
-        "yellow": 3,
-        "red": 2,
-        "total": 48
-      },
-      "cycle": 137
-    }
-  },
-  "J07": {
-    "peak": {
-      "西向直左南向直右": {
-        "green": 47,
-        "yellow": 3,
-        "red": 2,
-        "total": 50
-      },
-      "东向左右转": {
-        "green": 42,
-        "yellow": 3,
-        "red": 2,
-        "total": 45
-      },
-      "cycle": 95
-    },
-    "offpeak": {
-      "西向直左南向直右": {
-        "green": 36,
-        "yellow": 3,
-        "red": 2,
-        "total": 39
-      },
-      "东向左右转": {
-        "green": 41,
-        "yellow": 3,
-        "red": 2,
-        "total": 44
-      },
-      "cycle": 83
-    },
-    "evening": {
-      "西向直左南向直右": {
-        "green": 45,
-        "yellow": 3,
-        "red": 2,
-        "total": 48
-      },
-      "东向左右转": {
-        "green": 39,
-        "yellow": 3,
-        "red": 2,
-        "total": 42
-      },
-      "cycle": 90
-    }
-  },
-  "J08": {
-    "peak": {
-      "东西向直行": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "东西向左转": {
-        "green": 18,
-        "yellow": 3,
-        "red": 2,
-        "total": 23
-      },
-      "南北向直行": {
-        "green": 28,
-        "yellow": 3,
-        "red": 2,
-        "total": 33
-      },
-      "南北向左转": {
-        "green": 12,
-        "yellow": 3,
-        "red": 2,
-        "total": 17
-      },
-      "cycle": 110
-    },
-    "offpeak": {
-      "东西向直行": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "东西向左转": {
-        "green": 15,
-        "yellow": 3,
-        "red": 2,
-        "total": 20
-      },
-      "南北向直行": {
-        "green": 20,
-        "yellow": 3,
-        "red": 2,
-        "total": 25
-      },
-      "南北向左转": {
-        "green": 10,
-        "yellow": 3,
-        "red": 2,
-        "total": 15
-      },
-      "cycle": 90
-    },
-    "evening": {
-      "东西向直行": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "东西向左转": {
-        "green": 20,
-        "yellow": 3,
-        "red": 2,
-        "total": 25
-      },
-      "南北向直行": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "南北向左转": {
-        "green": 15,
-        "yellow": 3,
-        "red": 2,
-        "total": 20
-      },
-      "cycle": 120
-    }
-  },
-  "J09": {
-    "peak": {
-      "南北左转直行": {
-        "green": 56,
-        "yellow": 3,
-        "red": 2,
-        "total": 59
-      },
-      "东西左转直行": {
-        "green": 48,
-        "yellow": 3,
-        "red": 2,
-        "total": 51
-      },
-      "东北左转右转": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 145
-    },
-    "offpeak": {
-      "南北左转直行": {
-        "green": 56,
-        "yellow": 3,
-        "red": 2,
-        "total": 59
-      },
-      "东西左转直行": {
-        "green": 48,
-        "yellow": 3,
-        "red": 2,
-        "total": 51
-      },
-      "东北左转右转": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 145
-    },
-    "evening": {
-      "南北左转直行": {
-        "green": 56,
-        "yellow": 3,
-        "red": 2,
-        "total": 59
-      },
-      "东西左转直行": {
-        "green": 48,
-        "yellow": 3,
-        "red": 2,
-        "total": 51
-      },
-      "东北左转右转": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 145
-    }
-  },
-  "J10": {
-    "peak": {
-      "东西向直行": {
-        "green": 47,
-        "yellow": 3,
-        "red": 2,
-        "total": 52
-      },
-      "东南向左转": {
-        "green": 63,
-        "yellow": 3,
-        "red": 2,
-        "total": 68
-      },
-      "cycle": 120
-    },
-    "offpeak": {
-      "东西向直行": {
-        "green": 40,
-        "yellow": 3,
-        "red": 2,
-        "total": 45
-      },
-      "东南向左转": {
-        "green": 40,
-        "yellow": 3,
-        "red": 2,
-        "total": 45
-      },
-      "cycle": 90
-    },
-    "evening": {
-      "东西向直行": {
-        "green": 59,
-        "yellow": 3,
-        "red": 2,
-        "total": 64
-      },
-      "东南向左转": {
-        "green": 51,
-        "yellow": 3,
-        "red": 2,
-        "total": 56
-      },
-      "cycle": 120
-    }
-  },
-  "J11": {
-    "peak": {
-      "东西向直行": {
-        "green": 50,
-        "yellow": 3,
-        "red": 2,
-        "total": 55
-      },
-      "东西向左转": {
-        "green": 23,
-        "yellow": 3,
-        "red": 2,
-        "total": 28
-      },
-      "南北向直行": {
-        "green": 52,
-        "yellow": 3,
-        "red": 2,
-        "total": 57
-      },
-      "南北向左转": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 170
-    },
-    "offpeak": {
-      "东西向直行": {
-        "green": 40,
-        "yellow": 3,
-        "red": 2,
-        "total": 45
-      },
-      "东西向左转": {
-        "green": 20,
-        "yellow": 3,
-        "red": 2,
-        "total": 25
-      },
-      "南北向直行": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "南北向左转": {
-        "green": 20,
-        "yellow": 3,
-        "red": 2,
-        "total": 25
-      },
-      "cycle": 130
-    },
-    "evening": {
-      "东西向直行": {
-        "green": 50,
-        "yellow": 3,
-        "red": 2,
-        "total": 55
-      },
-      "东西向左转": {
-        "green": 26,
-        "yellow": 3,
-        "red": 2,
-        "total": 31
-      },
-      "南北向直行": {
-        "green": 52,
-        "yellow": 3,
-        "red": 2,
-        "total": 57
-      },
-      "南北向左转": {
-        "green": 28,
-        "yellow": 3,
-        "red": 2,
-        "total": 33
-      },
-      "cycle": 176
-    }
-  },
-  "J12": {
-    "peak": {
-      "东西向直行": {
-        "green": 55,
-        "yellow": 3,
-        "red": 2,
-        "total": 60
-      },
-      "东西向左转": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "南北向直行": {
-        "green": 50,
-        "yellow": 3,
-        "red": 2,
-        "total": 55
-      },
-      "南北向左转": {
-        "green": 15,
-        "yellow": 3,
-        "red": 2,
-        "total": 20
-      },
-      "cycle": 170
-    },
-    "offpeak": {
-      "东西向直行": {
-        "green": 65,
-        "yellow": 3,
-        "red": 2,
-        "total": 70
-      },
-      "东西向左转": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "南北向直行": {
-        "green": 60,
-        "yellow": 3,
-        "red": 2,
-        "total": 65
-      },
-      "南北向左转": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "cycle": 195
-    },
-    "evening": {
-      "东西向直行": {
-        "green": 58,
-        "yellow": 3,
-        "red": 2,
-        "total": 63
-      },
-      "东西向左转": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南北向直行": {
-        "green": 53,
-        "yellow": 3,
-        "red": 2,
-        "total": 58
-      },
-      "南北向左转": {
-        "green": 17,
-        "yellow": 3,
-        "red": 2,
-        "total": 22
-      },
-      "cycle": 178
-    }
-  },
-  "J13": {
-    "peak": {
-      "东西向直行": {
-        "green": 55,
-        "yellow": 3,
-        "red": 2,
-        "total": 60
-      },
-      "北进口左转": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 42
-      },
-      "西进口左转": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "东进口直行": {
-        "green": 15,
-        "yellow": 3,
-        "red": 2,
-        "total": 15
-      },
-      "cycle": 152
-    },
-    "offpeak": {
-      "东西向直行": {
-        "green": 65,
-        "yellow": 3,
-        "red": 2,
-        "total": 70
-      },
-      "北进口左转": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 42
-      },
-      "西进口左转": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 147
-    },
-    "evening": {
-      "东西向直行": {
-        "green": 55,
-        "yellow": 3,
-        "red": 2,
-        "total": 60
-      },
-      "北进口左转": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 42
-      },
-      "西进口左转": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "东进口直行": {
-        "green": 15,
-        "yellow": 3,
-        "red": 2,
-        "total": 15
-      },
-      "cycle": 152
-    }
-  },
-  "J14": {
-    "peak": {
-      "东、北放行": {
-        "green": 22,
-        "yellow": 3,
-        "red": 2,
-        "total": 25
-      },
-      "南放行": {
-        "green": 47,
-        "yellow": 3,
-        "red": 2,
-        "total": 50
-      },
-      "相位3": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 75
-    },
-    "offpeak": {
-      "东、北放行": {
-        "green": 22,
-        "yellow": 3,
-        "red": 2,
-        "total": 25
-      },
-      "南放行": {
-        "green": 47,
-        "yellow": 3,
-        "red": 2,
-        "total": 50
-      },
-      "相位7": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 75
-    },
-    "evening": {
-      "东、北放行": {
-        "green": 22,
-        "yellow": 3,
-        "red": 2,
-        "total": 25
-      },
-      "南放行": {
-        "green": 47,
-        "yellow": 3,
-        "red": 2,
-        "total": 50
-      },
-      "cycle": 75
-    }
-  },
-  "J15": {
-    "peak": {
-      "南北直左": {
-        "green": 50,
-        "yellow": 3,
-        "red": 2,
-        "total": 53
-      },
-      "东西直左": {
-        "green": 59,
-        "yellow": 3,
-        "red": 2,
-        "total": 62
-      },
-      "相位3": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 115
-    },
-    "offpeak": {
-      "南北直左": {
-        "green": 50,
-        "yellow": 3,
-        "red": 2,
-        "total": 53
-      },
-      "东西直左": {
-        "green": 59,
-        "yellow": 3,
-        "red": 2,
-        "total": 62
-      },
-      "相位7": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 115
-    },
-    "evening": {
-      "南北直左": {
-        "green": 50,
-        "yellow": 3,
-        "red": 2,
-        "total": 53
-      },
-      "东西直左": {
-        "green": 59,
-        "yellow": 3,
-        "red": 2,
-        "total": 62
-      },
-      "cycle": 115
-    }
-  },
-  "J16": {
-    "peak": {
-      "东西直左": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南北直左": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "相位3": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 77
-    },
-    "offpeak": {
-      "东西直左": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南北直左": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "相位7": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 77
-    },
-    "evening": {
-      "东西直左": {
-        "green": 34,
-        "yellow": 3,
-        "red": 2,
-        "total": 37
-      },
-      "南北直左": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "cycle": 77
-    }
-  },
-  "J17": {
-    "peak": {
-      "东进口左右转": {
-        "green": 58,
-        "yellow": 3,
-        "red": 2,
-        "total": 61
-      },
-      "南北直行转向": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位3": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 96
-    },
-    "offpeak": {
-      "东进口左右转": {
-        "green": 58,
-        "yellow": 3,
-        "red": 2,
-        "total": 61
-      },
-      "南北直行转向": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位7": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 96
-    },
-    "evening": {
-      "东进口左右转": {
-        "green": 58,
-        "yellow": 3,
-        "red": 2,
-        "total": 61
-      },
-      "南北直行转向": {
-        "green": 32,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 96
-    }
-  },
-  "J18": {
-    "peak": {
-      "东北、西南放行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "西北、东南放行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "相位3": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 80
-    },
-    "offpeak": {
-      "东北、西南放行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "西北、东南放行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "相位7": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 80
-    },
-    "evening": {
-      "东北、西南放行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "西北、东南放行": {
-        "green": 37,
-        "yellow": 3,
-        "red": 2,
-        "total": 40
-      },
-      "cycle": 80
-    }
-  },
-  "J19": {
-    "peak": {
-      "东北、西南放行": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 38
-      },
-      "西北、东南放行": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 38
-      },
-      "相位3": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "相位4": {
-        "green": 30,
-        "yellow": 3,
-        "red": 2,
-        "total": 35
-      },
-      "cycle": 76
-    },
-    "offpeak": {
-      "东北、西南放行": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 38
-      },
-      "西北、东南放行": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 38
-      },
-      "相位7": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "相位8": {
-        "green": 25,
-        "yellow": 3,
-        "red": 2,
-        "total": 30
-      },
-      "cycle": 76
-    },
-    "evening": {
-      "东北、西南放行": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 38
-      },
-      "西北、东南放行": {
-        "green": 35,
-        "yellow": 3,
-        "red": 2,
-        "total": 38
-      },
-      "cycle": 76
-    }
-  },
-  "J20": {
-    "peak": {
-      "东北西南左转直行": {
-        "green": 45,
-        "yellow": 3,
-        "red": 2,
-        "total": 48
-      },
-      "东北西南左转": {
-        "green": 9,
-        "yellow": 3,
-        "red": 2,
-        "total": 12
-      },
-      "西北东南左转直行": {
-        "green": 45,
-        "yellow": 3,
-        "red": 2,
-        "total": 48
-      },
-      "西北东南左转": {
-        "green": 9,
-        "yellow": 3,
-        "red": 2,
-        "total": 12
-      },
-      "cycle": 120
-    },
-    "offpeak": {
-      "东北西南左转直行": {
-        "green": 33,
-        "yellow": 3,
-        "red": 2,
-        "total": 36
-      },
-      "东北西南左转": {
-        "green": 6,
-        "yellow": 3,
-        "red": 2,
-        "total": 9
-      },
-      "西北东南左转直行": {
-        "green": 33,
-        "yellow": 3,
-        "red": 2,
-        "total": 36
-      },
-      "西北东南左转": {
-        "green": 6,
-        "yellow": 3,
-        "red": 2,
-        "total": 9
-      },
-      "cycle": 90
-    },
-    "evening": {
-      "东北西南左转直行": {
-        "green": 41,
-        "yellow": 3,
-        "red": 2,
-        "total": 44
-      },
-      "东北西南左转": {
-        "green": 8,
-        "yellow": 3,
-        "red": 2,
-        "total": 11
-      },
-      "西北东南左转直行": {
-        "green": 41,
-        "yellow": 3,
-        "red": 2,
-        "total": 44
-      },
-      "西北东南左转": {
-        "green": 8,
-        "yellow": 3,
-        "red": 2,
-        "total": 11
-      },
-      "cycle": 110
-    }
+  "evening": {
+   "东西向直行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "东西向左转": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 39
+   },
+   "南北向直行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "南北向左转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "cycle": 160
   }
+ },
+ "J02": {
+  "peak": {
+   "南北向直行": {
+    "green": 33,
+    "yellow": 3,
+    "red": 0,
+    "total": 36
+   },
+   "西南向左右转": {
+    "green": 41,
+    "yellow": 3,
+    "red": 0,
+    "total": 44
+   },
+   "cycle": 124,
+   "南进口左转": {
+    "green": 41,
+    "yellow": 3,
+    "red": 0,
+    "total": 44
+   }
+  },
+  "offpeak": {
+   "南北向直行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 0,
+    "total": 40
+   },
+   "西南向左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 0,
+    "total": 40
+   },
+   "cycle": 120,
+   "南进口左转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 0,
+    "total": 40
+   }
+  },
+  "evening": {
+   "南北向直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 0,
+    "total": 48
+   },
+   "西南向左右转": {
+    "green": 29,
+    "yellow": 3,
+    "red": 0,
+    "total": 32
+   },
+   "cycle": 112,
+   "南进口左转": {
+    "green": 29,
+    "yellow": 3,
+    "red": 0,
+    "total": 32
+   }
+  }
+ },
+ "J03": {
+  "peak": {
+   "东西左转直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 58
+   },
+   "南北左转直行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "相位3": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 182
+  },
+  "offpeak": {
+   "东西左转直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 58
+   },
+   "南北左转直行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "相位7": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 172
+  },
+  "evening": {
+   "东西左转直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 58
+   },
+   "南北左转直行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "cycle": 112
+  }
+ },
+ "J04": {
+  "peak": {
+   "南北向直行": {
+    "green": 52,
+    "yellow": 3,
+    "red": 2,
+    "total": 57
+   },
+   "南北向左转": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "西向直左": {
+    "green": 36,
+    "yellow": 3,
+    "red": 2,
+    "total": 41
+   },
+   "东向直左": {
+    "green": 42,
+    "yellow": 3,
+    "red": 2,
+    "total": 47
+   },
+   "cycle": 180
+  },
+  "offpeak": {
+   "南北向直左": {
+    "green": 57,
+    "yellow": 3,
+    "red": 2,
+    "total": 62
+   },
+   "西向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 39
+   },
+   "东向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 39
+   },
+   "cycle": 140
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "东西向左转": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "南北向直行": {
+    "green": 48,
+    "yellow": 3,
+    "red": 2,
+    "total": 53
+   },
+   "南北向左转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "cycle": 180
+  }
+ },
+ "J05": {
+  "peak": {
+   "东西向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "cycle": 81,
+   "南向左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   }
+  },
+  "offpeak": {
+   "东西向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "cycle": 81,
+   "南向左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   }
+  },
+  "evening": {
+   "东西向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "cycle": 81,
+   "南向左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   }
+  }
+ },
+ "J06": {
+  "peak": {
+   "东西直左": {
+    "green": 57,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "南北左转": {
+    "green": 26,
+    "yellow": 3,
+    "red": 2,
+    "total": 29
+   },
+   "南北直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 178
+  },
+  "offpeak": {
+   "东西直左": {
+    "green": 57,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "南北左转": {
+    "green": 26,
+    "yellow": 3,
+    "red": 2,
+    "total": 29
+   },
+   "南北直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 173
+  },
+  "evening": {
+   "东西直左": {
+    "green": 57,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "南北左转": {
+    "green": 26,
+    "yellow": 3,
+    "red": 2,
+    "total": 29
+   },
+   "南北直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "cycle": 143
+  }
+ },
+ "J07": {
+  "peak": {
+   "西向直左南向直右": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "东向左右转": {
+    "green": 42,
+    "yellow": 3,
+    "red": 2,
+    "total": 45
+   },
+   "cycle": 99
+  },
+  "offpeak": {
+   "西向直左南向直右": {
+    "green": 36,
+    "yellow": 3,
+    "red": 2,
+    "total": 39
+   },
+   "东向左右转": {
+    "green": 41,
+    "yellow": 3,
+    "red": 2,
+    "total": 44
+   },
+   "cycle": 87
+  },
+  "evening": {
+   "西向直左南向直右": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "东向左右转": {
+    "green": 39,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "cycle": 94
+  }
+ },
+ "J08": {
+  "peak": {
+   "东西向直行": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "东西向左转": {
+    "green": 18,
+    "yellow": 3,
+    "red": 2,
+    "total": 23
+   },
+   "南北向直行": {
+    "green": 28,
+    "yellow": 3,
+    "red": 2,
+    "total": 33
+   },
+   "南北向左转": {
+    "green": 12,
+    "yellow": 3,
+    "red": 2,
+    "total": 17
+   },
+   "cycle": 110
+  },
+  "offpeak": {
+   "东西向直行": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "东西向左转": {
+    "green": 15,
+    "yellow": 3,
+    "red": 2,
+    "total": 20
+   },
+   "南北向直行": {
+    "green": 20,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南北向左转": {
+    "green": 10,
+    "yellow": 3,
+    "red": 2,
+    "total": 15
+   },
+   "cycle": 90
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "东西向左转": {
+    "green": 20,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南北向直行": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "南北向左转": {
+    "green": 15,
+    "yellow": 3,
+    "red": 2,
+    "total": 20
+   },
+   "cycle": 120
+  }
+ },
+ "J09": {
+  "peak": {
+   "南北左转直行": {
+    "green": 56,
+    "yellow": 3,
+    "red": 2,
+    "total": 59
+   },
+   "东西左转直行": {
+    "green": 48,
+    "yellow": 3,
+    "red": 2,
+    "total": 51
+   },
+   "东北左转右转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 186
+  },
+  "offpeak": {
+   "南北左转直行": {
+    "green": 56,
+    "yellow": 3,
+    "red": 2,
+    "total": 59
+   },
+   "东西左转直行": {
+    "green": 48,
+    "yellow": 3,
+    "red": 2,
+    "total": 51
+   },
+   "东北左转右转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 181
+  },
+  "evening": {
+   "南北左转直行": {
+    "green": 56,
+    "yellow": 3,
+    "red": 2,
+    "total": 59
+   },
+   "东西左转直行": {
+    "green": 48,
+    "yellow": 3,
+    "red": 2,
+    "total": 51
+   },
+   "东北左转右转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 151
+  }
+ },
+ "J10": {
+  "peak": {
+   "东西向直行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 52
+   },
+   "南向左右转": {
+    "green": 63,
+    "yellow": 3,
+    "red": 2,
+    "total": 68
+   },
+   "cycle": 172,
+   "东进口左转": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 52
+   }
+  },
+  "offpeak": {
+   "东西向直行": {
+    "green": 40,
+    "yellow": 3,
+    "red": 2,
+    "total": 45
+   },
+   "南向左右转": {
+    "green": 40,
+    "yellow": 3,
+    "red": 2,
+    "total": 45
+   },
+   "cycle": 135,
+   "东进口左转": {
+    "green": 40,
+    "yellow": 3,
+    "red": 2,
+    "total": 45
+   }
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 59,
+    "yellow": 3,
+    "red": 2,
+    "total": 64
+   },
+   "南向左右转": {
+    "green": 51,
+    "yellow": 3,
+    "red": 2,
+    "total": 56
+   },
+   "cycle": 184,
+   "东进口左转": {
+    "green": 59,
+    "yellow": 3,
+    "red": 2,
+    "total": 64
+   }
+  }
+ },
+ "J11": {
+  "peak": {
+   "东西向直行": {
+    "green": 50,
+    "yellow": 3,
+    "red": 2,
+    "total": 55
+   },
+   "东西向左转": {
+    "green": 23,
+    "yellow": 3,
+    "red": 2,
+    "total": 28
+   },
+   "南北向直行": {
+    "green": 52,
+    "yellow": 3,
+    "red": 2,
+    "total": 57
+   },
+   "南北向左转": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 170
+  },
+  "offpeak": {
+   "东西向直行": {
+    "green": 40,
+    "yellow": 3,
+    "red": 2,
+    "total": 45
+   },
+   "东西向左转": {
+    "green": 20,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南北向直行": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "南北向左转": {
+    "green": 20,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "cycle": 130
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 50,
+    "yellow": 3,
+    "red": 2,
+    "total": 55
+   },
+   "东西向左转": {
+    "green": 26,
+    "yellow": 3,
+    "red": 2,
+    "total": 31
+   },
+   "南北向直行": {
+    "green": 52,
+    "yellow": 3,
+    "red": 2,
+    "total": 57
+   },
+   "南北向左转": {
+    "green": 28,
+    "yellow": 3,
+    "red": 2,
+    "total": 33
+   },
+   "cycle": 176
+  }
+ },
+ "J12": {
+  "peak": {
+   "东西向直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "东西向左转": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "南北向直行": {
+    "green": 50,
+    "yellow": 3,
+    "red": 2,
+    "total": 55
+   },
+   "南北向左转": {
+    "green": 15,
+    "yellow": 3,
+    "red": 2,
+    "total": 20
+   },
+   "cycle": 170
+  },
+  "offpeak": {
+   "东西向直行": {
+    "green": 65,
+    "yellow": 3,
+    "red": 2,
+    "total": 70
+   },
+   "东西向左转": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "南北向直行": {
+    "green": 60,
+    "yellow": 3,
+    "red": 2,
+    "total": 65
+   },
+   "南北向左转": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "cycle": 215
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 58,
+    "yellow": 3,
+    "red": 2,
+    "total": 63
+   },
+   "东西向左转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "南北向直行": {
+    "green": 53,
+    "yellow": 3,
+    "red": 2,
+    "total": 58
+   },
+   "南北向左转": {
+    "green": 17,
+    "yellow": 3,
+    "red": 2,
+    "total": 22
+   },
+   "cycle": 180
+  }
+ },
+ "J13": {
+  "peak": {
+   "东西向直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "北进口左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "西进口左转": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "东进口直行": {
+    "green": 15,
+    "yellow": 3,
+    "red": 2,
+    "total": 15
+   },
+   "cycle": 157
+  },
+  "offpeak": {
+   "东西向直行": {
+    "green": 65,
+    "yellow": 3,
+    "red": 2,
+    "total": 70
+   },
+   "北进口左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "西进口左转": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 177
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "北进口左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "西进口左转": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "东进口直行": {
+    "green": 15,
+    "yellow": 3,
+    "red": 2,
+    "total": 15
+   },
+   "cycle": 157
+  }
+ },
+ "J14": {
+  "peak": {
+   "东、北放行": {
+    "green": 22,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南放行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "相位3": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 149
+  },
+  "offpeak": {
+   "东、北放行": {
+    "green": 22,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南放行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "相位7": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 139
+  },
+  "evening": {
+   "东、北放行": {
+    "green": 22,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南放行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "cycle": 79
+  }
+ },
+ "J15": {
+  "peak": {
+   "南北直左": {
+    "green": 50,
+    "yellow": 3,
+    "red": 2,
+    "total": 53
+   },
+   "东西直左": {
+    "green": 59,
+    "yellow": 3,
+    "red": 2,
+    "total": 62
+   },
+   "相位3": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 189
+  },
+  "offpeak": {
+   "南北直左": {
+    "green": 50,
+    "yellow": 3,
+    "red": 2,
+    "total": 53
+   },
+   "东西直左": {
+    "green": 59,
+    "yellow": 3,
+    "red": 2,
+    "total": 62
+   },
+   "相位7": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 179
+  },
+  "evening": {
+   "南北直左": {
+    "green": 50,
+    "yellow": 3,
+    "red": 2,
+    "total": 53
+   },
+   "东西直左": {
+    "green": 59,
+    "yellow": 3,
+    "red": 2,
+    "total": 62
+   },
+   "cycle": 119
+  }
+ },
+ "J16": {
+  "peak": {
+   "东西直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "南北直左": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "相位3": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 151
+  },
+  "offpeak": {
+   "东西直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "南北直左": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "相位7": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 141
+  },
+  "evening": {
+   "东西直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "南北直左": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "cycle": 81
+  }
+ },
+ "J17": {
+  "peak": {
+   "东进口左右转": {
+    "green": 58,
+    "yellow": 3,
+    "red": 2,
+    "total": 61
+   },
+   "南北直行转向": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位3": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 170
+  },
+  "offpeak": {
+   "东进口左右转": {
+    "green": 58,
+    "yellow": 3,
+    "red": 2,
+    "total": 61
+   },
+   "南北直行转向": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位7": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 160
+  },
+  "evening": {
+   "东进口左右转": {
+    "green": 58,
+    "yellow": 3,
+    "red": 2,
+    "total": 61
+   },
+   "南北直行转向": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 100
+  }
+ },
+ "J18": {
+  "peak": {
+   "东北、西南放行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "西北、东南放行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "相位3": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 154
+  },
+  "offpeak": {
+   "东北、西南放行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "西北、东南放行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "相位7": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 144
+  },
+  "evening": {
+   "东北、西南放行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "西北、东南放行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "cycle": 84
+  }
+ },
+ "J19": {
+  "peak": {
+   "东北、西南放行": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "西北、东南放行": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "相位3": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 150
+  },
+  "offpeak": {
+   "东北、西南放行": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "西北、东南放行": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "相位7": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 140
+  },
+  "evening": {
+   "东北、西南放行": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "西北、东南放行": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "cycle": 80
+  }
+ },
+ "J20": {
+  "peak": {
+   "东北西南左转直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "东北西南左转": {
+    "green": 9,
+    "yellow": 3,
+    "red": 2,
+    "total": 12
+   },
+   "西北东南左转直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "西北东南左转": {
+    "green": 9,
+    "yellow": 3,
+    "red": 2,
+    "total": 12
+   },
+   "cycle": 128
+  },
+  "offpeak": {
+   "东北西南左转直行": {
+    "green": 33,
+    "yellow": 3,
+    "red": 2,
+    "total": 36
+   },
+   "东北西南左转": {
+    "green": 6,
+    "yellow": 3,
+    "red": 2,
+    "total": 9
+   },
+   "西北东南左转直行": {
+    "green": 33,
+    "yellow": 3,
+    "red": 2,
+    "total": 36
+   },
+   "西北东南左转": {
+    "green": 6,
+    "yellow": 3,
+    "red": 2,
+    "total": 9
+   },
+   "cycle": 98
+  },
+  "evening": {
+   "东北西南左转直行": {
+    "green": 41,
+    "yellow": 3,
+    "red": 2,
+    "total": 44
+   },
+   "东北西南左转": {
+    "green": 8,
+    "yellow": 3,
+    "red": 2,
+    "total": 11
+   },
+   "西北东南左转直行": {
+    "green": 41,
+    "yellow": 3,
+    "red": 2,
+    "total": 44
+   },
+   "西北东南左转": {
+    "green": 8,
+    "yellow": 3,
+    "red": 2,
+    "total": 11
+   },
+   "cycle": 118
+  }
+ },
+ "J21": {
+  "peak": {
+   "东西向直行": {
+    "green": 38,
+    "yellow": 3,
+    "red": 2,
+    "total": 43
+   },
+   "东西向左转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "南北向直行": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "南北向左转": {
+    "green": 38,
+    "yellow": 3,
+    "red": 2,
+    "total": 43
+   },
+   "cycle": 160
+  },
+  "offpeak": {
+   "东西向直行": {
+    "green": 27,
+    "yellow": 3,
+    "red": 2,
+    "total": 32
+   },
+   "东西向左转": {
+    "green": 33,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "南北向直行": {
+    "green": 33,
+    "yellow": 3,
+    "red": 2,
+    "total": 38
+   },
+   "南北向左转": {
+    "green": 27,
+    "yellow": 3,
+    "red": 2,
+    "total": 32
+   },
+   "cycle": 140
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "东西向左转": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 39
+   },
+   "南北向直行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "南北向左转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "cycle": 160
+  }
+ },
+ "J22": {
+  "peak": {
+   "东西左转直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 58
+   },
+   "南北左转直行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "相位3": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 182
+  },
+  "offpeak": {
+   "东西左转直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 58
+   },
+   "南北左转直行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "相位7": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 172
+  },
+  "evening": {
+   "东西左转直行": {
+    "green": 55,
+    "yellow": 3,
+    "red": 2,
+    "total": 58
+   },
+   "南北左转直行": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "cycle": 112
+  }
+ },
+ "J23": {
+  "peak": {
+   "南北向直行": {
+    "green": 52,
+    "yellow": 3,
+    "red": 2,
+    "total": 57
+   },
+   "南北向左转": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "西向直左": {
+    "green": 36,
+    "yellow": 3,
+    "red": 2,
+    "total": 41
+   },
+   "东向直左": {
+    "green": 42,
+    "yellow": 3,
+    "red": 2,
+    "total": 47
+   },
+   "cycle": 180
+  },
+  "offpeak": {
+   "南北向直左": {
+    "green": 57,
+    "yellow": 3,
+    "red": 2,
+    "total": 62
+   },
+   "西向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 39
+   },
+   "东向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 39
+   },
+   "cycle": 140
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "东西向左转": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "南北向直行": {
+    "green": 48,
+    "yellow": 3,
+    "red": 2,
+    "total": 53
+   },
+   "南北向左转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "cycle": 180
+  }
+ },
+ "J24": {
+  "peak": {
+   "东西直左": {
+    "green": 57,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "南北左转": {
+    "green": 26,
+    "yellow": 3,
+    "red": 2,
+    "total": 29
+   },
+   "南北直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 178
+  },
+  "offpeak": {
+   "东西直左": {
+    "green": 57,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "南北左转": {
+    "green": 26,
+    "yellow": 3,
+    "red": 2,
+    "total": 29
+   },
+   "南北直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 173
+  },
+  "evening": {
+   "东西直左": {
+    "green": 57,
+    "yellow": 3,
+    "red": 2,
+    "total": 60
+   },
+   "南北左转": {
+    "green": 26,
+    "yellow": 3,
+    "red": 2,
+    "total": 29
+   },
+   "南北直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "cycle": 143
+  }
+ },
+ "J25": {
+  "peak": {
+   "东西向直行": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "东西向左转": {
+    "green": 18,
+    "yellow": 3,
+    "red": 2,
+    "total": 23
+   },
+   "南北向直行": {
+    "green": 28,
+    "yellow": 3,
+    "red": 2,
+    "total": 33
+   },
+   "南北向左转": {
+    "green": 12,
+    "yellow": 3,
+    "red": 2,
+    "total": 17
+   },
+   "cycle": 110
+  },
+  "offpeak": {
+   "东西向直行": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "东西向左转": {
+    "green": 15,
+    "yellow": 3,
+    "red": 2,
+    "total": 20
+   },
+   "南北向直行": {
+    "green": 20,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南北向左转": {
+    "green": 10,
+    "yellow": 3,
+    "red": 2,
+    "total": 15
+   },
+   "cycle": 90
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 35,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "东西向左转": {
+    "green": 20,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南北向直行": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "南北向左转": {
+    "green": 15,
+    "yellow": 3,
+    "red": 2,
+    "total": 20
+   },
+   "cycle": 120
+  }
+ },
+ "J26": {
+  "peak": {
+   "东西向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "北向左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "cycle": 81
+  },
+  "offpeak": {
+   "东西向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "北向左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "cycle": 81
+  },
+  "evening": {
+   "东西向直左": {
+    "green": 34,
+    "yellow": 3,
+    "red": 2,
+    "total": 37
+   },
+   "北向左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 2,
+    "total": 40
+   },
+   "cycle": 81
+  }
+ },
+ "J27": {
+  "peak": {
+   "西向直左南向直右": {
+    "green": 47,
+    "yellow": 3,
+    "red": 2,
+    "total": 50
+   },
+   "东向左右转": {
+    "green": 42,
+    "yellow": 3,
+    "red": 2,
+    "total": 45
+   },
+   "cycle": 99
+  },
+  "offpeak": {
+   "西向直左南向直右": {
+    "green": 36,
+    "yellow": 3,
+    "red": 2,
+    "total": 39
+   },
+   "东向左右转": {
+    "green": 41,
+    "yellow": 3,
+    "red": 2,
+    "total": 44
+   },
+   "cycle": 87
+  },
+  "evening": {
+   "西向直左南向直右": {
+    "green": 45,
+    "yellow": 3,
+    "red": 2,
+    "total": 48
+   },
+   "东向左右转": {
+    "green": 39,
+    "yellow": 3,
+    "red": 2,
+    "total": 42
+   },
+   "cycle": 94
+  }
+ },
+ "J28": {
+  "peak": {
+   "南北左转直行": {
+    "green": 56,
+    "yellow": 3,
+    "red": 2,
+    "total": 59
+   },
+   "东西左转直行": {
+    "green": 48,
+    "yellow": 3,
+    "red": 2,
+    "total": 51
+   },
+   "东北左转右转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位4": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 186
+  },
+  "offpeak": {
+   "南北左转直行": {
+    "green": 56,
+    "yellow": 3,
+    "red": 2,
+    "total": 59
+   },
+   "东西左转直行": {
+    "green": 48,
+    "yellow": 3,
+    "red": 2,
+    "total": 51
+   },
+   "东北左转右转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "相位8": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 181
+  },
+  "evening": {
+   "南北左转直行": {
+    "green": 56,
+    "yellow": 3,
+    "red": 2,
+    "total": 59
+   },
+   "东西左转直行": {
+    "green": 48,
+    "yellow": 3,
+    "red": 2,
+    "total": 51
+   },
+   "东北左转右转": {
+    "green": 32,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "cycle": 151
+  }
+ },
+ "J29": {
+  "peak": {
+   "东西向直行": {
+    "green": 50,
+    "yellow": 3,
+    "red": 2,
+    "total": 55
+   },
+   "东西向左转": {
+    "green": 23,
+    "yellow": 3,
+    "red": 2,
+    "total": 28
+   },
+   "南北向直行": {
+    "green": 52,
+    "yellow": 3,
+    "red": 2,
+    "total": 57
+   },
+   "南北向左转": {
+    "green": 25,
+    "yellow": 3,
+    "red": 2,
+    "total": 30
+   },
+   "cycle": 170
+  },
+  "offpeak": {
+   "东西向直行": {
+    "green": 40,
+    "yellow": 3,
+    "red": 2,
+    "total": 45
+   },
+   "东西向左转": {
+    "green": 20,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "南北向直行": {
+    "green": 30,
+    "yellow": 3,
+    "red": 2,
+    "total": 35
+   },
+   "南北向左转": {
+    "green": 20,
+    "yellow": 3,
+    "red": 2,
+    "total": 25
+   },
+   "cycle": 130
+  },
+  "evening": {
+   "东西向直行": {
+    "green": 50,
+    "yellow": 3,
+    "red": 2,
+    "total": 55
+   },
+   "东西向左转": {
+    "green": 26,
+    "yellow": 3,
+    "red": 2,
+    "total": 31
+   },
+   "南北向直行": {
+    "green": 52,
+    "yellow": 3,
+    "red": 2,
+    "total": 57
+   },
+   "南北向左转": {
+    "green": 28,
+    "yellow": 3,
+    "red": 2,
+    "total": 33
+   },
+   "cycle": 176
+  }
+ },
+ "J30": {
+  "peak": {
+   "南北向直行": {
+    "green": 33,
+    "yellow": 3,
+    "red": 0,
+    "total": 36
+   },
+   "西南向左右转": {
+    "green": 41,
+    "yellow": 3,
+    "red": 0,
+    "total": 44
+   },
+   "cycle": 80
+  },
+  "offpeak": {
+   "南北向直行": {
+    "green": 37,
+    "yellow": 3,
+    "red": 0,
+    "total": 40
+   },
+   "西南向左右转": {
+    "green": 37,
+    "yellow": 3,
+    "red": 0,
+    "total": 40
+   },
+   "cycle": 80
+  },
+  "evening": {
+   "南北向直行": {
+    "green": 45,
+    "yellow": 3,
+    "red": 0,
+    "total": 48
+   },
+   "西南向左右转": {
+    "green": 29,
+    "yellow": 3,
+    "red": 0,
+    "total": 32
+   },
+   "cycle": 80
+  }
+ }
 }

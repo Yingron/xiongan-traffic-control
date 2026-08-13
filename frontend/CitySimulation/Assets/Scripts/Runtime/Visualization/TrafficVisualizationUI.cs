@@ -67,9 +67,9 @@ namespace CitySimulation.Runtime.Visualization
             _scenarioText.fontStyle = FontStyle.Bold;
 
             // ── 右上：场景切换按钮 ──
-            _morningBtn = CreateButton(canvasGo.transform, new Vector2(-340, -20), 100, 40, "早高峰", () => SwitchScene("morning"));
-            _eveningBtn = CreateButton(canvasGo.transform, new Vector2(-230, -20), 100, 40, "晚高峰", () => SwitchScene("evening"));
-            _flatBtn = CreateButton(canvasGo.transform, new Vector2(-120, -20), 100, 40, "平峰", () => SwitchScene("flat"));
+            _morningBtn = CreateButton(canvasGo.transform, new Vector2(-340, -20), 100, 40, "早高峰", () => SwitchScene("real_peak"));
+            _eveningBtn = CreateButton(canvasGo.transform, new Vector2(-230, -20), 100, 40, "晚高峰", () => SwitchScene("real_evening"));
+            _flatBtn = CreateButton(canvasGo.transform, new Vector2(-120, -20), 100, 40, "平峰", () => SwitchScene("real_offpeak"));
 
             // ── 左下：指标面板 ──
             var panelGo = CreatePanel(canvasGo.transform, new Vector2(20, -180), 300, 150);
@@ -170,7 +170,7 @@ namespace CitySimulation.Runtime.Visualization
         {
             var labels = new System.Collections.Generic.Dictionary<string, string>
             {
-                {"morning", "早高峰"}, {"evening", "晚高峰"}, {"flat", "平峰"}
+                {"real_peak", "早高峰"}, {"real_evening", "晚高峰"}, {"real_offpeak", "平峰"}
             };
             var label = labels.TryGetValue(scenario, out var l) ? l : scenario;
             if (_scenarioText != null)
@@ -179,9 +179,9 @@ namespace CitySimulation.Runtime.Visualization
             }
 
             // 更新按钮高亮
-            SetButtonColor(_morningBtn, scenario == "morning");
-            SetButtonColor(_eveningBtn, scenario == "evening");
-            SetButtonColor(_flatBtn, scenario == "flat");
+            SetButtonColor(_morningBtn, scenario == "real_peak");
+            SetButtonColor(_eveningBtn, scenario == "real_evening");
+            SetButtonColor(_flatBtn, scenario == "real_offpeak");
         }
 
         void SetButtonColor(Button btn, bool active)

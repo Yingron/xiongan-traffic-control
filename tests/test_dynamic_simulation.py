@@ -24,7 +24,7 @@ def run_dynamic_test():
     print('=' * 60)
 
     sumo_binary = os.path.join(os.environ['SUMO_HOME'], 'bin', 'sumo.exe')
-    cfg_path = str(PROJECT_ROOT / 'sumo_files' / 'xiongan.sumocfg')
+    cfg_path = str(PROJECT_ROOT / 'sumo_files' / 'xiongan_30.sumocfg')
 
     try:
         traci.start([

@@ -1,4 +1,4 @@
-"""全局状态提取模块 - 从TraCI提取440维全局状态向量"""
+"""全局状态提取模块 - 从TraCI提取660维全局状态向量"""
 from __future__ import annotations
 
 import json
@@ -63,11 +63,11 @@ def _get_representative_lane(controlled_lanes: list[str], direction: str) -> Opt
     return matching_lanes[0]
 
 
-def get_global_state(num_intersections: int = 20) -> np.ndarray:
-    """获取完整的440维全局状态向量
+def get_global_state(num_intersections: int = 30) -> np.ndarray:
+    """获取完整的660维全局状态向量
 
     Args:
-        num_intersections: 路口数量，默认为20
+        num_intersections: 路口数量，默认为30
 
     Returns:
         STATE_DIMENSION维的状态向量
@@ -87,18 +87,19 @@ def get_global_state(num_intersections: int = 20) -> np.ndarray:
     return state
 
 
-def _extract_intersection_state(traci: Any, tl_id: str) -> np.ndarray:
+def _extract_intersection_state(
+    traci: Any,
+    tl_id: str,
+    phase_changed_at: float | None = None,
+) -> np.ndarray:
     """提取单个路口的22维状态
 
     Args:
         traci: TraCI连接对象
         tl_id: 交通信号灯ID
-<<<<<<< Updated upstream
-=======
         phase_changed_at: 当前相位开始时刻（单路口训练环境传入），
             用于在 state[20] 编码"相位已持续秒数"，让智能体知道何时可合法切换
             （MIN_GREEN_SECONDS=15）。为None时保持原时间sin特征（全局30路口状态）。
->>>>>>> Stashed changes
 
     Returns:
         22维局部状态向量
@@ -138,9 +139,16 @@ def _extract_intersection_state(traci: Any, tl_id: str) -> np.ndarray:
     phase = _get_phase_onehot(traci, tl_id)
     state[16:20] = phase
 
-    time_sin, time_cos = _get_time_features(traci)
-    state[20] = time_sin
-    state[21] = time_cos
+    if phase_changed_at is not None:
+        # 相位已持续秒数（归一化，60s封顶）：智能体可据此判断是否过了最小绿灯锁定期
+        elapsed = max(0.0, float(traci.simulation.getTime()) - phase_changed_at)
+        state[20] = _normalize(elapsed, max_val=60.0)
+        # 保留cos时间特征（与sin冗余，编码同一时刻角）
+        state[21] = _get_time_features(traci)[1]
+    else:
+        time_sin, time_cos = _get_time_features(traci)
+        state[20] = time_sin
+        state[21] = time_cos
 
     if DEBUG:
         print(f"  {tl_id} 状态: 排队={state[0:4]}, 占有率={state[8:12]}")

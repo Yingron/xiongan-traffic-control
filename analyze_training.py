@@ -286,7 +286,7 @@ def main():
         from env.env import TrafficSignalEnv
         
         env = TrafficSignalEnv(
-            sumo_cfg_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sumo_files', 'xiongan.sumocfg'),
+            sumo_cfg_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sumo_files', 'xiongan_30.sumocfg'),
             use_gui=False,
             max_steps=3600,
             delta_time=5

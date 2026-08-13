@@ -299,7 +299,7 @@ def main():
     parser.add_argument('--model', type=str, default='./models_v2/dqn_traffic_final.zip',
                         help='DQN模型路径')
     parser.add_argument('--sumo-cfg', type=str, 
-                        default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sumo_files', 'xiongan.sumocfg'),
+                        default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sumo_files', 'xiongan_30.sumocfg'),
                         help='SUMO配置文件路径')
     parser.add_argument('--gui', action='store_true', help='是否使用GUI模式')
     
