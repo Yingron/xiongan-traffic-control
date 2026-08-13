@@ -16,6 +16,8 @@ from typing import Any
 
 import numpy as np
 
+from configs.constants import FEATURES_PER_INTERSECTION, INTERSECTION_COUNT
+
 
 SUPPORTED_FORMAT = "stable-baselines3-dqn"
 
@@ -40,8 +42,13 @@ class ModelServiceError(Exception):
 def split_global_state(
     state: np.ndarray | list[float],
     *,
+<<<<<<< Updated upstream
     intersection_count: int = 20,
     features_per_intersection: int = 22,
+=======
+    intersection_count: int = INTERSECTION_COUNT,
+    features_per_intersection: int = FEATURES_PER_INTERSECTION,
+>>>>>>> Stashed changes
 ) -> np.ndarray:
     """Validate and split J01..J20 state into a float32 batch of local states."""
     array = np.asarray(state, dtype=np.float32)

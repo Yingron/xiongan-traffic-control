@@ -23,7 +23,7 @@ DEBUG = False
 def _load_lane_mapping() -> dict[str, dict[str, list[str]]]:
     """Load the validated physical lane mapping generated with the SUMO net.
 
-    The generated 20-intersection network uses internal edge names in some
+    Earlier generated networks used internal edge names in some
     places, so inferring N/S/E/W from a lane-ID prefix is not reliable.
     """
     path = Path(DOCS_DIR) / "lane_mapping.json"
@@ -93,6 +93,12 @@ def _extract_intersection_state(traci: Any, tl_id: str) -> np.ndarray:
     Args:
         traci: TraCI连接对象
         tl_id: 交通信号灯ID
+<<<<<<< Updated upstream
+=======
+        phase_changed_at: 当前相位开始时刻（单路口训练环境传入），
+            用于在 state[20] 编码"相位已持续秒数"，让智能体知道何时可合法切换
+            （MIN_GREEN_SECONDS=15）。为None时保持原时间sin特征（全局30路口状态）。
+>>>>>>> Stashed changes
 
     Returns:
         22维局部状态向量

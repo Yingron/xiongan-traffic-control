@@ -78,7 +78,7 @@ def compute_rewards(
     previous_actions: dict[str, Optional[int]],
     **kwargs,
 ) -> tuple[dict[str, float], dict[str, dict], float]:
-    """计算所有20个路口的奖励
+    """计算所有30个路口的奖励
 
     Args:
         global_state: 440维全局状态

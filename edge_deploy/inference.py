@@ -7,6 +7,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from training.config import DISTILL_CONFIG
+from configs.constants import FEATURES_PER_INTERSECTION
 
 
 class EdgeInference:
@@ -38,7 +39,7 @@ class EdgeInference:
             print(f"Loaded quantized model from {self.model_path}")
 
     def warmup(self):
-        dummy = torch.randn(1, 26)
+        dummy = torch.randn(1, FEATURES_PER_INTERSECTION)
         for _ in range(10):
             _ = self.model(dummy)
 
@@ -59,7 +60,7 @@ class EdgeInference:
     def benchmark(self, n_iter=1000):
         latencies = []
         for _ in range(n_iter):
-            dummy = np.random.randn(26).astype(np.float32)
+            dummy = np.random.randn(FEATURES_PER_INTERSECTION).astype(np.float32)
             _, lat = self.predict(dummy)
             latencies.append(lat)
 
@@ -123,7 +124,7 @@ def main():
     if args.benchmark:
         inference.benchmark(args.n)
     else:
-        dummy_state = np.random.randn(26).astype(np.float32)
+        dummy_state = np.random.randn(FEATURES_PER_INTERSECTION).astype(np.float32)
         action, latency = inference.predict(dummy_state)
         print(f"Action: {action}, Latency: {latency:.2f}ms")
 

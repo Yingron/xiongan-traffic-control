@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -35,12 +36,16 @@ from configs.constants import (
     ACTION_NAMES,
     FEATURES_PER_INTERSECTION,
     STATE_DIMENSION,
+    STATE_LAYOUT_VERSION,
     MIN_GREEN_SECONDS,
     DEFAULT_SUMO_CONFIG,
 )
 
 API_PREFIX = "/api/v1"
+<<<<<<< Updated upstream
 STATE_LAYOUT_VERSION = "v1-20x22"
+=======
+>>>>>>> Stashed changes
 REWARD_VERSION = "v3"
 DEFAULT_CONFIG_PATH = DEFAULT_SUMO_CONFIG
 
@@ -587,11 +592,17 @@ async def shutdown() -> None:
 @app.get(f"{API_PREFIX}/health")
 async def health_check() -> dict[str, Any]:
     sumo_home = os.environ.get("SUMO_HOME")
-    sumo_available = bool(sumo_home and (Path(sumo_home) / "bin" / "sumo.exe").exists())
+    configured_sumo = Path(sumo_home) / "bin" / "sumo.exe" if sumo_home else None
+    sumo_executable = (
+        str(configured_sumo)
+        if configured_sumo is not None and configured_sumo.exists()
+        else shutil.which("sumo")
+    )
     return {
         "status": "healthy",
         "api_version": "v1",
-        "sumo_available": sumo_available,
+        "sumo_available": bool(sumo_executable),
+        "sumo_executable": sumo_executable,
         "active_session_id": manager.session.session_id if manager.session else None,
     }
 

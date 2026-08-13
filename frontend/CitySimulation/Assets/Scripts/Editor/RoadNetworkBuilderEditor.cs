@@ -8,14 +8,14 @@ using UnityEngine;
 namespace CitySimulation.EditorTools
 {
     /// <summary>
-    /// Menu items to build/reload the xiongan 20-intersection 4x4 road network from JSON.
+    /// Menu items to build/reload the xiongan 30-intersection 6x5 road network from JSON.
     /// Located under the top-level menu 雄安路网.
     /// </summary>
     public static class RoadNetworkBuilderEditor
     {
-        private const string MapId = "xiongan_20";
+        private const string MapId = "xiongan_30";
 
-        [MenuItem("雄安路网/构建 xiongan_20 20路口 (使用现有GameServices)", priority = 10)]
+        [MenuItem("雄安路网/构建 xiongan_30 30路口 (使用现有GameServices)", priority = 10)]
         public static void BuildFromGameServices()
         {
             if (!Application.isPlaying)
@@ -43,7 +43,7 @@ namespace CitySimulation.EditorTools
             }
         }
 
-        [MenuItem("雄安路网/构建 xiongan_20 (独立ObjectManager - 可在Edit模式预览)", priority = 20)]
+        [MenuItem("雄安路网/构建 xiongan_30 (独立ObjectManager - 可在Edit模式预览)", priority = 20)]
         public static void BuildStandalone()
         {
             var builder = new RoadNetworkBuilder();
@@ -57,7 +57,7 @@ namespace CitySimulation.EditorTools
                 if (string.IsNullOrEmpty(path))
                 {
                     EditorUtility.DisplayDialog("找不到 JSON",
-                        "请确认 xiongan_20.json 已放在 Assets/Scripts/Maps 目录。", "确定");
+                        "请确认 xiongan_30.json 已放在 Assets/Scripts/Maps 目录。", "确定");
                     return;
                 }
                 var report = builder.BuildFromJsonFullPath(path, objectManager);
@@ -70,37 +70,37 @@ namespace CitySimulation.EditorTools
             }
         }
 
-        [MenuItem("雄安路网/打开 xiongan_20.json 所在目录", priority = 90)]
+        [MenuItem("雄安路网/打开 xiongan_30.json 所在目录", priority = 90)]
         public static void RevealJsonFolder()
         {
             var p = RoadNetworkBuilder.ResolveJsonPath(MapId);
             if (string.IsNullOrEmpty(p))
             {
-                EditorUtility.DisplayDialog("未找到 JSON", "xiongan_20.json 不在 Assets/Scripts/Maps 中。", "确定");
+                EditorUtility.DisplayDialog("未找到 JSON", "xiongan_30.json 不在 Assets/Scripts/Maps 中。", "确定");
                 return;
             }
             EditorUtility.RevealInFinder(p);
         }
 
-        [MenuItem("雄安路网/验证 xiongan_20.json 解析 (不生成对象)", priority = 30)]
+        [MenuItem("雄安路网/验证 xiongan_30.json 解析 (不生成对象)", priority = 30)]
         public static void ValidateJsonParse()
         {
             var path = RoadNetworkBuilder.ResolveJsonPath(MapId);
             if (string.IsNullOrEmpty(path))
             {
-                Debug.LogError("[Validation] 找不到 xiongan_20.json");
+                Debug.LogError("[Validation] 找不到 xiongan_30.json");
                 return;
             }
             var json = File.ReadAllText(path);
             int roads = CountOccurrences(json, "\"category\": 1") + CountOccurrences(json, "\"category\":1");
             int trafficLights = CountOccurrences(json, "\"category\": 4") + CountOccurrences(json, "\"category\":4");
-            bool hasJ20 = json.Contains("\"J20\"");
+            bool hasJ30 = json.Contains("\"J30\"");
 
             Debug.Log(
-                $"[Validation] xiongan_20.json:\n" +
+                $"[Validation] xiongan_30.json:\n" +
                 $"  道路(Road, cat=1) 数  : {roads}\n" +
                 $"  路口(TrafficLight, cat=4) : {trafficLights}\n" +
-                $"  含J20路口            : {(hasJ20 ? "是" : "否")}\n" +
+                $"  含J30路口            : {(hasJ30 ? "是" : "否")}\n" +
                 $"  文件大小             : {new FileInfo(path).Length:N0} bytes\n" +
                 $"  路径                 : {path}");
         }
@@ -145,7 +145,7 @@ namespace CitySimulation.EditorTools
             {
                 EditorUtility.DisplayDialog(
                     "构建成功",
-                    $"xiongan_20 已加载：\n  道路 {report.roads} 条\n  路口 {report.trafficLights} 个\n范围 {report.boundsMin:F1} ~ {report.boundsMax:F1}",
+                    $"xiongan_30 已加载：\n  道路 {report.roads} 条\n  路口 {report.trafficLights} 个\n范围 {report.boundsMin:F1} ~ {report.boundsMax:F1}",
                     "确定");
             }
         }

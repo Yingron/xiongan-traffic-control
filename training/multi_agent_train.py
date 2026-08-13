@@ -2,12 +2,12 @@
 多路口交通信号控制训练框架（独立DQN + 参数共享 + 共享经验回放）
 
 核心设计：
-- 所有20个路口使用同一个DQN网络（参数共享）
+- 所有30个路口使用同一个DQN网络（参数共享）
 - 每个路口独立决策（22维输入，4维输出）
 - 经验存储在共享的回放缓冲区中
 - 训练时采样不同路口经验混合更新网络
 
-适用场景：雄安新区20路口窄路密网
+适用场景：雄安新区30路口窄路密网
 
 训练流程：
 1. 启动SUMO仿真，获取所有信号灯ID
@@ -331,13 +331,13 @@ class MultiIntersectionEnv:
     - 执行动作，推进仿真，收集奖励
     """
     
-    def __init__(self, sumo_cfg, num_intersections=20, use_gui=False, delta_time=5, max_steps=720):
+    def __init__(self, sumo_cfg, num_intersections=30, use_gui=False, delta_time=5, max_steps=720):
         """
         初始化多路口环境
         
         Args:
             sumo_cfg: SUMO配置文件路径
-            num_intersections: 路口数量（默认20）
+            num_intersections: 路口数量（默认30）
             use_gui: 是否使用GUI模式
             delta_time: 每步仿真时间（默认5秒）
             max_steps: 最大仿真步数（默认720）
@@ -664,7 +664,7 @@ if __name__ == "__main__":
     
     # 配置参数
     SUMO_CFG = "赛题资料/路口仿真案例/sumo工程_路口2/demo_2.sumocfg"
-    NUM_INTERSECTIONS = 1  # demo_2只有1个路口，完整路网时改为20
+    NUM_INTERSECTIONS = 30
     USE_GUI = False
     
     # 训练参数

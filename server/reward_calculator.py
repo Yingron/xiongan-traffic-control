@@ -84,8 +84,13 @@ class RewardCalculator:
         current_actions: dict[str, int],
         previous_actions: dict[str, Optional[int]]
     ) -> tuple[dict[str, float], dict[str, dict], float]:
+<<<<<<< Updated upstream
         """计算所有20个路口的奖励
         
+=======
+        """计算所有30个路口的奖励
+
+>>>>>>> Stashed changes
         Args:
             global_state: 440维全局状态
             current_actions: 当前动作字典

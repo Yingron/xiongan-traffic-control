@@ -16,10 +16,11 @@ except ImportError:
     D3QN = DQN  # 兼容旧版本
 from env.xiongan_env import XionganEnv
 from training.config import ENV_CONFIG, DISTILL_CONFIG, MODEL_DIR
+from configs.constants import FEATURES_PER_INTERSECTION
 
 
 class StudentNetwork(nn.Module):
-    def __init__(self, input_dim=26, output_dim=4, hidden_layers=[64, 64]):
+    def __init__(self, input_dim=FEATURES_PER_INTERSECTION, output_dim=4, hidden_layers=[64, 64]):
         super().__init__()
         layers = []
         prev_dim = input_dim
@@ -55,7 +56,7 @@ def distill_knowledge(args):
         teacher_model = DQN.load(teacher_path)
 
     student_net = StudentNetwork(
-        input_dim=26,
+        input_dim=FEATURES_PER_INTERSECTION,
         output_dim=4,
         hidden_layers=DISTILL_CONFIG['student_hidden_layers']
     )
@@ -131,7 +132,7 @@ def quantize_model(args):
         return
 
     student_net = StudentNetwork(
-        input_dim=26,
+        input_dim=FEATURES_PER_INTERSECTION,
         output_dim=4,
         hidden_layers=DISTILL_CONFIG['student_hidden_layers']
     )

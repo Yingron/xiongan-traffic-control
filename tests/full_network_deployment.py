@@ -1,6 +1,6 @@
 """全路网部署性能测试
 
-同时控制20个交叉口，评估路网级性能指标
+同时控制30个交叉口，评估路网级性能指标
 
 用法:
     python tests/full_network_deployment.py
@@ -19,7 +19,7 @@ from configs.constants import INTERSECTION_ORDER, SUMO_FILES_DIR
 
 
 def run_full_network_with_dqn(model_path: str, episodes: int = 3):
-    """全路网部署测试：同时控制20个路口"""
+    """全路网部署测试：同时控制30个路口"""
     from stable_baselines3 import DQN
     import traci
 

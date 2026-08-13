@@ -28,7 +28,7 @@ pip install opencv-contrib-python numpy
 ## Quick start
 
 ```
-python Assets\Scripts\AI\RoadGen\run_pipeline.py --image "D:\unity\CitySimulation\Assets\Scripts\AI\manual\sample.jpg"  
+python Assets\Scripts\AI\RoadGen\run_pipeline.py --image "Assets\Scripts\AI\manual\sample.jpg"
 ```
 
 Artifacts are saved under history/YYYYMMDD_HHMMSS/.

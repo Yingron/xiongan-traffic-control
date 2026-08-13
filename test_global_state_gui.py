@@ -98,7 +98,7 @@ def main():
     print("📊 获取全局状态 (前44维 = J01 + J02)")
     print("=" * 70)
     
-    state = get_global_state(num_intersections=20)
+    state = get_global_state(num_intersections=30)
     print(f"\n全局状态维度: {state.shape}")
     print(f"数据类型: {state.dtype}")
     

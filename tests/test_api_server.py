@@ -34,6 +34,7 @@ def test_health_reports_local_sumo(client: TestClient) -> None:
 
     assert response.status_code == 200
     assert response.json()["sumo_available"] is True
+    assert response.json()["sumo_executable"]
     assert response.json()["active_session_id"] is None
 
 

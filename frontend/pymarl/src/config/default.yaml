@@ -7,6 +7,7 @@ env: "unity_tcp" # Environment name
 env_args:
   host: "127.0.0.1" # Unity TCP server host
   port: 5000 # Unity TCP server port
+  map_id: "xiongan_30" # Formal 30-intersection Unity map loaded on every reset
   timeout: 60.0 # Unity TCP socket timeout in seconds
   action_dims: [5, 2] # Intersection agent heads: vehicle next-hop and binary signal switch
   simulate_packet_loss: False # Enable explicitly for distance-aware wireless-delay evaluation
