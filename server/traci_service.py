@@ -8,13 +8,11 @@ from pathlib import Path
 from typing import Any, Optional
 import numpy as np
 
-from configs.constants import (
-    ACTION_NAMES,
-    FEATURES_PER_INTERSECTION,
-    INTERSECTION_ORDER,
-    MIN_GREEN_SECONDS,
-    STATE_DIMENSION,
-)
+INTERSECTION_ORDER = tuple(f"J{i:02d}" for i in range(1, 31))
+STATE_DIMENSION = 660
+FEATURES_PER_INTERSECTION = 22
+ACTION_NAMES = ("NS_Straight", "NS_Left", "EW_Straight", "EW_Left")
+MIN_GREEN_SECONDS = 15
 
 
 class TraCIService:

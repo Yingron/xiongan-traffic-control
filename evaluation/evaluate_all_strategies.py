@@ -34,6 +34,8 @@ import matplotlib.pyplot as plt
 from env.single_intersection_env import SingleIntersectionEnv
 from evaluation.metrics_collector import MetricsCollector, get_approach_edges
 from configs.constants import MIN_GREEN_SECONDS
+from training.config import SCENARIO_CONFIG
+from baselines.fixed_time import make_real_fixed_time_action
 
 
 # ============================================================
@@ -46,6 +48,7 @@ def run_strategy_with_metrics(
     intersection_id: str = "J01",
     max_steps: int = 720,
     delta_time: int = 5,
+    sumo_cfg_path: str | Path | None = None,
 ) -> Dict:
     """运行策略并采集多维度指标
 
@@ -56,6 +59,7 @@ def run_strategy_with_metrics(
         intersection_id: 路口ID
         max_steps: 最大仿真步数
         delta_time: 每步仿真秒数
+        sumo_cfg_path: 场景 sumocfg（不传则使用 env 默认场景）
 
     Returns:
         汇总指标字典
@@ -65,6 +69,7 @@ def run_strategy_with_metrics(
     for ep in range(episodes):
         env = SingleIntersectionEnv(
             intersection_id=intersection_id,
+            sumo_cfg_path=sumo_cfg_path,
             max_steps=max_steps,
             delta_time=delta_time,
         )
@@ -130,8 +135,14 @@ def random_action(obs, env, step):
     return env.action_space.sample()
 
 
-def fixed_time_action(obs, env, step):
-    return (step // 5) % 4
+def make_fixed_time_action(junction_id: str, period: str = "offpeak"):
+    """真实定周期基线：读取 data/timing_plans.json 的 {junction_id}/{period} 配时，
+    在首个 env 上安装真实信号程序后返回哨兵动作 FIXED_TIME_CONTROL（见 baselines/fixed_time.py）。
+
+    替代旧的假基线 fixed_time_action = (step//5)%4（20s 周期每相位 5s，比 MIN_GREEN 15s 还短）。
+    """
+    action_fn, controller = make_real_fixed_time_action(junction_id, period)
+    return action_fn, controller
 
 
 def max_pressure_action(obs, env, step):
@@ -145,12 +156,20 @@ def max_pressure_action(obs, env, step):
 
 
 def make_dqn_action(model_path: str):
-    """创建DQN策略函数"""
+    """创建DQN策略函数
+
+    兼容两种观测维度：新模型输入 26 维（22 状态 + 4 掩码），旧模型输入 22 维。
+    按模型自身 observation_space 的维度裁剪 env 观测，新旧模型可共用同一评估管线。
+    """
     from stable_baselines3 import DQN
     model = DQN.load(str(model_path))
+    obs_dim = int(np.prod(model.observation_space.shape))
 
     def dqn_action(obs, env, step):
-        action, _ = model.predict(obs, deterministic=True)
+        obs_arr = np.asarray(obs, dtype=np.float32)
+        if obs_arr.shape[-1] > obs_dim:
+            obs_arr = obs_arr[..., :obs_dim]
+        action, _ = model.predict(obs_arr, deterministic=True)
         return int(action)
 
     return dqn_action
@@ -167,7 +186,20 @@ def main():
     parser.add_argument("--episodes", type=int, default=5)
     parser.add_argument("--intersection", type=str, default="J01")
     parser.add_argument("--max-steps", type=int, default=720)
+    parser.add_argument("--scenario", type=str, default="real_offpeak",
+                        choices=list(SCENARIO_CONFIG.keys()),
+                        help="评估场景 sumocfg（默认真实平峰，来自 SCENARIO_CONFIG）")
+    parser.add_argument("--period", type=str, default=None,
+                        choices=["peak", "offpeak", "evening"],
+                        help="Fixed-Time 基线使用的真实配时时段 (data/timing_plans.json)，"
+                             "默认与 --scenario 对应（real_peak→peak 等）")
     args = parser.parse_args()
+
+    # 场景 sumocfg 与 Fixed-Time 时段对齐：真实场景必须搭配对应的真实配时
+    scenario_cfg = SCENARIO_CONFIG[args.scenario]["sumo_cfg"]
+    default_period = {"real_peak": "peak", "real_offpeak": "offpeak", "real_evening": "evening"}.get(args.scenario, "offpeak")
+    period = args.period or default_period
+    args.period = period
 
     save_dir = PROJECT_ROOT / "models" / "dqn"
     save_dir.mkdir(parents=True, exist_ok=True)
@@ -175,11 +207,13 @@ def main():
     print("=" * 70, flush=True)
     print("Multi-Dimension Strategy Evaluation", flush=True)
     print("Random vs Fixed-Time vs Max-Pressure vs DQN", flush=True)
+    print(f"Scenario: {args.scenario}  Fixed-Time period: {args.period}", flush=True)
     print("=" * 70, flush=True)
 
+    fixed_time_action, ft_controller = make_fixed_time_action(args.intersection, args.period)
     strategies = [
         ("Random", random_action),
-        ("Fixed-Time", fixed_time_action),
+        (f"Fixed-Time({args.period})", fixed_time_action),
         ("Max-Pressure", max_pressure_action),
     ]
 
@@ -189,6 +223,16 @@ def main():
         strategies.append((f"DQN({model_path.stem})", make_dqn_action(str(model_path))))
     else:
         print(f"  Warning: DQN model not found at {model_path}", flush=True)
+
+    # 打印真实定周期基线摘要（评审要求：基线必须来自 timing_plans.json 的真实配时）
+    ft_summary = ft_controller.plan_summary
+    if ft_summary:
+        plan_phases = " + ".join(
+            f"{p['name']}(绿{p['green']}s/黄{p['yellow']}s/红{p['red']}s)"
+            for p in ft_summary["phases"]
+        )
+        print(f"\n  Fixed-Time({args.period}) 真实配时: {args.intersection} 周期={ft_summary['cycle']}s")
+        print(f"    {plan_phases}", flush=True)
 
     all_results = []
 
@@ -201,6 +245,7 @@ def main():
             episodes=args.episodes,
             intersection_id=args.intersection,
             max_steps=args.max_steps,
+            sumo_cfg_path=scenario_cfg,
         )
         elapsed = time.time() - t0
 

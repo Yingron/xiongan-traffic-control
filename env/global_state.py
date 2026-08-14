@@ -14,6 +14,9 @@ from configs.constants import (
     STATE_DIMENSION,
     DIRECTIONS,
     DOCS_DIR,
+    INTERSECTION_TEMPLATES,
+    ACTION_MASK_TEMPLATES,
+    ACTION_MASK_QUEUE_THRESHOLD,
 )
 
 DEBUG = False
@@ -210,6 +213,72 @@ def _get_time_features(traci: Any, sim_start_hour: float = 7.0) -> tuple[float, 
 def _normalize(value: float, max_val: float) -> float:
     """归一化到[0, 1]范围"""
     return min(max(value / max_val, 0.0), 1.0)
+
+
+def _intersection_template(junction: str) -> str | None:
+    """返回路口所属 rl4 模板（无分组时返回 None）。"""
+    for tpl, junctions in INTERSECTION_TEMPLATES.items():
+        if junction in junctions:
+            return tpl
+    return None
+
+
+def compute_action_mask(
+    traci: Any,
+    tl_id: str,
+    rl4_states: list[str] | None = None,
+) -> np.ndarray:
+    """按"相位所服务链路是否有排队车辆"计算 4 维动作掩码（0=无效，1=有效）。
+
+    仅对 ACTION_MASK_TEMPLATES（模板C）启用需求门控：遍历 rl4 程序的每个相位，
+    统计其绿灯链路（状态字符为 G/g 的受控链路）上的 halting 车辆数，
+    低于 ACTION_MASK_QUEUE_THRESHOLD 的相位视为"无需求"被掩蔽。
+    全部相位都无需求时（路口空闲）返回全 1，避免死锁。
+    其他模板返回全 1（不掩码）。
+
+    Args:
+        traci: TraCI 连接对象
+        tl_id: 信号灯 ID
+        rl4_states: 预取的 rl4 相位状态字符串（训练 env 在 reset 时缓存，避免每步查询）
+
+    Returns:
+        长度 4 的 float32 掩码向量
+    """
+    if _intersection_template(tl_id) not in ACTION_MASK_TEMPLATES:
+        return np.ones(4, dtype=np.float32)
+
+    if rl4_states is None:
+        logic = next(
+            (candidate for candidate in traci.trafficlight.getAllProgramLogics(tl_id) if candidate.programID == "rl4"),
+            None,
+        )
+        if logic is None or len(logic.phases) != 4:
+            return np.ones(4, dtype=np.float32)
+        rl4_states = [phase.state for phase in logic.phases]
+
+    lanes = traci.trafficlight.getControlledLanes(tl_id)
+    halting = [float(traci.lane.getLastStepHaltingNumber(lane)) for lane in lanes]
+
+    mask = np.zeros(4, dtype=np.float32)
+    for action, state_str in enumerate(rl4_states):
+        green_links = [i for i, ch in enumerate(state_str) if ch in "Gg" and i < len(lanes)]
+        if not green_links:
+            continue
+        demand = sum(halting[i] for i in green_links)
+        if demand >= ACTION_MASK_QUEUE_THRESHOLD:
+            mask[action] = 1.0
+    if mask.sum() == 0.0:
+        # 路口空闲：兜底全部有效，避免策略无动作可选
+        mask[:] = 1.0
+    return mask
+
+
+def get_action_masks(
+    traci: Any,
+    junctions: tuple[str, ...] = INTERSECTION_ORDER,
+) -> np.ndarray:
+    """获取全部路口动作掩码 (len(junctions), 4)。API 推理与全局控制使用。"""
+    return np.stack([compute_action_mask(traci, tl_id) for tl_id in junctions], axis=0)
 
 
 def parse_state(state: np.ndarray) -> dict:

@@ -201,14 +201,27 @@ class VisualizationServer:
         return get_global_state(num_intersections=len(INTERSECTION_ORDER))
 
     def _get_dqn_actions(self, state: np.ndarray) -> dict[str, int]:
-        """使用 DQN 模型推理得到 30 个路口的动作"""
+        """使用 DQN 模型推理得到 30 个路口的动作
+
+        兼容 26 维掩码模型：按模型观测维度为每个路口追加需求门控掩码
+        （22 状态 + 4 掩码，见 env/global_state.get_action_masks）。
+        """
         if self._model is None:
             return dict(self._current_actions)
+
+        obs_dim = int(np.prod(self._model.observation_space.shape))
+        masks = None
+        if obs_dim > FEATURES_PER_INTERSECTION and self._traci is not None:
+            from env.global_state import get_action_masks
+
+            masks = get_action_masks(self._traci, INTERSECTION_ORDER)
 
         actions: dict[str, int] = {}
         for idx, tl_id in enumerate(INTERSECTION_ORDER):
             local_state = state[idx * FEATURES_PER_INTERSECTION:(idx + 1) * FEATURES_PER_INTERSECTION]
-            action, _ = self._model.predict(local_state, deterministic=True)
+            if masks is not None:
+                local_state = np.concatenate([local_state, masks[idx]])
+            action, _ = self._model.predict(local_state.astype(np.float32), deterministic=True)
             actions[tl_id] = int(action)
         return actions
 

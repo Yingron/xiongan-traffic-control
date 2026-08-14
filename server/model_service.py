@@ -42,8 +42,8 @@ class ModelServiceError(Exception):
 def split_global_state(
     state: np.ndarray | list[float],
     *,
-    intersection_count: int = INTERSECTION_COUNT,
-    features_per_intersection: int = FEATURES_PER_INTERSECTION,
+    intersection_count: int = 30,
+    features_per_intersection: int = 22,
 ) -> np.ndarray:
     """Validate and split J01..J30 state into a float32 batch of local states."""
     array = np.asarray(state, dtype=np.float32)
@@ -96,13 +96,28 @@ class SB3ModelService:
         intersection_order: tuple[str, ...],
         *,
         deterministic: bool,
+        action_masks: np.ndarray | None = None,
     ) -> dict[str, Any]:
         entry = self.registry_entry(model_id)
+        # 公开状态契约恒为 22 维/路口（660 总维）；掩码模型（observation_dimension=26）
+        # 在推理侧追加 4 维需求门控掩码，不改变对外状态契约。
         observations = split_global_state(
             global_state,
             intersection_count=len(intersection_order),
-            features_per_intersection=int(entry.get("observation_dimension", 22)),
+            features_per_intersection=22,
         )
+        if action_masks is not None:
+            # 掩码模型（observation_dimension=26）：为每个路口追加 4 维需求门控掩码
+            masks = np.asarray(action_masks, dtype=np.float32)
+            expected_masks = (len(intersection_order), int(entry.get("action_count", 4)))
+            if masks.shape != expected_masks:
+                raise ModelServiceError(
+                    422,
+                    "MODEL_CONTRACT_MISMATCH",
+                    "Action masks do not match the registered observation contract.",
+                    {"expected_mask_shape": list(expected_masks), "actual_mask_shape": list(masks.shape)},
+                )
+            observations = np.concatenate([observations, masks], axis=1)
         model = self._get_or_load(model_id, entry)
 
         started_ns = time.perf_counter_ns()
@@ -211,7 +226,7 @@ class SB3ModelService:
             raise ModelServiceError(
                 422,
                 "MODEL_CONTRACT_MISMATCH",
-                "The delivered model spaces do not match the registered 22-input/4-action contract.",
+                "The delivered model spaces do not match the registered observation/action contract.",
                 {
                     "model_id": model_id,
                     "expected_observation_shape": [expected_observation],

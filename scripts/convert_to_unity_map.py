@@ -7,16 +7,14 @@
 - vehicleType：0=普通车辆, 1=应急车辆
 """
 import json
+import os
 import re
 import uuid
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-UNITY_MAP_DIR = PROJECT_ROOT / "frontend" / "CitySimulation" / "Assets" / "Scripts" / "Maps"
-
 def load_junction_positions():
     """从 xiongan_30.nod.xml 读取信号路口坐标 {jid: (x, y)}"""
-    nod = PROJECT_ROOT / "sumo_files" / "xiongan_30.nod.xml"
+    nod = Path(__file__).resolve().parents[1] / "sumo_files" / "xiongan_30.nod.xml"
     text = nod.read_text(encoding="utf-8")
     return {
         m.group(1): (float(m.group(2)), float(m.group(3)))
@@ -263,7 +261,17 @@ def main():
     # 生成Unity地图
     unity_map = generate_unity_map()
     
-    write_unity_map(unity_map)
+    # 保存路径
+    output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+                              'ChallengeCup-main', 'CitySimulation', 'Assets', 'Scripts', 'Maps')
+    os.makedirs(output_dir, exist_ok=True)
+    
+    output_path = os.path.join(output_dir, 'xiongan_30.json')
+    
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(unity_map, f, indent=2)
+    
+    print(f"\n✅ Unity地图文件已生成: {output_path}")
     
     # 在Unity中加载方法：
     print("\n在Unity中加载地图：")

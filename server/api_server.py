@@ -42,6 +42,7 @@ from configs.constants import (
 )
 
 API_PREFIX = "/api/v1"
+STATE_LAYOUT_VERSION = "v1-30x22"
 REWARD_VERSION = "v3"
 DEFAULT_CONFIG_PATH = DEFAULT_SUMO_CONFIG
 
@@ -499,6 +500,15 @@ class TraCISessionManager:
             session.last_state = state
             return session.transition_id, state.copy()
 
+    async def inference_masks(self, session_id: str) -> np.ndarray:
+        """返回 30×4 需求门控动作掩码（与 state 同一仿真时刻，供掩码模型推理）。"""
+        from env.global_state import get_action_masks
+
+        async with self.lock:
+            self._require_session(session_id)
+            raw_ids = self._validate_intersections(self._traci())
+            return get_action_masks(self._traci(), tuple(raw_ids))
+
     async def close(self) -> None:
         async with self.lock:
             if self.session is not None:
@@ -661,12 +671,14 @@ async def get_rewards(
 @app.post(f"{API_PREFIX}/model/predict")
 async def predict_model_action(request: ModelPredictRequest) -> dict[str, Any]:
     transition_id, state = await manager.inference_state(request.session_id)
+    masks = await manager.inference_masks(request.session_id)
     try:
         prediction = model_service.predict(
             request.model_id,
             state,
             INTERSECTION_ORDER,
             deterministic=request.deterministic,
+            action_masks=masks,
         )
     except ModelServiceError as error:
         raise ApiError(error.status_code, error.code, error.message, error.details) from error

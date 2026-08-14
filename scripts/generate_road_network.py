@@ -7,13 +7,12 @@ Traffic demand is maintained separately by ``generate_real_demand_scenarios``.
 """
 from __future__ import annotations
 
-import argparse
-import os
-import shutil
-import subprocess
-import sys
-import xml.etree.ElementTree as ET
-from pathlib import Path
+> ⚠️ 已废弃：本脚本生成的是旧版 20 路口（5×4）路网。当前项目以 30 路口
+> （6×5，J01–J30）路网为准，路网文件为仓库内已提交的 sumo_files/xiongan_30.*
+> 系列（nod/edg/net/rou/sumocfg 均保留）。运行本脚本会重建已删除的
+> xiongan_20.* 旧文件，仅保留作历史参考。
+
+使用netconvert工具配合nod.xml和edg.xml文件生成路网，避免手动编写复杂的net.xml
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SUMO_FILES_DIR = PROJECT_ROOT / "sumo_files"

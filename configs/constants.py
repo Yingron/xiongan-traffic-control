@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 
 INTERSECTION_ORDER = tuple(f"J{i:02d}" for i in range(1, 31))
-INTERSECTION_COUNT = len(INTERSECTION_ORDER)
+STATE_DIMENSION = 660
 FEATURES_PER_INTERSECTION = 22
 STATE_DIMENSION = INTERSECTION_COUNT * FEATURES_PER_INTERSECTION
 ACTION_COUNT_PER_INTERSECTION = 4
@@ -36,6 +36,18 @@ TEMPLATE_WEIGHTS: dict[str, float] = {
     "D": 0.10,
     "E": 0.10,
 }
+
+# ========== 需求门控动作掩码（模板C专用）==========
+# 模板C（J05/J07/J10，T型路口）的 4 个相位各自只服务单一流向：
+#   action_0='rrrrggrgrrrr' 南向右转、action_1='rrrrrrGrrrrr' 南向左转、
+#   action_2='GGrgrrrrgGGg' 东西向主相位、action_3='rrGrrrrrrrrr' 东向左转。
+# 共享策略在 1M→2M 续训后漂移：J10 上 action_0/1 合计 90%、东西向主相位仅 4%，
+# 排队爆至 9155s（见 memories/2m-anticollapse-eval）。分层采样救不了梯度幅值失衡，
+# 故对模板C施加硬掩码：相位所服务链路无排队车辆（halting ≥ 阈值）时该动作无效。
+# 掩码由 env/global_state.compute_action_mask 按 rl4 相位状态的绿灯链路动态计算，
+# 以最后 4 维追加进观测（22→26 维，公开全局状态契约 660 维不变）。
+ACTION_MASK_TEMPLATES: tuple[str, ...] = ("C",)
+ACTION_MASK_QUEUE_THRESHOLD: int = 1  # 相位绿灯链路 halting 车辆数达到该值才视为"有需求"
 
 # 真实定周期基线专用哨兵动作：
 # 值为 -1，表示"不干预信号"——由 baselines/fixed_time.py 在 env 上安装的真实配时
