@@ -156,12 +156,20 @@ def max_pressure_action(obs, env, step):
 
 
 def make_dqn_action(model_path: str):
-    """创建DQN策略函数"""
+    """创建DQN策略函数
+
+    兼容两种观测维度：新模型输入 26 维（22 状态 + 4 掩码），旧模型输入 22 维。
+    按模型自身 observation_space 的维度裁剪 env 观测，新旧模型可共用同一评估管线。
+    """
     from stable_baselines3 import DQN
     model = DQN.load(str(model_path))
+    obs_dim = int(np.prod(model.observation_space.shape))
 
     def dqn_action(obs, env, step):
-        action, _ = model.predict(obs, deterministic=True)
+        obs_arr = np.asarray(obs, dtype=np.float32)
+        if obs_arr.shape[-1] > obs_dim:
+            obs_arr = obs_arr[..., :obs_dim]
+        action, _ = model.predict(obs_arr, deterministic=True)
         return int(action)
 
     return dqn_action

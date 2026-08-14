@@ -99,12 +99,20 @@ def make_fixed_time_action(intersection_id: str, period: str):
 
 
 def make_dqn_action(model_path: str):
-    """创建 DQN 策略函数"""
+    """创建 DQN 策略函数
+
+    兼容新旧观测维度：新模型 26 维（22 状态 + 4 掩码）、旧模型 22 维，
+    按模型自身 observation_space 裁剪 env 观测。
+    """
     from stable_baselines3 import DQN
     model = DQN.load(str(model_path))
+    obs_dim = int(np.prod(model.observation_space.shape))
 
     def dqn_action(obs, env, step):
-        action, _ = model.predict(obs, deterministic=True)
+        obs_arr = np.asarray(obs, dtype=np.float32)
+        if obs_arr.shape[-1] > obs_dim:
+            obs_arr = obs_arr[..., :obs_dim]
+        action, _ = model.predict(obs_arr, deterministic=True)
         return int(action)
 
     return dqn_action

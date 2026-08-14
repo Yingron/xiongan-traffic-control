@@ -265,6 +265,8 @@ def train_dqn(
     from stable_baselines3.common.monitor import Monitor
     import traci
 
+    from training.masked_policy import MaskableDQN, MaskedDQNPolicy
+
     # ========== 解析场景配置 ==========
     sumo_cfg_path = None
     scenario_label = "default"
@@ -456,7 +458,7 @@ def train_dqn(
         if not Path(resume_path).exists():
             raise FileNotFoundError(f"恢复模型不存在: {resume_path}")
         print(f"[INFO] 继续训练模式: 加载模型 {resume_path}", flush=True)
-        model = DQN.load(resume_path, env=env, device=device)
+        model = MaskableDQN.load(resume_path, env=env, device=device)
         print(
             f"[INFO] 已恢复: num_timesteps={model.num_timesteps:,}, "
             f"lr={model.learning_rate}, batch_size={model.batch_size}, "
@@ -475,8 +477,8 @@ def train_dqn(
             policy_kw["double_q"] = True
 
         try:
-            model = DQN(
-                policy="MlpPolicy",
+            model = MaskableDQN(
+                policy=MaskedDQNPolicy,
                 env=env,
                 learning_rate=lr,
                 buffer_size=bf,
@@ -505,8 +507,8 @@ def train_dqn(
             )
             dueling = False
             double_q = False
-            model = DQN(
-                policy="MlpPolicy",
+            model = MaskableDQN(
+                policy=MaskedDQNPolicy,
                 env=env,
                 learning_rate=lr,
                 buffer_size=bf,
