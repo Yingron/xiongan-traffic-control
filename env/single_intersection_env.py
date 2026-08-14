@@ -26,7 +26,7 @@ from configs.constants import (
     TEMPLATE_WEIGHTS,
     YELLOW_TRANSITION_SECONDS,
 )
-from env.global_state import _extract_intersection_state
+from env.global_state import _extract_intersection_state, compute_action_mask
 from env.reward_functions import compute_reward
 
 try:
@@ -84,7 +84,11 @@ class SingleIntersectionEnv(_EnvBase):
         self.restart_every = restart_every
         self._episode_count = 0
         self.action_space = spaces.Discrete(ACTION_COUNT_PER_INTERSECTION)
-        self.observation_space = spaces.Box(low=-1.0, high=1.0, shape=(FEATURES_PER_INTERSECTION,), dtype=np.float32)
+        # 观测 = 22 维局部状态 + 4 维动作掩码（模板C 需求门控，其余模板全 1）。
+        # 公开的全局状态契约（660=30×22）不受影响，掩码仅在单路口 env 观测与 API 推理侧追加。
+        self._obs_dim = FEATURES_PER_INTERSECTION + ACTION_COUNT_PER_INTERSECTION
+        self.observation_space = spaces.Box(low=-1.0, high=1.0, shape=(self._obs_dim,), dtype=np.float32)
+        self._rl4_states: list[str] = []
         self._traci: Any | None = None
         self._sumo_proc: Any | None = None
         self._sumo_err_file: Any | None = None
@@ -195,6 +199,12 @@ class SingleIntersectionEnv(_EnvBase):
         traci = traci_conn  # 兼容后续引用绑定
         self._traci = traci
         traci.trafficlight.setProgram(self.intersection_id, "rl4")
+        # 缓存 rl4 相位状态字符串（动作掩码计算用，避免每步 getAllProgramLogics）
+        logic = next(
+            (candidate for candidate in traci.trafficlight.getAllProgramLogics(self.intersection_id) if candidate.programID == "rl4"),
+            None,
+        )
+        self._rl4_states = [phase.state for phase in logic.phases] if logic is not None else []
         self._previous_action = int(traci.trafficlight.getPhase(self.intersection_id))
         self._phase_changed_at = float(traci.simulation.getTime())
         self._step_count = 0
@@ -206,11 +216,14 @@ class SingleIntersectionEnv(_EnvBase):
     def _state(self) -> np.ndarray:
         assert self._traci is not None
         # 传入相位开始时刻，使 state[20] 编码"相位已持续秒数"（见 global_state.py）
-        return _extract_intersection_state(
+        local = _extract_intersection_state(
             self._traci,
             self.intersection_id,
             phase_changed_at=getattr(self, "_phase_changed_at", None),
         )
+        # 追加 4 维需求门控动作掩码（模板C 专用；其他模板全 1），见 configs.constants.ACTION_MASK_TEMPLATES
+        mask = compute_action_mask(self._traci, self.intersection_id, rl4_states=self._rl4_states or None)
+        return np.concatenate([local, mask]).astype(np.float32)
 
     def _queue_length(self) -> float:
         assert self._traci is not None

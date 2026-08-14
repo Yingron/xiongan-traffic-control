@@ -45,6 +45,11 @@ def check_templates(root):
             drift.append(f'{tpl}: 常量{len(jids)}个 {sorted(set(jids)-actual)} vs 路网实际 {sorted(actual)}')
     if drift:
         fail('INTERSECTION_TEMPLATES 与路网 rl4 相位不一致: ' + '; '.join(drift))
+    # 动作掩码配置校验：ACTION_MASK_TEMPLATES 必须是已知模板
+    from configs.constants import ACTION_MASK_TEMPLATES
+    unknown = [tpl for tpl in ACTION_MASK_TEMPLATES if tpl not in INTERSECTION_TEMPLATES]
+    if unknown:
+        fail(f'ACTION_MASK_TEMPLATES 含未知模板: {sorted(unknown)}')
     return {tpl: len(jids) for tpl, jids in sorted(INTERSECTION_TEMPLATES.items())}
 
 def main():
