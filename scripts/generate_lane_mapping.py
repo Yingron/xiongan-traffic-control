@@ -59,7 +59,7 @@ def main() -> None:
 
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     OUT_FILE.write_text(json.dumps(mapping, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"✅ {OUT_FILE.name}: {len(mapping)} 个路口")
+    print(f"[OK] {OUT_FILE.name}: {len(mapping)} intersections")
     for j in ["J01", "J02", "J05", "J21", "J30"]:
         print(f"   {j}: {mapping[j]}")
 

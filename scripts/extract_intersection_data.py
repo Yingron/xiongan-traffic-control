@@ -1,5 +1,5 @@
 """
-从Excel文件提取20个路口的流量和配时数据（兼容多种格式）
+从20份赛题原始Excel提取流量和配时数据（J21–J30由30路口需求脚本镜像扩展）
 """
 import os
 import json
@@ -209,7 +209,7 @@ def main():
     all_data = {}
     
     print("=" * 60)
-    print("🚀 开始提取20个路口的数据")
+    print("开始提取20份赛题原始路口数据（30路口扩展由 generate_real_demand_scenarios.py 完成）")
     print("=" * 60)
     
     for i in range(1, 21):

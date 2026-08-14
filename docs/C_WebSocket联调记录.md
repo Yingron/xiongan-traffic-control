@@ -1,8 +1,8 @@
-# C 同学 20 路口 WebSocket 联调记录
+# C 同学 30 路口 WebSocket 联调记录
 
 ## 1. 交付范围
 
-本次将原单路口 WebSocket 原型升级为 20 路口服务。WebSocket 集成在现有
+当前 WebSocket 服务已迁移为 30 路口契约。WebSocket 集成在现有
 FastAPI 服务中，与 REST API 共用同一个 `TraCISessionManager`、TraCI 连接、
 会话锁和 `transition_id`。
 
@@ -12,16 +12,16 @@ FastAPI 服务中，与 REST API 共用同一个 `TraCISessionManager`、TraCI �
 ws://<host>:8000/api/v1/ws
 ```
 
-本次交付不包含 DQN 模型加载或预测。服务只执行调用方明确提交的 J01–J20
+本次交付不包含 DQN 模型加载或预测。服务只执行调用方明确提交的 J01–J30
 动作，不生成随机动作、固定配时替代动作或模拟 DQN 结果。
 
 ## 2. 已实现功能
 
 - 按 `session_id` 订阅 `state`、`reward` 通道；
 - 首次订阅立即返回当前真实 SUMO 快照；
-- 状态严格按 J01–J20 排列，总长度 440，每路口 22 维；
-- 奖励包含 J01–J20 共 20 项及 `global_reward`；
-- WebSocket 可提交一次完整的 20 路口动作；
+- 状态严格按 J01–J30 排列，总长度 660，每路口 22 维；
+- 奖励包含 J01–J30 共 30 项及 `global_reward`；
+- WebSocket 可提交一次完整的 30 路口动作；
 - REST 执行动作后向相同会话的 WebSocket 订阅者广播新快照；
 - REST 停止或重置会话时推送相应事件并取消旧会话订阅；
 - 支持 `ping`/`pong` 和服务端心跳；
@@ -46,16 +46,16 @@ ws://<host>:8000/api/v1/ws
   "request_id": "unity-001",
   "session_id": "<session_id>",
   "expected_transition_id": 0,
-  "actions": {"J01": 0, "J02": 0, "...": 0, "J20": 0},
+  "actions": {"J01": 0, "J02": 0, "...": 0, "J30": 0},
   "step_seconds": 5
 }
 ```
 
-实际报文中必须列出 J01–J20，不能使用上例的 `"..."` 占位字段。
+实际报文中必须列出 J01–J30，不能使用上例的 `"..."` 占位字段。
 
 ## 4. 验证结果
 
-执行环境：本地 SUMO 1.27.1、FastAPI TestClient、真实 20 路口路网。
+执行环境：本地 SUMO 1.27.1、FastAPI TestClient、真实 30 路口路网。
 
 ```powershell
 & D:\ChallengeCup2026\.venv-xiongan-c\python.exe -m pytest tests/test_websocket_server.py -q
@@ -63,8 +63,8 @@ ws://<host>:8000/api/v1/ws
 
 验证内容：
 
-- 440 维状态和 20 个有序路口；
-- 20 项奖励；
+- 660 维状态和 30 个有序路口；
+- 30 项奖励；
 - WebSocket 动作结果和后续状态推送；
 - 非法订阅及不完整动作错误；
 - REST 动作完成后 WebSocket 收到相同 `transition_id` 的真实 SUMO 状态。
@@ -86,5 +86,5 @@ ws://<host>:8000/api/v1/ws
 - stable-baselines3/PyTorch 运行时版本；
 - 模型预测动作和推理延迟。
 
-A 完成交付后，C 再实现 `/api/v1/model/predict`，其输出可作为显式的 20 路口
+A 完成交付后，C 再完成 `/api/v1/model/predict` 真实权重验收，其输出可作为显式的 30 路口
 动作提交到当前 WebSocket/REST 动作接口。本次 WebSocket 协议无需依赖该模型。

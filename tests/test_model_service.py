@@ -16,18 +16,19 @@ os.environ.setdefault("SUMO_HOME", str(SUMO_HOME))
 
 from server.api_server import app
 from server.model_service import ModelServiceError, SB3ModelService, split_global_state
+from configs.constants import INTERSECTION_ORDER, STATE_DIMENSION
 
 
 MODEL_ID = "shared-dqn-generalization-100k-v1"
 REGISTRY_PATH = PROJECT_ROOT / "configs" / "model_registry.json"
 
 
-def test_split_global_state_preserves_twenty_ordered_slices() -> None:
-    state = np.arange(440, dtype=np.float32)
+def test_split_global_state_preserves_thirty_ordered_slices() -> None:
+    state = np.arange(STATE_DIMENSION, dtype=np.float32)
 
     observations = split_global_state(state)
 
-    assert observations.shape == (20, 22)
+    assert observations.shape == (30, 22)
     assert observations.dtype == np.float32
     assert observations[0].tolist() == state[:22].tolist()
     assert observations[-1].tolist() == state[-22:].tolist()
@@ -35,7 +36,7 @@ def test_split_global_state_preserves_twenty_ordered_slices() -> None:
 
 @pytest.mark.parametrize(
     "state",
-    [np.zeros(439, dtype=np.float32), np.zeros((20, 22), dtype=np.float32)],
+    [np.zeros(STATE_DIMENSION - 1, dtype=np.float32), np.zeros((30, 22), dtype=np.float32)],
 )
 def test_split_global_state_rejects_non_contract_shapes(state: np.ndarray) -> None:
     with pytest.raises(ModelServiceError) as captured:
@@ -56,8 +57,8 @@ def test_registry_distinguishes_unknown_and_waiting_models() -> None:
     with pytest.raises(ModelServiceError) as waiting:
         service.predict(
             MODEL_ID,
-            np.zeros(440, dtype=np.float32),
-            tuple(f"J{index:02d}" for index in range(1, 21)),
+            np.zeros(STATE_DIMENSION, dtype=np.float32),
+            INTERSECTION_ORDER,
             deterministic=True,
         )
     assert waiting.value.status_code == 503

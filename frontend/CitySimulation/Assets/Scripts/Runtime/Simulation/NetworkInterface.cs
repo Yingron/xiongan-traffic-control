@@ -349,10 +349,10 @@ namespace CitySimulation.Runtime.Simulation
 
         ResponseEnvelope HandleReset(RequestEnvelope req)
         {
-            // string mapId = string.IsNullOrEmpty(req.map_id) ? "default" : req.map_id;
+            string mapId = string.IsNullOrEmpty(req.map_id) ? "xiongan_30" : req.map_id;
             int resetSeed = req.seed != 0 ? req.seed : backendSeed + resetCount;
             resetCount++;
-            functionInterface.Reset(randomizeTargetPoints, resetSeed);
+            functionInterface.Reset(mapId, randomizeTargetPoints, resetSeed);
 
             return BuildTransitionResponse(req.request_id, reward: 0f);
         }

@@ -156,7 +156,7 @@ def compute_rewards(
     same_action_counts: dict[str, int] | None = None,
     **kwargs,
 ) -> tuple[dict[str, float], dict[str, dict], float]:
-    """计算所有20个路口的奖励
+    """计算所有30个路口的奖励
 
     Args:
         global_state: 660维全局状态

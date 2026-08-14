@@ -10,7 +10,7 @@ namespace CitySimulation.GameObjects
     [Serializable]
     public class NewMapSettings
     {
-        public string mapId = "default";
+        public string mapId = "xiongan_30";
     }
 
     [Serializable]
@@ -26,7 +26,7 @@ namespace CitySimulation.GameObjects
     {
         private readonly ObjectManager _objectManager;
         private readonly string _mapsFolder;
-        private string _currentMapId = "default";
+        private string _currentMapId = "xiongan_30";
 
         public MapManager(ObjectManager objectManager = null)
         {
@@ -37,14 +37,14 @@ namespace CitySimulation.GameObjects
 
         public void CreateNewMap(NewMapSettings settings)
         {
-            _currentMapId = settings?.mapId ?? "default";
+            _currentMapId = string.IsNullOrEmpty(settings?.mapId) ? "xiongan_30" : settings.mapId;
             // Clear runtime entities
             _objectManager.ImportAll(new ObjectManager.MapSnapshot());
         }
 
         public void SetCurrentMapId(string mapId)
         {
-            _currentMapId = string.IsNullOrEmpty(mapId) ? "default" : mapId;
+            _currentMapId = string.IsNullOrEmpty(mapId) ? "xiongan_30" : mapId;
         }
 
         public ObjectManager.MapSnapshot LoadMap()
@@ -92,14 +92,14 @@ namespace CitySimulation.GameObjects
 
         private string GetPath(string mapId)
         {
-            var safeId = string.IsNullOrEmpty(mapId) ? "default" : mapId;
+            var safeId = string.IsNullOrEmpty(mapId) ? "xiongan_30" : mapId;
             return Path.Combine(_mapsFolder, safeId + ".json");
         }
 
         private static string ResolveWorkspaceMapsFolder()
         {
             var primary = Path.Combine(Application.dataPath, "Scripts", "Maps");
-            if (File.Exists(Path.Combine(primary, "default.json")))
+            if (File.Exists(Path.Combine(primary, "xiongan_30.json")))
             {
                 return primary;
             }
@@ -109,7 +109,7 @@ namespace CitySimulation.GameObjects
             // often still live in the Unity project under Assets/Scripts/Maps.
             var projectMaps = Path.GetFullPath(
                 Path.Combine(Application.dataPath, "..", "..", "Assets", "Scripts", "Maps"));
-            if (File.Exists(Path.Combine(projectMaps, "default.json")))
+            if (File.Exists(Path.Combine(projectMaps, "xiongan_30.json")))
             {
                 return projectMaps;
             }

@@ -1,4 +1,8 @@
-# Unity 前端部署、启动和使用说明
+# Unity 前端部署、启动和使用说明（旧 WebSocket 可视化副本）
+
+> 适用范围：仓库仅保留 `frontend/CitySimulation` Unity工程。它既包含配合 `server/visualization_server.py:8765` 的SUMO可视化脚本，也包含监听 `127.0.0.1:5000`、供 `frontend/pymarl` 调用的长度前缀JSON/TCP协议；目前没有直接调用C后端REST `/api/v1/model/predict` 或WebSocket `/api/v1/ws`。三种接口不可混用。
+>
+> 当前仓库尚无正式DQN模型权重，注册表保持 `waiting_for_A`。下文提及的百万步模型文件是预期部署名，不代表文件当前存在。30路口地图请使用 `frontend/CitySimulation/Assets/Scripts/Maps/xiongan_30.json`，由 `python scripts/convert_to_unity_map.py` 生成。
 
 本指南面向首次接触本项目的用户，从零开始一步步完成 Unity 前端的部署与启动，最终在 Unity 编辑器中看到交通仿真动画正常运行。
 
@@ -54,7 +58,7 @@ xiongan-traffic-control/
 │   │   │   ├── City.unity
 │   │   │   └── SampleScene.unity
 │   │   └── Scripts/
-│   │       ├── Maps/xiongan_20.json ← 20路口路网数据
+│   │       ├── Maps/xiongan_30.json ← 30路口路网数据
 │   │       ├── Bootstrap/           ← 路网构建
 │   │       ├── Runtime/Visualization/ ← WebSocket 可视化
 │   │       └── Camera/              ← 相机控制
@@ -389,7 +393,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
    ```
 2. 双击以下任一场景文件打开：
    - **`City.unity`**（推荐，主城市场景）
-   - 或 **`xiong_20.unity`**（20 路口专用场景）
+   - 推荐 **`City.unity`**（当前30路口场景）
 
    > 也可通过菜单 **File → Open Scene** 打开。
 3. 打开后，**Hierarchy 窗口**（左上）会显示当前场景的 GameObject 层级结构。
@@ -400,7 +404,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 | GameObject 名称 | 挂载的关键组件 | 作用 |
 |----------------|---------------|------|
-| `XionganRoadBootstrap` | `XionganRoadBootstrap` | 自动构建 20 路口路网 |
+| `XionganRoadBootstrap` | `XionganRoadBootstrap` | 自动构建 30 路口路网 |
 | `SimulationRuntimeDriver` | `SimulationRuntimeDriver` | 运行时车辆生成与仿真驱动 |
 
 **检查方法：**
@@ -411,25 +415,25 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 1. Hierarchy 窗口右键 → **Create Empty**，分别命名为 `XionganRoadBootstrap` 和 `SimulationRuntimeDriver`。
 2. 选中 `XionganRoadBootstrap`，在 Inspector 中点击 **Add Component**，搜索 `XionganRoadBootstrap` 脚本并添加。
-   - 确认 `Map Id` 字段为 `xiongan_20`
+   - 确认 `Map Id` 字段为 `xiongan_30`
    - 确认 `Build On Awake` 勾选
 3. 选中 `SimulationRuntimeDriver`，在 Inspector 中点击 **Add Component**，搜索 `SimulationRuntimeDriver` 脚本并添加。
    - 确认 `Spawn Vehicles On Start` 勾选（如需本地车辆生成）
    - `Target Vehicle Count` 建议设为 25
 
-### 7.6 步骤 4：生成路网和信号灯（通过菜单 雄安路网 / 构建 xiongan_20 20路口）
+### 7.6 步骤 4：生成路网和信号灯（通过菜单 雄安路网 / 构建 xiongan_30 30路口）
 
 > 路网和信号灯是 Unity 中可视化交通的基础。`XionganRoadBootstrap` 在场景启动（Play）时会自动构建，但也可在编辑模式下手动构建以便预览。
 
 **方法 A：通过 Unity 顶部菜单构建（编辑模式预览）**
 
 1. 在 Unity 编辑器顶部菜单栏，点击 **雄安路网** 菜单（如果看不到，可能是因为脚本未编译完成，请等待编译完成或检查 Console 是否有编译错误）。
-2. 选择 **构建 xiongan_20 20路口**（菜单项名称类似 `雄安路网 / 构建 xiongan_20 20路口`）。
+2. 选择 **构建 xiongan_30 30路口**。
 3. 等待构建完成，Console 窗口会输出：
    ```
-   [XionganRoadBootstrap] [OK][standalone] map=xiongan_20 roads=xx tls=20/20
+   [XionganRoadBootstrap] [OK][standalone] map=xiongan_30 roads=xx tls=30/30
    ```
-4. 切换到 **Scene 视图**（点击 Scene 标签页），应能看到 20 路口的网格路网和信号灯。
+4. 切换到 **Scene 视图**（点击 Scene 标签页），应能看到 30 路口的网格路网和信号灯。
 
 **方法 B：通过 Inspector 上下文菜单构建**
 
@@ -497,9 +501,9 @@ python server/visualization_server.py --scenario real_peak --port 8765
 运行前，请逐项确认以下配置已完成：
 
 - [ ] 1. 已打开 `City.unity` 或 `xiong_20.unity` 场景
-- [ ] 2. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_20`
+- [ ] 2. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_30`
 - [ ] 3. Hierarchy 中存在 `SimulationRuntimeDriver`
-- [ ] 4. 已通过菜单 **雄安路网 / 构建 xiongan_20 20路口** 生成路网和信号灯
+- [ ] 4. 已通过菜单 **雄安路网 / 构建 xiongan_30 30路口** 生成路网和信号灯
 - [ ] 5. Hierarchy 中已创建 `VisualizationSystem` 空对象
 - [ ] 6. `VisualizationSystem` 上已挂载 `VisualizationBootstrap` 脚本
 - [ ] 7. `VisualizationBootstrap` 的 Server Host = `127.0.0.1`，Server Port = `8765`
@@ -513,7 +517,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 **路网构建日志：**
 ```
-[XionganRoadBootstrap] [OK] map=xiongan_20 roads=xx tls=20/20
+[XionganRoadBootstrap] [OK] map=xiongan_30 roads=xx tls=30/30
 ```
 
 **WebSocket 连接成功日志：**
@@ -539,7 +543,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 | 检查项 | 预期表现 | 异常表现 |
 |--------|---------|---------|
-| **路网** | 20 路口网格路网出现，道路清晰可见 | 路网空白 / 部分缺失 |
+| **路网** | 30 路口网格路网出现，道路清晰可见 | 路网空白 / 部分缺失 |
 | **车辆** | 道路上有多辆车辆移动 | 无车辆 / 车辆静止不动 |
 | **信号灯** | 路口信号灯有红/绿/黄颜色变化 | 信号灯全红 / 无颜色 |
 | **车辆行为** | 车辆遇红灯减速停车，绿灯通行 | 车辆穿墙 / 穿越红灯 |
@@ -550,7 +554,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 **路网构建成功日志：**
 ```
-[XionganRoadBootstrap] [OK] map=xiongan_20 roads=xx tls=20/20
+[XionganRoadBootstrap] [OK] map=xiongan_30 roads=xx tls=30/30
 ```
 
 **WebSocket 连接成功日志：**
@@ -592,7 +596,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 ### 8.5 动画正常运行的综合判断
 
 当以下条件全部满足时，即可判定动画运行正常：
-1. ✅ Unity Game 视图中显示完整的 20 路口路网
+1. ✅ Unity Game 视图中显示完整的 30 路口路网
 2. ✅ 路网上有车辆在行驶，且数量动态变化
 3. ✅ 路口信号灯按相位切换颜色
 4. ✅ Console 无红色错误日志（黄色警告可忽略）
@@ -814,9 +818,9 @@ python server/visualization_server.py --scenario real_peak --port 8765
 - [ ] 9. 已打开 `City.unity` 或 `xiong_20.unity` 场景
 
 **Unity 场景配置：**
-- [ ] 10. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_20`
+- [ ] 10. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_30`
 - [ ] 11. Hierarchy 中存在 `SimulationRuntimeDriver`
-- [ ] 12. 已通过菜单 **雄安路网 / 构建 xiongan_20 20路口** 生成路网和信号灯
+- [ ] 12. 已通过菜单 **雄安路网 / 构建 xiongan_30 30路口** 生成路网和信号灯
 - [ ] 13. Hierarchy 中已创建 `VisualizationSystem` 空对象
 - [ ] 14. `VisualizationSystem` 上已挂载 `VisualizationBootstrap` 脚本
 - [ ] 15. `VisualizationBootstrap` 的 Server Host = `127.0.0.1`，Server Port = `8765`

@@ -1,4 +1,4 @@
-"""Benchmark and tune static phase durations for the 20-intersection network.
+"""Benchmark and tune static phase durations for the 30-intersection network.
 
 The script keeps the four RL action phases intact and compares phase-duration
 plans under identical traffic demand.  It is intentionally independent of a

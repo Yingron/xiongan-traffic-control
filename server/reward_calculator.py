@@ -142,7 +142,7 @@ class RewardCalculator:
         previous_states: dict[str, np.ndarray] | None = None,
         same_action_counts: dict[str, int] | None = None,
     ) -> tuple[dict[str, float], dict[str, dict], float]:
-        """计算所有20个路口的奖励
+        """计算所有30个路口的奖励
 
         Args:
             global_state: 660维全局状态
