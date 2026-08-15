@@ -119,7 +119,12 @@ class MaskableDQN(DQN):
         losses = []
         for _ in range(gradient_steps):
             replay_data = self.replay_buffer.sample(batch_size, env=self._vec_normalize_env)
-            discounts = replay_data.discounts if replay_data.discounts is not None else self.gamma
+            # SB3 2.4 ReplayBufferSamples has no ``discounts`` member, while
+            # versions/configurations that support time-limit-aware discounting
+            # may provide one.  Fall back to the DQN scalar gamma in either case.
+            discounts = getattr(replay_data, "discounts", None)
+            if discounts is None:
+                discounts = self.gamma
 
             with th.no_grad():
                 # Double-DQN：在线（掩码）网络 argmax 选动作，目标网络给该动作估值。

@@ -1,0 +1,27 @@
+{
+  "episodes": 5,
+  "mean_reward": 1811.3840604004217,
+  "std_reward": 641.353228977226,
+  "min_reward": 1142.8329022352966,
+  "max_reward": 2866.1540590436243,
+  "mean_steps": 720.0,
+  "model_path": "D:\\Users\\zzb426\\Desktop\\\u6311\u6218\u676f\\xiongan-traffic-control-main-20260815\\models\\dqn\\dqn_multi_shared_real_offpeak_perf_1000000steps.zip",
+  "scenario": "real_offpeak",
+  "perf_mode": true,
+  "resumed_from": null,
+  "total_timesteps": 1000000,
+  "elapsed_seconds": 23537.78587627411,
+  "steps_per_second": 42.484879642311284,
+  "peak_steps_per_second": 55.25029368197562,
+  "params_count": 11784,
+  "n_envs": 1,
+  "timesteps": 1000000,
+  "net_arch": [
+    64,
+    64
+  ],
+  "batch_size": 256,
+  "train_freq": 4,
+  "learning_rate": 0.0003,
+  "device": "cuda"
+}

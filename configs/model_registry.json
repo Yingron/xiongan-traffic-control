@@ -28,6 +28,8 @@
       "observation_dtype": "float32",
       "action_count": 4,
       "normalization": "none",
+      "intersection_count": 30,
+      "global_state_dimension": 660,
       "state_layout_version": "v1-30x22",
       "model_contract_version": "shared-dqn-26x4-v1",
       "deterministic_inference_supported": true,
