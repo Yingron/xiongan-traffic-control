@@ -16,15 +16,19 @@ import torch as th
 from stable_baselines3.dqn import DQN
 from stable_baselines3.dqn.policies import DQNPolicy, QNetwork
 
-# 远大于该任务 Q 值量级（~±50）的掩码惩罚：保证无效动作永远不被 argmax 选中
-MASK_PENALTY = 1e8
+# 无效动作的 Q 值填充值：直接用乘法置零网络原始输出（不依赖 q - 大数），
+# 即使 Q 网络发散输出 1e10 量级，掩码动作的 Q 也恒为该巨大负值，argmax 不可能选中。
+# （2026-08-15 教训：首版用 q - 1e8，全模板门控训练时 Q 发散到 1e10，
+#   掩码动作的原始输出超过惩罚量级后反而胜出，造成推理违规。）
+MASK_FILL = 3.0e38
 
 
 class MaskedQNetwork(QNetwork):
     """带动作掩码的 Q 网络：观测尾部 action_dim 维为掩码，其余为状态。
 
     掩码维度不参与 MLP 前向：头网络输入维度 = features_dim - action_dim，
-    forward 时先剥离掩码再走基类前向，最后对无效动作 Q 值施加 MASK_PENALTY。
+    forward 时先剥离掩码再走基类前向，最后把无效动作的 Q 值乘法置零为 -MASK_FILL
+    （绝对掩码，与 Q 值发散与否无关）。
     """
 
     def __init__(
@@ -53,7 +57,8 @@ class MaskedQNetwork(QNetwork):
         state = obs[:, :-action_dim]
         mask = obs[:, -action_dim:]
         q_values = super().forward(state)
-        return q_values - (1.0 - mask) * MASK_PENALTY
+        # 绝对掩码：无效动作 Q = -MASK_FILL（乘法置零原始输出，与发散无关），有效动作原值
+        return q_values * mask - (1.0 - mask) * MASK_FILL
 
 
 class MaskedDQNPolicy(DQNPolicy):
@@ -69,7 +74,13 @@ class MaskedDQNPolicy(DQNPolicy):
 
 
 class MaskableDQN(DQN):
-    """DQN 子类：epsilon 探索只在当前掩码允许的动作内随机采样。"""
+    """DQN 子类：epsilon 探索只在当前掩码允许的动作内随机采样。
+
+    同时把目标计算改为 Double-DQN（在线网络选动作、目标网络估值）：
+    全模板门控训练实测 vanilla-DQN 的 max 偏置使 Q 值在 100k 步内发散到 1e8~1e10
+    （stratified 非掩码训练不会，掩码冻结部分动作输出加剧了自举放大），
+    Double-DQN 的 max 去偏置是抑制发散的常规手段。
+    """
 
     def predict(
         self,
@@ -96,6 +107,52 @@ class MaskableDQN(DQN):
                 action = np.array(self._sample_valid(mask, action_dim))
             return action, state
         return super().predict(observation, state, episode_start, deterministic)
+
+    def train(self, gradient_steps: int, batch_size: int = 100) -> None:
+        import torch.nn.functional as F
+
+        # Switch to train mode (this affects batch norm / dropout)
+        self.policy.set_training_mode(True)
+        # Update learning rate according to schedule
+        self._update_learning_rate(self.policy.optimizer)
+
+        losses = []
+        for _ in range(gradient_steps):
+            replay_data = self.replay_buffer.sample(batch_size, env=self._vec_normalize_env)
+            discounts = replay_data.discounts if replay_data.discounts is not None else self.gamma
+
+            with th.no_grad():
+                # Double-DQN：在线（掩码）网络 argmax 选动作，目标网络给该动作估值。
+                # 掩码网络保证选中的是有效动作（无效动作 Q=-MASK_FILL 不可能胜出）。
+                next_q_online = self.policy.q_net(replay_data.next_observations)
+                next_actions = next_q_online.argmax(dim=1, keepdim=True)
+                next_q_target = self.policy.q_net_target(replay_data.next_observations)
+                next_q_values = next_q_target.gather(dim=1, index=next_actions).reshape(-1, 1)
+                # 1-step TD target
+                target_q_values = replay_data.rewards + (1 - replay_data.dones) * discounts * next_q_values
+
+            # Get current Q-values estimates
+            current_q_values = self.policy.q_net(replay_data.observations)
+
+            # Retrieve the q-values for the actions from the replay buffer
+            current_q_values = th.gather(current_q_values, dim=1, index=replay_data.actions.long())
+
+            # Compute Huber loss (less sensitive to outliers)
+            loss = F.smooth_l1_loss(current_q_values, target_q_values)
+            losses.append(loss.item())
+
+            # Optimize the policy
+            self.policy.optimizer.zero_grad()
+            loss.backward()
+            # Clip gradient norm
+            th.nn.utils.clip_grad_norm_(self.policy.parameters(), self.max_grad_norm)
+            self.policy.optimizer.step()
+
+        # Increase update counter
+        self._n_updates += gradient_steps
+
+        self.logger.record("train/n_updates", self._n_updates, exclude="tensorboard")
+        self.logger.record("train/loss", np.mean(losses))
 
     @staticmethod
     def _sample_valid(mask: np.ndarray, action_dim: int) -> int:
