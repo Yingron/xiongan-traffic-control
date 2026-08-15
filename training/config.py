@@ -163,7 +163,7 @@ SCENARIO_CONFIG = {
         'n_envs_override': 1,
         'buffer_size_override': 100000,
         'batch_size_override': 256,
-        'gradient_steps_override': 10,
+        'gradient_steps_override': 4,
     },
     'real_offpeak': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_real_offpeak.sumocfg'),
@@ -173,7 +173,7 @@ SCENARIO_CONFIG = {
         'n_envs_override': 1,
         'buffer_size_override': 100000,
         'batch_size_override': 256,
-        'gradient_steps_override': 10,
+        'gradient_steps_override': 4,
     },
     'real_evening': {
         'sumo_cfg': os.path.join(BASE_DIR, 'sumo_files', 'xiongan_real_evening.sumocfg'),
@@ -183,6 +183,6 @@ SCENARIO_CONFIG = {
         'n_envs_override': 1,
         'buffer_size_override': 100000,
         'batch_size_override': 256,
-        'gradient_steps_override': 10,
+        'gradient_steps_override': 4,
     },
 }

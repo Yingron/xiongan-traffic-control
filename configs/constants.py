@@ -36,16 +36,17 @@ TEMPLATE_WEIGHTS: dict[str, float] = {
     "E": 0.10,
 }
 
-# ========== 需求门控动作掩码（模板C专用）==========
-# 模板C（J05/J07/J10，T型路口）的 4 个相位各自只服务单一流向：
-#   action_0='rrrrggrgrrrr' 南向右转、action_1='rrrrrrGrrrrr' 南向左转、
-#   action_2='GGrgrrrrgGGg' 东西向主相位、action_3='rrGrrrrrrrrr' 东向左转。
-# 共享策略在 1M→2M 续训后漂移：J10 上 action_0/1 合计 90%、东西向主相位仅 4%，
-# 排队爆至 9155s（见 memories/2m-anticollapse-eval）。分层采样救不了梯度幅值失衡，
-# 故对模板C施加硬掩码：相位所服务链路无排队车辆（halting ≥ 阈值）时该动作无效。
-# 掩码由 env/global_state.compute_action_mask 按 rl4 相位状态的绿灯链路动态计算，
+# ========== 需求门控动作掩码 ==========
+# 相位所服务链路无排队车辆（halting ≥ 阈值）时该动作无效。掩码由
+# env/global_state.compute_action_mask 按 rl4 相位状态的绿灯链路动态计算，
 # 以最后 4 维追加进观测（22→26 维，公开全局状态契约 660 维不变）。
-ACTION_MASK_TEMPLATES: tuple[str, ...] = ("C",)
+# 2026-08-14 首版仅对模板C（J05/J07/J10，T型路口）启用：其 4 相位各服务单一流向
+# （action_0 南向右转 / action_1 南向左转 / action_2 东西向主相位 / action_3 东向左转），
+# 共享策略会锁定相位子集饿死主相位（见 memories/2m-anticollapse-eval）。
+# 1M 训练后发现坍缩迁移到模板A（无掩码保护，最后 25 万步 action_0 锁定 93%→全网死锁），
+# 需求门控本身能打断"空相位锁定"的自我强化循环，故推广到全部模板。
+# 全部相位都无需求时（路口空闲）兜底全 1，避免死锁。
+ACTION_MASK_TEMPLATES: tuple[str, ...] = tuple(INTERSECTION_TEMPLATES.keys())
 ACTION_MASK_QUEUE_THRESHOLD: int = 1  # 相位绿灯链路 halting 车辆数达到该值才视为"有需求"
 
 # 真实定周期基线专用哨兵动作：

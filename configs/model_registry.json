@@ -15,6 +15,21 @@
       "model_contract_version": "shared-dqn-22x4-v1",
       "deterministic_inference_supported": true,
       "handoff_note": "Set status=ready, normalization=none (or provide normalization artifacts), and sha256 after A delivers the real SB3 model."
+    },
+    "shared-dqn-real-peak-masked-1m-v2": {
+      "status": "ready",
+      "format": "stable-baselines3-dqn",
+      "artifact_path": "models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip",
+      "sha256": "760a58a4fdf674f23ef80fe62d161865c7dd74bf0dc269d36357ecbd32f024bf",
+      "training_steps": 1000000,
+      "observation_dimension": 26,
+      "observation_dtype": "float32",
+      "action_count": 4,
+      "normalization": "none",
+      "state_layout_version": "v1-30x22",
+      "model_contract_version": "shared-dqn-26x4-v1",
+      "deterministic_inference_supported": true,
+      "handoff_note": "需求门控动作掩码模型（obs 22状态+4掩码=26维，推理侧由 api_server 按 get_action_masks 追加掩码）。8路口扫评 reward +13.7% vs 真实Fixed-Time。"
     }
   }
 }
