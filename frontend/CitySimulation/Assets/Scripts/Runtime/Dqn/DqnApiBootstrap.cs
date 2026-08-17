@@ -22,7 +22,7 @@ namespace CitySimulation.Runtime.Dqn
             var client = gameObject.AddComponent<DqnControlClient>();
             client.apiBaseUrl = "http://127.0.0.1:8000/api/v1";
             client.scenario = "real_offpeak";
-            client.modelId = "shared-dqn-real-offpeak-perf-1m-v1";
+            client.modelId = "shared-dqn-real-offpeak-masked-1m-v1";
             gameObject.AddComponent<DqnDashboardUI>();
             gameObject.AddComponent<DqnTrafficLightApplier>();
             Debug.Log("[DqnControl] 已为 30 路口 City 场景安装真实数据 Dashboard 与 DQN 闭环。");

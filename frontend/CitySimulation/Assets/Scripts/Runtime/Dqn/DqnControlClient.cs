@@ -19,7 +19,7 @@ namespace CitySimulation.Runtime.Dqn
         [Header("30 路口 DQN API")]
         public string apiBaseUrl = "http://127.0.0.1:8000/api/v1";
         public string scenario = "real_offpeak";
-        public string modelId = "shared-dqn-real-offpeak-perf-1m-v1";
+        public string modelId = "shared-dqn-real-offpeak-masked-1m-v1";
         public bool autoStartSession = true;
         public bool autoRun = true;
         [Range(1, 60)] public int stepSeconds = 5;

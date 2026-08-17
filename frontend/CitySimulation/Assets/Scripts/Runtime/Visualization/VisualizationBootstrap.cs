@@ -33,7 +33,7 @@ namespace CitySimulation.Runtime.Visualization
         public bool enableDqnApiControl = true;
         public string dqnApiBaseUrl = "http://127.0.0.1:8000/api/v1";
         public string dqnScenario = "real_offpeak";
-        public string dqnModelId = "shared-dqn-real-offpeak-perf-1m-v1";
+        public string dqnModelId = "shared-dqn-real-offpeak-masked-1m-v1";
 
         SumoWebSocketClient _wsClient;
         SumoVisualizationBridge _bridge;

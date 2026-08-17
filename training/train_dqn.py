@@ -207,7 +207,7 @@ class PolicyCollapseMonitorCallback:
             for _ in range(n_samples):
                 dummy_obs = np.random.randn(1, *model.observation_space.shape).astype(np.float32)
                 action, _ = model.predict(dummy_obs, deterministic=False)
-                action_counts[int(action)] += 1
+                action_counts[int(np.asarray(action).reshape(-1)[0])] += 1
             return action_counts / n_samples
         except Exception:
             return np.array([0.25, 0.25, 0.25, 0.25])
@@ -232,6 +232,7 @@ def train_dqn(
     log_interval: int = 1000,
     save_interval: int = 50000,
     resume_path: str | None = None,
+    run_name: str | None = None,
 ) -> dict:
     """运行DQN训练
 
@@ -364,7 +365,10 @@ def train_dqn(
     perf_tag = "_perf" if perf else ""
     scenario_tag = f"_{scenario_label}" if scenario else ""
 
-    log_dir = PROJECT_ROOT / "logs" / f"dqn_{env_name}{scenario_tag}{perf_tag}"
+    # Keep monitor CSVs per run so a new curve cannot include stale rows from a
+    # previous model trained with the same scenario/performance flags.
+    run_tag = f"_{run_name}" if run_name else ""
+    log_dir = PROJECT_ROOT / "logs" / f"dqn_{env_name}{scenario_tag}{perf_tag}{run_tag}"
     log_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 68)
@@ -889,6 +893,8 @@ def main():
     parser.add_argument("--resume", type=str, default=None,
                         help="从已有模型继续训练（模型路径，--timesteps为本次增量步数，"
                              "沿用已保存的网络架构/超参数）")
+    parser.add_argument("--run-name", type=str, default=None,
+                        help="本次训练标识，用于隔离 logs/ 下的监控数据")
     args = parser.parse_args()
 
     net_arch = None
@@ -942,6 +948,7 @@ def main():
         log_interval=args.log_interval,
         save_interval=args.save_interval,
         resume_path=args.resume,
+        run_name=args.run_name,
     )
 
     print(f"\n{'='*68}")

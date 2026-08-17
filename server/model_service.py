@@ -19,7 +19,7 @@ import numpy as np
 from configs.constants import FEATURES_PER_INTERSECTION, INTERSECTION_COUNT
 
 
-SUPPORTED_FORMAT = "stable-baselines3-dqn"
+SUPPORTED_FORMATS = {"stable-baselines3-dqn", "stable-baselines3-maskable-dqn"}
 
 
 class ModelServiceError(Exception):
@@ -190,12 +190,12 @@ class SB3ModelService:
                 "The registered model is waiting for A's artifact or contract confirmation.",
                 {"model_id": model_id, "handoff_status": status or "unknown"},
             )
-        if entry.get("format") != SUPPORTED_FORMAT:
+        if entry.get("format") not in SUPPORTED_FORMATS:
             raise ModelServiceError(
                 422,
                 "MODEL_CONTRACT_MISMATCH",
-                "Only Stable-Baselines3 DQN artifacts are supported by this model entry point.",
-                {"model_id": model_id, "registered_format": entry.get("format")},
+                "Only registered Stable-Baselines3 DQN artifact formats are supported by this model entry point.",
+                {"model_id": model_id, "registered_format": entry.get("format"), "supported_formats": sorted(SUPPORTED_FORMATS)},
             )
         if entry.get("normalization") != "none":
             raise ModelServiceError(

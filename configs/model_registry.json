@@ -34,6 +34,23 @@
       "model_contract_version": "shared-dqn-22x4-v1",
       "deterministic_inference_supported": true,
       "handoff_note": "Local real_offpeak 1M shared-DQN artifact validated for 22-dimensional observations. Action masks are exposed to the Unity dashboard; this legacy 22-D model does not consume masks as input."
+    },
+    "shared-dqn-real-offpeak-masked-1m-v1": {
+      "status": "ready",
+      "format": "stable-baselines3-maskable-dqn",
+      "artifact_path": "models/dqn_masked_offpeak_1m/dqn_multi_shared_real_offpeak_perf_1000000steps.zip",
+      "sha256": "acef69adf6a4905df15c6b5f22cdc2837edf9012a1c090e2761069e4a9b7e180",
+      "training_steps": 1000000,
+      "observation_dimension": 26,
+      "observation_dtype": "float32",
+      "action_count": 4,
+      "normalization": "none",
+      "intersection_count": 30,
+      "global_state_dimension": 660,
+      "state_layout_version": "v1-30x22-plus-mask4",
+      "model_contract_version": "shared-dqn-mask-26x4-v1",
+      "deterministic_inference_supported": true,
+      "handoff_note": "GPU-trained real_offpeak shared MaskableDQN. Each local inference observation appends the current 4-action demand mask to the 22 state features."
     }
   }
 }
