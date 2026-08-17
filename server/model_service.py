@@ -106,8 +106,17 @@ class SB3ModelService:
             intersection_count=len(intersection_order),
             features_per_intersection=22,
         )
-        if action_masks is not None:
-            # 掩码模型（observation_dimension=26）：为每个路口追加 4 维需求门控掩码
+        expected_observation_dimension = int(entry.get("observation_dimension", 22))
+        if expected_observation_dimension not in (22, 26):
+            raise ModelServiceError(
+                422,
+                "MODEL_CONTRACT_MISMATCH",
+                "The registered model must consume either 22 state features or 22 state features plus 4 action-mask features.",
+                {"model_id": model_id, "observation_dimension": expected_observation_dimension},
+            )
+        if action_masks is not None and expected_observation_dimension == 26:
+            # 掩码模型（observation_dimension=26）：为每个路口追加 4 维需求门控掩码。
+            # 22 维旧模型仍可复现实验，但不会伪装成已经使用掩码的模型。
             masks = np.asarray(action_masks, dtype=np.float32)
             expected_masks = (len(intersection_order), int(entry.get("action_count", 4)))
             if masks.shape != expected_masks:
@@ -207,9 +216,17 @@ class SB3ModelService:
         self._validate_checksum(model_id, artifact_path, entry.get("sha256"))
 
         try:
-            from stable_baselines3 import DQN
-
-            model = DQN.load(str(artifact_path), device="cpu")
+            expected_observation = int(entry.get("observation_dimension", 22))
+            # A 26-dimensional artifact is a MaskableDQN checkpoint.  Loading
+            # it through the base DQN class silently loses the custom Q-network
+            # behavior, so choose the implementation from its registered
+            # contract instead of guessing from a filename.
+            if expected_observation == 26:
+                from training.masked_policy import MaskableDQN
+                model = MaskableDQN.load(str(artifact_path), device="cpu")
+            else:
+                from stable_baselines3 import DQN
+                model = DQN.load(str(artifact_path), device="cpu")
         except Exception as error:
             raise ModelServiceError(
                 503,
@@ -218,7 +235,6 @@ class SB3ModelService:
                 {"model_id": model_id, "reason": str(error)},
             ) from error
 
-        expected_observation = int(entry.get("observation_dimension", 22))
         expected_actions = int(entry.get("action_count", 4))
         actual_observation = getattr(getattr(model, "observation_space", None), "shape", None)
         actual_actions = getattr(getattr(model, "action_space", None), "n", None)

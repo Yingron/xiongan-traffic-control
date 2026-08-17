@@ -17,6 +17,23 @@
       "model_contract_version": "shared-dqn-22x4-v1",
       "deterministic_inference_supported": true,
       "handoff_note": "Set status=ready, normalization=none (or provide normalization artifacts), and sha256 after A delivers the real SB3 model."
+    },
+    "shared-dqn-real-offpeak-perf-1m-v1": {
+      "status": "ready",
+      "format": "stable-baselines3-dqn",
+      "artifact_path": "models/dqn/checkpoints/dqn_multi_shared_real_offpeak_perf_1000000_steps.zip",
+      "sha256": "5fd407e8790f7afd195ff4a8bba8db7eeb5cdcc03cab3030394bc44b68a1ba62",
+      "training_steps": 1000000,
+      "observation_dimension": 22,
+      "observation_dtype": "float32",
+      "action_count": 4,
+      "normalization": "none",
+      "intersection_count": 30,
+      "global_state_dimension": 660,
+      "state_layout_version": "v1-30x22",
+      "model_contract_version": "shared-dqn-22x4-v1",
+      "deterministic_inference_supported": true,
+      "handoff_note": "Local real_offpeak 1M shared-DQN artifact validated for 22-dimensional observations. Action masks are exposed to the Unity dashboard; this legacy 22-D model does not consume masks as input."
     }
   }
 }

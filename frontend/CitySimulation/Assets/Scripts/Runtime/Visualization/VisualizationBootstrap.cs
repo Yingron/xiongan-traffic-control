@@ -1,4 +1,5 @@
 using UnityEngine;
+using CitySimulation.Runtime.Dqn;
 
 namespace CitySimulation.Runtime.Visualization
 {
@@ -26,6 +27,13 @@ namespace CitySimulation.Runtime.Visualization
         public bool autoConnect = true;
         [Tooltip("是否禁用本地车辆仿真（由 SUMO 数据驱动）")]
         public bool disableLocalSimulation = true;
+
+        [Header("DQN 控制闭环（8000 API）")]
+        [Tooltip("连接真实 660 维状态、DQN 推理和原子动作接口。该接口与 8765 可视化通道独立。")]
+        public bool enableDqnApiControl = true;
+        public string dqnApiBaseUrl = "http://127.0.0.1:8000/api/v1";
+        public string dqnScenario = "real_offpeak";
+        public string dqnModelId = "shared-dqn-real-offpeak-perf-1m-v1";
 
         SumoWebSocketClient _wsClient;
         SumoVisualizationBridge _bridge;
@@ -59,6 +67,19 @@ namespace CitySimulation.Runtime.Visualization
 
             // 配置可视化桥接器
             _bridge.wsClient = _wsClient;
+
+            if (enableDqnApiControl)
+            {
+                var dqnClient = GetComponent<DqnControlClient>();
+                if (dqnClient == null) dqnClient = gameObject.AddComponent<DqnControlClient>();
+                dqnClient.apiBaseUrl = dqnApiBaseUrl;
+                dqnClient.scenario = dqnScenario;
+                dqnClient.modelId = dqnModelId;
+
+                if (GetComponent<DqnDashboardUI>() == null) gameObject.AddComponent<DqnDashboardUI>();
+                if (GetComponent<DqnTrafficLightApplier>() == null) gameObject.AddComponent<DqnTrafficLightApplier>();
+                Debug.Log("[VisualizationBootstrap] 已启用 8000 端口 DQN 控制闭环与真实数据面板。");
+            }
 
             // 如果禁用本地仿真，关闭 SimulationRuntimeDriver 的车辆生成
             if (disableLocalSimulation)

@@ -652,6 +652,24 @@ async def get_state(session_id: str) -> dict[str, Any]:
     return await manager.state(session_id)
 
 
+@app.get(f"{API_PREFIX}/simulation/action-masks")
+async def get_action_masks(session_id: str) -> dict[str, Any]:
+    """Expose the actual 30×4 demand masks used by mask-capable DQN models.
+
+    The public state remains 660-dimensional (30×22); masks are intentionally a
+    separate payload so Unity can show their availability without altering the
+    state-vector contract used by existing 22-dimensional checkpoints.
+    """
+    transition_id, _ = await manager.inference_state(session_id)
+    masks = await manager.inference_masks(session_id)
+    return {
+        "session_id": session_id,
+        "transition_id": transition_id,
+        "intersection_order": list(INTERSECTION_ORDER),
+        "action_masks": np.asarray(masks, dtype=np.int32).tolist(),
+    }
+
+
 @app.post(f"{API_PREFIX}/simulation/actions")
 async def execute_actions(request: ActionsRequest) -> dict[str, Any]:
     result = await manager.actions(request)
