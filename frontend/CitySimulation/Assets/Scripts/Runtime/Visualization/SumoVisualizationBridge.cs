@@ -46,6 +46,7 @@ namespace CitySimulation.Runtime.Visualization
         // ── 车辆对象池 ──
         readonly List<GameObject> _vehiclePool = new();
         readonly Dictionary<string, GameObject> _activeVehicles = new();
+        readonly Dictionary<GameObject, float> _vehicleGroundOffsets = new();
         int _poolIndex;
 
         // ── 当前指标 ──
@@ -164,6 +165,10 @@ namespace CitySimulation.Runtime.Visualization
                     vehicleYOffset,
                     veh.y * coordinateScale + offsetZ
                 );
+                // Vehicle assets do not share one pivot convention.  Ground the visual
+                // from its renderer bounds so a mesh with its pivot at the centre does
+                // not sink into (or float above) the generated road surface (Y = 0).
+                pos.y += GetVehicleGroundOffset(go);
                 go.transform.position = pos;
 
                 // SUMO angle: 0=North, 90=East → Unity Y rotation 一致
@@ -193,6 +198,26 @@ namespace CitySimulation.Runtime.Visualization
             {
                 _activeVehicles.Remove(id);
             }
+        }
+
+        float GetVehicleGroundOffset(GameObject vehicle)
+        {
+            if (_vehicleGroundOffsets.TryGetValue(vehicle, out float cachedOffset))
+            {
+                return cachedOffset;
+            }
+
+            float lowestPoint = float.PositiveInfinity;
+            foreach (var renderer in vehicle.GetComponentsInChildren<Renderer>(true))
+            {
+                lowestPoint = Mathf.Min(lowestPoint, renderer.bounds.min.y);
+            }
+
+            // The object is still at its pool position when first measured.  Moving it
+            // by -minY makes the visual's lowest point coincide with road height.
+            float offset = float.IsPositiveInfinity(lowestPoint) ? 0f : -lowestPoint;
+            _vehicleGroundOffsets[vehicle] = offset;
+            return offset;
         }
 
         GameObject GetFromPool()
@@ -268,8 +293,10 @@ namespace CitySimulation.Runtime.Visualization
                 }
             }
 
-            // 如果按名称未找到，尝试按位置匹配
-            if (_tlAnimators.Count == 0)
+            // Names are preferred, but a partially rebuilt scene may only preserve a
+            // subset of them.  Always complete the missing IDs geometrically instead
+            // of leaving those traffic lights without a SUMO-driven visual state.
+            if (_tlAnimators.Count < GetExpectedIntersectionIds().Length)
             {
                 MatchTrafficLightsByPosition();
             }

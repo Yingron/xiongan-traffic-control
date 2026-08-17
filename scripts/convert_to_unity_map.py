@@ -12,6 +12,9 @@ import re
 import uuid
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+UNITY_MAP_DIR = PROJECT_ROOT / "frontend" / "CitySimulation" / "Assets" / "Scripts" / "Maps"
+
 def load_junction_positions():
     """从 xiongan_30.nod.xml 读取信号路口坐标 {jid: (x, y)}"""
     nod = Path(__file__).resolve().parents[1] / "sumo_files" / "xiongan_30.nod.xml"
@@ -258,26 +261,9 @@ def write_unity_map(unity_map):
 
 
 def main():
-    # 生成Unity地图
+    """生成并写入当前仓库的 Unity 30 路口地图。"""
     unity_map = generate_unity_map()
-    
-    # 保存路径
-    output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
-                              'ChallengeCup-main', 'CitySimulation', 'Assets', 'Scripts', 'Maps')
-    os.makedirs(output_dir, exist_ok=True)
-    
-    output_path = os.path.join(output_dir, 'xiongan_30.json')
-    
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(unity_map, f, indent=2)
-    
-    print(f"\n✅ Unity地图文件已生成: {output_path}")
-    
-    # 在Unity中加载方法：
-    print("\n在Unity中加载地图：")
-    print("   1. 进入Play模式")
-    print("   2. 在右侧面板输入地图名: xiongan_30")
-    print("   3. 点击 loadMap")
+    write_unity_map(unity_map)
 
 if __name__ == '__main__':
     main()

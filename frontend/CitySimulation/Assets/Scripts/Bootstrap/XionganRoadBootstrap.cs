@@ -2,6 +2,7 @@ using CitySimulation.Builder;
 using CitySimulation.GameObjects;
 using CitySimulation.Global;
 using UnityEngine;
+using CitySimulation.Presentation;
 
 namespace CitySimulation.Bootstrap
 {
@@ -38,6 +39,14 @@ namespace CitySimulation.Bootstrap
         [Range(1.0f, 2.0f)]
         public float cameraPadding = 1.12f;
 
+        [Header("30 路口场景适配")]
+        [Tooltip("根据导出地图边界自动扩展 City 场景中的 Plane，避免外围道路和车辆落到背景外。")]
+        public bool fitGroundToNetwork = true;
+
+        [Tooltip("路网边界外额外保留的地面宽度（米）。")]
+        [Min(0f)]
+        public float groundPadding = 80f;
+
         [Header("Runtime State (read-only)")]
         [SerializeField] private int _roads;
         [SerializeField] private int _trafficLights;
@@ -73,6 +82,8 @@ namespace CitySimulation.Bootstrap
                 _trafficLights = report.trafficLights;
                 _statusMessage =
                     $"[OK] map={mapId} roads={_roads} tls={_trafficLights}/{report.intersectionsExpected}";
+                FitGroundToNetwork(report);
+                RoadPresentationStyler.ApplyToGeneratedRoads();
                 if (frameCameraAfterBuild) FrameMainCamera(report);
             }
             catch (System.Exception ex)
@@ -93,17 +104,47 @@ namespace CitySimulation.Bootstrap
 
             var center = (report.boundsMin + report.boundsMax) * 0.5f;
             var size = report.boundsMax - report.boundsMin;
-            camera.orthographic = true;
-            camera.transform.position = new Vector3(center.x, Mathf.Max(1000f, size.magnitude), center.z);
-            camera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            camera.orthographicSize = Mathf.Max(
-                size.z * 0.5f,
-                size.x * 0.5f / Mathf.Max(0.1f, camera.aspect)) * cameraPadding;
+            var presentationCamera = camera.GetComponent<ThirtyJunctionCameraController>();
+            if (presentationCamera == null)
+                presentationCamera = camera.gameObject.AddComponent<ThirtyJunctionCameraController>();
+            presentationCamera.Configure(center, size * cameraPadding);
             camera.nearClipPlane = 0.3f;
-            camera.farClipPlane = Mathf.Max(3000f, camera.transform.position.y + 1000f);
+            camera.farClipPlane = 5000f;
             Debug.Log(
-                $"[XionganRoadBootstrap] Camera framed at {camera.transform.position}, " +
-                $"orthographicSize={camera.orthographicSize:F1}.");
+                $"[XionganRoadBootstrap] Presentation camera framed at {camera.transform.position}. " +
+                "Press C for the close presentation view, Home for the full-network overview.");
+        }
+
+        private void FitGroundToNetwork(BuildReport report)
+        {
+            if (!fitGroundToNetwork) return;
+
+            var ground = GameObject.Find("Plane");
+            var renderer = ground != null ? ground.GetComponent<Renderer>() : null;
+            if (renderer == null)
+            {
+                Debug.LogWarning("[XionganRoadBootstrap] Scene Plane not found; ground fitting skipped.");
+                return;
+            }
+
+            var networkSize = report.boundsMax - report.boundsMin;
+            var desiredWidth = Mathf.Max(1f, networkSize.x + 2f * groundPadding);
+            var desiredDepth = Mathf.Max(1f, networkSize.z + 2f * groundPadding);
+            var localSize = renderer.localBounds.size;
+            if (localSize.x <= Mathf.Epsilon || localSize.z <= Mathf.Epsilon)
+            {
+                Debug.LogWarning("[XionganRoadBootstrap] Scene Plane has invalid local bounds; ground fitting skipped.");
+                return;
+            }
+
+            var center = (report.boundsMin + report.boundsMax) * 0.5f;
+            var scale = ground.transform.localScale;
+            scale.x = desiredWidth / localSize.x;
+            scale.z = desiredDepth / localSize.z;
+            ground.transform.localScale = scale;
+            ground.transform.position = new Vector3(center.x, ground.transform.position.y, center.z);
+            Debug.Log(
+                $"[XionganRoadBootstrap] Ground fitted: center={center}, size=({desiredWidth:F1}, {desiredDepth:F1}).");
         }
 
         /// <summary>Edit-mode safe build (does not require GameServices).</summary>
@@ -127,6 +168,8 @@ namespace CitySimulation.Bootstrap
                 _trafficLights = report.trafficLights;
                 _statusMessage =
                     $"[OK][standalone] map={mapId} roads={_roads} tls={_trafficLights}/{report.intersectionsExpected}";
+                FitGroundToNetwork(report);
+                RoadPresentationStyler.ApplyToGeneratedRoads();
             }
             catch (System.Exception ex)
             {

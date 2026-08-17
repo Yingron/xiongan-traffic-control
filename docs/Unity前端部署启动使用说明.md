@@ -54,7 +54,7 @@ xiongan-traffic-control/
 ├── frontend/CitySimulation/        ← Unity 项目（本指南重点）
 │   ├── Assets/
 │   │   ├── Scenes/                 ← 场景文件
-│   │   │   ├── xiong_20.unity      ← 推荐打开的场景
+│   │   │   ├── City.unity          ← 30 路口推荐打开的场景
 │   │   │   ├── City.unity
 │   │   │   └── SampleScene.unity
 │   │   └── Scripts/
@@ -385,7 +385,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 - 在 Unity Hub 中点击 `CitySimulation` 项目，等待 Unity 编辑器加载完成。
 - 加载完成后，可在编辑器顶部标题栏看到项目名称 `CitySimulation - Unity 2022.3.62f2c1`。
 
-### 7.4 步骤 2：打开场景 Scenes/City.unity（或 xiong_20.unity）
+### 7.4 步骤 2：打开场景 Scenes/City.unity
 
 1. 在 Unity 编辑器顶部的 **Project 窗口**中，导航到：
    ```
@@ -440,8 +440,8 @@ python server/visualization_server.py --scenario real_peak --port 8765
 1. 在 Hierarchy 中选中 `XionganRoadBootstrap` 对象。
 2. 在 Inspector 中 `XionganRoadBootstrap (Script)` 组件右上角，点击三个小点（齿轮）图标。
 3. 在弹出菜单中选择：
-   - **Build Xiongan 20 (standalone / edit mode)** — 编辑模式下构建（推荐用于预览）
-   - 或 **Build Xiongan 20 (use GameServices)** — 运行模式下构建
+   - **Build Xiongan 30 (standalone / edit mode)** — 编辑模式下构建（推荐用于预览）
+   - 或 **Build Xiongan 30 (use GameServices)** — 运行模式下构建
 4. Console 窗口会输出构建成功日志。
 
 **方法 C：运行时自动构建（Play 模式）**
@@ -451,7 +451,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 **验证路网生成成功：**
 
-- Scene 视图中应出现 20 个十字路口和连接道路。
+- Scene 视图中应出现 30 个信号控制路口和连接道路。
 - Hierarchy 中可能新增 `Roads`、`TrafficLights` 等对象组。
 - Console 无红色错误日志。
 
@@ -500,7 +500,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 运行前，请逐项确认以下配置已完成：
 
-- [ ] 1. 已打开 `City.unity` 或 `xiong_20.unity` 场景
+- [ ] 1. 已打开 `City.unity` 场景
 - [ ] 2. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_30`
 - [ ] 3. Hierarchy 中存在 `SimulationRuntimeDriver`
 - [ ] 4. 已通过菜单 **雄安路网 / 构建 xiongan_30 30路口** 生成路网和信号灯
@@ -815,7 +815,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 **Unity 项目：**
 - [ ] 7. Unity Hub 中已添加 CitySimulation 项目
 - [ ] 8. Unity 编辑器使用 2022.3.62f2c1 版本
-- [ ] 9. 已打开 `City.unity` 或 `xiong_20.unity` 场景
+- [ ] 9. 已打开 `City.unity` 场景
 
 **Unity 场景配置：**
 - [ ] 10. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_30`
