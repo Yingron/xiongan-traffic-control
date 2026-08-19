@@ -91,13 +91,13 @@ def main():
                   f"coll={result['collisions']['total']:.0f} | tel={result['teleports']['total']:.0f} | {dt:.0f}s", flush=True)
             all_results[jid][name] = result
 
-    # ---- 保存 ----
-    json_path = save_dir / f"model_sweep_{model_stem}.json"
+    # ---- 保存（文件名含场景，避免同一模型换场景时互相覆盖）----
+    json_path = save_dir / f"model_sweep_{model_stem}_{args.scenario}.json"
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=2, ensure_ascii=False, default=str)
     print(f"\n[SAVE] {json_path}")
 
-    csv_path = save_dir / f"model_sweep_{model_stem}.csv"
+    csv_path = save_dir / f"model_sweep_{model_stem}_{args.scenario}.csv"
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
         w.writerow(["junction", "strategy", "reward_mean", "reward_std",

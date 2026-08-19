@@ -13,9 +13,10 @@ xiongan_rl_project/
 │   └── fixed_time.py             # 真实定周期基线（读取 data/timing_plans.json）
 ├── training/                     # 训练
 │   ├── config.py                 # 场景配置（真实早/平/晚高峰）
+│   ├── masked_policy.py          # 需求门控动作掩码 DQN 策略（正式配方）
 │   └── train_dqn.py              # DQN训练脚本
-├── evaluation/                   # 评估
-├── server/                       # Unity可视化 WebSocket 服务
+├── evaluation/                   # 评估（sweep / 三场景官方对比）
+├── server/                       # API服务 + Unity可视化 WebSocket 服务
 ├── sumo_files/                   # SUMO路网文件
 │   ├── xiongan_30.nod.xml        # 30路口节点定义
 │   ├── xiongan_30.edg.xml        # 边定义
@@ -24,14 +25,15 @@ xiongan_rl_project/
 │   ├── xiongan_real_offpeak.rou.xml  # 真实平峰需求
 │   └── xiongan_real_evening.rou.xml  # 真实晚高峰需求
 ├── docs/                         # 文档
+│   ├── 模型交付说明_20260819.md  # ★ 正式模型清单/参数/契约/部署（交付入口）
+│   ├── 三场景官方对比_20260819.md # ★ 8路口 + 30路口全量评估结论
+│   ├── Unity前端部署启动使用说明.md
 │   ├── lane_mapping.json         # 30路口车道方向映射
 │   └── state_definition.md       # 状态定义
 ├── data/                         # 数据
 │   └── timing_plans.json         # 真实定周期配时方案
-├── scripts/                      # 脚本
-│   ├── generate_real_demand_scenarios.py  # 真实需求场景生成
-│   └── validate_network.py       # 网络验证
-├── configs/                      # 配置（30路口常量）
+├── scripts/                      # 脚本（场景生成/网络验证/冒烟测试/Q监控/行为探针）
+├── configs/                      # 配置（30路口常量 + model_registry.json 模型注册表）
 └── requirements.txt
 `
 
@@ -45,8 +47,9 @@ pip install -r requirements.txt
 
 ### 2. 启动API服务
 `bash
-python src/api/api_server.py
+python server/api_server.py
 # 访问 http://localhost:8000/docs
+# 模型注册与推理契约见 docs/模型交付说明_20260819.md
 `
 
 ### 3. 测试接口

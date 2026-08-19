@@ -2,7 +2,7 @@
   "registry_version": "1.0",
   "models": {
     "shared-dqn-generalization-100k-v1": {
-      "status": "waiting_for_A",
+      "status": "archived",
       "format": "stable-baselines3-dqn",
       "artifact_path": "models/dqn/dqn_multi_shared_100000steps.zip",
       "sha256": null,
@@ -14,7 +14,7 @@
       "state_layout_version": "v1-20x22",
       "model_contract_version": "shared-dqn-22x4-v1",
       "deterministic_inference_supported": true,
-      "handoff_note": "Set status=ready, normalization=none (or provide normalization artifacts), and sha256 after A delivers the real SB3 model."
+      "handoff_note": "历史遗留条目：22维/20路口契约已被 30路口 26维掩码配方取代，artifact 从未交付，仅保留存档说明，不参与加载。"
     },
     "shared-dqn-real-peak-masked-1m-v2": {
       "status": "ready",
@@ -30,6 +30,36 @@
       "model_contract_version": "shared-dqn-26x4-v1",
       "deterministic_inference_supported": true,
       "handoff_note": "需求门控动作掩码模型（obs 22状态+4掩码=26维，推理侧由 api_server 按 get_action_masks 追加掩码）。8路口扫评 reward +13.7% vs 真实Fixed-Time。"
+    },
+    "shared-dqn-real-evening-masked-1m-v1": {
+      "status": "ready",
+      "format": "stable-baselines3-dqn",
+      "artifact_path": "models/dqn/dqn_multi_shared_real_evening_perf_1000000steps.zip",
+      "sha256": "eae0ba59ee2f08439be03dab4d383d3598bebe1e51e454cad79e5776c83a7d29",
+      "training_steps": 1000000,
+      "observation_dimension": 26,
+      "observation_dtype": "float32",
+      "action_count": 4,
+      "normalization": "none",
+      "state_layout_version": "v1-30x22",
+      "model_contract_version": "shared-dqn-26x4-v1",
+      "deterministic_inference_supported": true,
+      "handoff_note": "需求门控动作掩码模型（同 peak v2 配方）。自身场景 real_evening 扫评 reward +15.4% vs FT（历史最佳）；同时作为 real_offpeak 正式模型（泛化 +5.4% vs FT，offpeak 专用模型两次训练均病态已归档）。"
+    },
+    "shared-dqn-real-offpeak-via-evening-v1": {
+      "status": "ready",
+      "format": "stable-baselines3-dqn",
+      "artifact_path": "models/dqn/dqn_multi_shared_real_evening_perf_1000000steps.zip",
+      "sha256": "eae0ba59ee2f08439be03dab4d383d3598bebe1e51e454cad79e5776c83a7d29",
+      "training_steps": 1000000,
+      "observation_dimension": 26,
+      "observation_dtype": "float32",
+      "action_count": 4,
+      "normalization": "none",
+      "state_layout_version": "v1-30x22",
+      "model_contract_version": "shared-dqn-26x4-v1",
+      "deterministic_inference_supported": true,
+      "handoff_note": "offpeak 场景正式模型别名：指向 evening 模型（泛化）。offpeak 专用模型两次训练病态已归档；30路口全量 reward -1.6%，代表8路口 +5.4%。"
     }
   }
 }

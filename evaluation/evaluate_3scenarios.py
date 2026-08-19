@@ -66,7 +66,9 @@ SCENARIO_MODELS = {
         "sumo_cfg": SCENARIO_CONFIG["real_peak"]["sumo_cfg"],
     },
     "real_offpeak": {
-        "model": MODEL_DIR / "dqn_multi_shared_real_offpeak_perf_1000000steps.zip",
+        # offpeak 专用模型两次训练均收敛到病态策略（模板C action_0 占39-45%，见 archive/ failed_v1/v2），
+        # 正式方案：采用 evening 模型跨场景泛化（扫评 reward +5.4% vs FT，探针相位分布健康）
+        "model": MODEL_DIR / "dqn_multi_shared_real_evening_perf_1000000steps.zip",
         "anticollapse_model": MODEL_DIR / "dqn_multi_shared_real_offpeak_anticollapse_2000000steps.zip",
         "label": "真实平峰",
         "period": "offpeak",
