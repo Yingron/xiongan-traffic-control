@@ -119,7 +119,8 @@ class MaskableDQN(DQN):
         losses = []
         for _ in range(gradient_steps):
             replay_data = self.replay_buffer.sample(batch_size, env=self._vec_normalize_env)
-            discounts = replay_data.discounts if replay_data.discounts is not None else self.gamma
+            sample_discounts = getattr(replay_data, "discounts", None)
+            discounts = sample_discounts if sample_discounts is not None else self.gamma
 
             with th.no_grad():
                 # Double-DQN：在线（掩码）网络 argmax 选动作，目标网络给该动作估值。

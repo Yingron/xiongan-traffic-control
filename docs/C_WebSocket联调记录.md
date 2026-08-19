@@ -12,8 +12,9 @@ FastAPI 服务中，与 REST API 共用同一个 `TraCISessionManager`、TraCI �
 ws://<host>:8000/api/v1/ws
 ```
 
-本次交付不包含 DQN 模型加载或预测。服务只执行调用方明确提交的 J01–J30
-动作，不生成随机动作、固定配时替代动作或模拟 DQN 结果。
+WebSocket 本身不承载模型预测请求；正式 DQN 预测由同一 FastAPI 服务的
+`POST /api/v1/model/predict` 完成。调用方取得 J01–J30 共 30 个真实预测动作后，
+可通过 WebSocket 或 REST 动作端点提交。服务不生成随机动作或模拟 DQN 结果。
 
 ## 2. 已实现功能
 
@@ -76,15 +77,11 @@ ws://<host>:8000/api/v1/ws
 但项目没有定义它声明的 `state`、`traci` fixture。该问题不在本次 WebSocket
 变更范围内，也没有影响上述专项和真实 SUMO 联调结果。
 
-## 5. 等待 A 交付的内容
+## 5. 正式模型接入后的边界
 
-以下内容未在本任务中模拟：
+正式模型、model ID、SHA-256、26 维模型输入契约和推理链路均已交付并验收。
+WebSocket 协议仍保持职责单一：订阅真实状态/奖励并提交动作，不在 WebSocket
+消息内请求模型推理。标准链路为：REST `/model/predict` 获取动作，再将动作提交至
+WebSocket `simulation.actions` 或 REST `/simulation/actions`。
 
-- 共享 DQN 模型权重；
-- `model_id` 与场景版本；
-- 22 维输入的归一化信息；
-- stable-baselines3/PyTorch 运行时版本；
-- 模型预测动作和推理延迟。
-
-A 完成交付后，C 再完成 `/api/v1/model/predict` 真实权重验收，其输出可作为显式的 30 路口
-动作提交到当前 WebSocket/REST 动作接口。本次 WebSocket 协议无需依赖该模型。
+当前尚未完成的是 Unity 对 8000 端口协议的直接适配，而不是模型权重交付。

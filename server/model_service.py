@@ -178,7 +178,7 @@ class SB3ModelService:
             raise ModelServiceError(
                 503,
                 "MODEL_NOT_LOADED",
-                "The registered model is waiting for A's artifact or contract confirmation.",
+                "The registered model is not available for inference.",
                 {"model_id": model_id, "handoff_status": status or "unknown"},
             )
         if entry.get("format") != SUPPORTED_FORMAT:

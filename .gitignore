@@ -35,6 +35,12 @@ training/logs/
 visualization/output/
 models/
 
+# Version the compact edge-deployment deliverables and their validation reports.
+!models/
+models/*
+!models/edge/
+!models/edge/**
+
 *.sumocfg.bak
 *.net.xml.bak
 *.rou.xml.bak

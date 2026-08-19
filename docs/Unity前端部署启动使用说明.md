@@ -2,7 +2,10 @@
 
 > 适用范围：仓库仅保留 `frontend/CitySimulation` Unity工程。它既包含配合 `server/visualization_server.py:8765` 的SUMO可视化脚本，也包含监听 `127.0.0.1:5000`、供 `frontend/pymarl` 调用的长度前缀JSON/TCP协议；目前没有直接调用C后端REST `/api/v1/model/predict` 或WebSocket `/api/v1/ws`。三种接口不可混用。
 >
-> 当前仓库尚无正式DQN模型权重，注册表保持 `waiting_for_A`。下文提及的百万步模型文件是预期部署名，不代表文件当前存在。30路口地图请使用 `frontend/CitySimulation/Assets/Scripts/Maps/xiongan_30.json`，由 `python scripts/convert_to_unity_map.py` 生成。
+> 当前仓库已有 peak 和 evening 两个正式百万步 DQN 权重；real_offpeak 正式方案复用
+> evening 权重。三个场景 model ID 均已在 `configs/model_registry.json` 注册为 `ready`。
+> 30路口地图使用 `frontend/CitySimulation/Assets/Scripts/Maps/xiongan_30.json`，由
+> `python scripts/convert_to_unity_map.py` 生成。Unity 尚未直接接入 C 后端 8000 端口协议。
 
 本指南面向首次接触本项目的用户，从零开始一步步完成 Unity 前端的部署与启动，最终在 Unity 编辑器中看到交通仿真动画正常运行。
 
@@ -54,8 +57,7 @@ xiongan-traffic-control/
 ├── frontend/CitySimulation/        ← Unity 项目（本指南重点）
 │   ├── Assets/
 │   │   ├── Scenes/                 ← 场景文件
-│   │   │   ├── xiong_20.unity      ← 推荐打开的场景
-│   │   │   ├── City.unity
+│   │   │   ├── City.unity          ← 当前推荐打开的场景
 │   │   │   └── SampleScene.unity
 │   │   └── Scripts/
 │   │       ├── Maps/xiongan_30.json ← 30路口路网数据
@@ -387,7 +389,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 - 在 Unity Hub 中点击 `CitySimulation` 项目，等待 Unity 编辑器加载完成。
 - 加载完成后，可在编辑器顶部标题栏看到项目名称 `CitySimulation - Unity 2022.3.62f2c1`。
 
-### 7.4 步骤 2：打开场景 Scenes/City.unity（或 xiong_20.unity）
+### 7.4 步骤 2：打开场景 Scenes/City.unity
 
 1. 在 Unity 编辑器顶部的 **Project 窗口**中，导航到：
    ```
@@ -502,7 +504,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 运行前，请逐项确认以下配置已完成：
 
-- [ ] 1. 已打开 `City.unity` 或 `xiong_20.unity` 场景
+- [ ] 1. 已打开 `City.unity` 场景
 - [ ] 2. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_30`
 - [ ] 3. Hierarchy 中存在 `SimulationRuntimeDriver`
 - [ ] 4. 已通过菜单 **雄安路网 / 构建 xiongan_30 30路口** 生成路网和信号灯
@@ -817,7 +819,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 **Unity 项目：**
 - [ ] 7. Unity Hub 中已添加 CitySimulation 项目
 - [ ] 8. Unity 编辑器使用 2022.3.62f2c1 版本
-- [ ] 9. 已打开 `City.unity` 或 `xiong_20.unity` 场景
+- [ ] 9. 已打开 `City.unity` 场景
 
 **Unity 场景配置：**
 - [ ] 10. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_30`

@@ -1,0 +1,128 @@
+{
+  "schema_version": "edge-real-state-validation-v1",
+  "status": "PASS",
+  "minimum_action_agreement": 0.95,
+  "steps_per_intersection": 120,
+  "scenarios": {
+    "real_evening": {
+      "teacher": "models/dqn/dqn_multi_shared_real_evening_perf_1000000steps.zip",
+      "candidate": "models/edge/evening/model.onnx",
+      "samples": 960,
+      "action_agreement": 1.0,
+      "intersections": {
+        "J01": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J05": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J10": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J15": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J20": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J21": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J25": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J30": {
+          "samples": 120,
+          "action_agreement": 1.0
+        }
+      }
+    },
+    "real_offpeak": {
+      "teacher": "models/dqn/dqn_multi_shared_real_evening_perf_1000000steps.zip",
+      "candidate": "models/edge/evening/model.onnx",
+      "samples": 960,
+      "action_agreement": 1.0,
+      "intersections": {
+        "J01": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J05": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J10": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J15": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J20": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J21": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J25": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J30": {
+          "samples": 120,
+          "action_agreement": 1.0
+        }
+      }
+    },
+    "real_peak": {
+      "teacher": "models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip",
+      "candidate": "models/edge/peak/model.onnx",
+      "samples": 960,
+      "action_agreement": 1.0,
+      "intersections": {
+        "J01": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J05": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J10": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J15": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J20": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J21": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J25": {
+          "samples": 120,
+          "action_agreement": 1.0
+        },
+        "J30": {
+          "samples": 120,
+          "action_agreement": 1.0
+        }
+      }
+    }
+  }
+}

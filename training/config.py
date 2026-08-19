@@ -56,14 +56,19 @@ TRAINING_CONFIG = {
 }
 
 DISTILL_CONFIG = {
-    'teacher_model_path': os.path.join(MODEL_DIR, 'dqn_pretrained.zip'),
-    'student_model_path': os.path.join(MODEL_DIR, 'dqn_student.zip'),
-    'quantized_model_path': os.path.join(MODEL_DIR, 'dqn_quantized.pt'),
-    'distill_epochs': 50,
+    'teacher_model_paths': {
+        'peak': os.path.join(MODEL_DIR, 'dqn', 'dqn_multi_shared_real_peak_perf_1000000steps.zip'),
+        'evening': os.path.join(MODEL_DIR, 'dqn', 'dqn_multi_shared_real_evening_perf_1000000steps.zip'),
+    },
+    'output_root': os.path.join(MODEL_DIR, 'edge'),
+    'input_dimension': 26,
+    'state_dimension': 22,
+    'action_mask_dimension': 4,
+    'distill_epochs': 30,
     'distill_lr': 1e-3,
     'temperature': 2.0,
     'alpha': 0.7,
-    'student_hidden_layers': [64, 64],
+    'student_hidden_layers': [56, 56],
 }
 
 ENV_CONFIG = {

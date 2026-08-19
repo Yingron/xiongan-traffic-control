@@ -1,0 +1,68 @@
+{
+  "schema_version": "edge-model-v1",
+  "source": {
+    "path": "models/dqn/dqn_multi_shared_real_evening_perf_1000000steps.zip",
+    "sha256": "eae0ba59ee2f08439be03dab4d383d3598bebe1e51e454cad79e5776c83a7d29",
+    "format": "stable-baselines3-dqn"
+  },
+  "contract": {
+    "input_dimension": 26,
+    "state_dimension": 22,
+    "action_mask_dimension": 4,
+    "action_count": 4,
+    "model_contract_version": "shared-dqn-26x4-v1",
+    "normalization": "none"
+  },
+  "structured_pruning": {
+    "teacher_hidden_dims": [
+      64,
+      64
+    ],
+    "pruned_hidden_dims": [
+      56,
+      56
+    ],
+    "calibration_samples": 20000,
+    "validation_samples": 5000,
+    "epochs": 30,
+    "final_distillation_loss": 0.363045834004879
+  },
+  "offline_action_agreement": {
+    "fp32": 1.0,
+    "int8": 0.9924,
+    "pruned_fp32": 0.9732,
+    "pruned_int8": 0.9724
+  },
+  "artifacts": {
+    "torchscript_fp32": {
+      "path": "models/edge/evening/model_fp32.pt",
+      "size_bytes": 34902,
+      "sha256": "3166fc4c6cddfd4e05bd956566fc86ed37800e0b03bebc52957d07699ded12f6"
+    },
+    "onnx_fp32": {
+      "path": "models/edge/evening/model.onnx",
+      "size_bytes": 25742,
+      "sha256": "3536ca4b205ca164400f599599f7b4734ec9bb70f485e2301464afc9fb28dbdc"
+    },
+    "torchscript_int8": {
+      "path": "models/edge/evening/model_int8.pt",
+      "size_bytes": 36220,
+      "sha256": "8ddad2ce6d4593ba286573a4447a3ded2e8bcf3bd62dfc7756378ff765302157"
+    },
+    "onnx_int8": {
+      "path": "models/edge/evening/model_int8.onnx",
+      "size_bytes": 23904,
+      "sha256": "e8361dba14aa12bb523ddd55f043cf06396f2e8402276072bc575c0ea6ac4a7c"
+    },
+    "torchscript_pruned_fp32": {
+      "path": "models/edge/evening/model_pruned_fp32.pt",
+      "size_bytes": 30833,
+      "sha256": "59e04de762ede4d52bf9dd6c6c04d39d80cfe3c0409ade25508c9876beda256a"
+    },
+    "torchscript_pruned_int8": {
+      "path": "models/edge/evening/model_pruned_int8.pt",
+      "size_bytes": 32215,
+      "sha256": "979618fcace44d42b380832db402d93d6ffad4e2b155e48d35b3ecf1ba6b73a3"
+    }
+  }
+}
