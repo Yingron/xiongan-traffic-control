@@ -45,7 +45,9 @@ SCENARIOS = {
     "real_offpeak": {
         "label": "真实平峰(14:30-16:30)",
         "sumocfg": SUMO_FILES_DIR / "xiongan_real_offpeak.sumocfg",
-        "model": "dqn_multi_shared_real_offpeak_perf_1000000steps.zip",
+        # offpeak 专用模型两次训练均病态（见 models/dqn/archive/ failed_v1/v2），
+        # 正式方案：evening 模型跨场景泛化（30路口全量 reward −1.6%，代表8路口 +5.4%）
+        "model": "dqn_multi_shared_real_evening_perf_1000000steps.zip",
     },
     "real_evening": {
         "label": "真实晚高峰(17:30-19:30)",

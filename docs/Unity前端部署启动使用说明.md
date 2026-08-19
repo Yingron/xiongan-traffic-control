@@ -232,7 +232,9 @@ models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip
        "real_offpeak": {
            "label": "真实平峰(14:30-16:30)",
            "sumocfg": SUMO_FILES_DIR / "xiongan_real_offpeak.sumocfg",
-           "model": "dqn_multi_shared_real_offpeak_perf_1000000steps.zip",
+           # 正式方案：offpeak 专用模型两次训练均病态（archive/ failed_v1/v2），
+           # 采用 evening 模型跨场景泛化（代表8路口 +5.4% vs FT）
+           "model": "dqn_multi_shared_real_evening_perf_1000000steps.zip",
        },
        "real_evening": {
            "label": "真实晚高峰(17:30-19:30)",
