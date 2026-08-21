@@ -7,7 +7,7 @@ namespace CitySimulation.Bootstrap
 {
     /// <summary>
     /// Scene bootstrapper: drop this into Scenes/City.unity as a GameObject and
-    /// it will automatically build the xiongan 20-intersection road network
+    /// it will automatically build the xiongan 30-intersection road network
     /// on scene Awake (right after GameServices initializes ObjectManager).
     ///
     /// To use:
@@ -15,16 +15,16 @@ namespace CitySimulation.Bootstrap
     ///   2. Create a new empty GameObject named "XionganRoadBootstrap"
     ///   3. Drag this script as a component
     ///   4. (Optional) Tick "Build On Awake" to auto-build.
-    ///   5. Press Play — road network + 20 traffic lights will appear.
+    ///   5. Press Play — road network + 30 traffic lights will appear.
     ///
-    /// Or trigger via the menu 雄安路网 / 构建 xiongan_20 ... instead.
+    /// Or trigger via the menu 雄安路网 / 构建 xiongan_30 ... instead.
     /// </summary>
     [DisallowMultipleComponent]
     public class XionganRoadBootstrap : MonoBehaviour
     {
         [Header("Settings")]
         [Tooltip("Name of the JSON file (without extension) under Assets/Scripts/Maps.")]
-        public string mapId = "xiongan_20";
+        public string mapId = "xiongan_30";
 
         [Tooltip("If true, BuildFromJson is invoked on Awake (Play mode).")]
         public bool buildOnAwake = true;
@@ -56,7 +56,7 @@ namespace CitySimulation.Bootstrap
         }
 
         /// <summary>Button-like API: build using GameServices.ObjectManager (Play mode).</summary>
-        [ContextMenu("Build Xiongan 20 (use GameServices)")]
+        [ContextMenu("Build Xiongan 30 (use GameServices)")]
         public void BuildNow()
         {
             var builder = new RoadNetworkBuilder();
@@ -76,7 +76,7 @@ namespace CitySimulation.Bootstrap
         }
 
         /// <summary>Edit-mode safe build (does not require GameServices).</summary>
-        [ContextMenu("Build Xiongan 20 (standalone / edit mode)")]
+        [ContextMenu("Build Xiongan 30 (standalone / edit mode)")]
         public void BuildNowStandalone()
         {
             var builder = new RoadNetworkBuilder();

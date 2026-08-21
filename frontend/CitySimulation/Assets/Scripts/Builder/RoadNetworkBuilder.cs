@@ -9,17 +9,17 @@ using UnityEngine;
 namespace CitySimulation.Builder
 {
     /// <summary>
-    /// Parses xiongan_20.json (4x4 grid with 20 intersections, category 4 = traffic light)
+    /// Parses xiongan_30.json (6x5 grid with 30 intersections, category 4 = traffic light)
     /// and rebuilds the map inside the current scene via the existing ObjectManager
     /// pipeline (PrefabFactory + Resources/{Road,TarfficLight}/section|Empty_TrafficLight).
     ///
     /// Run-time usage:
     ///   var builder = new RoadNetworkBuilder();
-    ///   builder.BuildFromJson("xiongan_20");   // lives in Assets/Scripts/Maps
+    ///   builder.BuildFromJson("xiongan_30");   // lives in Assets/Scripts/Maps
     ///   // or
-    ///   builder.BuildFromJsonFullPath(@"C:\full\path\xiongan_20.json");
+    ///   builder.BuildFromJsonFullPath(@"C:\full\path\xiongan_30.json");
     ///
-    /// For editor usage, see RoadNetworkBuilderEditor.cs (menu: 雄安路网 / 构建 xiongan_20 20路口).
+    /// For editor usage, see RoadNetworkBuilderEditor.cs (menu: 雄安路网 / 构建 xiongan_30 30路口).
     /// </summary>
     [Serializable]
     public class RoadNetworkBuilder
@@ -33,13 +33,13 @@ namespace CitySimulation.Builder
         public int TrafficLightsCreated => _trafficLightsCreated;
 
         /// <summary>
-        /// Resolve the xiongan_20.json path inside the Unity project. During edit mode
+        /// Resolve the xiongan_30.json path inside the Unity project. During edit mode
         /// or player builds we first search the canonical Assets/Scripts/Maps folder,
         /// then try Application.streamingAssetsPath for shipped JSONs.
         /// </summary>
         public static string ResolveJsonPath(string mapId)
         {
-            var safeId = string.IsNullOrEmpty(mapId) ? "xiongan_20" : mapId;
+            var safeId = string.IsNullOrEmpty(mapId) ? "xiongan_30" : mapId;
             if (!safeId.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
                 safeId += ".json";
 
@@ -61,8 +61,8 @@ namespace CitySimulation.Builder
             return null;
         }
 
-        /// <summary>Build from a map id inside Assets/Scripts/Maps (default "xiongan_20").</summary>
-        public BuildReport BuildFromJson(string mapId = "xiongan_20", ObjectManager objectManager = null)
+        /// <summary>Build from a map id inside Assets/Scripts/Maps (default "xiongan_30").</summary>
+        public BuildReport BuildFromJson(string mapId = "xiongan_30", ObjectManager objectManager = null)
         {
             var path = ResolveJsonPath(mapId);
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
@@ -84,7 +84,7 @@ namespace CitySimulation.Builder
 
         // --------------- json parsing (category mapping) ----------------
         //
-        // xiongan_20.json uses numeric "category" but our DTOs use MapCategory enum.
+        // xiongan_30.json uses numeric "category" but our DTOs use MapCategory enum.
         //   1 => Road
         //   4 => TrafficLight
         // We parse through a loose intermediate struct to keep JsonUtility happy.
@@ -177,7 +177,7 @@ namespace CitySimulation.Builder
             {
                 foreach (var raw in snap.trafficLights)
                 {
-                    // JSON 坐标约定: x=网格列(0-800), y=高度(道路0, 交通灯5), z=网格行(0-600)
+                    // JSON 坐标约定: x=网格列(0-800), y=高度(道路0, 交通灯5), z=网格行(0-1000)
                     // Unity 坐标约定: X=水平, Y=高度, Z=前进
                     // 直接映射: Unity(X,Y,Z) = JSON(x,y,z)
                     var dto = new TrafficLightDTO
@@ -229,7 +229,7 @@ namespace CitySimulation.Builder
                 mapId = mapId,
                 roads = _roadsCreated,
                 trafficLights = _trafficLightsCreated,
-                intersectionsExpected = 20,
+                intersectionsExpected = _trafficLightsCreated,
                 boundsMin = ComputeBounds(snap, true),
                 boundsMax = ComputeBounds(snap, false),
             };
@@ -272,7 +272,7 @@ namespace CitySimulation.Builder
         public string mapId;
         public int roads;
         public int trafficLights;
-        public int intersectionsExpected = 20;
+        public int intersectionsExpected = 30;
         public Vector3 boundsMin;
         public Vector3 boundsMax;
         public List<string> warnings = new List<string>();
@@ -283,7 +283,7 @@ namespace CitySimulation.Builder
         public void Validate()
         {
             if (trafficLights != intersectionsExpected)
-                warnings.Add($"路口数 {trafficLights} ≠ 预期 {intersectionsExpected}。如果JSON是xiongan_20请确认trafficLights段完整。");
+                warnings.Add($"路口数 {trafficLights} ≠ 预期 {intersectionsExpected}。请确认 JSON 的 trafficLights 段完整。");
             if (roads <= 0)
                 errors.Add("道路数为0，JSON roads段可能缺失或解析失败。");
         }

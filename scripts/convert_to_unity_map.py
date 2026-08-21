@@ -42,11 +42,13 @@ def generate_unity_map():
     }
     
     # ============ 生成道路 ============
+    # 只生成相邻路口之间的路段（与 SUMO 路网一致，共 98 条），
+    # 不生成外圈之外的悬空路段。
     for row in range(rows):
         y = (rows - 1 - row) * spacing
         
         # 水平道路（东向）
-        for col in range(cols):
+        for col in range(cols - 1):
             road_id = str(uuid.uuid4())
             points = [
                 {"x": col * spacing, "y": 0, "z": y},
@@ -65,7 +67,7 @@ def generate_unity_map():
             })
         
         # 水平道路（西向）
-        for col in range(cols):
+        for col in range(cols - 1):
             road_id = str(uuid.uuid4())
             points = [
                 {"x": (col + 1) * spacing, "y": 0, "z": y},
@@ -87,7 +89,7 @@ def generate_unity_map():
         x = col * spacing
         
         # 垂直道路（南向）
-        for row in range(rows):
+        for row in range(rows - 1):
             road_id = str(uuid.uuid4())
             y_start = (rows - 1 - row) * spacing
             y_end = (rows - 1 - (row + 1)) * spacing
@@ -109,7 +111,7 @@ def generate_unity_map():
             })
         
         # 垂直道路（北向）
-        for row in range(rows):
+        for row in range(rows - 1):
             road_id = str(uuid.uuid4())
             y_start = (rows - 1 - row) * spacing
             y_end = (rows - 1 - (row + 1)) * spacing
@@ -247,9 +249,9 @@ def main():
     # 生成Unity地图
     unity_map = generate_unity_map()
     
-    # 保存路径
+    # 保存路径：本项目 Unity 工程位于 frontend/CitySimulation
     output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
-                              'ChallengeCup-main', 'CitySimulation', 'Assets', 'Scripts', 'Maps')
+                              'frontend', 'CitySimulation', 'Assets', 'Scripts', 'Maps')
     os.makedirs(output_dir, exist_ok=True)
     
     output_path = os.path.join(output_dir, 'xiongan_30.json')

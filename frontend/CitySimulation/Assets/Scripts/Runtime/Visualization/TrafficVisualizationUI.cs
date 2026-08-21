@@ -13,6 +13,7 @@ namespace CitySimulation.Runtime.Visualization
     {
         SumoWebSocketClient _wsClient;
         SumoVisualizationBridge _bridge;
+        Font _uiFont;
 
         // ── UI 元素 ──
         Text _statusText;
@@ -31,6 +32,13 @@ namespace CitySimulation.Runtime.Visualization
 
         void Start()
         {
+            // 优先加载中文字体（Resources/Fonts/simhei.ttf），避免中文显示为方块
+            _uiFont = Resources.Load<Font>("Fonts/simhei");
+            if (_uiFont == null)
+            {
+                _uiFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            }
+
             _wsClient = GetComponent<SumoWebSocketClient>();
             _bridge = GetComponent<SumoVisualizationBridge>();
             BuildUI();
@@ -66,10 +74,30 @@ namespace CitySimulation.Runtime.Visualization
                 "场景: --", 16, TextAnchor.UpperLeft);
             _scenarioText.fontStyle = FontStyle.Bold;
 
+            // ── 顶部中央：平台标题 ──
+            var titleGo = new GameObject("Title");
+            titleGo.transform.SetParent(canvasGo.transform, false);
+            var titleRt = titleGo.AddComponent<RectTransform>();
+            titleRt.anchorMin = titleRt.anchorMax = new Vector2(0.5f, 1f);
+            titleRt.pivot = new Vector2(0.5f, 1f);
+            titleRt.anchoredPosition = new Vector2(0, -14);
+            titleRt.sizeDelta = new Vector2(900, 38);
+            var titleImg = titleGo.AddComponent<Image>();
+            titleImg.color = new Color(0, 0, 0, 0.35f);
+            titleImg.raycastTarget = false;
+            var title = titleGo.AddComponent<Text>();
+            title.font = _uiFont;
+            title.text = "雄安新区车路云一体化协同管控平台";
+            title.fontSize = 22;
+            title.fontStyle = FontStyle.Bold;
+            title.alignment = TextAnchor.MiddleCenter;
+            title.color = new Color(1f, 1f, 1f, 0.95f);
+            title.raycastTarget = false;
+
             // ── 右上：场景切换按钮 ──
-            _morningBtn = CreateButton(canvasGo.transform, new Vector2(-340, -20), 100, 40, "早高峰", () => SwitchScene("morning"));
-            _eveningBtn = CreateButton(canvasGo.transform, new Vector2(-230, -20), 100, 40, "晚高峰", () => SwitchScene("evening"));
-            _flatBtn = CreateButton(canvasGo.transform, new Vector2(-120, -20), 100, 40, "平峰", () => SwitchScene("flat"));
+            _morningBtn = CreateButton(canvasGo.transform, new Vector2(-340, -20), 100, 40, "早高峰", () => SwitchScene("real_peak"));
+            _eveningBtn = CreateButton(canvasGo.transform, new Vector2(-230, -20), 100, 40, "晚高峰", () => SwitchScene("real_evening"));
+            _flatBtn = CreateButton(canvasGo.transform, new Vector2(-120, -20), 100, 40, "平峰", () => SwitchScene("real_offpeak"));
 
             // ── 左下：指标面板 ──
             var panelGo = CreatePanel(canvasGo.transform, new Vector2(20, -180), 300, 150);
@@ -93,7 +121,7 @@ namespace CitySimulation.Runtime.Visualization
             rt.anchoredPosition = pos;
             rt.sizeDelta = new Vector2(w, h);
             var text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.font = _uiFont;
             text.text = content;
             text.fontSize = fontSize;
             text.alignment = anchor;
@@ -127,7 +155,7 @@ namespace CitySimulation.Runtime.Visualization
             textRt.pivot = new Vector2(0.5f, 0.5f);
             textRt.sizeDelta = Vector2.zero;
             var text = textGo.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.font = _uiFont;
             text.text = label;
             text.fontSize = 14;
             text.alignment = TextAnchor.MiddleCenter;
@@ -170,7 +198,7 @@ namespace CitySimulation.Runtime.Visualization
         {
             var labels = new System.Collections.Generic.Dictionary<string, string>
             {
-                {"morning", "早高峰"}, {"evening", "晚高峰"}, {"flat", "平峰"}
+                {"real_peak", "早高峰"}, {"real_evening", "晚高峰"}, {"real_offpeak", "平峰"}
             };
             var label = labels.TryGetValue(scenario, out var l) ? l : scenario;
             if (_scenarioText != null)
@@ -179,9 +207,9 @@ namespace CitySimulation.Runtime.Visualization
             }
 
             // 更新按钮高亮
-            SetButtonColor(_morningBtn, scenario == "morning");
-            SetButtonColor(_eveningBtn, scenario == "evening");
-            SetButtonColor(_flatBtn, scenario == "flat");
+            SetButtonColor(_morningBtn, scenario == "real_peak");
+            SetButtonColor(_eveningBtn, scenario == "real_evening");
+            SetButtonColor(_flatBtn, scenario == "real_offpeak");
         }
 
         void SetButtonColor(Button btn, bool active)
