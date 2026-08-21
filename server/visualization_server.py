@@ -18,6 +18,8 @@ import os
 import subprocess
 import sys
 import time
+import hashlib
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +31,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 SUMO_FILES_DIR = PROJECT_ROOT / "sumo_files"
 MODEL_DIR = PROJECT_ROOT / "models" / "dqn"
+EDGE_MODEL_REGISTRY_PATH = PROJECT_ROOT / "configs" / "edge_model_registry.json"
 
 # 30 路口顺序/特征维度统一取自 configs.constants（与训练环境一致）
 from configs.constants import INTERSECTION_ORDER, FEATURES_PER_INTERSECTION
@@ -40,19 +43,19 @@ SCENARIOS = {
     "real_peak": {
         "label": "真实早高峰(07:00-09:00)",
         "sumocfg": SUMO_FILES_DIR / "xiongan_real_peak.sumocfg",
-        "model": "dqn_multi_shared_real_peak_perf_1000000steps.zip",
+        "edge_model_id": "edge-real-peak-onnx-v1",
     },
     "real_offpeak": {
         "label": "真实平峰(14:30-16:30)",
         "sumocfg": SUMO_FILES_DIR / "xiongan_real_offpeak.sumocfg",
         # offpeak 专用模型两次训练均病态（见 models/dqn/archive/ failed_v1/v2），
         # 正式方案：evening 模型跨场景泛化（30路口全量 reward −1.6%，代表8路口 +5.4%）
-        "model": "dqn_multi_shared_real_evening_perf_1000000steps.zip",
+        "edge_model_id": "edge-real-offpeak-via-evening-onnx-v1",
     },
     "real_evening": {
         "label": "真实晚高峰(17:30-19:30)",
         "sumocfg": SUMO_FILES_DIR / "xiongan_real_evening.sumocfg",
-        "model": "dqn_multi_shared_real_evening_perf_1000000steps.zip",
+        "edge_model_id": "edge-real-evening-onnx-v1",
     },
 }
 
@@ -73,17 +76,26 @@ class VisualizationServer:
     """SUMO + DQN + WebSocket 可视化服务器"""
 
     def __init__(self, scenario: str = "real_peak", port: int = 8765,
-                 use_model: bool = True, use_gui: bool = False) -> None:
+                 use_model: bool = True, use_gui: bool = False,
+                 model_override: Path | None = None) -> None:
         self.scenario = scenario
         self.port = port
         self.use_model = use_model
         self.use_gui = use_gui
+        self.model_override = model_override
         self._traci: Any = None
         self._model: Any = None
+        self._model_backend: str | None = None
+        self._model_id: str | None = None
         self._sumo_proc: Any = None
         self._clients: set[Any] = set()
         self._current_actions: dict[str, int] = {}
+        self._last_requested_actions: dict[str, int] = {}
+        self._last_action_masks: dict[str, list[int]] = {}
         self._phase_changed_at: dict[str, float] = {}
+        # WebSocket 场景切换在 executor 线程执行；SUMO 步进在服务线程执行。
+        # 二者必须串行，避免切换期间对已关闭 TraCI socket 继续读写。
+        self._simulation_lock = threading.RLock()
         self._running = False
         self._step_count = 0
 
@@ -172,26 +184,72 @@ class VisualizationServer:
 
     # ── DQN 模型 ──
 
+    @staticmethod
+    def _sha256(path: Path) -> str:
+        digest = hashlib.sha256()
+        with path.open("rb") as stream:
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(chunk)
+        return digest.hexdigest()
+
+    def _load_formal_edge_model(self) -> None:
+        """Load the registry-approved ONNX model for the active scenario.
+
+        The edge registry is the deployable source of truth.  It deliberately
+        excludes experimental INT8 artefacts whose real-state fidelity failed.
+        """
+        registry = json.loads(EDGE_MODEL_REGISTRY_PATH.read_text(encoding="utf-8"))
+        model_id = SCENARIOS[self.scenario]["edge_model_id"]
+        entry = registry.get("models", {}).get(model_id)
+        if not isinstance(entry, dict) or entry.get("status") != "ready":
+            raise RuntimeError(f"正式边缘模型未就绪: {model_id}")
+        artifact = PROJECT_ROOT / str(entry["artifact_path"])
+        if not artifact.is_file():
+            raise FileNotFoundError(f"正式边缘模型不存在: {artifact}")
+        expected_sha = entry.get("sha256")
+        actual_sha = self._sha256(artifact)
+        if expected_sha and actual_sha != expected_sha:
+            raise RuntimeError(f"正式边缘模型校验和不匹配: {artifact.name}")
+
+        from edge_deploy.inference import EdgeInference
+
+        self._model = EdgeInference(artifact)
+        self._model_backend = "edge-onnx"
+        self._model_id = model_id
+        print(f"[Server] 正式边缘模型已加载: {model_id} → {artifact.name}")
+
     def _load_model(self) -> None:
+        # 场景热切换时不能继续保留上一场景的模型。
+        self._model = None
+        self._model_backend = None
+        self._model_id = None
         if not self.use_model:
             print("[Server] 未加载 DQN 模型（--no-model 模式），使用固定配时")
             return
 
-        model_file = SCENARIOS[self.scenario]["model"]
-        model_path = MODEL_DIR / model_file
-        if not model_path.exists():
-            # 回退到最优模型
-            model_path = MODEL_DIR / "dqn_multi_shared_real_peak_perf_1000000steps.zip"
-            if not model_path.exists():
-                print(f"[Server] 未找到 DQN 模型，回退到固定配时")
+        try:
+            if self.model_override is None:
+                self._load_formal_edge_model()
                 return
 
-        try:
-            from stable_baselines3 import DQN
-            self._model = DQN.load(str(model_path))
-            print(f"[Server] DQN 模型已加载: {model_path.name}")
+            model_path = self.model_override
+            if not model_path.exists():
+                raise FileNotFoundError(f"本地验证覆盖模型不存在: {model_path}")
+            # 保留 .zip 覆盖模式，便于回归比对；正式三场景运行不会走此路径。
+            if model_path.suffix.lower() == ".zip":
+                from training.masked_policy import MaskableDQN
+
+                self._model = MaskableDQN.load(str(model_path))
+                self._model_backend = "sb3-zip-override"
+            else:
+                from edge_deploy.inference import EdgeInference
+
+                self._model = EdgeInference(model_path)
+                self._model_backend = f"edge-{model_path.suffix.lower().lstrip('.')}"
+            self._model_id = f"local-override:{model_path.name}"
+            print(f"[Server] 本地验证覆盖模型已加载: {model_path.name}")
         except Exception as e:
-            print(f"[Server] DQN 模型加载失败: {e}，回退到固定配时")
+            print(f"[Server] DQN 模型加载失败: {e}；本次不会执行模型推理")
             self._model = None
 
     # ── 状态提取 ──
@@ -213,18 +271,42 @@ class VisualizationServer:
         if self._model is None:
             return dict(self._current_actions)
 
-        obs_dim = int(np.prod(self._model.observation_space.shape))
         masks = None
-        if obs_dim > FEATURES_PER_INTERSECTION and self._traci is not None:
+        if self._traci is not None:
             from env.global_state import get_action_masks
 
             masks = get_action_masks(self._traci, INTERSECTION_ORDER)
 
+        self._last_action_masks = (
+            {tl_id: [int(value) for value in masks[idx]] for idx, tl_id in enumerate(INTERSECTION_ORDER)}
+            if masks is not None
+            else {}
+        )
+
+        local_states = np.asarray(
+            [state[index * FEATURES_PER_INTERSECTION:(index + 1) * FEATURES_PER_INTERSECTION]
+             for index in range(len(INTERSECTION_ORDER))],
+            dtype=np.float32,
+        )
+        if self._model_backend and self._model_backend.startswith("edge-"):
+            if masks is None:
+                raise RuntimeError("正式边缘模型推理需要 30×4 动作掩码")
+            predictions, _ = self._model.predict(local_states, masks)
+            return {
+                tl_id: int(predictions[index])
+                for index, tl_id in enumerate(INTERSECTION_ORDER)
+            }
+
+        obs_dim = int(np.prod(self._model.observation_space.shape))
         actions: dict[str, int] = {}
         for idx, tl_id in enumerate(INTERSECTION_ORDER):
-            local_state = state[idx * FEATURES_PER_INTERSECTION:(idx + 1) * FEATURES_PER_INTERSECTION]
+            local_state = local_states[idx]
             if masks is not None:
                 local_state = np.concatenate([local_state, masks[idx]])
+            if local_state.size != obs_dim:
+                raise RuntimeError(
+                    f"模型观测维度不匹配: {tl_id} 得到 {local_state.size} 维，模型需要 {obs_dim} 维"
+                )
             action, _ = self._model.predict(local_state.astype(np.float32), deterministic=True)
             actions[tl_id] = int(action)
         return actions
@@ -322,12 +404,18 @@ class VisualizationServer:
     # ── 仿真步进 ──
 
     def _simulation_step(self) -> dict:
+        """Run one atomic SUMO/DQN step, never concurrently with a restart."""
+        with self._simulation_lock:
+            return self._simulation_step_locked()
+
+    def _simulation_step_locked(self) -> dict:
         """执行一步仿真：状态提取 → DQN推理 → 应用动作 → 推进SUMO → 返回快照"""
         # 1. 提取状态
         state = self._extract_state()
 
         # 2. DQN 推理
         actions = self._get_dqn_actions(state)
+        self._last_requested_actions = dict(actions)
 
         # 3. 应用动作
         self._apply_actions(actions)
@@ -345,11 +433,17 @@ class VisualizationServer:
             "step": self._step_count,
             "scenario": self.scenario,
             "scenario_label": SCENARIOS[self.scenario]["label"],
+            "model_id": self._model_id,
+            "model_backend": self._model_backend,
             "simulation_time": round(float(traci.simulation.getTime()), 1),
             "traffic_lights": self._extract_traffic_lights(),
             "vehicles": self._extract_vehicles(),
             "metrics": self._compute_metrics(),
+            # requested_actions 为掩码 DQN 的原始决策；actions 为经过最小绿灯
+            # 约束后实际写入 SUMO 的相位。两者分开可审计动作闭环。
+            "requested_actions": dict(self._last_requested_actions),
             "actions": dict(self._current_actions),
+            "action_masks": dict(self._last_action_masks),
         }
         return snapshot
 
@@ -363,11 +457,12 @@ class VisualizationServer:
             return {"type": "scenario_switched", "scenario": self.scenario, "message": "已是当前场景"}
 
         print(f"[Server] 切换场景: {self.scenario} → {new_scenario}")
-        self._close_sumo()
-        self.scenario = new_scenario
-        self._start_sumo()
-        self._load_model()
-        self._step_count = 0
+        with self._simulation_lock:
+            self._close_sumo()
+            self.scenario = new_scenario
+            self._start_sumo()
+            self._load_model()
+            self._step_count = 0
 
         return {
             "type": "scenario_switched",
@@ -389,6 +484,8 @@ class VisualizationServer:
             "scenario": self.scenario,
             "scenario_label": SCENARIOS[self.scenario]["label"],
             "model_loaded": self._model is not None,
+            "model_id": self._model_id,
+            "model_backend": self._model_backend,
             "intersection_order": list(INTERSECTION_ORDER),
         }, ensure_ascii=False))
 
@@ -473,6 +570,10 @@ def main():
                         help="初始场景 (默认: real_peak)")
     parser.add_argument("--port", type=int, default=8765, help="WebSocket 端口 (默认: 8765)")
     parser.add_argument("--no-model", action="store_true", help="不加载 DQN 模型（固定配时）")
+    parser.add_argument(
+        "--model-override", type=Path,
+        help="仅用于本地联调的掩码 DQN 模型路径；不替代三场景正式模型交付",
+    )
     parser.add_argument("--gui", action="store_true", help="使用 SUMO GUI（调试用）")
     args = parser.parse_args()
 
@@ -481,6 +582,7 @@ def main():
         port=args.port,
         use_model=not args.no_model,
         use_gui=args.gui,
+        model_override=args.model_override,
     )
     asyncio.run(server.run())
 

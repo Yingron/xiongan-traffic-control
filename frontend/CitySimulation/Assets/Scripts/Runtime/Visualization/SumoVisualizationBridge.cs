@@ -233,10 +233,10 @@ namespace CitySimulation.Runtime.Visualization
                 if (string.IsNullOrEmpty(tl.id)) continue;
                 if (_tlAnimators.TryGetValue(tl.id, out var animator))
                 {
-                    // SUMO相位映射到Unity相位:
-                    //   SUMO 0 (NS直) / 1 (NS左) → Unity 0 (NS_Green)
-                    //   SUMO 2 (EW直) / 3 (EW左) → Unity 2 (EW_Green)
-                    int unityPhase = (tl.phase < 2) ? 0 : 2;
+                    // SUMO 与 Unity 均采用 0--3 的四相位约定。必须保留左转
+                    // 相位（1/3），否则 DQN 的动作虽已回传到 SUMO，Unity 视觉上
+                    // 却会把左转绿灯误显示为直行绿灯，无法完成闭环验收。
+                    int unityPhase = ((tl.phase % 4) + 4) % 4;
 
                     // 仅在相位变化时更新（避免每帧重置计时器）
                     if (!_lastPhases.TryGetValue(tl.id, out int lastPhase) || lastPhase != unityPhase)
@@ -342,6 +342,23 @@ namespace CitySimulation.Runtime.Visualization
                 ids[i] = $"J{i + 1:D2}";
             }
             return ids;
+        }
+
+        /// <summary>
+        /// 切换后端场景时清除旧快照，避免车辆、指标或相位短暂残留在新场景中。
+        /// </summary>
+        public void ResetForScenarioSwitch()
+        {
+            foreach (var vehicle in _activeVehicles.Values)
+            {
+                if (vehicle != null)
+                {
+                    vehicle.SetActive(false);
+                }
+            }
+            _activeVehicles.Clear();
+            _lastPhases.Clear();
+            CurrentMetrics = null;
         }
 
         void OnDestroy()
