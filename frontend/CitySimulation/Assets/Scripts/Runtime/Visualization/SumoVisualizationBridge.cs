@@ -28,8 +28,8 @@ namespace CitySimulation.Runtime.Visualization
         public int poolSize = 80;
         [Tooltip("车辆缩放")]
         public float vehicleScale = 1f;
-        [Tooltip("车辆 Y 偏移（高度）")]
-        public float vehicleYOffset = 0f;
+        [Tooltip("车辆 Y 偏移（高度）。0.35 可防止车辆与路面 z-fighting 闪烁。")]
+        public float vehicleYOffset = 0.35f;
 
         [Header("坐标变换")]
         [Tooltip("SUMO 坐标到 Unity 坐标的缩放系数")]
@@ -287,23 +287,23 @@ namespace CitySimulation.Runtime.Visualization
 
         void MatchTrafficLightsByPosition()
         {
-            // SUMO 路口坐标（与 xiongan_30.nod.xml 一致）
+            // SUMO 路口坐标（与 xiongan_30.nod.xml 一致，SUMO y=North → Unity z）
             var intersectionPositions = new Dictionary<string, Vector2>
             {
-                {"J01", new Vector2(600, 1000)}, {"J02", new Vector2(800, 800)},
-                {"J03", new Vector2(800, 1000)}, {"J04", new Vector2(200, 800)},
-                {"J05", new Vector2(0, 1000)},   {"J06", new Vector2(400, 800)},
-                {"J07", new Vector2(200, 1000)}, {"J08", new Vector2(600, 800)},
-                {"J09", new Vector2(200, 600)},  {"J10", new Vector2(400, 1000)},
+                {"J05", new Vector2(0, 1000)},   {"J07", new Vector2(200, 1000)},
+                {"J10", new Vector2(400, 1000)}, {"J01", new Vector2(600, 1000)},
+                {"J03", new Vector2(800, 1000)}, {"J14", new Vector2(0, 800)},
+                {"J04", new Vector2(200, 800)},  {"J06", new Vector2(400, 800)},
+                {"J08", new Vector2(600, 800)},  {"J02", new Vector2(800, 800)},
+                {"J17", new Vector2(0, 600)},    {"J09", new Vector2(200, 600)},
                 {"J11", new Vector2(400, 600)},  {"J12", new Vector2(600, 600)},
-                {"J13", new Vector2(0, 0)},      {"J14", new Vector2(0, 800)},
                 {"J15", new Vector2(800, 600)},  {"J16", new Vector2(0, 400)},
-                {"J17", new Vector2(0, 600)},    {"J18", new Vector2(200, 400)},
-                {"J19", new Vector2(400, 400)},  {"J20", new Vector2(600, 400)},
-                {"J21", new Vector2(800, 400)},  {"J22", new Vector2(0, 200)},
-                {"J23", new Vector2(200, 200)},  {"J24", new Vector2(400, 200)},
-                {"J25", new Vector2(600, 200)},  {"J26", new Vector2(200, 0)},
-                {"J27", new Vector2(400, 0)},    {"J28", new Vector2(800, 200)},
+                {"J18", new Vector2(200, 400)},  {"J19", new Vector2(400, 400)},
+                {"J20", new Vector2(600, 400)},  {"J21", new Vector2(800, 400)},
+                {"J22", new Vector2(0, 200)},    {"J23", new Vector2(200, 200)},
+                {"J24", new Vector2(400, 200)},  {"J25", new Vector2(600, 200)},
+                {"J28", new Vector2(800, 200)},  {"J13", new Vector2(0, 0)},
+                {"J26", new Vector2(200, 0)},    {"J27", new Vector2(400, 0)},
                 {"J29", new Vector2(600, 0)},    {"J30", new Vector2(800, 0)},
             };
 

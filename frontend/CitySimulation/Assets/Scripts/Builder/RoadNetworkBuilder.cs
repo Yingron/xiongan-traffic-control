@@ -177,7 +177,7 @@ namespace CitySimulation.Builder
             {
                 foreach (var raw in snap.trafficLights)
                 {
-                    // JSON 坐标约定: x=网格列(0-800), y=高度(道路0, 交通灯5), z=网格行(0-600)
+                    // JSON 坐标约定: x=网格列(0-800), y=高度(道路0, 交通灯5), z=网格行(0-1000)
                     // Unity 坐标约定: X=水平, Y=高度, Z=前进
                     // 直接映射: Unity(X,Y,Z) = JSON(x,y,z)
                     var dto = new TrafficLightDTO
@@ -229,7 +229,7 @@ namespace CitySimulation.Builder
                 mapId = mapId,
                 roads = _roadsCreated,
                 trafficLights = _trafficLightsCreated,
-                intersectionsExpected = 30,
+                intersectionsExpected = _trafficLightsCreated,
                 boundsMin = ComputeBounds(snap, true),
                 boundsMax = ComputeBounds(snap, false),
             };
@@ -283,7 +283,7 @@ namespace CitySimulation.Builder
         public void Validate()
         {
             if (trafficLights != intersectionsExpected)
-                warnings.Add($"路口数 {trafficLights} ≠ 预期 {intersectionsExpected}。如果JSON是xiongan_30请确认trafficLights段完整。");
+                warnings.Add($"路口数 {trafficLights} ≠ 预期 {intersectionsExpected}。请确认 JSON 的 trafficLights 段完整。");
             if (roads <= 0)
                 errors.Add("道路数为0，JSON roads段可能缺失或解析失败。");
         }
