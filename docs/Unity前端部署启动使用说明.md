@@ -57,7 +57,8 @@ xiongan-traffic-control/
 ├── frontend/CitySimulation/        ← Unity 项目（本指南重点）
 │   ├── Assets/
 │   │   ├── Scenes/                 ← 场景文件
-│   │   │   ├── City.unity          ← 当前推荐打开的场景
+│   │   │   ├── xiong_30.unity      ← 推荐打开的场景（30 路口）
+│   │   │   ├── City.unity
 │   │   │   └── SampleScene.unity
 │   │   └── Scripts/
 │   │       ├── Maps/xiongan_30.json ← 30路口路网数据
@@ -210,7 +211,7 @@ xiongan-traffic-control/
 models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip
 ```
 
-> 该模型为真实早高峰场景下训练 100 万步的参数共享 DQN，文件大小约 61 KB。
+> 该模型为真实早高峰场景下训练 100 万步的参数共享 DQN，文件大小约 118 KB（11,784 参数）。
 
 ### 5.2 修改可视化服务配置
 
@@ -389,15 +390,15 @@ python server/visualization_server.py --scenario real_peak --port 8765
 - 在 Unity Hub 中点击 `CitySimulation` 项目，等待 Unity 编辑器加载完成。
 - 加载完成后，可在编辑器顶部标题栏看到项目名称 `CitySimulation - Unity 2022.3.62f2c1`。
 
-### 7.4 步骤 2：打开场景 Scenes/City.unity
+### 7.4 步骤 2：打开场景 Scenes/xiong_30.unity（或 City.unity）
 
 1. 在 Unity 编辑器顶部的 **Project 窗口**中，导航到：
    ```
    Assets/Scenes/
    ```
 2. 双击以下任一场景文件打开：
-   - **`City.unity`**（推荐，主城市场景）
-   - 推荐 **`City.unity`**（当前30路口场景）
+   - **`xiong_30.unity`**（推荐，30 路口专用场景）
+   - 或 **`City.unity`**（主城市场景，`XionganRoadBootstrap` 的 Map Id 已配置为 `xiongan_30`）
 
    > 也可通过菜单 **File → Open Scene** 打开。
 3. 打开后，**Hierarchy 窗口**（左上）会显示当前场景的 GameObject 层级结构。
@@ -432,10 +433,10 @@ python server/visualization_server.py --scenario real_peak --port 8765
 **方法 A：通过 Unity 顶部菜单构建（编辑模式预览）**
 
 1. 在 Unity 编辑器顶部菜单栏，点击 **雄安路网** 菜单（如果看不到，可能是因为脚本未编译完成，请等待编译完成或检查 Console 是否有编译错误）。
-2. 选择 **构建 xiongan_30 30路口**。
+2. 选择 **构建 xiongan_30 30路口**（菜单项名称类似 `雄安路网 / 构建 xiongan_30 30路口`）。
 3. 等待构建完成，Console 窗口会输出：
    ```
-   [XionganRoadBootstrap] [OK][standalone] map=xiongan_30 roads=xx tls=30/30
+   [XionganRoadBootstrap] [OK][standalone] map=xiongan_30 roads=98 tls=30/30
    ```
 4. 切换到 **Scene 视图**（点击 Scene 标签页），应能看到 30 路口的网格路网和信号灯。
 
@@ -444,8 +445,8 @@ python server/visualization_server.py --scenario real_peak --port 8765
 1. 在 Hierarchy 中选中 `XionganRoadBootstrap` 对象。
 2. 在 Inspector 中 `XionganRoadBootstrap (Script)` 组件右上角，点击三个小点（齿轮）图标。
 3. 在弹出菜单中选择：
-   - **Build Xiongan 20 (standalone / edit mode)** — 编辑模式下构建（推荐用于预览）
-   - 或 **Build Xiongan 20 (use GameServices)** — 运行模式下构建
+   - **Build Xiongan 30 (standalone / edit mode)** — 编辑模式下构建（推荐用于预览）
+   - 或 **Build Xiongan 30 (use GameServices)** — 运行模式下构建
 4. Console 窗口会输出构建成功日志。
 
 **方法 C：运行时自动构建（Play 模式）**
@@ -455,32 +456,43 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 **验证路网生成成功：**
 
-- Scene 视图中应出现 20 个十字路口和连接道路。
+- Scene 视图中应出现 30 个十字路口和连接道路。
 - Hierarchy 中可能新增 `Roads`、`TrafficLights` 等对象组。
 - Console 无红色错误日志。
 
-### 7.7 步骤 5：创建 VisualizationSystem 并挂载 VisualizationBootstrap
+### 7.7 步骤 5：确认 VisualizationSystem（已预置）
 
-> `VisualizationBootstrap` 是连接 Unity 与后端 Python 服务的桥梁，负责自动创建 WebSocket 客户端、可视化桥接器和 UI 面板。
+> `VisualizationSystem` 已预置在 `xiong_30.unity` 与 `City.unity` 中，**无需手动创建**。
+> 它是连接 Unity 与后端 Python 服务的桥梁，Awake 时自动配置 WebSocket 客户端、可视化桥接器和演示 HUD。
 
-**5.1 创建空 GameObject：**
+**场景中应已存在以下组件：**
 
-1. 在 Hierarchy 窗口中右键空白处。
-2. 选择 **Create Empty**。
-3. 将新对象重命名为 **`VisualizationSystem`**。
-   > 重命名方法：选中对象后按 `F2`，或再次点击对象名称。
-   > 建议使用准确的名称 `VisualizationSystem`，便于后续查找和管理。
+- `VisualizationBootstrap` — 启动器（Server Host = `127.0.0.1`，Server Port = `8765`，Auto Connect ✅，Disable Local Simulation ✅）
+- `SumoWebSocketClient` — WebSocket 客户端（8765 端口）
+- `SumoVisualizationBridge` — 可视化桥接器（SUMO 数据驱动车辆渲染与信号灯相位）
+- `TrafficVisualizationUI` — 演示 HUD（自动创建 Canvas）
 
-**5.2 挂载 VisualizationBootstrap 脚本：**
+**演示 HUD 布局：**
 
-1. 在 Hierarchy 中选中刚创建的 `VisualizationSystem` 对象。
-2. 在右侧 **Inspector 窗口**中，点击最下方的 **Add Component** 按钮。
-3. 在搜索框中输入 `VisualizationBootstrap`。
-4. 在搜索结果中点击 `VisualizationBootstrap` 脚本，将其添加到对象上。
+| 位置 | 内容 |
+|------|------|
+| 顶部中央 | 平台标题「雄安新区车路云一体化协同管控平台」 |
+| 左上 | 连接状态 ● 已连接 / ○ 未连接 + 当前场景名 |
+| 右上 | 场景切换按钮：**早高峰**（real_peak）/ **晚高峰**（real_evening）/ **平峰**（real_offpeak） |
+| 左下 | 实时指标面板（仿真时间、车辆总数、平均排队、平均等待、平均车速、已到达、已发车） |
+| 右下 | 渲染车辆数 |
 
-**5.3 配置 VisualizationBootstrap 参数：**
+> 中文由 `Assets/Resources/Fonts/simhei.ttf`（黑体）渲染，保证中文正常显示。
 
-挂载后，Inspector 中会显示 `VisualizationBootstrap (Script)` 组件，确认以下参数：
+**编辑器侧边栏（已默认禁用）：**
+
+- 场景中的 `UIDocument`（英文编辑器侧边栏，含 edit map / running / training 等开发工具按钮）默认**禁用**，避免遮挡演示画面。
+- 开发需要时可选中 Hierarchy 中的 `UIDocument` 对象，在 Inspector 顶部勾选重新启用。
+- 若在新建场景中没有 `VisualizationSystem`，可通过菜单 **雄安路网 / 创建可视化系统** 一键创建。
+
+**5.3 确认 VisualizationBootstrap 参数：**
+
+选中 `VisualizationSystem` 对象，确认 `VisualizationBootstrap (Script)` 参数：
 
 | 参数 | 推荐值 | 说明 |
 |------|--------|------|
@@ -489,12 +501,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 | **Auto Connect** | ✅ 勾选 | 启动时自动连接后端服务 |
 | **Disable Local Simulation** | ✅ 勾选 | 禁用本地车辆仿真，使用 SUMO 数据驱动 |
 
-> `VisualizationBootstrap` 在 Awake 时会自动添加以下组件（无需手动添加）：
-> - `SumoWebSocketClient` — WebSocket 客户端
-> - `SumoVisualizationBridge` — 可视化桥接器
-> - `TrafficVisualizationUI` — 数据面板 UI
->
-> 如果希望分别配置这些组件，也可手动添加。
+> 其余三个组件（`SumoWebSocketClient` / `SumoVisualizationBridge` / `TrafficVisualizationUI`）由 `VisualizationBootstrap` 在 Awake 时自动配置，一般无需手动调整。
 
 **5.4 保存场景：**
 
@@ -504,13 +511,13 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 运行前，请逐项确认以下配置已完成：
 
-- [ ] 1. 已打开 `City.unity` 场景
+- [ ] 1. 已打开 `xiong_30.unity` 或 `City.unity` 场景（均内置 30 路口配置）
 - [ ] 2. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_30`
 - [ ] 3. Hierarchy 中存在 `SimulationRuntimeDriver`
 - [ ] 4. 已通过菜单 **雄安路网 / 构建 xiongan_30 30路口** 生成路网和信号灯
-- [ ] 5. Hierarchy 中已创建 `VisualizationSystem` 空对象
-- [ ] 6. `VisualizationSystem` 上已挂载 `VisualizationBootstrap` 脚本
-- [ ] 7. `VisualizationBootstrap` 的 Server Host = `127.0.0.1`，Server Port = `8765`
+- [ ] 5. Hierarchy 中存在 `VisualizationSystem`（已预置 4 组件：VisualizationBootstrap / SumoWebSocketClient / SumoVisualizationBridge / TrafficVisualizationUI）
+- [ ] 6. `VisualizationBootstrap` 的 Server Host = `127.0.0.1`，Server Port = `8765`
+- [ ] 7. `UIDocument` 编辑器侧边栏处于禁用状态（默认已禁用，可勾选恢复）
 - [ ] 8. 已保存场景（Ctrl+S）
 
 ### 7.9 点击 Play 运行
@@ -521,13 +528,13 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 **路网构建日志：**
 ```
-[XionganRoadBootstrap] [OK] map=xiongan_30 roads=xx tls=30/30
+[XionganRoadBootstrap] [OK] map=xiongan_30 roads=98 tls=30/30
 ```
 
 **WebSocket 连接成功日志：**
 ```
 [SumoWS] 已连接 → ws://127.0.0.1:8765
-[SumoWS] 服务器确认 — 场景: 平峰
+[SumoWS] 服务器确认 — 场景: 真实早高峰(07:00-09:00)
 ```
 
 **可视化桥接启动日志：**
@@ -558,13 +565,13 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 **路网构建成功日志：**
 ```
-[XionganRoadBootstrap] [OK] map=xiongan_30 roads=xx tls=30/30
+[XionganRoadBootstrap] [OK] map=xiongan_30 roads=98 tls=30/30
 ```
 
 **WebSocket 连接成功日志：**
 ```
 [SumoWS] 已连接 → ws://127.0.0.1:8765
-[SumoWS] 服务器确认 — 场景: 平峰
+[SumoWS] 服务器确认 — 场景: 真实早高峰(07:00-09:00)
 ```
 
 **车辆生成日志（如启用本地仿真）：**
@@ -589,7 +596,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 ### 8.4 可视化数据面板（如有）
 
 如果场景中包含 `TrafficVisualizationUI` 组件，Game 视图右上角会显示数据面板，包含：
-- 当前场景：平峰
+- 当前场景：真实早高峰
 - 仿真时间
 - 车辆总数
 - 平均排队长度
@@ -819,15 +826,15 @@ python server/visualization_server.py --scenario real_peak --port 8765
 **Unity 项目：**
 - [ ] 7. Unity Hub 中已添加 CitySimulation 项目
 - [ ] 8. Unity 编辑器使用 2022.3.62f2c1 版本
-- [ ] 9. 已打开 `City.unity` 场景
+- [ ] 9. 已打开 `xiong_30.unity` 场景
 
 **Unity 场景配置：**
 - [ ] 10. Hierarchy 中存在 `XionganRoadBootstrap`，且 `Map Id` = `xiongan_30`
 - [ ] 11. Hierarchy 中存在 `SimulationRuntimeDriver`
 - [ ] 12. 已通过菜单 **雄安路网 / 构建 xiongan_30 30路口** 生成路网和信号灯
-- [ ] 13. Hierarchy 中已创建 `VisualizationSystem` 空对象
-- [ ] 14. `VisualizationSystem` 上已挂载 `VisualizationBootstrap` 脚本
-- [ ] 15. `VisualizationBootstrap` 的 Server Host = `127.0.0.1`，Server Port = `8765`
+- [ ] 13. Hierarchy 中存在 `VisualizationSystem`（已预置 4 组件）
+- [ ] 14. `VisualizationBootstrap` 的 Server Host = `127.0.0.1`，Server Port = `8765`
+- [ ] 15. `UIDocument` 编辑器侧边栏处于禁用状态（默认已禁用）
 - [ ] 16. 已保存场景（Ctrl+S）
 
 **运行验证：**
