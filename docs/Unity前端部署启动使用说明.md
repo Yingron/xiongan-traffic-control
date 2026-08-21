@@ -1,15 +1,17 @@
-# Unity 前端部署、启动和使用说明（旧 WebSocket 可视化副本）
+# Unity 前端部署、启动和使用说明（30 路口正式联调版）
 
 > 适用范围：仓库仅保留 `frontend/CitySimulation` Unity工程。它既包含配合 `server/visualization_server.py:8765` 的SUMO可视化脚本，也包含监听 `127.0.0.1:5000`、供 `frontend/pymarl` 调用的长度前缀JSON/TCP协议；目前没有直接调用C后端REST `/api/v1/model/predict` 或WebSocket `/api/v1/ws`。三种接口不可混用。
 >
-> 当前仓库已有 peak 和 evening 两个正式百万步 DQN 权重；real_offpeak 正式方案复用
-> evening 权重。三个场景 model ID 均已在 `configs/model_registry.json` 注册为 `ready`。
+> 当前 Unity 联调服务使用仓库内的正式 FP32 ONNX 边缘模型：peak 使用
+> `models/edge/peak/model.onnx`，evening 与 offpeak 使用
+> `models/edge/evening/model.onnx`。三个场景的正式模型 ID 均在
+> `configs/edge_model_registry.json` 注册为 `ready`，加载前会校验 SHA-256。
 > 30路口地图使用 `frontend/CitySimulation/Assets/Scripts/Maps/xiongan_30.json`，由
 > `python scripts/convert_to_unity_map.py` 生成。Unity 尚未直接接入 C 后端 8000 端口协议。
 
 本指南面向首次接触本项目的用户，从零开始一步步完成 Unity 前端的部署与启动，最终在 Unity 编辑器中看到交通仿真动画正常运行。
 
-本指南使用的 DQN 模型文件为：`models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip`（真实早高峰场景，100万训练步）。
+本指南使用正式 ONNX 推理模型，不要求本机保留原始训练 `.zip` 文件。
 
 ---
 
@@ -66,8 +68,10 @@ xiongan-traffic-control/
 │   │       ├── Runtime/Visualization/ ← WebSocket 可视化
 │   │       └── Camera/              ← 相机控制
 ├── server/visualization_server.py  ← 后端可视化服务
-├── models/dqn/                     ← DQN 模型文件
-│   └── dqn_multi_shared_real_peak_perf_1000000steps.zip
+├── models/edge/                    ← 正式 ONNX 推理模型
+│   ├── peak/model.onnx             ← real_peak
+│   └── evening/model.onnx          ← real_evening / real_offpeak
+├── configs/edge_model_registry.json ← 正式模型注册与 SHA-256
 ├── sumo_files/                     ← SUMO 路网与场景配置
 └── requirements.txt                ← Python 依赖
 ```
@@ -190,28 +194,30 @@ xiongan-traffic-control/
    等待安装完成。主要依赖包括：
    - `fastapi` / `uvicorn` — Web 服务
    - `traci` — SUMO 交互接口
-   - `stable-baselines3` — DQN 模型加载
+   - `onnxruntime` — 正式 ONNX 模型推理
    - `websockets` — WebSocket 服务器
    - `numpy` / `pandas` / `matplotlib` — 数据处理
 
 4. 验证依赖：
    ```cmd
-   python -c "import traci; import stable_baselines3; import websockets; print('依赖验证成功')"
+   python -c "import traci, onnxruntime, websockets; print('依赖验证成功')"
    ```
    应输出 `依赖验证成功`。
 
 ---
 
-## 5. 第四步：配置 DQN 模型
+## 5. 第四步：确认正式 ONNX 模型
 
 ### 5.1 确认模型文件
 
-确认以下模型文件存在：
+确认以下正式交付文件存在：
 ```
-models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip
+models/edge/peak/model.onnx
+models/edge/evening/model.onnx
+configs/edge_model_registry.json
 ```
 
-> 该模型为真实早高峰场景下训练 100 万步的参数共享 DQN，文件大小约 118 KB（11,784 参数）。
+> 两个 ONNX 文件均为 26 维掩码 DQN 的正式部署产物：每个路口输入 22 维交通状态和 4 维动作掩码，输出 4 个相位动作。正式 FP32 ONNX 文件约 25 KB；请勿改用标记为实验性的 INT8 文件。
 
 ### 5.2 修改可视化服务配置
 
@@ -224,34 +230,29 @@ models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip
    server/visualization_server.py
    ```
 
-2. 找到 `SCENARIOS` 配置（文件头部）：
+2. 确认 `SCENARIOS` 通过正式边缘模型 ID 映射三种真实场景（无需手动修改）：
    ```python
    SCENARIOS = {
        "real_peak": {
            "label": "真实早高峰(07:00-09:00)",
            "sumocfg": SUMO_FILES_DIR / "xiongan_real_peak.sumocfg",
-           "model": "dqn_multi_shared_real_peak_perf_1000000steps.zip",
+           "edge_model_id": "edge-real-peak-onnx-v1",
        },
        "real_offpeak": {
            "label": "真实平峰(14:30-16:30)",
            "sumocfg": SUMO_FILES_DIR / "xiongan_real_offpeak.sumocfg",
-           # 正式方案：offpeak 专用模型两次训练均病态（archive/ failed_v1/v2），
-           # 采用 evening 模型跨场景泛化（代表8路口 +5.4% vs FT）
-           "model": "dqn_multi_shared_real_evening_perf_1000000steps.zip",
+           # 正式方案：复用 evening 模型跨场景泛化
+           "edge_model_id": "edge-real-offpeak-via-evening-onnx-v1",
        },
        "real_evening": {
            "label": "真实晚高峰(17:30-19:30)",
            "sumocfg": SUMO_FILES_DIR / "xiongan_real_evening.sumocfg",
-           "model": "dqn_multi_shared_real_evening_perf_1000000steps.zip",
+           "edge_model_id": "edge-real-evening-onnx-v1",
        },
    }
    ```
 
-3. `model` 字段指向训练产出的模型文件（`training/train_dqn.py` 按
-   `dqn_multi_shared_{scenario}_perf_{steps}steps.zip` 命名）。
-   模型文件不存在时服务会自动回退到固定配时，不影响启动。
-
-4. 保存文件。
+3. 服务按 `configs/edge_model_registry.json` 的 `artifact_path` 和 `sha256` 加载模型；模型缺失或校验失败时会明确报错，**不会冒充 DQN 正常运行**。
 
 ---
 
@@ -270,7 +271,7 @@ models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip
 
 **1. 切换到项目根目录：**
 ```cmd
-cd /d "C:\Users\挑战杯\xiongan-traffic-control"
+cd /d "D:\Users\zzb426\Desktop\挑战杯\xiongan-traffic-control-latest"
 ```
 > 请将路径替换为您实际的项目位置。`/d` 参数用于跨盘符切换。
 
@@ -295,7 +296,7 @@ python --version
 
 **5. 确认关键 Python 依赖已安装：**
 ```cmd
-python -c "import traci,stable_baselines3,websockets,numpy; print('OK')"
+python -c "import traci,onnxruntime,websockets,numpy; print('OK')"
 ```
 - 应输出 `OK`。
 - 若报 `ModuleNotFoundError`，请回到第 4.2 节执行 `pip install -r requirements.txt`。
@@ -305,12 +306,13 @@ python -c "import traci,stable_baselines3,websockets,numpy; print('OK')"
 if exist "server\visualization_server.py" (echo [OK] server) else (echo [MISSING] server)
 if exist "sumo_files\xiongan_real_peak.sumocfg" (echo [OK] scenario) else (echo [MISSING] scenario)
 if exist "sumo_files\xiongan_30.net.xml" (echo [OK] net) else (echo [MISSING] net)
+if exist "models\edge\peak\model.onnx" (echo [OK] peak model) else (echo [MISSING] peak model)
 ```
-- 三行都应输出 `[OK]`。
+- 四行都应输出 `[OK]`。
 
 ### 6.2 启动可视化服务
 
-在**项目根目录**下执行以下命令（推荐使用真实早高峰场景 real_peak，模型缺失时自动回退固定配时）：
+在**项目根目录**下执行以下命令（推荐使用真实早高峰场景 `real_peak`）：
 
 ```cmd
 python server/visualization_server.py --scenario real_peak --port 8765
@@ -322,7 +324,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 [Server] 启动 SUMO (端口 xxxx)...
 [Server] TraCI 连接成功 (端口 xxxx) — 仿真时间: 0.0s
 [Server] SUMO 已启动 — 场景: 真实早高峰(07:00-09:00) — 车辆数: xx
-[Server] DQN 模型已加载: dqn_multi_shared_real_peak_perf_1000000steps.zip
+[Server] 正式边缘模型已加载: edge-real-peak-onnx-v1 → model.onnx
 [Server] WebSocket 服务器已启动 — ws://localhost:8765
 [Server] 场景: 真实早高峰(07:00-09:00)
 [Server] DQN 模型: 已加载
@@ -374,7 +376,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
    ```
    frontend/CitySimulation
    ```
-   > 完整路径示例：`C:\Users\挑战杯\xiongan-traffic-control\frontend\CitySimulation`
+   > 本机完整路径示例：`D:\Users\zzb426\Desktop\挑战杯\xiongan-traffic-control-latest\frontend\CitySimulation`
 5. 确保项目旁显示的 Unity 版本为 **2022.3.62f2c1**。
 
 ### 7.2 打开项目
@@ -689,23 +691,24 @@ python server/visualization_server.py --scenario real_peak --port 8765
 
 ### 10.3 后端启动报错：ModuleNotFoundError
 
-**现象**：提示 `No module named 'traci'` 或 `No module named 'stable_baselines3'`。
+**现象**：提示 `No module named 'traci'`、`onnxruntime` 或 `websockets`。
 
 **解决**：
 - 确认已激活虚拟环境（如使用）。
 - 重新安装依赖：`pip install -r requirements.txt`。
-- 验证：`python -c "import traci; import stable_baselines3; print('OK')"`
+- 验证：`python -c "import traci, onnxruntime, websockets; print('OK')"`
 
-### 10.4 后端启动报错：模型文件未找到
+### 10.4 后端启动报错：正式模型文件未找到或校验失败
 
 **现象**：
 ```
-[Server] 未找到 DQN 模型，回退到固定配时
+[Server] DQN 模型加载失败: 正式边缘模型不存在 / 校验和不匹配
 ```
 
 **解决**：
-- 确认 `models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip` 文件存在。
-- 确认已按 5.2 节修改 `visualization_server.py` 中的模型文件名。
+- 确认 `models/edge/peak/model.onnx` 和 `models/edge/evening/model.onnx` 均存在。
+- 确认 `configs/edge_model_registry.json` 中对应条目状态为 `ready`，且文件未被手动修改（SHA-256 会校验）。
+- 不要用 `model_int8.onnx` 替换正式 FP32 模型；该文件仅为实验产物。
 
 ### 10.5 Unity Console 报错：WebSocket 连接失败
 
@@ -735,7 +738,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 **现象**：所有信号灯颜色固定不变。
 
 **解决**：
-- 确认后端 DQN 模型已加载（后端日志显示 `DQN 模型已加载`）。
+- 确认后端正式模型已加载（后端日志显示 `正式边缘模型已加载`）。
 - 检查 `TrafficService` 是否已初始化。
 - 查看后端日志是否有 `仿真步进异常` 错误。
 
@@ -788,7 +791,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
    将当前 cmd 的代码页设为 GBK，使其与 Windows 中文系统默认编码一致。
 3. **使用引号包裹中文路径**：
    ```cmd
-   cd /d "C:\Users\挑战杯\xiongan-traffic-control"
+cd /d "D:\Users\zzb426\Desktop\挑战杯\xiongan-traffic-control-latest"
    ```
    双引号可避免路径中的空格和特殊字符被错误解析。
 4. **避免在路径中使用特殊符号**：如项目路径含括号（如 `C:\Program Files (x86)\...`），务必用双引号包裹整个路径。
@@ -802,11 +805,11 @@ python server/visualization_server.py --scenario real_peak --port 8765
 **解决**：
 - 本项目推荐 Python 3.10 - 3.11。
 - Python 3.12+ 部分依赖包可能不兼容（如 `gymnasium` 旧版本）。
-- 如使用 Python 3.12+，确保 `stable-baselines3 >= 2.4.0`。
+- 正式 Unity 联调使用 ONNX Runtime；如使用 Python 3.12+，确认 `onnxruntime` 已按 `requirements.txt` 成功安装。
 - 验证命令：
   ```cmd
   python -c "import sys; print(sys.version)"
-  python -c "import stable_baselines3; print(stable_baselines3.__version__)"
+  python -c "import onnxruntime; print(onnxruntime.__version__)"
   ```
 
 ---
@@ -818,9 +821,9 @@ python server/visualization_server.py --scenario real_peak --port 8765
 **后端环境：**
 - [ ] 1. SUMO_HOME 环境变量已设置
 - [ ] 2. Python 依赖已安装（`pip install -r requirements.txt`）
-- [ ] 3. `visualization_server.py` 中真实场景模型已配置为 `dqn_multi_shared_real_peak_perf_1000000steps.zip`
+- [ ] 3. `models/edge/peak/model.onnx`、`models/edge/evening/model.onnx` 和 `configs/edge_model_registry.json` 均存在
 - [ ] 4. 后端服务已启动（`python server/visualization_server.py --scenario real_peak`）
-- [ ] 5. 后端日志显示"DQN 模型已加载"
+- [ ] 5. 后端日志显示"正式边缘模型已加载"
 - [ ] 6. 后端日志显示"WebSocket 服务器已启动 — ws://localhost:8765"
 
 **Unity 项目：**
