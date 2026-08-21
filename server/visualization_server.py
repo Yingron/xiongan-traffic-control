@@ -134,9 +134,11 @@ class VisualizationServer:
         for _ in range(10):
             traci.simulationStep()
 
-        # 初始化信号灯状态
+        # 30 路口正式路网只使用 rl4 四相位程序。显式选中它，避免 --no-model
+        # 基线演示依赖 SUMO 文件中某个默认程序，或把旧 program 0 的黄灯当作动作相位。
         sim_time = float(traci.simulation.getTime())
         for tl_id in INTERSECTION_ORDER:
+            traci.trafficlight.setProgram(tl_id, "rl4")
             self._current_actions[tl_id] = int(traci.trafficlight.getPhase(tl_id))
             self._phase_changed_at[tl_id] = sim_time
 

@@ -3,14 +3,17 @@
 
 格式说明：
 - snapshot结构包含roads, trafficLights, buildings, vehicles, targetPoints
-- category值：0=targetPoint, 1=road, 3=vehicle, 4=trafficLight
+- category值：0=targetPoint, 1=road, 2=building, 3=vehicle, 4=trafficLight
 - vehicleType：0=普通车辆, 1=应急车辆
 """
 import json
-import os
 import re
 import uuid
 from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+UNITY_MAP_DIR = REPO_ROOT / "frontend" / "CitySimulation" / "Assets" / "Scripts" / "Maps"
 
 def load_junction_positions():
     """从 xiongan_30.nod.xml 读取信号路口坐标 {jid: (x, y)}"""
@@ -164,6 +167,26 @@ def generate_unity_map():
                 "timeInPhase": 0
             })
     
+    # ============ 生成建筑 ============
+    # 建筑只放在相邻道路围成的内部街区中心，不占用道路或路口。静态地图不再
+    # 预置车辆，所有车辆由 SUMO 通过 WebSocket 动态生成，避免与其重叠。
+    building_styles = ("Sky_big_color01", "Fast_Food_color01")
+    for row in range(rows - 1):
+        for col in range(cols - 1):
+            unity_map["snapshot"]["buildings"].append({
+                "id": f"B{row + 1:02d}{col + 1:02d}",
+                "category": 2,
+                "styleId": building_styles[(row + col) % len(building_styles)],
+                "position": {
+                    "x": (col + 0.5) * spacing,
+                    "y": 0,
+                    "z": (row + 0.5) * spacing,
+                },
+                "rotation": {"x": 0, "y": 0, "z": 0, "w": 1},
+                # 零尺寸表示保留预制体自身比例，避免以 JSON 覆盖模型缩放。
+                "size": {"x": 0, "y": 0, "z": 0},
+            })
+
     # ============ 生成目标点 ============
     target_point_id = str(uuid.uuid4())
     unity_map["snapshot"]["targetPoints"].append({
@@ -174,74 +197,8 @@ def generate_unity_map():
         "rotation": {"x": 0, "y": 0, "z": 0, "w": 1}
     })
     
-    # ============ 生成车辆 ============
-    # 添加应急车辆（用于强化学习控制）
-    vehicle_count = 0
-    for row in range(rows):
-        for col in range(cols):
-            # 在每个路口附近添加应急车辆
-            x = col * spacing + spacing/4
-            y = (rows - 1 - row) * spacing + spacing/4
-            
-            # 找到附近的道路
-            nearest_road = None
-            for road in road_list:
-                points = road["controlPoints"]
-                for p in points:
-                    if abs(p["x"] - x) < spacing and abs(p["z"] - y) < spacing:
-                        nearest_road = road["id"]
-                        break
-                if nearest_road:
-                    break
-            
-            if nearest_road:
-                vehicle_count += 1
-                unity_map["snapshot"]["vehicles"].append({
-                    "id": str(uuid.uuid4()),
-                    "category": 3,
-                    "styleId": "Police",
-                    "position": {"x": x, "y": 0, "z": y},
-                    "rotation": {"x": 0, "y": 0, "z": 0, "w": 1},
-                    "vehicleType": 1,  # 1=应急车辆
-                    "currentRoadId": nearest_road,
-                    "targetPointId": target_point_id,
-                    "gameStatus": 0
-                })
-    
-    # 添加普通车辆（背景交通）
-    normal_vehicle_count = 0
-    for i in range(15):
-        row = i % rows
-        col = (i // rows) % cols
-        x = col * spacing + spacing/3 + (i % 2) * 10
-        y = (rows - 1 - row) * spacing + spacing/3 + (i % 2) * 10
-        
-        nearest_road = None
-        for road in road_list:
-            points = road["controlPoints"]
-            for p in points:
-                if abs(p["x"] - x) < spacing and abs(p["z"] - y) < spacing:
-                    nearest_road = road["id"]
-                    break
-            if nearest_road:
-                break
-        
-        if nearest_road:
-            normal_vehicle_count += 1
-            unity_map["snapshot"]["vehicles"].append({
-                "id": str(uuid.uuid4()),
-                "category": 3,
-                "styleId": "Truck_color03",
-                "position": {"x": x, "y": 0, "z": y},
-                "rotation": {"x": 0, "y": 0, "z": 0, "w": 1},
-                "vehicleType": 0,  # 0=普通车辆
-                "currentRoadId": nearest_road,
-                "targetPointId": target_point_id,
-                "gameStatus": 0
-            })
-    
     print(f"生成统计：道路={len(road_list)}, 信号灯={len(unity_map['snapshot']['trafficLights'])}, "
-          f"应急车辆={vehicle_count}, 普通车辆={normal_vehicle_count}, 目标点=1")
+          f"建筑={len(unity_map['snapshot']['buildings'])}, 静态车辆=0, 目标点=1")
     
     return unity_map
 
@@ -263,17 +220,8 @@ def main():
     # 生成Unity地图
     unity_map = generate_unity_map()
     
-    # 保存路径：本项目 Unity 工程位于 frontend/CitySimulation
-    output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
-                              'frontend', 'CitySimulation', 'Assets', 'Scripts', 'Maps')
-    os.makedirs(output_dir, exist_ok=True)
-    
-    output_path = os.path.join(output_dir, 'xiongan_30.json')
-    
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(unity_map, f, indent=2)
-    
-    print(f"\n✅ Unity地图文件已生成: {output_path}")
+    output_path = write_unity_map(unity_map)
+    print(f"\n[OK] Unity地图文件已生成: {output_path}")
     
     # 在Unity中加载方法：
     print("\n在Unity中加载地图：")
