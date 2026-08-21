@@ -1,0 +1,57 @@
+{
+  "registry_version": "1.0",
+  "contract": {
+    "input_dimension": 26,
+    "state_dimension": 22,
+    "action_mask_dimension": 4,
+    "action_count": 4,
+    "model_contract_version": "shared-dqn-26x4-v1"
+  },
+  "models": {
+    "edge-real-peak-onnx-v1": {
+      "status": "ready",
+      "scenario": "real_peak",
+      "format": "onnx-fp32",
+      "artifact_path": "models/edge/peak/model.onnx",
+      "sha256": "4d471c119a4853f6d5a69047729d608ca5ce72ac6ad4c73313bde7bb1eda84c3",
+      "size_bytes": 25742,
+      "real_state_action_agreement": 1.0
+    },
+    "edge-real-evening-onnx-v1": {
+      "status": "ready",
+      "scenario": "real_evening",
+      "format": "onnx-fp32",
+      "artifact_path": "models/edge/evening/model.onnx",
+      "sha256": "3536ca4b205ca164400f599599f7b4734ec9bb70f485e2301464afc9fb28dbdc",
+      "size_bytes": 25742,
+      "real_state_action_agreement": 1.0
+    },
+    "edge-real-offpeak-via-evening-onnx-v1": {
+      "status": "ready",
+      "scenario": "real_offpeak",
+      "format": "onnx-fp32",
+      "artifact_path": "models/edge/evening/model.onnx",
+      "sha256": "3536ca4b205ca164400f599599f7b4734ec9bb70f485e2301464afc9fb28dbdc",
+      "size_bytes": 25742,
+      "real_state_action_agreement": 1.0
+    },
+    "edge-real-peak-onnx-int8-experimental-v1": {
+      "status": "experimental_failed_real_state_fidelity",
+      "scenario": "real_peak",
+      "format": "onnx-dynamic-int8-first-hidden-layer",
+      "artifact_path": "models/edge/peak/model_int8.onnx",
+      "sha256": "88957c104a07896696fef560dd736cd2704f495993b481054727db91aa5118db",
+      "size_bytes": 23904,
+      "real_state_action_agreement": 0.84375
+    },
+    "edge-real-evening-onnx-int8-experimental-v1": {
+      "status": "experimental_failed_real_state_fidelity",
+      "scenario": "real_evening",
+      "format": "onnx-dynamic-int8-first-hidden-layer",
+      "artifact_path": "models/edge/evening/model_int8.onnx",
+      "sha256": "e8361dba14aa12bb523ddd55f043cf06396f2e8402276072bc575c0ea6ac4a7c",
+      "size_bytes": 23904,
+      "real_state_action_agreement": 0.9322916666666666
+    }
+  }
+}

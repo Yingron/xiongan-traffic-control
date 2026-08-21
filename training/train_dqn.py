@@ -207,7 +207,7 @@ class PolicyCollapseMonitorCallback:
             for _ in range(n_samples):
                 dummy_obs = np.random.randn(1, *model.observation_space.shape).astype(np.float32)
                 action, _ = model.predict(dummy_obs, deterministic=False)
-                action_counts[int(action)] += 1
+                action_counts[int(np.asarray(action).item())] += 1
             return action_counts / n_samples
         except Exception:
             return np.array([0.25, 0.25, 0.25, 0.25])

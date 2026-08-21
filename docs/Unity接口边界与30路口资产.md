@@ -35,7 +35,9 @@ python scripts/convert_to_unity_map.py
 - REST：`http://localhost:8000/api/v1`；
 - WebSocket：`ws://localhost:8000/api/v1/ws`。
 
-该接口管理SUMO/TraCI的30路口会话。当前模型注册状态为 `waiting_for_A`，没有权重时 `/model/predict` 正确返回 `503 MODEL_NOT_LOADED`。
+该接口管理 SUMO/TraCI 的 30 路口会话。peak、evening 和 offpeak 泛化别名三个
+正式 model ID 已注册为 `ready`；`/model/predict` 正常返回 30 个真实模型动作及
+`shared-dqn-26x4-v1` 契约。只有调用历史归档、未注册或缺失权重的模型时才返回错误。
 
 ### SUMO可视化接口
 
@@ -44,8 +46,9 @@ python scripts/convert_to_unity_map.py
 ## 当前未完成事项
 
 - Unity工程尚未实现对C后端8000端口协议的直接适配；
-- 正式DQN权重、SHA-256和归一化配置尚未交付；
-- 因此不得宣称Unity—C后端—DQN闭环已经完成。
+- C 后端正式 DQN 权重、SHA-256、掩码推理和 REST—SUMO 闭环已经验收；
+- Unity—C 后端 8000 端口的直接闭环仍未完成，因此不得把 8765 可视化通道或
+  5000 PyMARL 通道描述为 Unity—REST 模型闭环。
 
 ## Unity实机验收（2026-08-13）
 

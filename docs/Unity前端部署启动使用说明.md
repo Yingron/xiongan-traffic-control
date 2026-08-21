@@ -2,7 +2,10 @@
 
 > 适用范围：仓库仅保留 `frontend/CitySimulation` Unity工程。它既包含配合 `server/visualization_server.py:8765` 的SUMO可视化脚本，也包含监听 `127.0.0.1:5000`、供 `frontend/pymarl` 调用的长度前缀JSON/TCP协议；目前没有直接调用C后端REST `/api/v1/model/predict` 或WebSocket `/api/v1/ws`。三种接口不可混用。
 >
-> 当前仓库尚无正式DQN模型权重，注册表保持 `waiting_for_A`。下文提及的百万步模型文件是预期部署名，不代表文件当前存在。30路口地图请使用 `frontend/CitySimulation/Assets/Scripts/Maps/xiongan_30.json`，由 `python scripts/convert_to_unity_map.py` 生成。
+> 当前仓库已有 peak 和 evening 两个正式百万步 DQN 权重；real_offpeak 正式方案复用
+> evening 权重。三个场景 model ID 均已在 `configs/model_registry.json` 注册为 `ready`。
+> 30路口地图使用 `frontend/CitySimulation/Assets/Scripts/Maps/xiongan_30.json`，由
+> `python scripts/convert_to_unity_map.py` 生成。Unity 尚未直接接入 C 后端 8000 端口协议。
 
 本指南面向首次接触本项目的用户，从零开始一步步完成 Unity 前端的部署与启动，最终在 Unity 编辑器中看到交通仿真动画正常运行。
 

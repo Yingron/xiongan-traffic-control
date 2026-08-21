@@ -11,3 +11,6 @@ sympy==1.13.1
 pandas>=2.0.0
 matplotlib>=3.7.0
 websockets>=12.0
+onnx>=1.15.0
+onnxruntime>=1.17.0
+psutil>=5.9.0

@@ -1,133 +1,164 @@
-import torch
-import numpy as np
+"""Unified TorchScript/ONNX inference for 26-dimensional edge models."""
+from __future__ import annotations
+
+import argparse
+import json
 import time
-import os
-import sys
+from pathlib import Path
+from typing import Any
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import numpy as np
 
-from training.config import DISTILL_CONFIG
-from configs.constants import FEATURES_PER_INTERSECTION
+from edge_deploy.modeling import ACTION_DIM, MODEL_INPUT_DIM, STATE_DIM
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_MODEL = PROJECT_ROOT / "models" / "edge" / "peak" / "model.onnx"
 
 
 class EdgeInference:
-    def __init__(self, model_path=None):
-        if model_path is None:
-            model_path = DISTILL_CONFIG['quantized_model_path']
-        
-        self.model_path = model_path
-        self.model = None
+    """Load a portable model and expose single/batched masked predictions."""
+
+    def __init__(self, model_path: str | Path | None = None, *, warmup: int = 10) -> None:
+        self.model_path = Path(model_path or DEFAULT_MODEL).resolve()
+        if not self.model_path.is_file():
+            raise FileNotFoundError(f"Edge model not found: {self.model_path}")
+        self.backend = "onnx" if self.model_path.suffix.lower() == ".onnx" else "torchscript"
+        self.model: Any = None
+        self.input_name: str | None = None
         self.load_model()
-        self.warmup()
+        self.warmup(warmup)
 
-    def load_model(self):
-        if not os.path.exists(self.model_path):
-            print(f"Model not found: {self.model_path}")
-            print("Trying to load unquantized model...")
-            unquantized_path = self.model_path.replace('.pt', '.pth')
-            if os.path.exists(unquantized_path):
-                from training.train_distill import StudentNetwork
-                self.model = StudentNetwork()
-                self.model.load_state_dict(torch.load(unquantized_path))
-                self.model.eval()
-                print(f"Loaded unquantized model from {unquantized_path}")
-            else:
-                raise FileNotFoundError(f"Neither quantized nor unquantized model found")
+    def load_model(self) -> None:
+        if self.backend == "onnx":
+            import onnxruntime as ort
+
+            options = ort.SessionOptions()
+            options.intra_op_num_threads = 1
+            options.inter_op_num_threads = 1
+            self.model = ort.InferenceSession(
+                str(self.model_path),
+                sess_options=options,
+                providers=["CPUExecutionProvider"],
+            )
+            self.input_name = self.model.get_inputs()[0].name
         else:
-            self.model = torch.jit.load(self.model_path)
+            import torch
+
+            self.model = torch.jit.load(str(self.model_path), map_location="cpu")
             self.model.eval()
-            print(f"Loaded quantized model from {self.model_path}")
 
-    def warmup(self):
-        dummy = torch.randn(1, FEATURES_PER_INTERSECTION)
-        for _ in range(10):
-            _ = self.model(dummy)
+    @staticmethod
+    def prepare_observations(
+        state: np.ndarray | list[float],
+        action_mask: np.ndarray | list[float] | None = None,
+    ) -> tuple[np.ndarray, bool]:
+        observations = np.asarray(state, dtype=np.float32)
+        was_single = observations.ndim == 1
+        if was_single:
+            observations = observations.reshape(1, -1)
+        if observations.ndim != 2:
+            raise ValueError("state must have shape (22,), (26,), (batch,22), or (batch,26)")
 
-    def predict(self, state):
-        start = time.perf_counter()
-        with torch.no_grad():
-            if isinstance(state, np.ndarray):
-                input_tensor = torch.tensor(state, dtype=torch.float32).unsqueeze(0)
-            else:
-                input_tensor = state.unsqueeze(0)
-            
-            q_values = self.model(input_tensor)
-            action = int(torch.argmax(q_values, dim=1).item())
-        
-        latency = (time.perf_counter() - start) * 1000
-        return action, latency
+        if observations.shape[1] == STATE_DIM:
+            if action_mask is None:
+                raise ValueError("22-dimensional state requires a four-value action_mask")
+            masks = np.asarray(action_mask, dtype=np.float32)
+            if masks.ndim == 1:
+                masks = masks.reshape(1, -1)
+            if masks.shape == (1, ACTION_DIM) and len(observations) > 1:
+                masks = np.repeat(masks, len(observations), axis=0)
+            if masks.shape != (len(observations), ACTION_DIM):
+                raise ValueError(f"action_mask must have shape ({len(observations)}, 4)")
+            observations = np.concatenate([observations, masks], axis=1)
+        elif observations.shape[1] != MODEL_INPUT_DIM:
+            raise ValueError(f"expected 22 or 26 features, got {observations.shape[1]}")
 
-    def benchmark(self, n_iter=1000):
-        latencies = []
-        for _ in range(n_iter):
-            dummy = np.random.randn(FEATURES_PER_INTERSECTION).astype(np.float32)
-            _, lat = self.predict(dummy)
-            latencies.append(lat)
+        if not np.isfinite(observations).all():
+            raise ValueError("observations contain NaN or infinity")
+        masks = observations[:, STATE_DIM:]
+        if np.any(masks < 0.0) or np.any(masks > 1.0) or np.any(masks.sum(axis=1) == 0):
+            raise ValueError("each action mask must contain at least one valid value in [0,1]")
+        return np.ascontiguousarray(observations, dtype=np.float32), was_single
 
-        model_size = os.path.getsize(self.model_path) / 1024
-
-        print("=" * 50)
-        print("Edge Inference Benchmark Results")
-        print("=" * 50)
-        print(f"Model path: {self.model_path}")
-        print(f"Model size: {model_size:.2f} KB")
-        print(f"Mean latency: {np.mean(latencies):.2f} ms")
-        print(f"P50 latency: {np.percentile(latencies, 50):.2f} ms")
-        print(f"P90 latency: {np.percentile(latencies, 90):.2f} ms")
-        print(f"P99 latency: {np.percentile(latencies, 99):.2f} ms")
-        print(f"Max latency: {np.max(latencies):.2f} ms")
-        print(f"Min latency: {np.min(latencies):.2f} ms")
-        
-        if model_size < 1024:
-            print("✅ Model size < 1MB: PASS")
+    def predict_q(
+        self,
+        state: np.ndarray | list[float],
+        action_mask: np.ndarray | list[float] | None = None,
+    ) -> tuple[np.ndarray, float]:
+        observations, was_single = self.prepare_observations(state, action_mask)
+        started = time.perf_counter_ns()
+        if self.backend == "onnx":
+            q_values = self.model.run(None, {self.input_name: observations})[0]
         else:
-            print("❌ Model size >= 1MB: FAIL")
-        
-        if np.mean(latencies) < 5:
-            print("✅ Mean latency < 5ms: PASS")
-        else:
-            print("❌ Mean latency >= 5ms: FAIL")
-        print("=" * 50)
+            import torch
 
-        return {
-            'model_size_kb': model_size,
-            'mean_latency_ms': np.mean(latencies),
-            'p99_latency_ms': np.percentile(latencies, 99),
-            'p90_latency_ms': np.percentile(latencies, 90),
-            'max_latency_ms': np.max(latencies),
-            'min_latency_ms': np.min(latencies)
+            with torch.inference_mode():
+                q_values = self.model(torch.from_numpy(observations)).cpu().numpy()
+        latency_ms = (time.perf_counter_ns() - started) / 1_000_000.0
+        return (q_values[0] if was_single else q_values), latency_ms
+
+    def predict(
+        self,
+        state: np.ndarray | list[float],
+        action_mask: np.ndarray | list[float] | None = None,
+    ) -> tuple[int | np.ndarray, float]:
+        q_values, latency_ms = self.predict_q(state, action_mask)
+        if q_values.ndim == 1:
+            return int(np.argmax(q_values)), latency_ms
+        return np.argmax(q_values, axis=1).astype(np.int64), latency_ms
+
+    def warmup(self, iterations: int = 10) -> None:
+        if iterations < 0:
+            raise ValueError("warmup iterations must be non-negative")
+        observations = np.zeros((30, MODEL_INPUT_DIM), dtype=np.float32)
+        observations[:, STATE_DIM:] = 1.0
+        for _ in range(iterations):
+            self.predict(observations)
+
+    def benchmark(self, iterations: int = 1000, seed: int = 20260820) -> dict[str, Any]:
+        if iterations < 1:
+            raise ValueError("iterations must be positive")
+        rng = np.random.default_rng(seed)
+        results: dict[str, Any] = {
+            "model_path": str(self.model_path),
+            "backend": self.backend,
+            "model_size_bytes": self.model_path.stat().st_size,
         }
+        for batch_size, label in ((1, "single"), (30, "batch30")):
+            latencies: list[float] = []
+            for _ in range(iterations):
+                observations = rng.random((batch_size, MODEL_INPUT_DIM), dtype=np.float32)
+                observations[:, STATE_DIM:] = 1.0
+                _, latency = self.predict(observations)
+                latencies.append(latency)
+            values = np.asarray(latencies, dtype=np.float64)
+            results[label] = {
+                "mean_ms": float(values.mean()),
+                "p50_ms": float(np.percentile(values, 50)),
+                "p95_ms": float(np.percentile(values, 95)),
+                "p99_ms": float(np.percentile(values, 99)),
+                "max_ms": float(values.max()),
+            }
+        return results
 
-    def run_online_inference(self, state_generator, callback=None):
-        while True:
-            state = state_generator()
-            action, latency = self.predict(state)
-            
-            if callback:
-                callback(action, latency)
-            
-            print(f"Action: {action}, Latency: {latency:.2f}ms")
 
-
-def main():
-    import argparse
-    
-    parser = argparse.ArgumentParser(description='Edge inference for traffic signal control')
-    parser.add_argument('--model', type=str, default=None, help='Path to model file')
-    parser.add_argument('--benchmark', action='store_true', help='Run benchmark')
-    parser.add_argument('--n', type=int, default=1000, help='Number of benchmark iterations')
-    
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Run a portable 26-dimensional edge model")
+    parser.add_argument("--model", type=Path, default=DEFAULT_MODEL)
+    parser.add_argument("--benchmark", action="store_true")
+    parser.add_argument("--iterations", "--n", type=int, default=1000)
     args = parser.parse_args()
 
     inference = EdgeInference(args.model)
-
     if args.benchmark:
-        inference.benchmark(args.n)
-    else:
-        dummy_state = np.random.randn(FEATURES_PER_INTERSECTION).astype(np.float32)
-        action, latency = inference.predict(dummy_state)
-        print(f"Action: {action}, Latency: {latency:.2f}ms")
+        print(json.dumps(inference.benchmark(args.iterations), ensure_ascii=False, indent=2))
+        return
+
+    state = np.zeros(STATE_DIM, dtype=np.float32)
+    action, latency = inference.predict(state, np.ones(ACTION_DIM, dtype=np.float32))
+    print(json.dumps({"action": action, "latency_ms": latency}, ensure_ascii=False))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

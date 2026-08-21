@@ -1,0 +1,432 @@
+{
+  "schema_version": "edge-validation-v1",
+  "status": "PASS",
+  "models": {
+    "evening": {
+      "teacher": "models/dqn/dqn_multi_shared_real_evening_perf_1000000steps.zip",
+      "validation_samples": 10000,
+      "latency_iterations": 500,
+      "minimum_action_agreement": 0.95,
+      "recommended_artifact": "model.onnx",
+      "candidates": [
+        {
+          "artifact": "model_fp32.pt",
+          "backend": "torchscript",
+          "size_bytes": 34902,
+          "size_kb": 34.083984375,
+          "action_agreement": 1.0,
+          "action_disagreement": 0.0,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.0811918,
+              "p50_ms": 0.0725,
+              "p95_ms": 0.11460999999999999,
+              "p99_ms": 0.20490999999999998,
+              "max_ms": 0.7909
+            },
+            "batch30": {
+              "mean_ms": 0.09206980000000001,
+              "p50_ms": 0.08274999999999999,
+              "p95_ms": 0.12351999999999981,
+              "p99_ms": 0.2537909999999998,
+              "max_ms": 0.7524
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model.onnx",
+          "backend": "onnx",
+          "size_bytes": 25742,
+          "size_kb": 25.138671875,
+          "action_agreement": 1.0,
+          "action_disagreement": 0.0,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.0232466,
+              "p50_ms": 0.0191,
+              "p95_ms": 0.04227499999999993,
+              "p99_ms": 0.09333099999999997,
+              "max_ms": 0.2122
+            },
+            "batch30": {
+              "mean_ms": 0.030723599999999997,
+              "p50_ms": 0.0254,
+              "p95_ms": 0.052805,
+              "p99_ms": 0.10320499999999999,
+              "max_ms": 0.4753
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model_int8.pt",
+          "backend": "torchscript",
+          "size_bytes": 36220,
+          "size_kb": 35.37109375,
+          "action_agreement": 0.9923,
+          "action_disagreement": 0.00770000000000004,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.1656214,
+              "p50_ms": 0.13595000000000002,
+              "p95_ms": 0.3145649999999999,
+              "p99_ms": 0.5938349999999997,
+              "max_ms": 1.1414
+            },
+            "batch30": {
+              "mean_ms": 0.14812380000000003,
+              "p50_ms": 0.12365000000000001,
+              "p95_ms": 0.28879499999999964,
+              "p99_ms": 0.5010459999999998,
+              "max_ms": 0.9611
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model_int8.onnx",
+          "backend": "onnx",
+          "size_bytes": 23904,
+          "size_kb": 23.34375,
+          "action_agreement": 0.9933,
+          "action_disagreement": 0.006700000000000039,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.024967000000000003,
+              "p50_ms": 0.0218,
+              "p95_ms": 0.04486499999999994,
+              "p99_ms": 0.08411199999999971,
+              "max_ms": 0.2085
+            },
+            "batch30": {
+              "mean_ms": 0.0334394,
+              "p50_ms": 0.0284,
+              "p95_ms": 0.055505,
+              "p99_ms": 0.14141099999999998,
+              "max_ms": 0.3309
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model_pruned_fp32.pt",
+          "backend": "torchscript",
+          "size_bytes": 30833,
+          "size_kb": 30.1103515625,
+          "action_agreement": 0.9703,
+          "action_disagreement": 0.02969999999999995,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.0845274,
+              "p50_ms": 0.06964999999999999,
+              "p95_ms": 0.16697999999999938,
+              "p99_ms": 0.2981939999999998,
+              "max_ms": 0.4013
+            },
+            "batch30": {
+              "mean_ms": 0.09762860000000001,
+              "p50_ms": 0.082,
+              "p95_ms": 0.17030999999999982,
+              "p99_ms": 0.4039329999999999,
+              "max_ms": 1.0111
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model_pruned_int8.pt",
+          "backend": "torchscript",
+          "size_bytes": 32215,
+          "size_kb": 31.4599609375,
+          "action_agreement": 0.9694,
+          "action_disagreement": 0.03059999999999996,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.1638026,
+              "p50_ms": 0.1367,
+              "p95_ms": 0.3280699999999996,
+              "p99_ms": 0.5678539999999999,
+              "max_ms": 1.2026
+            },
+            "batch30": {
+              "mean_ms": 0.1501528,
+              "p50_ms": 0.12265000000000001,
+              "p95_ms": 0.29596999999999996,
+              "p99_ms": 0.5230130000000001,
+              "max_ms": 2.9702
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        }
+      ]
+    },
+    "peak": {
+      "teacher": "models/dqn/dqn_multi_shared_real_peak_perf_1000000steps.zip",
+      "validation_samples": 10000,
+      "latency_iterations": 500,
+      "minimum_action_agreement": 0.95,
+      "recommended_artifact": "model.onnx",
+      "candidates": [
+        {
+          "artifact": "model_fp32.pt",
+          "backend": "torchscript",
+          "size_bytes": 34902,
+          "size_kb": 34.083984375,
+          "action_agreement": 1.0,
+          "action_disagreement": 0.0,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.0749272,
+              "p50_ms": 0.06935,
+              "p95_ms": 0.10721499999999999,
+              "p99_ms": 0.14464999999999997,
+              "max_ms": 0.3023
+            },
+            "batch30": {
+              "mean_ms": 0.09886400000000001,
+              "p50_ms": 0.0831,
+              "p95_ms": 0.13364499999999996,
+              "p99_ms": 0.6111569999999996,
+              "max_ms": 0.8435
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model.onnx",
+          "backend": "onnx",
+          "size_bytes": 25742,
+          "size_kb": 25.138671875,
+          "action_agreement": 1.0,
+          "action_disagreement": 0.0,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.022330199999999998,
+              "p50_ms": 0.0194,
+              "p95_ms": 0.02787499999999975,
+              "p99_ms": 0.11493299999999988,
+              "max_ms": 0.2759
+            },
+            "batch30": {
+              "mean_ms": 0.029297600000000004,
+              "p50_ms": 0.0248,
+              "p95_ms": 0.0476,
+              "p99_ms": 0.1056099999999999,
+              "max_ms": 0.3311
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model_int8.pt",
+          "backend": "torchscript",
+          "size_bytes": 36220,
+          "size_kb": 35.37109375,
+          "action_agreement": 0.993,
+          "action_disagreement": 0.007000000000000006,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.15342160000000002,
+              "p50_ms": 0.1344,
+              "p95_ms": 0.254625,
+              "p99_ms": 0.46872499999999945,
+              "max_ms": 0.7478
+            },
+            "batch30": {
+              "mean_ms": 0.14120999999999997,
+              "p50_ms": 0.12245,
+              "p95_ms": 0.25062999999999996,
+              "p99_ms": 0.447057,
+              "max_ms": 0.7134
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model_int8.onnx",
+          "backend": "onnx",
+          "size_bytes": 23904,
+          "size_kb": 23.34375,
+          "action_agreement": 0.9935,
+          "action_disagreement": 0.00649999999999995,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.0265484,
+              "p50_ms": 0.0224,
+              "p95_ms": 0.045805,
+              "p99_ms": 0.10327499999999994,
+              "max_ms": 0.199
+            },
+            "batch30": {
+              "mean_ms": 0.0319066,
+              "p50_ms": 0.0276,
+              "p95_ms": 0.05530999999999999,
+              "p99_ms": 0.12742399999999998,
+              "max_ms": 0.2846
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model_pruned_fp32.pt",
+          "backend": "torchscript",
+          "size_bytes": 30833,
+          "size_kb": 30.1103515625,
+          "action_agreement": 0.9674,
+          "action_disagreement": 0.03259999999999996,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.08408259999999998,
+              "p50_ms": 0.07314999999999999,
+              "p95_ms": 0.13950500000000002,
+              "p99_ms": 0.33106799999999986,
+              "max_ms": 0.5727
+            },
+            "batch30": {
+              "mean_ms": 0.0931496,
+              "p50_ms": 0.0812,
+              "p95_ms": 0.1561249999999997,
+              "p99_ms": 0.287242,
+              "max_ms": 0.6432
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        },
+        {
+          "artifact": "model_pruned_int8.pt",
+          "backend": "torchscript",
+          "size_bytes": 32215,
+          "size_kb": 31.4599609375,
+          "action_agreement": 0.9657,
+          "action_disagreement": 0.0343,
+          "mask_compliance": 1.0,
+          "latency": {
+            "single": {
+              "mean_ms": 0.176385,
+              "p50_ms": 0.1402,
+              "p95_ms": 0.4008099999999999,
+              "p99_ms": 0.6259029999999999,
+              "max_ms": 0.9186
+            },
+            "batch30": {
+              "mean_ms": 0.1421934,
+              "p50_ms": 0.12345,
+              "p95_ms": 0.2332599999999994,
+              "p99_ms": 0.47147999999999973,
+              "max_ms": 0.607
+            }
+          },
+          "checks": {
+            "model_size_le_1mb": true,
+            "action_disagreement_le_5pct": true,
+            "action_mask_compliance": true,
+            "single_mean_le_5ms": true,
+            "single_p95_le_100ms": true,
+            "batch30_p95_le_500ms": true
+          },
+          "passed": true
+        }
+      ]
+    }
+  }
+}
