@@ -20,12 +20,12 @@ def validate_imports() -> None:
     print("=" * 50)
     print("模块导入验证")
     print("=" * 50)
-    print(f"✅ TraCIService: {TraCIService}")
-    print(f"✅ StateExtractor: {StateExtractor}")
-    print(f"✅ RewardCalculator: {RewardCalculator}")
-    print(f"✅ 路口数量: {len(INTERSECTION_ORDER)}")
-    print(f"✅ 状态维度: {STATE_DIMENSION}")
-    print(f"✅ 每路口特征: {FEATURES_PER_INTERSECTION}")
+    print(f"[OK] TraCIService: {TraCIService}")
+    print(f"[OK] StateExtractor: {StateExtractor}")
+    print(f"[OK] RewardCalculator: {RewardCalculator}")
+    print(f"[OK] 路口数量: {len(INTERSECTION_ORDER)}")
+    print(f"[OK] 状态维度: {STATE_DIMENSION}")
+    print(f"[OK] 每路口特征: {FEATURES_PER_INTERSECTION}")
 
 
 def validate_constants() -> None:
@@ -37,7 +37,7 @@ def validate_constants() -> None:
         offset_start = idx * FEATURES_PER_INTERSECTION
         offset_end = (idx + 1) * FEATURES_PER_INTERSECTION
         print(f"  {jid}: state[{offset_start}:{offset_end}]")
-    print(f"\n✅ 总维度: {len(INTERSECTION_ORDER) * FEATURES_PER_INTERSECTION}")
+    print(f"\n[OK] 总维度: {len(INTERSECTION_ORDER) * FEATURES_PER_INTERSECTION}")
 
 
 def validate_reward() -> None:
@@ -78,14 +78,14 @@ def validate_network_exists() -> None:
         filepath = SUMO_FILES_DIR / filename
         exists = filepath.exists()
         size = filepath.stat().st_size if exists else 0
-        status = f"✅ ({size:,} bytes)" if exists else "❌ 缺失"
+        status = f"[OK] ({size:,} bytes)" if exists else "[FAIL] 缺失"
         print(f"  {filename}: {status}")
 
     net_file = SUMO_FILES_DIR / "xiongan_30.net.xml"
     if net_file.exists():
-        print(f"  xiongan_30.net.xml: ✅ ({net_file.stat().st_size:,} bytes)")
+        print(f"  xiongan_30.net.xml: [OK] ({net_file.stat().st_size:,} bytes)")
     else:
-        print(f"  xiongan_30.net.xml: ⚠️ 需要运行 netconvert 生成")
+        print(f"  xiongan_30.net.xml: [WARN] 需要运行 netconvert 生成")
 
 
 def main() -> None:
@@ -96,7 +96,7 @@ def main() -> None:
     try:
         validate_imports()
     except Exception as e:
-        print(f"❌ 导入失败: {e}")
+        print(f"[FAIL] 导入失败: {e}")
         sys.exit(1)
 
     validate_constants()
@@ -104,10 +104,10 @@ def main() -> None:
     validate_network_exists()
 
     print("\n" + "=" * 50)
-    print("🎉 基础验证完成！")
+    print("基础验证完成！")
     print("=" * 50)
     print("\n下一步操作:")
-    print("1. 运行 scripts/build_and_validate.ps1 生成.net.xml")
+    print("1. 运行 scripts/build_and_validate.ps1 校验已提交的30路口路网与映射")
     print("2. 设置 SUMO_HOME 环境变量")
     print("3. 启动 API: python server/api_server.py")
     print("4. 启动训练: python training/train_dqn.py")

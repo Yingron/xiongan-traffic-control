@@ -567,7 +567,7 @@ namespace CitySimulation.Runtime.Simulation
                 return;
             }
 
-            Reset("default", randomizeTargetPoints, targetSeed);
+            Reset("xiongan_30", randomizeTargetPoints, targetSeed);
         }
 
         public void Reset(string mapId, bool randomizeTargetPoints, int targetSeed)
@@ -584,8 +584,8 @@ namespace CitySimulation.Runtime.Simulation
             // 2) Remove all current entities/GameObjects from ObjectManager.
             objectManager.ImportAll(new ObjectManager.MapSnapshot());
 
-            // 3) Reload map content (default map by default).
-            var targetMapId = string.IsNullOrEmpty(mapId) ? "default" : mapId;
+            // 3) Reload the formal 30-intersection map unless explicitly overridden.
+            var targetMapId = string.IsNullOrEmpty(mapId) ? "xiongan_30" : mapId;
             GameServices.MapManager.SetCurrentMapId(targetMapId);
             GameServices.MapManager.LoadMap();
             if (randomizeTargetPoints)
@@ -605,7 +605,7 @@ namespace CitySimulation.Runtime.Simulation
                 return;
             }
 
-            Reset("default");
+            Reset("xiongan_30");
         }
 
         void RandomizeTargetPointsOnRoad(int seed)

@@ -1,10 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="framework" style="flex-grow: 1; left: 70%; width: 30%;">
-        <ui:VisualElement name="collapse" style="flex-grow: 0; width: auto; left: auto; height: 5%; top: 0%;">
+    <ui:VisualElement name="framework" style="position: absolute; right: 0; top: 0; bottom: 0; width: 38%; min-width: 360px; max-width: 560px; background-color: rgba(235, 238, 242, 0.96); padding-left: 6px; padding-right: 6px;">
+        <ui:VisualElement name="collapse" style="flex-grow: 0; height: 34px;">
             <ui:Button text="fold" parse-escape-sequences="true" display-tooltip-when-elided="true" name="collapseButton" />
         </ui:VisualElement>
         <ui:VisualElement name="controlPanel" style="flex-grow: 1; width: auto; left: auto; flex-direction: row;">
-            <ui:VisualElement name="model" style="flex-grow: 0; width: 20%;">
+            <ui:VisualElement name="model" style="flex-grow: 0; width: 28%; min-width: 92px;">
                 <ui:Button text="edit map" parse-escape-sequences="true" display-tooltip-when-elided="true" name="edit" style="flex-shrink: 0; font-size: 14px;" />
                 <ui:Button text="running" parse-escape-sequences="true" display-tooltip-when-elided="true" name="running" style="font-size: 14px;" />
                 <ui:Button text="training" parse-escape-sequences="true" display-tooltip-when-elided="true" name="training" />
@@ -12,15 +12,15 @@
                 <ui:Button text="playback" parse-escape-sequences="true" display-tooltip-when-elided="true" name="playback" />
             </ui:VisualElement>
             <ui:VisualElement name="detail" style="flex-grow: 1; display: flex;">
-                <ui:VisualElement name="edit" style="flex-grow: 0; height: 100%; flex-direction: column; display: flex;">
-                    <ui:Label tabindex="-1" text="road" parse-escape-sequences="true" display-tooltip-when-elided="true" name="roadLabel" style="font-size: 44px;" />
-                    <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row; height: 10%; cursor: initial; background-image: none;">
+                <ui:VisualElement name="edit" style="flex-grow: 1; height: 100%; flex-direction: column; display: flex; padding-left: 6px; overflow: hidden;">
+                    <ui:Label tabindex="-1" text="road" parse-escape-sequences="true" display-tooltip-when-elided="true" name="roadLabel" style="font-size: 20px; height: 28px;" />
+                    <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row; height: 64px; cursor: initial; background-image: none;">
                         <ui:VisualElement name="class2" style="flex-grow: 0; width: 24%; height: auto;">
                             <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="createRoad" style="width: 80%; background-image: resource(&apos;Road/icon_Lane_01&apos;); height: 80%;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:Label tabindex="-1" text="building" parse-escape-sequences="true" display-tooltip-when-elided="true" name="buiidingLabel" style="font-size: 44px;" />
-                    <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row; height: 10%; cursor: initial; background-image: none;">
+                    <ui:Label tabindex="-1" text="building" parse-escape-sequences="true" display-tooltip-when-elided="true" name="buiidingLabel" style="font-size: 20px; height: 28px;" />
+                    <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row; height: 64px; cursor: initial; background-image: none;">
                         <ui:VisualElement name="class2" style="flex-grow: 0; width: 24%; height: auto;">
                             <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="createBuilding_Sky_big_color01" style="width: 80%; background-image: resource(&apos;Building/icon_Sky_big_color01&apos;); height: 80%;" />
                         </ui:VisualElement>
@@ -28,8 +28,8 @@
                             <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="createBuilding_Fast_Food_color01" style="width: 80%; background-image: resource(&apos;Building/icon_Fast_Food_color01&apos;); height: 80%;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:Label tabindex="-1" text="vehicle" parse-escape-sequences="true" display-tooltip-when-elided="true" name="vehicleLabel" style="font-size: 44px;" />
-                    <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row; height: 10%; cursor: initial; background-image: none;">
+                    <ui:Label tabindex="-1" text="vehicle" parse-escape-sequences="true" display-tooltip-when-elided="true" name="vehicleLabel" style="font-size: 20px; height: 28px;" />
+                    <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row; height: 64px; cursor: initial; background-image: none;">
                         <ui:VisualElement name="class2" style="flex-grow: 0; width: 24%; height: auto;">
                             <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="createVehicle_Truck_color03" style="width: 80%; background-image: resource(&apos;Vehicle/icon_Truck_color03&apos;); height: 80%;" />
                         </ui:VisualElement>
@@ -37,19 +37,19 @@
                             <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="createVehicle_Police" style="width: 80%; background-image: resource(&apos;Vehicle/icon_Police&apos;); height: 80%;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:Label tabindex="-1" text="target point" parse-escape-sequences="true" display-tooltip-when-elided="true" name="targetpointLabel" style="font-size: 44px;" />
-                    <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row; height: 10%; cursor: initial; background-image: none;">
+                    <ui:Label tabindex="-1" text="target point" parse-escape-sequences="true" display-tooltip-when-elided="true" name="targetpointLabel" style="font-size: 20px; height: 28px;" />
+                    <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row; height: 64px; cursor: initial; background-image: none;">
                         <ui:VisualElement name="class2" style="flex-grow: 0; width: 24%; height: auto;">
                             <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="createTargetPoint" style="width: 80%; background-image: resource(&apos;TargetPoint/icon_red_sphere&apos;); height: 80%;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:Button text="destory" parse-escape-sequences="true" display-tooltip-when-elided="true" name="destory" />
                     <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row;">
-                        <ui:TextField picking-mode="Ignore" label="map name" value="default" name="saveMap_name" />
+                        <ui:TextField picking-mode="Ignore" label="map name" value="xiongan_30" name="saveMap_name" style="flex-grow: 1;" />
                         <ui:Button text="saveMap" parse-escape-sequences="true" display-tooltip-when-elided="true" name="saveMap_button" />
                     </ui:VisualElement>
                     <ui:VisualElement name="class1" style="flex-grow: 0; flex-direction: row;">
-                        <ui:TextField picking-mode="Ignore" label="map name" value="default" name="loadMap_name" />
+                        <ui:TextField picking-mode="Ignore" label="map name" value="xiongan_30" name="loadMap_name" style="flex-grow: 1;" />
                         <ui:Button text="loadMap" parse-escape-sequences="true" display-tooltip-when-elided="true" name="loadMap_button" />
                     </ui:VisualElement>
                     <ui:VisualElement style="flex-grow: 0; display: flex;">
@@ -58,14 +58,14 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="running" style="flex-grow: 0; height: 100%; display: none;">
+                <ui:VisualElement name="running" style="flex-grow: 1; height: 100%; display: none; padding-left: 8px; padding-right: 8px;">
                     <ui:Toggle label="play_test" name="running_play" />
                     <ui:Toggle label="play_backend" name="running_play_backend" value="true" />
                     <ui:Toggle label="low speed" name="low_speed_mode" value="false" />
                     <ui:Toggle label="noise" name="set_noise" />
                     <ui:Button text="follow emergency" parse-escape-sequences="true" display-tooltip-when-elided="true" name="follow_emergency_vehicle" />
-                    <ui:SliderInt label="StepRepeat" low-value="1" high-value="10" value="10" tabindex="10" show-input-field="true" focusable="true" name="set_StepRepeat" style="width: 406px;" />
-                    <ui:SliderInt label="EffectiveVehicle" low-value="1" high-value="10" value="5" tabindex="11" show-input-field="true" focusable="true" name="set_effective_vehicle" style="width: 406px;" />
+                    <ui:SliderInt label="StepRepeat" low-value="1" high-value="10" value="10" tabindex="10" show-input-field="true" focusable="true" name="set_StepRepeat" style="width: 100%;" />
+                    <ui:SliderInt label="EffectiveVehicle" low-value="1" high-value="10" value="5" tabindex="11" show-input-field="true" focusable="true" name="set_effective_vehicle" style="width: 100%;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="training" style="flex-grow: 1; display: none;" />
                 <ui:VisualElement name="evaluate" style="flex-grow: 1; display: none;" />

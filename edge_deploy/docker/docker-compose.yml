@@ -6,8 +6,6 @@ services:
       context: ../..
       dockerfile: edge_deploy/docker/Dockerfile
     container_name: xiongan-edge
-    ports:
-      - "8765:8765"
     deploy:
       resources:
         limits:

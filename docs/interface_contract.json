@@ -19,7 +19,17 @@
     "J17",
     "J18",
     "J19",
-    "J20"
+    "J20",
+    "J21",
+    "J22",
+    "J23",
+    "J24",
+    "J25",
+    "J26",
+    "J27",
+    "J28",
+    "J29",
+    "J30"
   ],
   "action_count_per_junction": 4,
   "action_semantics": {
@@ -28,8 +38,10 @@
     "2": "东西直行及右转",
     "3": "东西保护左转"
   },
-  "global_state_dimension": 440,
+  "intersection_count": 30,
+  "global_state_dimension": 660,
   "state_dimension_per_junction": 22,
+  "state_layout_version": "v1-30x22",
   "lane_mapping_file": "docs/lane_mapping.json",
   "tls_mapping_file": "docs/tls_mapping.json"
 }

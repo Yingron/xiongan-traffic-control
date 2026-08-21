@@ -1,4 +1,4 @@
-"""Tests for the shared REST/WebSocket 20-intersection contract."""
+"""Tests for the shared REST/WebSocket 30-intersection contract."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ def _state_payload(transition_id: int) -> dict[str, Any]:
         "transition_id": transition_id,
         "timestamp": 1,
         "simulation_time": float(transition_id * 5),
-        "state_layout_version": "v1-20x22",
+        "state_layout_version": "v1-30x22",
         "intersection_order": list(INTERSECTION_ORDER),
         "state_vector": [0.0] * STATE_DIMENSION,
         "intersections": intersections,
@@ -93,7 +93,7 @@ def websocket_client() -> TestClient:
         yield client
 
 
-def test_subscribe_returns_twenty_intersections_and_440_values(websocket_client: TestClient) -> None:
+def test_subscribe_returns_thirty_intersections_and_660_values(websocket_client: TestClient) -> None:
     with websocket_client.websocket_connect("/api/v1/ws") as websocket:
         websocket.send_json(
             {

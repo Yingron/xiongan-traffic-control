@@ -245,6 +245,20 @@ def generate_unity_map():
     
     return unity_map
 
+def write_unity_map(unity_map):
+    """将30路口地图写入仓库唯一的 frontend Unity工程。"""
+    if not UNITY_MAP_DIR.parent.parent.parent.parent.exists():
+        raise FileNotFoundError("未找到 frontend/CitySimulation Unity工程")
+    UNITY_MAP_DIR.mkdir(parents=True, exist_ok=True)
+    output_path = UNITY_MAP_DIR / "xiongan_30.json"
+    output_path.write_text(
+        json.dumps(unity_map, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(f"[OK] Unity地图文件已生成: {output_path}")
+    return output_path
+
+
 def main():
     # 生成Unity地图
     unity_map = generate_unity_map()
@@ -262,7 +276,7 @@ def main():
     print(f"\n✅ Unity地图文件已生成: {output_path}")
     
     # 在Unity中加载方法：
-    print("\n📋 在Unity中加载地图：")
+    print("\n在Unity中加载地图：")
     print("   1. 进入Play模式")
     print("   2. 在右侧面板输入地图名: xiongan_30")
     print("   3. 点击 loadMap")

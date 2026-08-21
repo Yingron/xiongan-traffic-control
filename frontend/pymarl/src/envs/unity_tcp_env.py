@@ -23,6 +23,7 @@ class UnityTCPEnv(MultiAgentEnv):
         self,
         host: str = "127.0.0.1",
         port: int = 5000,
+        map_id: str = "xiongan_30",
         timeout: float = 10.0,
         n_agents: int = 1,
         n_actions: int = 5,
@@ -64,6 +65,7 @@ class UnityTCPEnv(MultiAgentEnv):
     ):
         self.host = host
         self.port = int(port)
+        self.map_id = str(map_id or "xiongan_30")
         self.timeout = float(timeout)
         self.auto_reconnect = bool(auto_reconnect)
         self.simulate_packet_loss = bool(simulate_packet_loss)
@@ -334,6 +336,7 @@ class UnityTCPEnv(MultiAgentEnv):
             {
                 "cmd": "reset",
                 "request_id": self._next_request_id(),
+                "map_id": self.map_id,
                 "seed": int(reset_seed),
             }
         )

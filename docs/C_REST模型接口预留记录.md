@@ -3,8 +3,8 @@
 ## 1. 当前结论
 
 `POST /api/v1/model/predict` 的 Stable-Baselines3 接入框架已经完成。接口使用真实
-TraCI 会话的 440 维状态，按 J01–J20 切成 `float32[20,22]`，并预留使用同一个
-参数共享 DQN 批量输出 20 个动作的实现。
+TraCI 会话的 660 维状态，按 J01–J30 切成 `float32[30,22]`，并预留使用同一个
+参数共享 DQN 批量输出 30 个动作的实现。
 
 当前没有 A 的真实权重，因此未进行模型加载成功、真实动作、确定性及延迟验收，
 也没有使用假模型或其他策略替代。
@@ -16,7 +16,7 @@ TraCI 会话的 440 维状态，按 J01–J20 切成 `float32[20,22]`，并预�
 | 模型框架 | Stable-Baselines3 DQN |
 | 单路口输入 | 22 维 `float32` |
 | 单路口输出 | 离散动作 `0`–`3` |
-| 全局状态 | 440 维，按 J01–J20 切分 |
+| 全局状态 | 660 维，按 J01–J30 切分 |
 | 模型 ID | `shared-dqn-generalization-100k-v1` |
 | 模型契约 | `shared-dqn-22x4-v1` |
 
@@ -26,9 +26,9 @@ TraCI 会话的 440 维状态，按 J01–J20 切成 `float32[20,22]`，并预�
 - SB3 DQN CPU 懒加载及进程内缓存；
 - 模型文件 SHA-256 校验；
 - 模型 observation/action space 校验；
-- 440 维有限值检查及 20×22 有序切分；
+- 660 维有限值检查及 30×22 有序切分；
 - `model.predict(observations, deterministic=...)` 批量入口；
-- 20 个整数动作及 `0`–`3` 范围校验；
+- 30 个整数动作及 `0`–`3` 范围校验；
 - 推理耗时字段；
 - `MODEL_NOT_FOUND`、`MODEL_NOT_LOADED`、`MODEL_LOAD_FAILED`、
   `MODEL_CONTRACT_MISMATCH`、`MODEL_REGISTRY_INVALID`、`INFERENCE_FAILED`、
@@ -42,7 +42,7 @@ TraCI 会话的 440 维状态，按 J01–J20 切成 `float32[20,22]`，并预�
 2. 模型文件 SHA-256；
 3. 确认训练时未使用额外归一化；若使用 `VecNormalize`，需交付对应 `.pkl`；
 4. stable-baselines3、PyTorch、Gymnasium 和 Python 版本；
-5. 确认模型为 J01–J20 参数共享泛化模型；
+5. 确认模型为 J01–J30 参数共享泛化模型；
 6. 训练代码 Git commit、训练场景和已知限制。
 
 交付后修改 `configs/model_registry.json`：
@@ -62,7 +62,7 @@ TraCI 会话的 440 维状态，按 J01–J20 切成 `float32[20,22]`，并预�
 
 不依赖模型权重的测试覆盖：
 
-- 440→20×22 顺序和 `float32` 类型；
+- 660→30×22 顺序和 `float32` 类型；
 - 非法状态形状；
 - 未注册模型；
 - 已注册但等待 A 的模型；
@@ -71,7 +71,7 @@ TraCI 会话的 440 维状态，按 J01–J20 切成 `float32[20,22]`，并预�
 模型交付后仍须补充：
 
 - 真实 SB3 加载测试；
-- 20 个真实动作输出测试；
+- 30 个真实动作输出测试；
 - 相同输入的确定性测试；
 - CPU 推理 mean/P95/P99 延迟；
 - 输出动作可直接提交到 `/simulation/actions` 的闭环测试。

@@ -48,7 +48,7 @@ def run_dynamic_test():
         queue_history = []
         vehicle_history = []
         
-        previous_actions = {f'J{i:02d}': None for i in range(1, 21)}
+        previous_actions = {intersection_id: None for intersection_id in INTERSECTION_ORDER}
         
         print('数据采集阶段 (120步)...')
         print('-' * 60)
@@ -61,8 +61,7 @@ def run_dynamic_test():
             
             # 构造随机动作（模拟RL智能体）
             current_actions = {}
-            for i in range(1, 21):
-                tl_id = f'J{i:02d}'
+            for tl_id in INTERSECTION_ORDER:
                 current_actions[tl_id] = np.random.randint(0, 4)
             
             # 计算奖励
@@ -72,7 +71,7 @@ def run_dynamic_test():
             
             # 统计排队长度
             total_queue = 0
-            for i in range(20):
+            for i in range(len(INTERSECTION_ORDER)):
                 offset = i * 22
                 queue = state[offset:offset+4]
                 total_queue += np.sum(queue)
@@ -138,7 +137,7 @@ def run_dynamic_test():
         # 测试随机动作 vs 固定动作对比
         print()
         print('策略对比测试:')
-        test_strategies(state, traci)
+        compare_strategies(state)
 
         traci.close()
         print()
@@ -153,27 +152,27 @@ def run_dynamic_test():
         except:
             pass
 
-def test_strategies(state, traci):
+def compare_strategies(state):
     """测试不同策略的效果"""
     print('  测试固定相位策略...')
     
     # 构造 previous_actions 字典
-    prev_actions = {f'J{i:02d}': None for i in range(1, 21)}
+    prev_actions = {intersection_id: None for intersection_id in INTERSECTION_ORDER}
     
     # 固定相位0
-    fixed_actions = {f'J{i:02d}': 0 for i in range(1, 21)}
+    fixed_actions = {intersection_id: 0 for intersection_id in INTERSECTION_ORDER}
     rewards_fixed, _, _ = compute_rewards(state, fixed_actions, prev_actions)
     fixed_reward = sum(rewards_fixed.values()) / len(rewards_fixed)
     
     # 固定相位2
-    fixed2_actions = {f'J{i:02d}': 2 for i in range(1, 21)}
+    fixed2_actions = {intersection_id: 2 for intersection_id in INTERSECTION_ORDER}
     rewards_fixed2, _, _ = compute_rewards(state, fixed2_actions, prev_actions)
     fixed2_reward = sum(rewards_fixed2.values()) / len(rewards_fixed2)
     
     # 随机策略 (测试5次)
     random_rewards = []
     for _ in range(5):
-        rand_actions = {f'J{i:02d}': np.random.randint(0, 4) for i in range(1, 21)}
+        rand_actions = {intersection_id: np.random.randint(0, 4) for intersection_id in INTERSECTION_ORDER}
         _, _, r = compute_rewards(state, rand_actions, prev_actions)
         random_rewards.append(r)
     

@@ -9,6 +9,7 @@ import numpy as np
 import psutil
 
 from edge_deploy.inference import EdgeInference
+from configs.constants import FEATURES_PER_INTERSECTION
 
 
 def run_comprehensive_benchmark(args):
@@ -43,7 +44,7 @@ def run_comprehensive_benchmark(args):
     
     start_time = time.perf_counter()
     for _ in range(args.n):
-        dummy = np.random.randn(26).astype(np.float32)
+        dummy = np.random.randn(FEATURES_PER_INTERSECTION).astype(np.float32)
         inference.predict(dummy)
     end_time = time.perf_counter()
     
@@ -90,7 +91,7 @@ def profile_memory(args):
     print(f"Memory overhead after loading model: {load_overhead:.2f} MB")
 
     for _ in range(100):
-        dummy = np.random.randn(26).astype(np.float32)
+        dummy = np.random.randn(FEATURES_PER_INTERSECTION).astype(np.float32)
         inference.predict(dummy)
     
     after_inference_mem = process.memory_info().rss

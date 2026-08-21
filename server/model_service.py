@@ -16,6 +16,8 @@ from typing import Any
 
 import numpy as np
 
+from configs.constants import FEATURES_PER_INTERSECTION, INTERSECTION_COUNT
+
 
 SUPPORTED_FORMAT = "stable-baselines3-dqn"
 

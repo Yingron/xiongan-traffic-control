@@ -15,7 +15,7 @@ import traci
 import numpy as np
 from env.global_state import get_global_state, parse_state
 from env.reward_functions import compute_rewards, compute_reward
-from configs.constants import STATE_DIMENSION, INTERSECTION_ORDER, ACTION_NAMES
+from configs.constants import INTERSECTION_COUNT, STATE_DIMENSION, INTERSECTION_ORDER, ACTION_NAMES
 
 def test_state_extraction():
     """测试状态提取"""
@@ -39,7 +39,7 @@ def test_state_extraction():
             traci.simulationStep()
 
         print('提取全局状态...')
-        global_state = get_global_state(num_intersections=20)
+        global_state = get_global_state(num_intersections=INTERSECTION_COUNT)
 
         print(f'状态维度: {global_state.shape}')
         print(f'状态类型: {global_state.dtype}')
@@ -114,8 +114,7 @@ def test_reward_computation(state=None):
     # 构造动作
     current_actions = {}
     previous_actions = {}
-    for i in range(1, 21):
-        tl_id = f'J{i:02d}'
+    for i, tl_id in enumerate(INTERSECTION_ORDER, start=1):
         current_actions[tl_id] = i % 4
         previous_actions[tl_id] = None
 

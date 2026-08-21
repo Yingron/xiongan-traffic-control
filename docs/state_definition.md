@@ -5,7 +5,7 @@
 | 项目 | 内容 |
 |------|------|
 | 版本 | v1.0 |
-| 适用场景 | 雄安新区20路口交通信号控制DQN模型 |
+| 适用场景 | 雄安新区30路口交通信号控制DQN模型 |
 | 接口文件 | `env/global_state.py` |
 
 ---
@@ -16,9 +16,9 @@
 
 | 参数 | 值 | 说明 |
 |------|------|------|
-| 路口数量 | 20 | 20个信号灯控制路口 |
+| 路口数量 | 30 | 30个信号灯控制路口 |
 | 每路口特征 | 22维 | 排队长度+等待时间+占有率+溢出风险+相位+时间 |
-| 总状态维度 | **440维** | 20 × 22 = 440 |
+| 总状态维度 | **660维** | 30 × 22 = 660 |
 | 数据类型 | `np.float32` | 归一化后的浮点型数组 |
 | 输出格式 | 一维扁平化数组 | 可直接作为DQN网络输入 |
 
@@ -145,7 +145,7 @@ time_cos = cos(2π × current_hour / 24)
 状态向量按路口ID顺序排列：
 
 ```
-J01 → J02 → J03 → ... → J20
+J01 → J02 → J03 → ... → J30
 ```
 
 每个路口占用连续22维空间。
@@ -282,7 +282,7 @@ sin/cos组合形成单位圆上的点，24小时完成一个周期，相邻时�
 
 - **方向缺失处理**：若某方向无受控车道，对应维度填充0
 - **相位越界处理**：若相位索引超出0~3范围，默认设为相位0
-- **路口数量容错**：若实际信号灯数量少于20个，剩余位置填充0
+- **契约校验**：正式服务要求实际信号灯恰好为 J01–J30；缺失路口应视为配置错误
 
 ---
 
@@ -294,21 +294,21 @@ sin/cos组合形成单位圆上的点，24小时完成一个周期，相邻时�
 from env.global_state import get_global_state
 
 # 在仿真中调用
-state = get_global_state(num_intersections=20, sim_start_hour=7.0)
-# 返回: np.ndarray, shape=(440,), dtype=np.float32
+state = get_global_state(num_intersections=30, sim_start_hour=7.0)
+# 返回: np.ndarray, shape=(660,), dtype=np.float32
 ```
 
 ### 7.2 参数说明
 
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| num_intersections | int | 20 | 路口数量 |
+| num_intersections | int | 30 | 路口数量 |
 | sim_start_hour | float | 7.0 | 仿真起始小时（用于时间特征计算） |
 
 ### 7.3 返回值
 
 - **类型**：`numpy.ndarray`
-- **形状**：`(440,)`
+- **形状**：`(660,)`
 - **数据类型**：`np.float32`
 - **格式**：一维扁平化数组，可直接作为DQN网络输入
 
@@ -330,7 +330,7 @@ state = get_global_state()
 from env.global_state import parse_global_state, get_state_dimension_info
 
 # 解析状态向量为结构化数据
-parsed_state = parse_global_state(state, num_intersections=20)
+parsed_state = parse_global_state(state, num_intersections=30)
 
 # 获取维度详细信息
 dim_info = get_state_dimension_info()
@@ -352,7 +352,7 @@ traci.start(["sumo", "-c", "xiongan.sumocfg"])
 
 # 在仿真循环中调用
 while True:
-    state = get_global_state()  # 获取440维状态
+    state = get_global_state()  # 获取660维状态
     action = model.predict(state)  # DQN决策
     # ... 执行动作 ...
     traci.simulationStep()
@@ -389,9 +389,9 @@ action = torch.argmax(q_values).item()
 
 ## 9. 附录
 
-### 9.1 440维完整索引速查表
+### 9.1 660维完整索引速查表
 
-**路口J01（0-21），J02（22-43），...，J20（396-415）**
+**路口J01（0-21），J02（22-43），...，J30（638-659）**
 
 每个路口内部结构相同：
 - [0:4] 排队长度（N,S,E,W）
@@ -406,5 +406,5 @@ action = torch.argmax(q_values).item()
 1. **固定顺序**：特征顺序严格固定，确保训练和推理一致
 2. **归一化**：所有数值特征归一化到[0,1]范围（时间特征除外）
 3. **容错性**：处理缺失数据和异常值
-4. **可扩展性**：支持任意数量路口（默认20个）
+4. **固定契约**：当前生产契约固定为30个路口
 5. **可调试性**：提供详细的调试日志和辅助解析函数

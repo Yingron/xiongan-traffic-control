@@ -11,7 +11,9 @@
       "observation_dtype": "float32",
       "action_count": 4,
       "normalization": "pending_A_confirmation",
-      "state_layout_version": "v1-20x22",
+      "intersection_count": 30,
+      "global_state_dimension": 660,
+      "state_layout_version": "v1-30x22",
       "model_contract_version": "shared-dqn-22x4-v1",
       "deterministic_inference_supported": true,
       "handoff_note": "历史遗留条目：22维/20路口契约已被 30路口 26维掩码配方取代，artifact 从未交付，仅保留存档说明，不参与加载。"
