@@ -7,13 +7,13 @@ namespace CitySimulation.GameObjects.Entities
     /// 4相位信号灯动画器，挂载到 TrafficLight GameObject 上。
     ///
     /// 4相位循环：
-    ///   Phase 0: 南北绿 / 东西红  (greenDuration秒)
-    ///   Phase 1: 南北黄 / 东西红  (yellowDuration秒)
-    ///   Phase 2: 东西绿 / 南北红  (greenDuration秒)
-    ///   Phase 3: 东西黄 / 南北红  (yellowDuration秒)
+    ///   Phase 0: 南北直行绿 / 东西红
+    ///   Phase 1: 南北保护左转绿 / 东西红
+    ///   Phase 2: 东西直行绿 / 南北红
+    ///   Phase 3: 东西保护左转绿 / 南北红
     ///   → 回到 Phase 0
     ///
-    /// 每个 direction (NS / EW) 各有一组 R/Y/G 灯泡（用 Sphere + 发光材质模拟）。
+    /// 每个 direction (NS / EW) 各有一组 R/Y/G 灯泡和一组保护左转黄/绿指示灯。
     /// 根据 currentPhase 控制各灯泡的亮灭。
     /// </summary>
     [DisallowMultipleComponent]
@@ -23,9 +23,9 @@ namespace CitySimulation.GameObjects.Entities
         public enum Phase : int
         {
             NS_Green = 0,   // 南北绿灯，东西红灯
-            NS_Yellow = 1,  // 南北黄灯，东西红灯
+            NS_Left = 1,    // 南北保护左转绿灯，东西红灯
             EW_Green = 2,   // 东西绿灯，南北红灯
-            EW_Yellow = 3,  // 东西黄灯，南北红灯
+            EW_Left = 3,    // 东西保护左转绿灯，南北红灯
         }
 
         // ===================== 配置 =====================
@@ -49,6 +49,9 @@ namespace CitySimulation.GameObjects.Entities
         [Tooltip("灯组距路口中心偏移（米）")]
         public float armOffset = 3f;
 
+        [Tooltip("保护左转灯列相对直行灯列的水平偏移")]
+        public float protectedLeftColumnOffset = 0.85f;
+
         [Header("运行状态（只读）")]
         [SerializeField] private int _currentPhase = 0;
         [SerializeField] private float _timeInPhase = 0f;
@@ -64,12 +67,19 @@ namespace CitySimulation.GameObjects.Entities
         public float TimeInPhase => _timeInPhase;
 
         // ===================== 内部状态 =====================
-        // 4个方向灯组：[0]=North, [1]=South, [2]=East, [3]=West
-        // 每组3个灯泡：[0]=Red, [1]=Yellow, [2]=Green
+        // 4个方向灯组：[0]=North, [1]=South, [2]=East, [3]=West。
+        // 每组5个灯泡：[0]=Red, [1]=Yellow, [2]=Green,
+        // [3]=ProtectedLeftYellow, [4]=ProtectedLeftGreen。
+        private const int BulbCount = 5;
+        private const int RedBulb = 0;
+        private const int YellowBulb = 1;
+        private const int GreenBulb = 2;
+        private const int ProtectedLeftYellowBulb = 3;
+        private const int ProtectedLeftGreenBulb = 4;
         private GameObject[][] _bulbs;
         private Renderer[][] _bulbRenderers;
-        private Material[] _onMaterials;   // [R_on, Y_on, G_on]
-        private Material[] _offMaterials;  // [R_off, Y_off, G_off]
+        private Material[] _onMaterials;
+        private Material[] _offMaterials;
         private bool _initialized;
 
         // 颜色定义
@@ -158,11 +168,11 @@ namespace CitySimulation.GameObjects.Entities
             if (_initialized) return;
 
             // ----- 预先创建所有材质（一次性分配，所有灯泡共享） -----
-            _onMaterials = new Material[3];
-            _offMaterials = new Material[3];
-            Color[] onColors = { ColorRedOn, ColorYellowOn, ColorGreenOn };
-            string[] matNames = { "Traffic_Red", "Traffic_Yellow", "Traffic_Green" };
-            for (int i = 0; i < 3; i++)
+            _onMaterials = new Material[BulbCount];
+            _offMaterials = new Material[BulbCount];
+            Color[] onColors = { ColorRedOn, ColorYellowOn, ColorGreenOn, ColorYellowOn, ColorGreenOn };
+            string[] matNames = { "Traffic_Red", "Traffic_Yellow", "Traffic_Green", "Traffic_LeftYellow", "Traffic_LeftGreen" };
+            for (int i = 0; i < BulbCount; i++)
             {
                 _onMaterials[i] = CreateTrafficMat(matNames[i] + "_On", onColors[i], true);
                 _offMaterials[i] = CreateTrafficMat(matNames[i] + "_Off", ColorOff, false);
@@ -175,9 +185,9 @@ namespace CitySimulation.GameObjects.Entities
 
             for (int dir = 0; dir < 4; dir++)
             {
-                _bulbs[dir] = new GameObject[3];
-                _bulbRenderers[dir] = new Renderer[3];
-                string[] bulbNames = { "Red", "Yellow", "Green" };
+                _bulbs[dir] = new GameObject[BulbCount];
+                _bulbRenderers[dir] = new Renderer[BulbCount];
+                string[] bulbNames = { "Red", "Yellow", "Green", "LeftArrow_Yellow", "LeftArrow_Green" };
 
                 // 灯组父节点
                 var arm = new GameObject($"Arm_{dirNames[dir]}");
@@ -204,15 +214,17 @@ namespace CitySimulation.GameObjects.Entities
                 Vector3 armDir = dir < 2 ? new Vector3(0, 0, dir == 0 ? 1 : -1) : new Vector3(dir == 2 ? 1 : -1, 0, 0);
                 arm.transform.localPosition = armDir * armOffset;
 
-                // 3个灯泡：红上、黄中、绿下
-                for (int bulb = 0; bulb < 3; bulb++)
+                // 直行灯列为红上、黄中、绿下；右侧的两盏小灯专门表示保护左转。
+                for (int bulb = 0; bulb < BulbCount; bulb++)
                 {
                     var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                     sphere.name = bulbNames[bulb];
                     sphere.transform.SetParent(arm.transform, false);
-                    sphere.transform.localScale = Vector3.one * bulbRadius * 2f;
-                    // 灯泡排列在灯臂末端，垂直排列
-                    sphere.transform.localPosition = new Vector3(0, poleHeight - bulb * bulbSpacing, 0);
+                    float columnX = bulb >= ProtectedLeftYellowBulb ? protectedLeftColumnOffset : 0f;
+                    int row = bulb >= ProtectedLeftYellowBulb ? bulb - ProtectedLeftYellowBulb : bulb;
+                    float radiusScale = bulb >= ProtectedLeftYellowBulb ? 0.8f : 1f;
+                    sphere.transform.localScale = Vector3.one * bulbRadius * 2f * radiusScale;
+                    sphere.transform.localPosition = new Vector3(columnX, poleHeight - row * bulbSpacing, 0);
                     // 初始全灭（用 off 共享材质）
                     var r = sphere.GetComponent<Renderer>();
                     if (r != null) r.sharedMaterial = _offMaterials[bulb];
@@ -278,8 +290,9 @@ namespace CitySimulation.GameObjects.Entities
         /// <summary>获取当前相位时长</summary>
         public float GetPhaseDuration(int phase)
         {
-            // Phase 0,2 = 绿灯；Phase 1,3 = 黄灯
-            return (phase == 0 || phase == 2) ? greenDuration : yellowDuration;
+            // 四个 SUMO rl4 相位均为有效放行相位；黄灯仅保留为灯头，
+            // 不再把保护左转相位误显示成黄灯。
+            return greenDuration;
         }
 
         // ===================== 视觉更新 =====================
@@ -288,22 +301,23 @@ namespace CitySimulation.GameObjects.Entities
             if (!_initialized) return;
 
             // dir: 0=N, 1=S (南北方向)；2=E, 3=W (东西方向)
-            bool nsGreen = _currentPhase == (int)Phase.NS_Green;
-            bool nsYellow = _currentPhase == (int)Phase.NS_Yellow;
-            bool ewGreen = _currentPhase == (int)Phase.EW_Green;
-            bool ewYellow = _currentPhase == (int)Phase.EW_Yellow;
+            bool nsStraightGreen = _currentPhase == (int)Phase.NS_Green;
+            bool nsLeftGreen = _currentPhase == (int)Phase.NS_Left;
+            bool ewStraightGreen = _currentPhase == (int)Phase.EW_Green;
+            bool ewLeftGreen = _currentPhase == (int)Phase.EW_Left;
 
             for (int dir = 0; dir < 4; dir++)
             {
                 bool isNS = dir < 2;
-                bool green = isNS ? nsGreen : ewGreen;
-                bool yellow = isNS ? nsYellow : ewYellow;
-                // 绿/黄时红灭，否则红亮
-                bool red = !green && !yellow;
+                bool straightGreen = isNS ? nsStraightGreen : ewStraightGreen;
+                bool leftGreen = isNS ? nsLeftGreen : ewLeftGreen;
+                bool red = !straightGreen && !leftGreen;
 
-                SetBulb(dir, 0, red);     // Red
-                SetBulb(dir, 1, yellow);  // Yellow
-                SetBulb(dir, 2, green);   // Green
+                SetBulb(dir, RedBulb, red);
+                SetBulb(dir, YellowBulb, false);
+                SetBulb(dir, GreenBulb, straightGreen);
+                SetBulb(dir, ProtectedLeftYellowBulb, false);
+                SetBulb(dir, ProtectedLeftGreenBulb, leftGreen);
             }
         }
 
@@ -358,7 +372,7 @@ namespace CitySimulation.GameObjects.Entities
             for (int dir = 0; dir < 4; dir++)
             {
                 if (_bulbs[dir] == null) continue;
-                for (int bulb = 0; bulb < 3; bulb++)
+                for (int bulb = 0; bulb < BulbCount; bulb++)
                 {
                     var b = _bulbs[dir][bulb];
                     if (b == null) continue;
@@ -368,7 +382,13 @@ namespace CitySimulation.GameObjects.Entities
                     {
                         case 0: gizmoColor = Color.red; break;
                         case 1: gizmoColor = Color.yellow; break;
-                        case 2: gizmoColor = Color.green; break;
+                        case 2:
+                        case ProtectedLeftGreenBulb:
+                            gizmoColor = Color.green;
+                            break;
+                        case ProtectedLeftYellowBulb:
+                            gizmoColor = Color.yellow;
+                            break;
                         default: gizmoColor = Color.gray; break;
                     }
                     // 实际亮灭时用亮色，不亮时用暗色

@@ -101,6 +101,13 @@ namespace CitySimulation.Bootstrap
                 size.x * 0.5f / Mathf.Max(0.1f, camera.aspect)) * cameraPadding;
             camera.nearClipPlane = 0.3f;
             camera.farClipPlane = Mathf.Max(3000f, camera.transform.position.y + 1000f);
+
+            // City.unity 的原始 Main Camera 没有预挂镜头控制器。运行时确保
+            // 控制器存在，数字键 1/2/3 才能提供答辩全景和路口特写，且无需修改场景资产。
+            if (camera.GetComponent<CameraMoveController>() == null)
+            {
+                camera.gameObject.AddComponent<CameraMoveController>();
+            }
             Debug.Log(
                 $"[XionganRoadBootstrap] Camera framed at {camera.transform.position}, " +
                 $"orthographicSize={camera.orthographicSize:F1}.");

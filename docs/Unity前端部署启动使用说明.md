@@ -559,6 +559,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 | **路网** | 30 路口网格路网出现，道路清晰可见 | 路网空白 / 部分缺失 |
 | **车辆** | 道路上有多辆车辆移动 | 无车辆 / 车辆静止不动 |
 | **信号灯** | 路口信号灯有红/绿/黄颜色变化 | 信号灯全红 / 无颜色 |
+| **保护左转灯** | phase 1/3 时对应方向的左转绿灯亮起 | 左转相位仍被显示为黄灯或直行绿灯 |
 | **车辆行为** | 车辆遇红灯减速停车，绿灯通行 | 车辆穿墙 / 穿越红灯 |
 
 ### 8.2 Console 日志检查
@@ -634,8 +635,12 @@ python server/visualization_server.py --scenario real_peak --port 8765
 | `E` | 向上移动 |
 | `鼠标滚轮` | 垂直升降 |
 | `Shift`（按住） | 移动速度加倍 |
+| `1` | 30 路口全景镜头（答辩总览） |
+| `2` | 北侧路口特写（J01 附近） |
+| `3` | 中心路口特写（J19 附近） |
 
 > 移动速度默认为 200，可在 `CameraMoveController` 组件的 Inspector 中调整 `Move Speed`。
+> 答辩录制时建议先按 `1` 录制全景，再按 `2` 或 `3` 录制车辆与信号灯特写。
 
 ### 9.2 场景切换
 
@@ -765,6 +770,7 @@ python server/visualization_server.py --scenario real_peak --port 8765
 - 在 `SimulationRuntimeDriver` 中降低 `Target Vehicle Count`。
 - 在 `SimulationConfig` 中降低 `RuntimeStepRepeat`。
 - 确认未启用 SUMO GUI（`--gui` 参数）。
+- 在 `SumoVisualizationBridge` 中保持 `maxRenderedVehicles`（默认 850）与 `maxPoolSize`（默认 900）的上限，并启用 `cullVehiclesByDistance`；答辩全景下优先保证近景车辆与信号灯流畅显示。
 
 ### 10.10 后端服务异常退出
 

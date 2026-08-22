@@ -24,8 +24,18 @@ namespace CitySimulation.Runtime.Visualization
         public GameObject vehiclePrefab;
         [Tooltip("公交车 Prefab (可选)")]
         public GameObject busPrefab;
-        [Tooltip("车辆池初始大小")]
-        public int poolSize = 80;
+        [Tooltip("车辆池初始大小。运行时会按需增长至最大值。")]
+        public int poolSize = 120;
+        [Tooltip("车辆池最大大小，防止高车流时无限实例化拖慢 Unity。0 表示不设上限。")]
+        public int maxPoolSize = 900;
+        [Tooltip("单帧最多渲染的 SUMO 车辆数。0 表示不设上限。")]
+        public int maxRenderedVehicles = 850;
+        [Tooltip("按相机水平距离裁剪远处车辆，降低答辩全景下的渲染压力。")]
+        public bool cullVehiclesByDistance = true;
+        [Tooltip("车辆到演示相机的最大水平渲染距离。0 表示不裁剪。")]
+        public float maxRenderDistance = 900f;
+        [Tooltip("用于裁剪的相机；为空时自动使用 Main Camera。")]
+        public Camera presentationCamera;
         [Tooltip("车辆缩放")]
         public float vehicleScale = 1f;
         [Tooltip("车辆 Y 偏移（高度）。0.35 可防止车辆与路面 z-fighting 闪烁。")]
@@ -46,7 +56,10 @@ namespace CitySimulation.Runtime.Visualization
         // ── 车辆对象池 ──
         readonly List<GameObject> _vehiclePool = new();
         readonly Dictionary<string, GameObject> _activeVehicles = new();
+        readonly HashSet<string> _renderedVehicleIds = new();
+        readonly List<string> _vehiclesToRelease = new();
         int _poolIndex;
+        Transform _renderCameraTransform;
 
         // ── 当前指标 ──
         public SimMetrics CurrentMetrics { get; private set; }
@@ -59,6 +72,7 @@ namespace CitySimulation.Runtime.Visualization
         void Start()
         {
             InitializePool();
+            ResolveRenderCamera();
 
             if (wsClient != null)
             {
@@ -86,7 +100,10 @@ namespace CitySimulation.Runtime.Visualization
             var poolParent = new GameObject("VehiclePool");
             poolParent.transform.SetParent(transform, false);
 
-            for (int i = 0; i < poolSize; i++)
+            // 初始池也必须受同一上限保护；这样 Inspector 中误填较大 poolSize
+            // 不会在启动瞬间创建大量对象导致卡顿。
+            int initialPoolSize = maxPoolSize > 0 ? Mathf.Min(poolSize, maxPoolSize) : poolSize;
+            for (int i = 0; i < Mathf.Max(0, initialPoolSize); i++)
             {
                 var go = CreateVehicle();
                 go.transform.SetParent(poolParent.transform, false);
@@ -138,13 +155,28 @@ namespace CitySimulation.Runtime.Visualization
         {
             if (state.vehicles == null) return;
 
-            // 标记当前活跃的车辆 ID
-            var currentIds = new HashSet<string>();
+            // 只保留实际进入渲染预算的车辆。避免“服务端有 1300 辆”时
+            // 为每辆车创建 GameObject，也避免被裁剪车辆残留在画面里。
+            _renderedVehicleIds.Clear();
+            var cameraTransform = ResolveRenderCamera();
+            float maxDistanceSqr = maxRenderDistance > 0f ? maxRenderDistance * maxRenderDistance : float.PositiveInfinity;
+            int renderedCount = 0;
 
             foreach (var veh in state.vehicles)
             {
                 if (string.IsNullOrEmpty(veh.id)) continue;
-                currentIds.Add(veh.id);
+                if (maxRenderedVehicles > 0 && renderedCount >= maxRenderedVehicles) continue;
+
+                float unityX = veh.x * coordinateScale + offsetX;
+                float unityZ = veh.y * coordinateScale + offsetZ;
+                if (cullVehiclesByDistance && cameraTransform != null && maxRenderDistance > 0f)
+                {
+                    float dx = unityX - cameraTransform.position.x;
+                    float dz = unityZ - cameraTransform.position.z;
+                    if (dx * dx + dz * dz > maxDistanceSqr) continue;
+                }
+
+                _renderedVehicleIds.Add(veh.id);
 
                 GameObject go;
                 if (!_activeVehicles.TryGetValue(veh.id, out go))
@@ -160,9 +192,9 @@ namespace CitySimulation.Runtime.Visualization
                 // 更新位置和朝向
                 // SUMO: x=East, y=North → Unity: x=East, z=North
                 var pos = new Vector3(
-                    veh.x * coordinateScale + offsetX,
+                    unityX,
                     vehicleYOffset,
-                    veh.y * coordinateScale + offsetZ
+                    unityZ
                 );
                 go.transform.position = pos;
 
@@ -177,22 +209,31 @@ namespace CitySimulation.Runtime.Visualization
                         // 可以在这里切换 mesh，但为简化，仅改颜色
                     }
                 }
+                renderedCount++;
             }
 
-            // 回收不在当前状态中的车辆
-            var toRemove = new List<string>();
+            // 回收离开 SUMO、被距离裁剪或超出渲染预算的车辆。
+            _vehiclesToRelease.Clear();
             foreach (var kvp in _activeVehicles)
             {
-                if (!currentIds.Contains(kvp.Key))
+                if (!_renderedVehicleIds.Contains(kvp.Key))
                 {
                     kvp.Value.SetActive(false);
-                    toRemove.Add(kvp.Key);
+                    _vehiclesToRelease.Add(kvp.Key);
                 }
             }
-            foreach (var id in toRemove)
+            foreach (var id in _vehiclesToRelease)
             {
                 _activeVehicles.Remove(id);
             }
+        }
+
+        Transform ResolveRenderCamera()
+        {
+            if (_renderCameraTransform != null) return _renderCameraTransform;
+            var camera = presentationCamera != null ? presentationCamera : Camera.main;
+            if (camera != null) _renderCameraTransform = camera.transform;
+            return _renderCameraTransform;
         }
 
         GameObject GetFromPool()
@@ -208,9 +249,13 @@ namespace CitySimulation.Runtime.Visualization
                 }
             }
 
-            // 池已耗尽，动态扩展
+            // 池已耗尽时按需扩展，但受上限保护。
+            if (maxPoolSize > 0 && _vehiclePool.Count >= maxPoolSize)
+            {
+                return null;
+            }
             var newGo = CreateVehicle();
-            newGo.transform.SetParent(_vehiclePool[0].transform.parent, false);
+            newGo.transform.SetParent(_vehiclePool.Count > 0 ? _vehiclePool[0].transform.parent : transform, false);
             _vehiclePool.Add(newGo);
             return newGo;
         }
@@ -357,6 +402,8 @@ namespace CitySimulation.Runtime.Visualization
                 }
             }
             _activeVehicles.Clear();
+            _renderedVehicleIds.Clear();
+            _vehiclesToRelease.Clear();
             _lastPhases.Clear();
             CurrentMetrics = null;
         }
