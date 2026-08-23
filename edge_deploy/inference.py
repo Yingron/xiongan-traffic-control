@@ -9,7 +9,12 @@ from typing import Any
 
 import numpy as np
 
-from edge_deploy.modeling import ACTION_DIM, MODEL_INPUT_DIM, STATE_DIM
+# Keep the lightweight ONNX serving path independent from the optional PyTorch
+# export/training helpers in ``edge_deploy.modeling``.  These constants define
+# the deployed contract and are also recorded in configs/edge_model_registry.
+STATE_DIM = 22
+ACTION_DIM = 4
+MODEL_INPUT_DIM = STATE_DIM + ACTION_DIM
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]

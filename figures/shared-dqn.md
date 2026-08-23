@@ -1,0 +1,20 @@
+# 共享掩码 DQN 推理结构
+
+30 个路口共用同一套网络参数，每个路口独立输入本地状态并受自己的绝对动作掩码约束。
+
+```mermaid
+flowchart LR
+    State["单路口状态<br/>22 维"] --> Concat["拼接绝对动作掩码<br/>4 维"]
+    Mask["合法相位掩码<br/>30 × 4"] --> Concat
+    Concat --> QNet["共享 DQN<br/>MLP 64 → 64"]
+    QNet --> QValues["4 个 Q 值"]
+    QValues --> Select["掩码约束 argmax"]
+    Select --> Action["动作 0..3<br/>路口相位"]
+    Buffer["共享经验回放<br/>来自 J01...J30"] --> QNet
+    classDef input fill:#dcfce7,stroke:#16a34a,color:#111827,stroke-width:2px;
+    classDef core fill:#dbeafe,stroke:#2563eb,color:#111827,stroke-width:2px;
+    classDef output fill:#ffedd5,stroke:#ea580c,color:#111827,stroke-width:2px;
+    class State,Mask,Buffer input;
+    class Concat,QNet,QValues core;
+    class Select,Action output;
+```

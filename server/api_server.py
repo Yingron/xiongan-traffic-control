@@ -8,11 +8,14 @@ an invalid or incomplete SUMO network is reported to the caller as a 503.
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 import shutil
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -105,6 +108,12 @@ class ModelPredictRequest(SessionRequest):
     deterministic: bool = True
 
 
+class EdgePredictRequest(SessionRequest):
+    """Request a batched 30-junction decision from the ONNX edge service."""
+
+    model_id: str = Field(min_length=1)
+
+
 @dataclass
 class SimulationSession:
     session_id: str
@@ -139,21 +148,28 @@ class TraCISessionManager:
     @staticmethod
     def _sumo_binary(use_gui: bool) -> str:
         sumo_home = os.environ.get("SUMO_HOME")
-        if not sumo_home:
-            raise ApiError(
-                503,
-                "TRACI_UNAVAILABLE",
-                "SUMO_HOME is not configured. Run scripts/activate_c_environment.ps1 first.",
-            )
-        executable = Path(sumo_home) / "bin" / ("sumo-gui.exe" if use_gui else "sumo.exe")
-        if not executable.exists():
-            raise ApiError(
-                503,
-                "TRACI_UNAVAILABLE",
-                "SUMO executable was not found under SUMO_HOME.",
-                {"sumo_home": sumo_home, "expected_executable": str(executable)},
-            )
-        return str(executable)
+        binary_name = "sumo-gui" if use_gui else "sumo"
+        candidates: list[Path] = []
+        if sumo_home:
+            bin_dir = Path(sumo_home) / "bin"
+            # Windows packages use .exe while Debian SUMO packages use bare names.
+            candidates.extend((bin_dir / f"{binary_name}.exe", bin_dir / binary_name))
+        for candidate in candidates:
+            if candidate.is_file():
+                return str(candidate)
+        executable = shutil.which(binary_name) or shutil.which(f"{binary_name}.exe")
+        if executable:
+            return executable
+        raise ApiError(
+            503,
+            "TRACI_UNAVAILABLE",
+            "SUMO executable was not found. Configure SUMO_HOME or put SUMO on PATH.",
+            {
+                "sumo_home": sumo_home,
+                "searched": [str(candidate) for candidate in candidates],
+                "binary_name": binary_name,
+            },
+        )
 
     @staticmethod
     def _validate_sumo_assets(sumo_binary: str, config_path: Path) -> None:
@@ -597,13 +613,10 @@ async def shutdown() -> None:
 
 @app.get(f"{API_PREFIX}/health")
 async def health_check() -> dict[str, Any]:
-    sumo_home = os.environ.get("SUMO_HOME")
-    configured_sumo = Path(sumo_home) / "bin" / "sumo.exe" if sumo_home else None
-    sumo_executable = (
-        str(configured_sumo)
-        if configured_sumo is not None and configured_sumo.exists()
-        else shutil.which("sumo")
-    )
+    try:
+        sumo_executable = manager._sumo_binary(use_gui=False)
+    except ApiError:
+        sumo_executable = None
     return {
         "status": "healthy",
         "api_version": "v1",
@@ -611,6 +624,31 @@ async def health_check() -> dict[str, Any]:
         "sumo_executable": sumo_executable,
         "active_session_id": manager.session.session_id if manager.session else None,
     }
+
+
+@app.get(f"{API_PREFIX}/edge/health")
+async def edge_health_check() -> dict[str, Any]:
+    """Check the optional ONNX edge service configured for deployment."""
+
+    edge_url = os.environ.get("EDGE_INFERENCE_URL")
+    if not edge_url:
+        raise ApiError(503, "EDGE_SERVICE_UNAVAILABLE", "EDGE_INFERENCE_URL is not configured.")
+    endpoint = f"{edge_url.rstrip('/')}/health"
+    try:
+        with urllib.request.urlopen(endpoint, timeout=3) as response:
+            payload = response.read().decode("utf-8")
+    except (OSError, urllib.error.URLError) as error:
+        raise ApiError(
+            503,
+            "EDGE_SERVICE_UNAVAILABLE",
+            "The ONNX edge service could not be reached.",
+            {"endpoint": endpoint, "reason": str(error)},
+        ) from error
+    try:
+        status = json.loads(payload)
+    except ValueError as error:
+        raise ApiError(503, "EDGE_SERVICE_UNAVAILABLE", "The edge service returned invalid JSON.") from error
+    return {"status": "healthy", "edge_url": edge_url, "edge": status}
 
 
 @app.post(f"{API_PREFIX}/simulation/start", status_code=201)
@@ -689,6 +727,52 @@ async def predict_model_action(request: ModelPredictRequest) -> dict[str, Any]:
         "state_layout_version": STATE_LAYOUT_VERSION,
         "deterministic": request.deterministic,
         **prediction,
+    }
+
+
+@app.post(f"{API_PREFIX}/edge/predict")
+async def predict_edge_action(request: EdgePredictRequest) -> dict[str, Any]:
+    """Forward the current 660-D state and 30 action masks to the ONNX edge service.
+
+    This endpoint keeps the 30-junction API contract intact while exercising the
+    real container-to-container inference path used in deployment.
+    """
+
+    edge_url = os.environ.get("EDGE_INFERENCE_URL")
+    if not edge_url:
+        raise ApiError(503, "EDGE_SERVICE_UNAVAILABLE", "EDGE_INFERENCE_URL is not configured.")
+    transition_id, state = await manager.inference_state(request.session_id)
+    masks = await manager.inference_masks(request.session_id)
+    observations = np.asarray(state, dtype=np.float32).reshape(len(INTERSECTION_ORDER), FEATURES_PER_INTERSECTION)
+    payload = {
+        "model_id": request.model_id,
+        "state": observations.tolist(),
+        "action_mask": np.asarray(masks, dtype=np.float32).tolist(),
+    }
+    endpoint = f"{edge_url.rstrip('/')}/predict"
+    body = json.dumps(payload).encode("utf-8")
+    edge_request = urllib.request.Request(endpoint, data=body, headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(edge_request, timeout=5) as response:
+            edge_response = json.loads(response.read().decode("utf-8"))
+    except (OSError, ValueError, urllib.error.URLError) as error:
+        raise ApiError(
+            503,
+            "EDGE_SERVICE_UNAVAILABLE",
+            "The ONNX edge prediction request failed.",
+            {"endpoint": endpoint, "reason": str(error)},
+        ) from error
+    actions = edge_response.get("actions")
+    if not isinstance(actions, list) or len(actions) != len(INTERSECTION_ORDER):
+        raise ApiError(503, "EDGE_SERVICE_INVALID_RESPONSE", "The edge service did not return 30 actions.")
+    return {
+        "session_id": request.session_id,
+        "model_id": request.model_id,
+        "transition_id": transition_id,
+        "state_layout_version": STATE_LAYOUT_VERSION,
+        "actions": {junction_id: int(action) for junction_id, action in zip(INTERSECTION_ORDER, actions)},
+        "latency_ms": edge_response.get("latency_ms"),
+        "edge_backend": edge_response.get("backend"),
     }
 
 

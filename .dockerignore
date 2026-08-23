@@ -1,0 +1,19 @@
+# Runtime images receive large simulation/model artifacts as read-only volumes.
+# Keep the build context small and deterministic.
+.git
+.aris
+.pytest_cache
+__pycache__
+*.py[cod]
+logs
+models
+frontend
+ChallengeCup-main
+data
+docs
+赛题资料
+visualization
+tests
+*.zip
+*.tar
+*.tar.gz
