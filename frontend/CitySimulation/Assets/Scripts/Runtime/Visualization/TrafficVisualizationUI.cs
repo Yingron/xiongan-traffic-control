@@ -200,6 +200,7 @@ namespace CitySimulation.Runtime.Visualization
 
         void OnScenarioSwitched(string scenario, string message)
         {
+            _bridge?.ResetForScenarioSwitch();
             UpdateScenarioDisplay(scenario);
         }
 
@@ -235,8 +236,16 @@ namespace CitySimulation.Runtime.Visualization
         {
             if (_wsClient != null)
             {
+                _bridge?.ResetForScenarioSwitch();
+                if (_metricsText != null)
+                {
+                    _metricsText.text = "场景切换中，等待后端快照...";
+                }
+                if (_vehicleCountText != null)
+                {
+                    _vehicleCountText.text = "渲染车辆: 0";
+                }
                 _wsClient.SwitchScenario(scenario);
-                UpdateScenarioDisplay(scenario);
             }
         }
 

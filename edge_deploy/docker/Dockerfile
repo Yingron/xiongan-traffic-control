@@ -2,13 +2,20 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout="30" update \
+    && apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout="30" install -y --no-install-recommends \
     curl \
+    sumo \
+    sumo-tools \
     && rm -rf /var/lib/apt/lists/*
+
+COPY edge_deploy/docker/requirements.runtime.txt /tmp/requirements.runtime.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.runtime.txt
 
 COPY . .
 
-CMD ["python", "edge_deploy/inference.py", "--benchmark", "--n", "1000"]
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    SUMO_HOME=/usr/share/sumo
+
+CMD ["uvicorn", "edge_deploy.inference_server:app", "--host", "0.0.0.0", "--port", "8001"]

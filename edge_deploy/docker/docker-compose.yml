@@ -1,27 +1,36 @@
-version: '3.8'
-
 services:
   xiongan-edge:
     build:
       context: ../..
       dockerfile: edge_deploy/docker/Dockerfile
+    image: xiongan-traffic-runtime:local
     container_name: xiongan-edge
+    ports:
+      - "8001:8001"
     deploy:
       resources:
         limits:
           cpus: '1'
           memory: 512M
     environment:
-      - SUMO_HOME=/usr/share/sumo
+      SUMO_HOME: /usr/share/sumo
+      EDGE_MODEL_PATH: /app/models/edge/peak/model.onnx
     volumes:
-      - ../../models:/app/models
-      - ../../sumo_files:/app/sumo_files
-    command: python edge_deploy/inference.py --benchmark --n 1000
+      - ../../models:/app/models:ro
+      - ../../sumo_files:/app/sumo_files:ro
+    command: uvicorn edge_deploy.inference_server:app --host 0.0.0.0 --port 8001
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
 
   xiongan-api:
     build:
       context: ../..
       dockerfile: edge_deploy/docker/Dockerfile
+    image: xiongan-traffic-runtime:local
     container_name: xiongan-api
     ports:
       - "8000:8000"
@@ -31,8 +40,18 @@ services:
           cpus: '1'
           memory: 512M
     environment:
-      - SUMO_HOME=/usr/share/sumo
+      SUMO_HOME: /usr/share/sumo
+      EDGE_INFERENCE_URL: http://xiongan-edge:8001
     volumes:
-      - ../../models:/app/models
-      - ../../sumo_files:/app/sumo_files
-    command: python server/api_server.py
+      - ../../models:/app/models:ro
+      - ../../sumo_files:/app/sumo_files:ro
+    command: uvicorn server.api_server:app --host 0.0.0.0 --port 8000
+    depends_on:
+      xiongan-edge:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
