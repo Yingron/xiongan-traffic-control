@@ -85,7 +85,16 @@ namespace CitySimulation.Runtime.Visualization
             var titleImg = titleGo.AddComponent<Image>();
             titleImg.color = new Color(0, 0, 0, 0.35f);
             titleImg.raycastTarget = false;
-            var title = titleGo.AddComponent<Text>();
+            // Image 与 Text 都是 Graphic，不能挂在同一个 GameObject 上。
+            // 标题文本作为背景面板的子物体，避免启动时 UI 初始化空引用。
+            var titleTextGo = new GameObject("TitleText");
+            titleTextGo.transform.SetParent(titleGo.transform, false);
+            var titleTextRt = titleTextGo.AddComponent<RectTransform>();
+            titleTextRt.anchorMin = Vector2.zero;
+            titleTextRt.anchorMax = Vector2.one;
+            titleTextRt.offsetMin = Vector2.zero;
+            titleTextRt.offsetMax = Vector2.zero;
+            var title = titleTextGo.AddComponent<Text>();
             title.font = _uiFont;
             title.text = "雄安新区车路云一体化协同管控平台";
             title.fontSize = 22;

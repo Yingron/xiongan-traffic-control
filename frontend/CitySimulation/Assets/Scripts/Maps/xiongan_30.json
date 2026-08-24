@@ -2,7 +2,7 @@
   "snapshot": {
     "roads": [
       {
-        "id": "c0be17f2-10ec-4146-b802-2cfc158a8920",
+        "id": "5de6e963-6c60-4082-b45d-9e9ed0afae3a",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -32,7 +32,7 @@
         "speedLimit": 50
       },
       {
-        "id": "6369f94b-1f7e-4a29-93cc-36b44622c03a",
+        "id": "01b32419-5f49-4dc3-b3b9-ee8bf0892380",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -62,7 +62,7 @@
         "speedLimit": 50
       },
       {
-        "id": "f6e54b81-15ee-4d4c-b864-a12ec5df6bed",
+        "id": "d3c33c83-468d-4a7d-bfbc-a087a297ba97",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -92,7 +92,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0771a115-54c5-46ad-b69e-fb06f516094a",
+        "id": "dca7cca8-2b41-45be-aca4-74b26db112c7",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -122,7 +122,7 @@
         "speedLimit": 50
       },
       {
-        "id": "b5fce495-0883-4f36-97bf-a5f42bd8d00f",
+        "id": "9a474fb5-a120-4b13-96dd-ad2180876d9b",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -152,7 +152,7 @@
         "speedLimit": 50
       },
       {
-        "id": "b3ac1117-69b9-49f3-9847-62641ad34ad3",
+        "id": "f657e493-9e46-4656-aff2-14b2ffc84098",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -182,7 +182,7 @@
         "speedLimit": 50
       },
       {
-        "id": "84b63030-3b65-44ae-98c8-1d1a8fb81b75",
+        "id": "a4fb2120-ea29-45bd-9496-6c6c411d4735",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -212,7 +212,7 @@
         "speedLimit": 50
       },
       {
-        "id": "19ac1b7d-1019-4670-a6fb-d2d1e2b29f5b",
+        "id": "f7927579-11b9-430d-93b0-7d1e52f6927d",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -242,7 +242,7 @@
         "speedLimit": 50
       },
       {
-        "id": "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
+        "id": "31377e0f-a933-40a8-8d99-d288447dbe9f",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -272,7 +272,7 @@
         "speedLimit": 50
       },
       {
-        "id": "27eda12f-c6e3-4ab6-b41f-7528878b6a17",
+        "id": "126f7476-b908-4c69-9d3d-2e00e590c898",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -302,7 +302,7 @@
         "speedLimit": 50
       },
       {
-        "id": "4be004e3-30f3-40d4-873f-5a38288b4b41",
+        "id": "8e4d200c-f01b-44a7-9d94-5e1dea29bc71",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -332,7 +332,7 @@
         "speedLimit": 50
       },
       {
-        "id": "afce0055-defd-4594-90fe-df5c19b66b0c",
+        "id": "e8cc8eac-6bb3-439b-9763-61515b05b205",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -362,7 +362,7 @@
         "speedLimit": 50
       },
       {
-        "id": "1aa25b6a-27ab-49bd-abbe-700a8a69a067",
+        "id": "ee8aa4fd-7593-4e54-a2c5-93ac52362d4e",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -392,7 +392,7 @@
         "speedLimit": 50
       },
       {
-        "id": "d2a8c599-8305-4b9d-835a-2ccbb29364a1",
+        "id": "63566842-b0bc-4bec-aeff-5dc3e617fe05",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -422,7 +422,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0fff222f-9ba4-4faf-9c54-691261065741",
+        "id": "41446d73-0ac7-4646-ab10-e39aec5d4a86",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -452,7 +452,7 @@
         "speedLimit": 50
       },
       {
-        "id": "9e91eb6d-408c-4ca9-860d-191dad3e1675",
+        "id": "5daa2fcd-67bf-4c00-a823-65ddec7f17f7",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -482,7 +482,7 @@
         "speedLimit": 50
       },
       {
-        "id": "c3d6a897-8d14-4342-a9e7-b15702592f96",
+        "id": "f0c173d5-dae5-4219-a7cc-4a793f16fbe4",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -512,7 +512,7 @@
         "speedLimit": 50
       },
       {
-        "id": "114592f2-e570-4a67-a6db-507f9405fc30",
+        "id": "863ec84c-90d8-4a7a-9c6f-ffcc80b34074",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -542,7 +542,7 @@
         "speedLimit": 50
       },
       {
-        "id": "95aa7919-ec01-44fb-bbfb-dc57dac2b441",
+        "id": "69a69185-4303-4d16-af64-ffc7f1e47f81",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -572,7 +572,7 @@
         "speedLimit": 50
       },
       {
-        "id": "b4a67581-5620-4110-a0c5-96d9b6cecfb2",
+        "id": "fcb92cfc-3257-4772-ba3b-561081c5b5ce",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -602,7 +602,7 @@
         "speedLimit": 50
       },
       {
-        "id": "3bbdfebb-06d7-435f-8189-8ae6bed8430d",
+        "id": "555fa77b-34fc-4973-bbf9-19261e06d2e0",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -632,7 +632,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0776fa22-f17b-41ef-952f-bcd869f3c343",
+        "id": "592d4db2-2787-4bb2-9e22-865d06f92554",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -662,7 +662,7 @@
         "speedLimit": 50
       },
       {
-        "id": "d71a73d7-6a26-4615-a0be-385c8f74ccbc",
+        "id": "d73c79dc-56c1-44bb-a5b9-1c2586115b11",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -692,7 +692,7 @@
         "speedLimit": 50
       },
       {
-        "id": "a2f2dd7b-f52d-45d6-94f9-dd2db6b37e70",
+        "id": "e267a5dd-f3b7-4923-a023-abafe414c541",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -722,7 +722,7 @@
         "speedLimit": 50
       },
       {
-        "id": "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
+        "id": "dc30f197-fde8-475c-a561-a444a69bb0de",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -752,7 +752,7 @@
         "speedLimit": 50
       },
       {
-        "id": "95f4ce4d-f7d3-4592-877d-83107e3c4fa2",
+        "id": "bbb8498e-d137-49ca-b9d4-2b2ddd588b48",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -782,7 +782,7 @@
         "speedLimit": 50
       },
       {
-        "id": "bd24885e-1b76-4579-a124-6799fccda2e0",
+        "id": "da5872ff-7659-4a0f-9dec-f42face2a4ff",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -812,7 +812,7 @@
         "speedLimit": 50
       },
       {
-        "id": "8c82f5a8-b7f0-4683-b26d-7bdc89177333",
+        "id": "7d1291fd-382f-43c5-9198-7712af7a1692",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -842,7 +842,7 @@
         "speedLimit": 50
       },
       {
-        "id": "4867f65b-114b-447c-8b63-0c2713fdc35d",
+        "id": "f1eafd7d-47ec-4995-807c-f5b30a12c083",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -872,7 +872,7 @@
         "speedLimit": 50
       },
       {
-        "id": "a976bbee-8895-4be6-8cc5-9dbc2367e5fb",
+        "id": "cab1211a-ff72-4ea8-b1a5-52706d7b22e3",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -902,7 +902,7 @@
         "speedLimit": 50
       },
       {
-        "id": "bfc37fb3-c3b1-4fef-b4f0-9639ed2bac93",
+        "id": "bb131fb8-be9c-4200-bbf9-369e24493b49",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -932,7 +932,7 @@
         "speedLimit": 50
       },
       {
-        "id": "3b0827eb-4f2b-4500-9ba7-a99afb2eeba9",
+        "id": "8a42cd8e-ea5d-411a-89f4-4b28545eb344",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -962,7 +962,7 @@
         "speedLimit": 50
       },
       {
-        "id": "884c4199-9dd2-41b9-bbc1-47184a91410d",
+        "id": "eb67363b-8a09-42a3-9594-29368f86a89d",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -992,7 +992,7 @@
         "speedLimit": 50
       },
       {
-        "id": "b268dd6d-b67b-4077-bd22-63f7cdd78cdb",
+        "id": "ea27fe6d-19f9-480c-9db9-939ecb188a26",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1022,7 +1022,7 @@
         "speedLimit": 50
       },
       {
-        "id": "d6ca4be5-7255-42c7-83c4-1d0601be4d4e",
+        "id": "662f5b7e-c14f-498f-b327-014ed615533c",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1052,7 +1052,7 @@
         "speedLimit": 50
       },
       {
-        "id": "24d5e3a3-10b3-41ca-af50-69096ed7b61b",
+        "id": "5cef8504-5b1d-4556-9ac9-0ce1e62f9bd3",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1082,7 +1082,7 @@
         "speedLimit": 50
       },
       {
-        "id": "b82eb5c4-96ae-4c29-91fc-46340cfd5f46",
+        "id": "25029217-a6f9-4af3-9bbf-a13fe35c46be",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1112,7 +1112,7 @@
         "speedLimit": 50
       },
       {
-        "id": "bf9c5b89-10e0-4cf3-b35c-a4253fc312ba",
+        "id": "539a5a83-8f32-4407-a90e-eaf9262371b4",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1142,7 +1142,7 @@
         "speedLimit": 50
       },
       {
-        "id": "ff3c344a-95ae-426a-8873-52460138bb2f",
+        "id": "e0663f0d-a041-4c5e-94d9-4cfe4bdd4887",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1172,7 +1172,7 @@
         "speedLimit": 50
       },
       {
-        "id": "c0e4dff3-f353-4ca5-a72c-dfff09763690",
+        "id": "28d63b9b-663e-41e1-a6a8-092a29f7ce5b",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1202,7 +1202,7 @@
         "speedLimit": 50
       },
       {
-        "id": "83efe048-403c-4d3a-a009-f5c5e6a9b42a",
+        "id": "c8b8a982-7fa9-4647-89f3-b864975c7147",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1232,7 +1232,7 @@
         "speedLimit": 50
       },
       {
-        "id": "83846028-181d-49e6-b66b-b7144956ba26",
+        "id": "b61ec9aa-ed05-4bb4-9c18-d1f02836a50e",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1262,7 +1262,7 @@
         "speedLimit": 50
       },
       {
-        "id": "72bc76fd-24a6-45f0-807f-cac4ce191ad3",
+        "id": "d4ce022d-0c9e-48a3-a6fe-24ff2bcd39c5",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1292,7 +1292,7 @@
         "speedLimit": 50
       },
       {
-        "id": "469a726d-3c3f-4d57-898b-c5c5efa8538f",
+        "id": "4ce6bf92-a8ae-48c5-8068-e1b3bbc0ca26",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1322,7 +1322,7 @@
         "speedLimit": 50
       },
       {
-        "id": "1b6b581b-797e-44a8-9488-6692fd890e1a",
+        "id": "7819dec8-934c-453e-a75b-c8dd652b5ba7",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1352,7 +1352,7 @@
         "speedLimit": 50
       },
       {
-        "id": "63a2b0e3-d4bd-490a-a289-3b204713d759",
+        "id": "7e1f092e-16a0-4b05-bbae-89631ae75479",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1382,7 +1382,7 @@
         "speedLimit": 50
       },
       {
-        "id": "f586bb7d-64cc-42ce-b80c-df60de5c1e7f",
+        "id": "b53e5dea-4a27-4099-bb6b-7aa5a3e02aa4",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1412,7 +1412,7 @@
         "speedLimit": 50
       },
       {
-        "id": "b799ec44-e8bb-41e0-8a9c-b403f6abc7ca",
+        "id": "022bf82a-3d2c-48cf-9e00-7fa52afa874f",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1442,7 +1442,7 @@
         "speedLimit": 50
       },
       {
-        "id": "35cfcec2-297f-402c-8f2f-497f4a2e5cd6",
+        "id": "9dd4f28f-f8f4-4308-aa13-b054c235e584",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1472,7 +1472,7 @@
         "speedLimit": 50
       },
       {
-        "id": "c63b6117-e21e-4c7f-bd1f-75a07e48e6da",
+        "id": "5f11787e-048b-451e-96d8-af43af036cf5",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1502,7 +1502,7 @@
         "speedLimit": 50
       },
       {
-        "id": "d6788ef1-deff-4978-bc7d-a6094374d88b",
+        "id": "6a77c4cc-765f-453a-8165-f4e49e4b81a9",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1532,7 +1532,7 @@
         "speedLimit": 50
       },
       {
-        "id": "90d2a9e0-400c-44ec-a3c2-9d727841c287",
+        "id": "6fdb1935-8e15-4c17-9c5d-811832606dec",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1562,7 +1562,7 @@
         "speedLimit": 50
       },
       {
-        "id": "134d4394-8f7f-42df-a1e3-fe20cb19d951",
+        "id": "990fbeb1-0bef-4d9d-9395-9666956ff360",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1592,7 +1592,7 @@
         "speedLimit": 50
       },
       {
-        "id": "fd5a1888-789a-4ae0-a079-c86e897157b6",
+        "id": "c0d965fa-c41f-4ebb-b257-765bdbf15f24",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1622,7 +1622,7 @@
         "speedLimit": 50
       },
       {
-        "id": "1933fc05-7378-479f-810e-49fccbe6e996",
+        "id": "4ef642d7-4207-41a7-b683-5cfad0255f8a",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1652,7 +1652,7 @@
         "speedLimit": 50
       },
       {
-        "id": "f35f5385-6e72-4833-8ab7-e3a6ce84e2e9",
+        "id": "894809ca-a63e-419d-9794-76812fb2ef7f",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1682,7 +1682,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0a0882ca-87b3-435e-a8a7-1e7f30aa75e1",
+        "id": "0a6942fb-a9a9-4a81-98e4-5a73e5a666b9",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1712,7 +1712,7 @@
         "speedLimit": 50
       },
       {
-        "id": "43dff6fd-8f0f-4931-b8b2-2dbc89f3fec3",
+        "id": "d1039711-caf9-4b57-bdcd-7fa645eaf3fc",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1742,7 +1742,7 @@
         "speedLimit": 50
       },
       {
-        "id": "ab1f4a0d-4e21-4fdf-af98-608527628aff",
+        "id": "753bf7d6-005a-49c7-aa6f-f63dc3fea1de",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1772,7 +1772,7 @@
         "speedLimit": 50
       },
       {
-        "id": "55b7d865-2d88-471c-8d12-0e35c90e79f2",
+        "id": "f257f614-83b0-4de5-8937-55d7d732741e",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1802,7 +1802,7 @@
         "speedLimit": 50
       },
       {
-        "id": "70878954-6859-4b09-a407-472f2d7e467b",
+        "id": "eeae1fa1-45ff-4795-a7e7-abba5a20f3ba",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1832,7 +1832,7 @@
         "speedLimit": 50
       },
       {
-        "id": "e904f0fc-da8b-43c4-b3e5-0d11e5860679",
+        "id": "20bddbaa-da10-4501-986e-e27318c4f264",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1862,7 +1862,7 @@
         "speedLimit": 50
       },
       {
-        "id": "9c0ccc09-0ea8-4eea-9adf-8a165c17abb5",
+        "id": "1322950c-a39e-4730-a623-5c2e99bc9eef",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1892,7 +1892,7 @@
         "speedLimit": 50
       },
       {
-        "id": "01c68317-68f4-4a68-90e7-51b3dbb5f48d",
+        "id": "aece33b6-91f6-434c-811e-362fbc089497",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1922,7 +1922,7 @@
         "speedLimit": 50
       },
       {
-        "id": "88598675-5a2a-4d0f-8f0e-fc1cb821d145",
+        "id": "a17dad88-a96a-4d2c-b2e0-ef06e1dce9a3",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1952,7 +1952,7 @@
         "speedLimit": 50
       },
       {
-        "id": "e3632a1b-1452-4b20-a28b-b2b9dfbe0280",
+        "id": "2559de21-6634-4009-be41-0bb16482fc93",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -1982,7 +1982,7 @@
         "speedLimit": 50
       },
       {
-        "id": "de947132-35f7-436e-a8e9-bbe795fb00ce",
+        "id": "eb8193de-1c0b-4d06-981a-7f7d3bf6e4f2",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2012,7 +2012,7 @@
         "speedLimit": 50
       },
       {
-        "id": "01d860d7-bd75-4f0b-b229-4cdcd4f93fea",
+        "id": "bfa375bc-6887-49bd-8d7b-98a05e7f4092",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2042,7 +2042,7 @@
         "speedLimit": 50
       },
       {
-        "id": "3ae285ea-d6e9-44e8-9361-3cb7c00b2a0b",
+        "id": "5d0ad55a-856e-4b0e-86b9-5b49dffea29d",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2072,7 +2072,7 @@
         "speedLimit": 50
       },
       {
-        "id": "b9a22753-a3d1-493b-961f-41c9068265d4",
+        "id": "439ce7ef-223f-489c-8b5a-9ac27a852f6d",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2102,7 +2102,7 @@
         "speedLimit": 50
       },
       {
-        "id": "4706a94c-0ad4-4b93-bceb-afb380079831",
+        "id": "1b4eaeae-f7b2-497f-9180-1249b4ceba45",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2132,7 +2132,7 @@
         "speedLimit": 50
       },
       {
-        "id": "b365a0b6-f434-4b8c-88e9-bda4686155ea",
+        "id": "9ab62261-fa8d-411d-a03f-8293abb168e7",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2162,7 +2162,7 @@
         "speedLimit": 50
       },
       {
-        "id": "d9dc33e9-354e-4b23-adb0-f324b8d9eaf7",
+        "id": "d22bfea2-ce69-4832-91f1-b754e8ca6262",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2192,7 +2192,7 @@
         "speedLimit": 50
       },
       {
-        "id": "609aeb99-d0e6-4815-983f-33c3f356ddcd",
+        "id": "8c65acdd-c1cf-4aa7-aefa-11d86acc8a66",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2222,7 +2222,7 @@
         "speedLimit": 50
       },
       {
-        "id": "8b2cdf24-8f0d-4a13-b2a5-ecda55a08048",
+        "id": "5001ead7-b897-4a08-af57-28e32e5eaf4c",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2252,7 +2252,7 @@
         "speedLimit": 50
       },
       {
-        "id": "55e10c82-0aa6-448e-9537-c2effeba0ee1",
+        "id": "20e571b1-cf74-48d2-b3cd-61b5cb005c6b",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2282,7 +2282,7 @@
         "speedLimit": 50
       },
       {
-        "id": "18efb03c-ff05-4b57-baa3-5fa5950151c6",
+        "id": "7ab9f901-23db-4012-b5ed-6f40348006bc",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2312,7 +2312,7 @@
         "speedLimit": 50
       },
       {
-        "id": "20e7963f-1540-4606-a1e3-3768adf56ae2",
+        "id": "f9a43c63-98c4-44c0-9806-af0f0a119007",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2342,7 +2342,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0b5b5653-6813-458f-b19a-2989060f196c",
+        "id": "1dd57218-a79c-4988-a95f-85dad3ebc4f6",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2372,7 +2372,7 @@
         "speedLimit": 50
       },
       {
-        "id": "fe9d89e5-1ebf-4755-951a-ccfd08d73ad3",
+        "id": "e063f6c2-f732-4fcf-9c76-2ee8387ab630",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2402,7 +2402,7 @@
         "speedLimit": 50
       },
       {
-        "id": "ad97c01e-559c-44e6-b770-9302c3027867",
+        "id": "0343eace-8a31-42b4-afbb-e64653353d5e",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2432,7 +2432,7 @@
         "speedLimit": 50
       },
       {
-        "id": "c6cc1a70-cfc1-49af-93b3-8da099732149",
+        "id": "a449af8f-222d-4c0e-992c-516f5f287282",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2462,7 +2462,7 @@
         "speedLimit": 50
       },
       {
-        "id": "e52abfb7-71b1-43a2-b48a-27b1ae27ed01",
+        "id": "4182bf19-7692-479f-8375-45153923c701",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2492,7 +2492,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0fd38566-2854-42c7-a899-b36e73012ff0",
+        "id": "b07f9274-8441-4ba1-ad00-41ddc4fbd9ef",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2522,7 +2522,7 @@
         "speedLimit": 50
       },
       {
-        "id": "74754882-59af-4ab6-a7f7-c5513db73b32",
+        "id": "8f58c3f3-5c92-4877-a2dc-d89971256dec",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2552,7 +2552,7 @@
         "speedLimit": 50
       },
       {
-        "id": "dc7ec809-0b76-4ff2-9f26-78cc3438d8d5",
+        "id": "cf8aeba2-9108-45dc-8fdb-c901c9286792",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2582,7 +2582,7 @@
         "speedLimit": 50
       },
       {
-        "id": "801b4c3e-7615-4a2f-9323-f630c3952322",
+        "id": "8f20cf48-f92e-46e0-ae77-f967c1065328",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2612,7 +2612,7 @@
         "speedLimit": 50
       },
       {
-        "id": "e1981bed-255d-42e0-bb50-7a4b53936386",
+        "id": "498c15e0-ba8e-49e5-8752-299024caa202",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2642,7 +2642,7 @@
         "speedLimit": 50
       },
       {
-        "id": "fd80a78c-2a70-42ed-b7f8-e851f6c2f3d5",
+        "id": "04441103-fd7c-467b-845d-d1e6d2cadf20",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2672,7 +2672,7 @@
         "speedLimit": 50
       },
       {
-        "id": "6d4c2df6-ae7c-4e25-9ba2-cd3a1f0a3c00",
+        "id": "402ac17e-eaad-4b67-b56f-06cb5c625da6",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2702,7 +2702,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0cbdfa07-add4-46ef-ba84-b32b3a97152d",
+        "id": "c4cc90f3-ace6-4ade-a6a7-4638db92648f",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2732,7 +2732,7 @@
         "speedLimit": 50
       },
       {
-        "id": "97e00930-0ef7-402f-8ec8-04fd8c34de03",
+        "id": "2db2a847-2427-42df-b10a-f8b686b845e5",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2762,7 +2762,7 @@
         "speedLimit": 50
       },
       {
-        "id": "ea7f001a-f0ad-4844-96fb-5e078d82e748",
+        "id": "6d6ce742-8a1c-4f87-bb2d-9f8ece66a440",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2792,7 +2792,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0f7b0bc4-7ef2-43ea-90eb-7395223de642",
+        "id": "4479e9ed-ac94-42d5-adb6-b98bc30d9cc1",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2822,7 +2822,7 @@
         "speedLimit": 50
       },
       {
-        "id": "5092d3d8-645a-4ea6-8c71-88b3c85fc213",
+        "id": "5fa1ca10-105d-4168-bde0-773d9f17e7f2",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2852,7 +2852,7 @@
         "speedLimit": 50
       },
       {
-        "id": "0095517b-f3cd-4674-96d5-492f476bc63b",
+        "id": "1bf0dc71-32f4-4a5d-bfca-8349f9d16b79",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2882,7 +2882,7 @@
         "speedLimit": 50
       },
       {
-        "id": "a9300f20-efce-425b-bc28-98d43db7bc12",
+        "id": "7bb8c013-d195-43e8-8ae7-6d9f14ca71c4",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2912,7 +2912,7 @@
         "speedLimit": 50
       },
       {
-        "id": "5d1a01e8-7bd5-4f82-847d-db21ba2e1abb",
+        "id": "d4aecd2c-d188-423e-92a8-e7ebbcf5847f",
         "category": 1,
         "styleId": "section",
         "position": {
@@ -2959,10 +2959,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "c0be17f2-10ec-4146-b802-2cfc158a8920",
-          "b5fce495-0883-4f36-97bf-a5f42bd8d00f"
+          "5de6e963-6c60-4082-b45d-9e9ed0afae3a",
+          "9a474fb5-a120-4b13-96dd-ad2180876d9b"
         ],
-        "currentGreenRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
+        "currentGreenRoadId": "5de6e963-6c60-4082-b45d-9e9ed0afae3a",
         "timeInPhase": 0
       },
       {
@@ -2981,10 +2981,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "c0be17f2-10ec-4146-b802-2cfc158a8920",
-          "6369f94b-1f7e-4a29-93cc-36b44622c03a"
+          "5de6e963-6c60-4082-b45d-9e9ed0afae3a",
+          "01b32419-5f49-4dc3-b3b9-ee8bf0892380"
         ],
-        "currentGreenRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
+        "currentGreenRoadId": "5de6e963-6c60-4082-b45d-9e9ed0afae3a",
         "timeInPhase": 0
       },
       {
@@ -3003,10 +3003,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "6369f94b-1f7e-4a29-93cc-36b44622c03a",
-          "f6e54b81-15ee-4d4c-b864-a12ec5df6bed"
+          "01b32419-5f49-4dc3-b3b9-ee8bf0892380",
+          "d3c33c83-468d-4a7d-bfbc-a087a297ba97"
         ],
-        "currentGreenRoadId": "6369f94b-1f7e-4a29-93cc-36b44622c03a",
+        "currentGreenRoadId": "01b32419-5f49-4dc3-b3b9-ee8bf0892380",
         "timeInPhase": 0
       },
       {
@@ -3025,10 +3025,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "f6e54b81-15ee-4d4c-b864-a12ec5df6bed",
-          "0771a115-54c5-46ad-b69e-fb06f516094a"
+          "d3c33c83-468d-4a7d-bfbc-a087a297ba97",
+          "dca7cca8-2b41-45be-aca4-74b26db112c7"
         ],
-        "currentGreenRoadId": "f6e54b81-15ee-4d4c-b864-a12ec5df6bed",
+        "currentGreenRoadId": "d3c33c83-468d-4a7d-bfbc-a087a297ba97",
         "timeInPhase": 0
       },
       {
@@ -3047,10 +3047,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "0771a115-54c5-46ad-b69e-fb06f516094a",
-          "19ac1b7d-1019-4670-a6fb-d2d1e2b29f5b"
+          "dca7cca8-2b41-45be-aca4-74b26db112c7",
+          "f7927579-11b9-430d-93b0-7d1e52f6927d"
         ],
-        "currentGreenRoadId": "0771a115-54c5-46ad-b69e-fb06f516094a",
+        "currentGreenRoadId": "dca7cca8-2b41-45be-aca4-74b26db112c7",
         "timeInPhase": 0
       },
       {
@@ -3069,10 +3069,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
-          "1aa25b6a-27ab-49bd-abbe-700a8a69a067"
+          "31377e0f-a933-40a8-8d99-d288447dbe9f",
+          "ee8aa4fd-7593-4e54-a2c5-93ac52362d4e"
         ],
-        "currentGreenRoadId": "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
+        "currentGreenRoadId": "31377e0f-a933-40a8-8d99-d288447dbe9f",
         "timeInPhase": 0
       },
       {
@@ -3091,10 +3091,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
-          "27eda12f-c6e3-4ab6-b41f-7528878b6a17"
+          "31377e0f-a933-40a8-8d99-d288447dbe9f",
+          "126f7476-b908-4c69-9d3d-2e00e590c898"
         ],
-        "currentGreenRoadId": "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
+        "currentGreenRoadId": "31377e0f-a933-40a8-8d99-d288447dbe9f",
         "timeInPhase": 0
       },
       {
@@ -3113,10 +3113,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "27eda12f-c6e3-4ab6-b41f-7528878b6a17",
-          "4be004e3-30f3-40d4-873f-5a38288b4b41"
+          "126f7476-b908-4c69-9d3d-2e00e590c898",
+          "8e4d200c-f01b-44a7-9d94-5e1dea29bc71"
         ],
-        "currentGreenRoadId": "27eda12f-c6e3-4ab6-b41f-7528878b6a17",
+        "currentGreenRoadId": "126f7476-b908-4c69-9d3d-2e00e590c898",
         "timeInPhase": 0
       },
       {
@@ -3135,10 +3135,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "4be004e3-30f3-40d4-873f-5a38288b4b41",
-          "afce0055-defd-4594-90fe-df5c19b66b0c"
+          "8e4d200c-f01b-44a7-9d94-5e1dea29bc71",
+          "e8cc8eac-6bb3-439b-9763-61515b05b205"
         ],
-        "currentGreenRoadId": "4be004e3-30f3-40d4-873f-5a38288b4b41",
+        "currentGreenRoadId": "8e4d200c-f01b-44a7-9d94-5e1dea29bc71",
         "timeInPhase": 0
       },
       {
@@ -3157,10 +3157,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "afce0055-defd-4594-90fe-df5c19b66b0c",
-          "9e91eb6d-408c-4ca9-860d-191dad3e1675"
+          "e8cc8eac-6bb3-439b-9763-61515b05b205",
+          "5daa2fcd-67bf-4c00-a823-65ddec7f17f7"
         ],
-        "currentGreenRoadId": "afce0055-defd-4594-90fe-df5c19b66b0c",
+        "currentGreenRoadId": "e8cc8eac-6bb3-439b-9763-61515b05b205",
         "timeInPhase": 0
       },
       {
@@ -3179,10 +3179,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "c3d6a897-8d14-4342-a9e7-b15702592f96",
-          "3bbdfebb-06d7-435f-8189-8ae6bed8430d"
+          "f0c173d5-dae5-4219-a7cc-4a793f16fbe4",
+          "555fa77b-34fc-4973-bbf9-19261e06d2e0"
         ],
-        "currentGreenRoadId": "c3d6a897-8d14-4342-a9e7-b15702592f96",
+        "currentGreenRoadId": "f0c173d5-dae5-4219-a7cc-4a793f16fbe4",
         "timeInPhase": 0
       },
       {
@@ -3201,10 +3201,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "c3d6a897-8d14-4342-a9e7-b15702592f96",
-          "114592f2-e570-4a67-a6db-507f9405fc30"
+          "f0c173d5-dae5-4219-a7cc-4a793f16fbe4",
+          "863ec84c-90d8-4a7a-9c6f-ffcc80b34074"
         ],
-        "currentGreenRoadId": "c3d6a897-8d14-4342-a9e7-b15702592f96",
+        "currentGreenRoadId": "f0c173d5-dae5-4219-a7cc-4a793f16fbe4",
         "timeInPhase": 0
       },
       {
@@ -3223,10 +3223,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "114592f2-e570-4a67-a6db-507f9405fc30",
-          "95aa7919-ec01-44fb-bbfb-dc57dac2b441"
+          "863ec84c-90d8-4a7a-9c6f-ffcc80b34074",
+          "69a69185-4303-4d16-af64-ffc7f1e47f81"
         ],
-        "currentGreenRoadId": "114592f2-e570-4a67-a6db-507f9405fc30",
+        "currentGreenRoadId": "863ec84c-90d8-4a7a-9c6f-ffcc80b34074",
         "timeInPhase": 0
       },
       {
@@ -3245,10 +3245,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "95aa7919-ec01-44fb-bbfb-dc57dac2b441",
-          "b4a67581-5620-4110-a0c5-96d9b6cecfb2"
+          "69a69185-4303-4d16-af64-ffc7f1e47f81",
+          "fcb92cfc-3257-4772-ba3b-561081c5b5ce"
         ],
-        "currentGreenRoadId": "95aa7919-ec01-44fb-bbfb-dc57dac2b441",
+        "currentGreenRoadId": "69a69185-4303-4d16-af64-ffc7f1e47f81",
         "timeInPhase": 0
       },
       {
@@ -3267,10 +3267,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "b4a67581-5620-4110-a0c5-96d9b6cecfb2",
-          "a2f2dd7b-f52d-45d6-94f9-dd2db6b37e70"
+          "fcb92cfc-3257-4772-ba3b-561081c5b5ce",
+          "e267a5dd-f3b7-4923-a023-abafe414c541"
         ],
-        "currentGreenRoadId": "b4a67581-5620-4110-a0c5-96d9b6cecfb2",
+        "currentGreenRoadId": "fcb92cfc-3257-4772-ba3b-561081c5b5ce",
         "timeInPhase": 0
       },
       {
@@ -3289,10 +3289,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
-          "4867f65b-114b-447c-8b63-0c2713fdc35d"
+          "dc30f197-fde8-475c-a561-a444a69bb0de",
+          "f1eafd7d-47ec-4995-807c-f5b30a12c083"
         ],
-        "currentGreenRoadId": "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
+        "currentGreenRoadId": "dc30f197-fde8-475c-a561-a444a69bb0de",
         "timeInPhase": 0
       },
       {
@@ -3311,10 +3311,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
-          "95f4ce4d-f7d3-4592-877d-83107e3c4fa2"
+          "dc30f197-fde8-475c-a561-a444a69bb0de",
+          "bbb8498e-d137-49ca-b9d4-2b2ddd588b48"
         ],
-        "currentGreenRoadId": "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
+        "currentGreenRoadId": "dc30f197-fde8-475c-a561-a444a69bb0de",
         "timeInPhase": 0
       },
       {
@@ -3333,10 +3333,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "95f4ce4d-f7d3-4592-877d-83107e3c4fa2",
-          "bd24885e-1b76-4579-a124-6799fccda2e0"
+          "bbb8498e-d137-49ca-b9d4-2b2ddd588b48",
+          "da5872ff-7659-4a0f-9dec-f42face2a4ff"
         ],
-        "currentGreenRoadId": "95f4ce4d-f7d3-4592-877d-83107e3c4fa2",
+        "currentGreenRoadId": "bbb8498e-d137-49ca-b9d4-2b2ddd588b48",
         "timeInPhase": 0
       },
       {
@@ -3355,10 +3355,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "bd24885e-1b76-4579-a124-6799fccda2e0",
-          "8c82f5a8-b7f0-4683-b26d-7bdc89177333"
+          "da5872ff-7659-4a0f-9dec-f42face2a4ff",
+          "7d1291fd-382f-43c5-9198-7712af7a1692"
         ],
-        "currentGreenRoadId": "bd24885e-1b76-4579-a124-6799fccda2e0",
+        "currentGreenRoadId": "da5872ff-7659-4a0f-9dec-f42face2a4ff",
         "timeInPhase": 0
       },
       {
@@ -3377,10 +3377,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "8c82f5a8-b7f0-4683-b26d-7bdc89177333",
-          "3b0827eb-4f2b-4500-9ba7-a99afb2eeba9"
+          "7d1291fd-382f-43c5-9198-7712af7a1692",
+          "8a42cd8e-ea5d-411a-89f4-4b28545eb344"
         ],
-        "currentGreenRoadId": "8c82f5a8-b7f0-4683-b26d-7bdc89177333",
+        "currentGreenRoadId": "7d1291fd-382f-43c5-9198-7712af7a1692",
         "timeInPhase": 0
       },
       {
@@ -3399,10 +3399,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "884c4199-9dd2-41b9-bbc1-47184a91410d",
-          "b82eb5c4-96ae-4c29-91fc-46340cfd5f46"
+          "eb67363b-8a09-42a3-9594-29368f86a89d",
+          "25029217-a6f9-4af3-9bbf-a13fe35c46be"
         ],
-        "currentGreenRoadId": "884c4199-9dd2-41b9-bbc1-47184a91410d",
+        "currentGreenRoadId": "eb67363b-8a09-42a3-9594-29368f86a89d",
         "timeInPhase": 0
       },
       {
@@ -3421,10 +3421,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "884c4199-9dd2-41b9-bbc1-47184a91410d",
-          "b268dd6d-b67b-4077-bd22-63f7cdd78cdb"
+          "eb67363b-8a09-42a3-9594-29368f86a89d",
+          "ea27fe6d-19f9-480c-9db9-939ecb188a26"
         ],
-        "currentGreenRoadId": "884c4199-9dd2-41b9-bbc1-47184a91410d",
+        "currentGreenRoadId": "eb67363b-8a09-42a3-9594-29368f86a89d",
         "timeInPhase": 0
       },
       {
@@ -3443,10 +3443,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "b268dd6d-b67b-4077-bd22-63f7cdd78cdb",
-          "d6ca4be5-7255-42c7-83c4-1d0601be4d4e"
+          "ea27fe6d-19f9-480c-9db9-939ecb188a26",
+          "662f5b7e-c14f-498f-b327-014ed615533c"
         ],
-        "currentGreenRoadId": "b268dd6d-b67b-4077-bd22-63f7cdd78cdb",
+        "currentGreenRoadId": "ea27fe6d-19f9-480c-9db9-939ecb188a26",
         "timeInPhase": 0
       },
       {
@@ -3465,10 +3465,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "d6ca4be5-7255-42c7-83c4-1d0601be4d4e",
-          "24d5e3a3-10b3-41ca-af50-69096ed7b61b"
+          "662f5b7e-c14f-498f-b327-014ed615533c",
+          "5cef8504-5b1d-4556-9ac9-0ce1e62f9bd3"
         ],
-        "currentGreenRoadId": "d6ca4be5-7255-42c7-83c4-1d0601be4d4e",
+        "currentGreenRoadId": "662f5b7e-c14f-498f-b327-014ed615533c",
         "timeInPhase": 0
       },
       {
@@ -3487,10 +3487,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "24d5e3a3-10b3-41ca-af50-69096ed7b61b",
-          "c0e4dff3-f353-4ca5-a72c-dfff09763690"
+          "5cef8504-5b1d-4556-9ac9-0ce1e62f9bd3",
+          "28d63b9b-663e-41e1-a6a8-092a29f7ce5b"
         ],
-        "currentGreenRoadId": "24d5e3a3-10b3-41ca-af50-69096ed7b61b",
+        "currentGreenRoadId": "5cef8504-5b1d-4556-9ac9-0ce1e62f9bd3",
         "timeInPhase": 0
       },
       {
@@ -3509,10 +3509,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "83efe048-403c-4d3a-a009-f5c5e6a9b42a",
-          "1b6b581b-797e-44a8-9488-6692fd890e1a"
+          "c8b8a982-7fa9-4647-89f3-b864975c7147",
+          "7819dec8-934c-453e-a75b-c8dd652b5ba7"
         ],
-        "currentGreenRoadId": "83efe048-403c-4d3a-a009-f5c5e6a9b42a",
+        "currentGreenRoadId": "c8b8a982-7fa9-4647-89f3-b864975c7147",
         "timeInPhase": 0
       },
       {
@@ -3531,10 +3531,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "83efe048-403c-4d3a-a009-f5c5e6a9b42a",
-          "83846028-181d-49e6-b66b-b7144956ba26"
+          "c8b8a982-7fa9-4647-89f3-b864975c7147",
+          "b61ec9aa-ed05-4bb4-9c18-d1f02836a50e"
         ],
-        "currentGreenRoadId": "83efe048-403c-4d3a-a009-f5c5e6a9b42a",
+        "currentGreenRoadId": "c8b8a982-7fa9-4647-89f3-b864975c7147",
         "timeInPhase": 0
       },
       {
@@ -3553,10 +3553,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "83846028-181d-49e6-b66b-b7144956ba26",
-          "72bc76fd-24a6-45f0-807f-cac4ce191ad3"
+          "b61ec9aa-ed05-4bb4-9c18-d1f02836a50e",
+          "d4ce022d-0c9e-48a3-a6fe-24ff2bcd39c5"
         ],
-        "currentGreenRoadId": "83846028-181d-49e6-b66b-b7144956ba26",
+        "currentGreenRoadId": "b61ec9aa-ed05-4bb4-9c18-d1f02836a50e",
         "timeInPhase": 0
       },
       {
@@ -3575,10 +3575,10 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "72bc76fd-24a6-45f0-807f-cac4ce191ad3",
-          "469a726d-3c3f-4d57-898b-c5c5efa8538f"
+          "d4ce022d-0c9e-48a3-a6fe-24ff2bcd39c5",
+          "4ce6bf92-a8ae-48c5-8068-e1b3bbc0ca26"
         ],
-        "currentGreenRoadId": "72bc76fd-24a6-45f0-807f-cac4ce191ad3",
+        "currentGreenRoadId": "d4ce022d-0c9e-48a3-a6fe-24ff2bcd39c5",
         "timeInPhase": 0
       },
       {
@@ -3597,23 +3597,22 @@
           "w": 1
         },
         "controlledRoadIds": [
-          "469a726d-3c3f-4d57-898b-c5c5efa8538f",
-          "b799ec44-e8bb-41e0-8a9c-b403f6abc7ca"
+          "4ce6bf92-a8ae-48c5-8068-e1b3bbc0ca26",
+          "022bf82a-3d2c-48cf-9e00-7fa52afa874f"
         ],
-        "currentGreenRoadId": "469a726d-3c3f-4d57-898b-c5c5efa8538f",
+        "currentGreenRoadId": "4ce6bf92-a8ae-48c5-8068-e1b3bbc0ca26",
         "timeInPhase": 0
       }
     ],
-    "buildings": [],
-    "vehicles": [
+    "buildings": [
       {
-        "id": "439c06fb-e33c-4307-9989-2ea445884ae6",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0101",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 50.0,
+          "x": 100.0,
           "y": 0,
-          "z": 1050.0
+          "z": 100.0
         },
         "rotation": {
           "x": 0,
@@ -3621,19 +3620,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "4edec290-c7bd-4bb5-92fc-21f0ebbc6178",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0102",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 250.0,
+          "x": 300.0,
           "y": 0,
-          "z": 1050.0
+          "z": 100.0
         },
         "rotation": {
           "x": 0,
@@ -3641,19 +3641,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "0bda3dd8-ffa4-475c-9a35-bf7a81215cad",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0103",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 450.0,
+          "x": 500.0,
           "y": 0,
-          "z": 1050.0
+          "z": 100.0
         },
         "rotation": {
           "x": 0,
@@ -3661,19 +3662,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "6369f94b-1f7e-4a29-93cc-36b44622c03a",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "40e82edc-fb57-4b6f-ac47-d89f6a3c807b",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0104",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 650.0,
+          "x": 700.0,
           "y": 0,
-          "z": 1050.0
+          "z": 100.0
         },
         "rotation": {
           "x": 0,
@@ -3681,19 +3683,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "f6e54b81-15ee-4d4c-b864-a12ec5df6bed",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "fe80aaca-3770-4033-a100-b75e51f682cc",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0201",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 850.0,
+          "x": 100.0,
           "y": 0,
-          "z": 1050.0
+          "z": 300.0
         },
         "rotation": {
           "x": 0,
@@ -3701,19 +3704,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "0771a115-54c5-46ad-b69e-fb06f516094a",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "a12403bf-74fd-4a3a-bdd7-18f3cb53755e",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0202",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 50.0,
+          "x": 300.0,
           "y": 0,
-          "z": 850.0
+          "z": 300.0
         },
         "rotation": {
           "x": 0,
@@ -3721,19 +3725,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "487db4b4-8aa9-4a9d-87fa-8d690dc49568",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0203",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 250.0,
+          "x": 500.0,
           "y": 0,
-          "z": 850.0
+          "z": 300.0
         },
         "rotation": {
           "x": 0,
@@ -3741,19 +3746,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "24f528f3-04d0-4d56-98df-fc929ac7564a",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0204",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 450.0,
+          "x": 700.0,
           "y": 0,
-          "z": 850.0
+          "z": 300.0
         },
         "rotation": {
           "x": 0,
@@ -3761,19 +3767,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "6369f94b-1f7e-4a29-93cc-36b44622c03a",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "d994fb6a-d52f-45ea-8e8f-25f89c54f3f3",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0301",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 650.0,
+          "x": 100.0,
           "y": 0,
-          "z": 850.0
+          "z": 500.0
         },
         "rotation": {
           "x": 0,
@@ -3781,19 +3788,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "f6e54b81-15ee-4d4c-b864-a12ec5df6bed",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "501f04d5-92b7-4526-ae7d-ae48330bbbcf",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0302",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 850.0,
+          "x": 300.0,
           "y": 0,
-          "z": 850.0
+          "z": 500.0
         },
         "rotation": {
           "x": 0,
@@ -3801,19 +3809,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "0771a115-54c5-46ad-b69e-fb06f516094a",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "a41ed019-f739-4939-b6b0-c015fe5783df",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0303",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 50.0,
+          "x": 500.0,
           "y": 0,
-          "z": 650.0
+          "z": 500.0
         },
         "rotation": {
           "x": 0,
@@ -3821,19 +3830,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "ebe9439f-e053-427e-9f7a-d3a29241c9b1",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0304",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 250.0,
+          "x": 700.0,
           "y": 0,
-          "z": 650.0
+          "z": 500.0
         },
         "rotation": {
           "x": 0,
@@ -3841,19 +3851,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "827165a4-7529-4808-b2f5-1fbbd2610587",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0401",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 450.0,
+          "x": 100.0,
           "y": 0,
-          "z": 650.0
+          "z": 700.0
         },
         "rotation": {
           "x": 0,
@@ -3861,19 +3872,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "27eda12f-c6e3-4ab6-b41f-7528878b6a17",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "5337610c-db36-415d-9f7e-1056591902b1",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0402",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 650.0,
+          "x": 300.0,
           "y": 0,
-          "z": 650.0
+          "z": 700.0
         },
         "rotation": {
           "x": 0,
@@ -3881,19 +3893,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "4be004e3-30f3-40d4-873f-5a38288b4b41",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "19d9c1d8-d165-4535-8ccf-db09caf1af78",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0403",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 850.0,
+          "x": 500.0,
           "y": 0,
-          "z": 650.0
+          "z": 700.0
         },
         "rotation": {
           "x": 0,
@@ -3901,19 +3914,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "afce0055-defd-4594-90fe-df5c19b66b0c",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "59b61422-c8f6-4899-8ce9-7887822ffaa5",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0404",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 50.0,
+          "x": 700.0,
           "y": 0,
-          "z": 450.0
+          "z": 700.0
         },
         "rotation": {
           "x": 0,
@@ -3921,19 +3935,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "c3d6a897-8d14-4342-a9e7-b15702592f96",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "927c9ad5-1297-473e-bdf6-38871ab4b89a",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0501",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 250.0,
+          "x": 100.0,
           "y": 0,
-          "z": 450.0
+          "z": 900.0
         },
         "rotation": {
           "x": 0,
@@ -3941,19 +3956,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "c3d6a897-8d14-4342-a9e7-b15702592f96",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "39c9d650-a3bf-4c89-939e-80ecd44328fe",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0502",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 450.0,
+          "x": 300.0,
           "y": 0,
-          "z": 450.0
+          "z": 900.0
         },
         "rotation": {
           "x": 0,
@@ -3961,19 +3977,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "114592f2-e570-4a67-a6db-507f9405fc30",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "5edba017-0efc-4084-b88e-d2d972e5bc1e",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0503",
+        "category": 2,
+        "styleId": "Sky_big_color01",
         "position": {
-          "x": 650.0,
+          "x": 500.0,
           "y": 0,
-          "z": 450.0
+          "z": 900.0
         },
         "rotation": {
           "x": 0,
@@ -3981,19 +3998,20 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "95aa7919-ec01-44fb-bbfb-dc57dac2b441",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+        "size": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       },
       {
-        "id": "64208c3a-32ce-4553-bda3-ff77ebe6f15a",
-        "category": 3,
-        "styleId": "Police",
+        "id": "B0504",
+        "category": 2,
+        "styleId": "Fast_Food_color01",
         "position": {
-          "x": 850.0,
+          "x": 700.0,
           "y": 0,
-          "z": 450.0
+          "z": 900.0
         },
         "rotation": {
           "x": 0,
@@ -4001,515 +4019,17 @@
           "z": 0,
           "w": 1
         },
-        "vehicleType": 1,
-        "currentRoadId": "b4a67581-5620-4110-a0c5-96d9b6cecfb2",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "faa3fb9b-1236-4288-9121-348651b759d1",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 50.0,
-          "y": 0,
-          "z": 250.0
-        },
-        "rotation": {
+        "size": {
           "x": 0,
           "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "7cb83726-6df6-4138-9d53-f995a0d9da11",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 250.0,
-          "y": 0,
-          "z": 250.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "105e1fbc-9137-48ed-a54d-9be9f0a2a510",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 450.0,
-          "y": 0,
-          "z": 250.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "95f4ce4d-f7d3-4592-877d-83107e3c4fa2",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "e25b0e8c-2e2e-4c50-bb67-69b23ead852d",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 650.0,
-          "y": 0,
-          "z": 250.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "bd24885e-1b76-4579-a124-6799fccda2e0",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "26bfb1f1-c4f2-4038-a7ba-3188a42e0027",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 850.0,
-          "y": 0,
-          "z": 250.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "8c82f5a8-b7f0-4683-b26d-7bdc89177333",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "7ecc0a5c-0ace-4f08-8180-eea12277f227",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 50.0,
-          "y": 0,
-          "z": 50.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "884c4199-9dd2-41b9-bbc1-47184a91410d",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "f03265b8-f38b-47c8-b092-2efdb14106d0",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 250.0,
-          "y": 0,
-          "z": 50.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "884c4199-9dd2-41b9-bbc1-47184a91410d",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "d0facee1-8a1c-4cef-908a-86fd22cd937a",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 450.0,
-          "y": 0,
-          "z": 50.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "b268dd6d-b67b-4077-bd22-63f7cdd78cdb",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "cb4a9406-311d-471d-9019-7a6f0b01e479",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 650.0,
-          "y": 0,
-          "z": 50.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "d6ca4be5-7255-42c7-83c4-1d0601be4d4e",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "f441cac5-7fda-4c55-a707-6e8f83336eed",
-        "category": 3,
-        "styleId": "Police",
-        "position": {
-          "x": 850.0,
-          "y": 0,
-          "z": 50.0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 1,
-        "currentRoadId": "24d5e3a3-10b3-41ca-af50-69096ed7b61b",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "c1fb5032-3340-496c-b90b-332f0c84edfe",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 66.66666666666667,
-          "y": 0,
-          "z": 1066.6666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "efe54608-9b17-44df-a698-830092f4febf",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 76.66666666666667,
-          "y": 0,
-          "z": 876.6666666666666
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "7e87f597-fa8f-4e24-a447-215c60cdeeb8",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 66.66666666666667,
-          "y": 0,
-          "z": 666.6666666666666
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "fa3768e5-92e5-4ef2-b5c3-26423ce32057",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 76.66666666666667,
-          "y": 0,
-          "z": 476.6666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "c3d6a897-8d14-4342-a9e7-b15702592f96",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "2dd9bacf-5cfc-44a0-8278-fa93ec17a7cc",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 66.66666666666667,
-          "y": 0,
-          "z": 266.6666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "c78d482c-c0d1-402d-9420-77aed3a39961",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 76.66666666666667,
-          "y": 0,
-          "z": 76.66666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "884c4199-9dd2-41b9-bbc1-47184a91410d",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "3dc003fd-29a8-4620-ae86-2c82dec1a56d",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 266.6666666666667,
-          "y": 0,
-          "z": 1066.6666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "713fe65a-e6fb-4c8b-9acc-fc65ec7cda1f",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 276.6666666666667,
-          "y": 0,
-          "z": 876.6666666666666
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "c0be17f2-10ec-4146-b802-2cfc158a8920",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "66cedd7f-6a50-49a0-964d-ec4ba57678cf",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 266.6666666666667,
-          "y": 0,
-          "z": 666.6666666666666
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "e1b35a30-6cd2-408c-87f9-1743e371cbbc",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "cd67784b-a944-4f8f-b79f-92002e1deb15",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 276.6666666666667,
-          "y": 0,
-          "z": 476.6666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "c3d6a897-8d14-4342-a9e7-b15702592f96",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "ef296552-5477-41f5-a1a2-9c726be293ec",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 266.6666666666667,
-          "y": 0,
-          "z": 266.6666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "1b8f1c14-f8b5-4811-a10b-9d536f44a7e7",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "bfe1b747-cf25-4575-9100-33963c025a88",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 276.6666666666667,
-          "y": 0,
-          "z": 76.66666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "884c4199-9dd2-41b9-bbc1-47184a91410d",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "62dffd4c-537d-4af6-993e-d93113c49c34",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 466.6666666666667,
-          "y": 0,
-          "z": 1066.6666666666667
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "6369f94b-1f7e-4a29-93cc-36b44622c03a",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "5d2a9fb8-9a99-4b81-8122-ff6ab6e8aea5",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 476.6666666666667,
-          "y": 0,
-          "z": 876.6666666666666
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "6369f94b-1f7e-4a29-93cc-36b44622c03a",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
-      },
-      {
-        "id": "62f36176-231c-4f35-b696-6ab28cdb5828",
-        "category": 3,
-        "styleId": "Truck_color03",
-        "position": {
-          "x": 466.6666666666667,
-          "y": 0,
-          "z": 666.6666666666666
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0,
-          "w": 1
-        },
-        "vehicleType": 0,
-        "currentRoadId": "27eda12f-c6e3-4ab6-b41f-7528878b6a17",
-        "targetPointId": "899b8c94-3dfb-4c84-8832-013411b000ba",
-        "gameStatus": 0
+          "z": 0
+        }
       }
     ],
+    "vehicles": [],
     "targetPoints": [
       {
-        "id": "899b8c94-3dfb-4c84-8832-013411b000ba",
+        "id": "ed9c51cd-7907-4270-8426-522fc15b1fa2",
         "category": 0,
         "styleId": "red_sphere",
         "position": {

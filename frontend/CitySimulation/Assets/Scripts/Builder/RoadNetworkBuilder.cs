@@ -9,7 +9,8 @@ using UnityEngine;
 namespace CitySimulation.Builder
 {
     /// <summary>
-    /// Parses xiongan_30.json (6x5 grid with 30 intersections, category 4 = traffic light)
+    /// Parses xiongan_30.json (6x5 grid with 30 intersections, category 2 = building,
+    /// category 4 = traffic light)
     /// and rebuilds the map inside the current scene via the existing ObjectManager
     /// pipeline (PrefabFactory + Resources/{Road,TarfficLight}/section|Empty_TrafficLight).
     ///
@@ -86,6 +87,7 @@ namespace CitySimulation.Builder
         //
         // xiongan_30.json uses numeric "category" but our DTOs use MapCategory enum.
         //   1 => Road
+        //   2 => Building
         //   4 => TrafficLight
         // We parse through a loose intermediate struct to keep JsonUtility happy.
         [Serializable]
@@ -132,9 +134,21 @@ namespace CitySimulation.Builder
         }
 
         [Serializable]
+        private struct BuildingRaw
+        {
+            public string id;
+            public int category;
+            public string styleId;
+            public Vec3Data position;
+            public QuatData rotation;
+            public Vec3Data size;
+        }
+
+        [Serializable]
         private class SnapshotRaw
         {
             public List<RoadRaw> roads = new List<RoadRaw>();
+            public List<BuildingRaw> buildings = new List<BuildingRaw>();
             public List<TrafficLightRaw> trafficLights = new List<TrafficLightRaw>();
         }
 
@@ -169,6 +183,23 @@ namespace CitySimulation.Builder
                             dto.controlPoints.Add(new Vector3(cp.x, cp.y, cp.z));
                     }
                     result.roads.Add(dto);
+                }
+            }
+
+            // ----- buildings (category = 2) -----
+            if (snap.buildings != null)
+            {
+                foreach (var raw in snap.buildings)
+                {
+                    result.buildings.Add(new BuildingDTO
+                    {
+                        id = string.IsNullOrEmpty(raw.id) ? Guid.NewGuid().ToString() : raw.id,
+                        category = MapCategory.Building,
+                        styleId = raw.styleId,
+                        position = raw.position.Value,
+                        rotation = IdentityIfZero(raw.rotation.Value),
+                        size = raw.size.Value,
+                    });
                 }
             }
 
@@ -262,6 +293,8 @@ namespace CitySimulation.Builder
                         foreach (var cp in r.controlPoints) Accumulate(cp);
                 }
             }
+            if (snap.buildings != null)
+                foreach (var building in snap.buildings) Accumulate(building.position);
             return any ?? Vector3.zero;
         }
     }
