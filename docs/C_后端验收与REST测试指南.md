@@ -230,7 +230,8 @@ Invoke-RestMethod -Method Post `
 ## 9. 当前阶段验收边界
 
 第1–8节验收“正式 SB3 模型 + 后端 REST/TraCI 闭环”；第10节单独验收轻量化模型。
-Docker部署和 Unity 直连8000端口仍未完成，不得与当前模型验收混为一项。
+Docker部署已完成SUMO/API/ONNX双服务三场景闭环验收，复验方式见
+`docs/容器化部署指南_20260823.md`；Unity直连8000端口仍未完成，不得与Docker闭环混为一项。
 
 ## 10. 轻量化模型复验
 
