@@ -34,6 +34,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from env.reward_functions import compute_reward
 from server.model_service import ModelServiceError, SB3ModelService
+from server.llm_service import LLMService, LLMServiceError
 from configs.constants import (
     INTERSECTION_ORDER,
     ACTION_NAMES,
@@ -42,6 +43,7 @@ from configs.constants import (
     STATE_LAYOUT_VERSION,
     MIN_GREEN_SECONDS,
     DEFAULT_SUMO_CONFIG,
+    API_VERSION,
 )
 
 API_PREFIX = "/api/v1"
@@ -112,6 +114,17 @@ class EdgePredictRequest(SessionRequest):
     """Request a batched 30-junction decision from the ONNX edge service."""
 
     model_id: str = Field(min_length=1)
+
+
+class LLMAnalyzeRequest(BaseModel):
+    """Request a cloud-brain analysis of one intersection's state window.
+
+    ``text`` is the rendered Chinese state window (see llm_data.text_format);
+    callers build it from the 660-D state or from SUMO snapshots.
+    """
+
+    text: str = Field(min_length=20, max_length=8192)
+    junction: str | None = Field(default=None, min_length=2, max_length=8)
 
 
 @dataclass
@@ -550,6 +563,7 @@ model_service = SB3ModelService(
     registry_path=PROJECT_ROOT / "configs" / "model_registry.json",
     project_root=PROJECT_ROOT,
 )
+llm_service = LLMService()  # llama.cpp 云脑服务（LLM_BASE_URL/LLM_MODEL 可经环境变量覆盖）
 app = FastAPI(title="Xiongan Traffic Control API", version="2.0.0")
 app.add_middleware(
     CORSMiddleware,
@@ -773,6 +787,24 @@ async def predict_edge_action(request: EdgePredictRequest) -> dict[str, Any]:
         "actions": {junction_id: int(action) for junction_id, action in zip(INTERSECTION_ORDER, actions)},
         "latency_ms": edge_response.get("latency_ms"),
         "edge_backend": edge_response.get("backend"),
+    }
+
+
+@app.post(f"{API_PREFIX}/llm/analyze")
+async def analyze_with_llm(request: LLMAnalyzeRequest) -> dict[str, Any]:
+    """云端 LLM 事件识别与管控建议（赛道 C 云脑）。
+
+    调用 llama.cpp 服务（OpenAI 兼容接口）分析一个路口的交通状态窗口文本，
+    返回结构化事件判定；建议 JSON 经合法性校验后由上层决定是否干预信号。
+    """
+    try:
+        result = llm_service.analyze(request.text, junction=request.junction)
+    except LLMServiceError as error:
+        raise ApiError(error.status_code, error.code, error.message, error.details) from error
+    return {
+        "api_version": API_VERSION,
+        "state_layout_version": STATE_LAYOUT_VERSION,
+        **result,
     }
 
 

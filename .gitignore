@@ -47,8 +47,13 @@ models/*
 
 .vscode/
 .idea/
-*.swp"__pycache__/" 
-"*.pyc" 
-"venv/" 
-"env/" 
-".venv/" 
+
+# 赛道C：llama.cpp 二进制工具（b10612 release 下载物，不入库；转换脚本 conversion/*.py 入库）
+tools/llama.cpp/*.exe
+tools/llama.cpp/*.dll
+
+# 赛道C：大体积可复现数据（由 scripts/generate_llm_dataset.py 重新生成）
+data/llm/dataset_v1.jsonl
+data/llm/dataset_incident.jsonl
+data/llm/smoke*.jsonl
+data/llm/smoke*_stats.json
