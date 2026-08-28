@@ -65,5 +65,6 @@ TraCI 会话读取 660 维公开状态，按 J01–J30 切成 `float32[30,22]`�
 - 平峰使用 evening 模型泛化。30 路口全量评估 reward 比真实 Fixed-Time 低 1.6%，
   且 J16/J18 等低流量路口等待时间拖尾，演示与报告不得描述为全量全面领先；
 - ONNX、动态量化和结构化剪枝已经完成；正式推荐FP32 ONNX，详见
-  `docs/轻量化验证报告_20260820.md`。包含SUMO的Docker镜像尚未完成；
+  `docs/轻量化验证报告_20260820.md`。包含SUMO、API和ONNX推理的Docker Compose
+  双服务已完成三场景闭环验收，见`docs/容器化部署验收记录_20260823.md`；
 - Unity 工程尚未直接接入 8000 端口的 REST/WebSocket 会话协议。
