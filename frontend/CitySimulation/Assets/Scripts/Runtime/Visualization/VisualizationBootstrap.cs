@@ -20,6 +20,8 @@ namespace CitySimulation.Runtime.Visualization
         public string serverHost = "127.0.0.1";
         [Tooltip("WebSocket 端口")]
         public int serverPort = 8765;
+        [Tooltip("FastAPI REST 网关地址（LLM 告警）")]
+        public string apiBaseUrl = "http://127.0.0.1:8000";
 
         [Header("运行选项")]
         [Tooltip("启动时自动连接服务器")]
@@ -30,6 +32,7 @@ namespace CitySimulation.Runtime.Visualization
         SumoWebSocketClient _wsClient;
         SumoVisualizationBridge _bridge;
         TrafficVisualizationUI _ui;
+        LlmAlertPanel _llmAlertPanel;
 
         void Awake()
         {
@@ -52,6 +55,12 @@ namespace CitySimulation.Runtime.Visualization
                 _ui = gameObject.AddComponent<TrafficVisualizationUI>();
             }
 
+            _llmAlertPanel = GetComponent<LlmAlertPanel>();
+            if (_llmAlertPanel == null)
+            {
+                _llmAlertPanel = gameObject.AddComponent<LlmAlertPanel>();
+            }
+
             // 配置 WebSocket 客户端
             _wsClient.serverHost = serverHost;
             _wsClient.serverPort = serverPort;
@@ -59,6 +68,7 @@ namespace CitySimulation.Runtime.Visualization
 
             // 配置可视化桥接器
             _bridge.wsClient = _wsClient;
+            _llmAlertPanel.apiBaseUrl = apiBaseUrl;
 
             // 如果禁用本地仿真，关闭 SimulationRuntimeDriver 的车辆生成
             if (disableLocalSimulation)

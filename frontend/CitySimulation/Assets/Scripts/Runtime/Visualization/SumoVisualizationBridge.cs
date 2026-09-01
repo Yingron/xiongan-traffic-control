@@ -63,6 +63,7 @@ namespace CitySimulation.Runtime.Visualization
 
         // ── 当前指标 ──
         public SimMetrics CurrentMetrics { get; private set; }
+        public SimLlmContext CurrentLlmContext { get; private set; }
         public int ActiveVehicleCount => _activeVehicles.Count;
 
         // ── 信号灯查找 ──
@@ -147,6 +148,7 @@ namespace CitySimulation.Runtime.Visualization
             UpdateVehicles(state);
             UpdateTrafficLights(state);
             CurrentMetrics = state.metrics;
+            CurrentLlmContext = state.llm_context;
         }
 
         // ── 车辆更新 ──
@@ -430,6 +432,14 @@ namespace CitySimulation.Runtime.Visualization
         public SimTrafficLight[] traffic_lights;
         public SimVehicle[] vehicles;
         public SimMetrics metrics;
+        public SimLlmContext llm_context;
+    }
+
+    [System.Serializable]
+    public class SimLlmContext
+    {
+        public string junction;
+        public string text;
     }
 
     [System.Serializable]

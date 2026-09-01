@@ -37,6 +37,9 @@ EDGE_MODEL_REGISTRY_PATH = PROJECT_ROOT / "configs" / "edge_model_registry.json"
 from configs.constants import INTERSECTION_ORDER, FEATURES_PER_INTERSECTION
 # 状态提取复用训练环境的全局状态实现（docs/lane_mapping.json 几何映射，30路口×22维）
 from env.global_state import get_global_state
+from llm_data.features import extract_intersection_raw
+from llm_data.schema import SCENARIOS as LLM_SCENARIOS
+from llm_data.text_format import format_window_text
 
 # ── 场景配置 ──
 SCENARIOS = {
@@ -61,6 +64,7 @@ SCENARIOS = {
 
 MIN_GREEN_SECONDS = 15
 STEP_SECONDS = 5  # 每次推进的仿真秒数
+LLM_DEMO_JUNCTION = "J16"
 
 
 def find_sumo_binary(use_gui: bool = False) -> str:
@@ -401,6 +405,33 @@ class VisualizationServer:
             })
         return tls
 
+    def _build_llm_context(self) -> dict | None:
+        """Build a model-compatible prompt from the current live SUMO state.
+
+        Unity deliberately triggers the expensive cloud analysis manually.  The
+        websocket snapshot only carries the latest prompt, so opening the alert
+        panel never starts an LLM request by itself.
+        """
+        try:
+            sim_time = float(self._traci.simulation.getTime())
+            raw = extract_intersection_raw(self._traci, LLM_DEMO_JUNCTION)
+            raw["t"] = sim_time
+            scenario = LLM_SCENARIOS[self.scenario]
+            text = format_window_text(
+                junction=LLM_DEMO_JUNCTION,
+                scenario_cn=scenario["cn"],
+                start_hour=int(scenario["start_hour"]),
+                sim_time=sim_time,
+                snapshots=[raw],
+                window_sec=STEP_SECONDS,
+                sample_sec=STEP_SECONDS,
+                vehicle_count=int(self._traci.vehicle.getIDCount()),
+            )
+            return {"junction": LLM_DEMO_JUNCTION, "text": text}
+        except Exception as error:
+            print(f"[LLM context] failed to build live prompt: {error}")
+            return None
+
     # ── 仿真步进 ──
 
     def _simulation_step(self) -> dict:
@@ -439,6 +470,7 @@ class VisualizationServer:
             "traffic_lights": self._extract_traffic_lights(),
             "vehicles": self._extract_vehicles(),
             "metrics": self._compute_metrics(),
+            "llm_context": self._build_llm_context(),
             # requested_actions 为掩码 DQN 的原始决策；actions 为经过最小绿灯
             # 约束后实际写入 SUMO 的相位。两者分开可审计动作闭环。
             "requested_actions": dict(self._last_requested_actions),
