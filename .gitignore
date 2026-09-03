@@ -57,3 +57,7 @@ data/llm/dataset_v1.jsonl
 data/llm/dataset_incident.jsonl
 data/llm/smoke*.jsonl
 data/llm/smoke*_stats.json
+
+# 运行时日志（本机验证/演示产生）
+logs_llama_server.txt
+logs_viz_server.txt
