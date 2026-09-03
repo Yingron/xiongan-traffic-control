@@ -20,6 +20,7 @@ import sys
 import time
 import hashlib
 import threading
+import traceback
 from pathlib import Path
 from typing import Any
 
@@ -122,6 +123,7 @@ class VisualizationServer:
         # LLM 云脑告警状态（演示用慢周期决策：60s 级一次，5~9s 一次分析）
         self._llm_service: LLMService | None = None
         self._last_state: np.ndarray | None = None
+        self._last_sim_time: float | None = None  # 最近一次推进后的仿真时刻（快照 sim 用）
         self._llm_alert: dict[str, Any] | None = None
         self._llm_alert_clock: str | None = None
         self._llm_alert_at: float = 0.0
@@ -454,6 +456,7 @@ class VisualizationServer:
         traci = self._traci
         for _ in range(STEP_SECONDS):
             traci.simulationStep()
+        self._last_sim_time = float(traci.simulation.getTime())
 
         self._step_count += 1
 
@@ -604,7 +607,10 @@ class VisualizationServer:
         return result
 
     def _make_alert_payload(self, result: dict[str, Any]) -> dict[str, Any]:
-        """构造推送给 Unity 的 llm_alert 消息（只含展示字段，不带原始文本）。"""
+        """构造推送给 Unity 的 llm_alert 消息（只含展示字段，不带原始文本）。
+
+        result 可以是本服务诊断产出，也可以来自 REST 层广播（source="rest"）。
+        """
         return {
             "type": "llm_alert",
             "junction": result.get("junction"),
@@ -617,13 +623,61 @@ class VisualizationServer:
             "sim_clock": result.get("sim_clock"),
             "scenario": self.scenario,
             "llm_backend": result.get("llm_backend"),
+            "source": result.get("source", "auto"),
         }
+
+    def _fill_sim_stamp(self, alert: dict[str, Any]) -> dict[str, Any]:
+        """给外部广播进来的告警补上当前仿真时刻（若本服务正在跑 SUMO）。"""
+        sim_time = self._last_sim_time
+        if sim_time is None:
+            alert.setdefault("sim_time", None)
+            alert.setdefault("sim_clock", None)
+        else:
+            alert.setdefault("sim_time", sim_time)
+            alert.setdefault("sim_clock", self._clock_cn(float(sim_time), SCENARIO_START_HOURS[self.scenario]))
+        return alert
+
+    def _accept_external_alert(self, payload: dict[str, Any]) -> dict[str, Any] | None:
+        """接收 REST 层（api_server /llm/analyze）广播进来的云脑告警并校验。
+
+        合法则更新告警缓存并返回展示载荷（由调用方广播给全部客户端）；
+        非法/功能关闭返回 None。
+        """
+        if not self.llm_enabled:
+            return None
+        if not isinstance(payload, dict):
+            return None
+        event = payload.get("event")
+        if event not in ("正常", "拥堵", "溢出", "事件"):
+            return None
+        alert = {
+            "junction": payload.get("junction"),
+            "event": event,
+            "event_en": payload.get("event_en"),
+            "confidence": payload.get("confidence"),
+            "advice": payload.get("advice"),
+            "latency_ms": payload.get("latency_ms"),
+            "llm_backend": payload.get("llm_backend"),
+            "source": "rest",
+        }
+        if alert["confidence"] is not None and not isinstance(alert["confidence"], (int, float)):
+            alert["confidence"] = None
+        self._fill_sim_stamp(alert)
+        self._llm_alert = dict(alert)
+        self._llm_alert_at = time.time()
+        self._llm_alert_clock = alert.get("sim_clock")
+        self._llm_fail_reason = None
+        print(f"[LLM] 收到 REST 云脑告警广播: {alert.get('junction')} {event} "
+              f"(置信度 {alert.get('confidence')}, 耗时 {alert.get('latency_ms')}ms)")
+        return self._make_alert_payload(alert)
 
     async def _dispatch_llm_alert(self, forced_junction: str | None = None) -> None:
         """触发一次云脑诊断并向全部客户端广播结果（busy 时丢弃本次触发）。
 
         分析失败（llama-server 未启动等）时广播 llm_alert_error，
-        让 Unity 面板能显示"云脑离线"的具体原因而不是干等。
+        让 Unity 面板能显示"云脑离线"的具体原因而不是干等；
+        失败也会刷新 _llm_alert_at，避免自动循环每 2s 重试造成错误风暴
+        （手动「立即诊断」不受影响，可随时重试）。
         """
         if not self.llm_enabled or self._llm_busy or not self._clients:
             return
@@ -633,6 +687,7 @@ class VisualizationServer:
             result = await loop.run_in_executor(
                 None, self._run_llm_analysis_blocking, forced_junction)
             if result is None:
+                self._llm_alert_at = time.time()  # 失败退避：自动循环等待 llm_interval 再试
                 error_msg = {"type": "llm_alert_error",
                              "message": self._llm_fail_reason or "云脑分析失败"}
                 raw = json.dumps(error_msg, ensure_ascii=False)
@@ -642,19 +697,18 @@ class VisualizationServer:
                     except Exception:
                         pass
                 return
+            result["source"] = "manual" if forced_junction is not None else "auto"
             self._llm_alert = result
             self._llm_alert_at = time.time()
             self._llm_alert_clock = result.get("sim_clock")
             self._llm_fail_reason = None
             payload = self._make_alert_payload(result)
             raw = json.dumps(payload, ensure_ascii=False)
-            disconnected = set()
             for ws in list(self._clients):
                 try:
                     await asyncio.wait_for(ws.send(raw), timeout=2.0)
                 except Exception:
-                    disconnected.add(ws)
-            self._clients -= disconnected
+                    pass
         finally:
             self._llm_busy = False
 
@@ -693,6 +747,7 @@ class VisualizationServer:
             self._start_sumo()
             self._load_model()
             self._step_count = 0
+            self._last_sim_time = None  # 新场景首步推进后重新生效
         self._reset_llm_alert()
 
         return {
@@ -739,6 +794,21 @@ class VisualizationServer:
                         # 手动请求一次云脑诊断：junction 缺省时由规则预筛自动选路口
                         junction = msg.get("junction") or None
                         asyncio.ensure_future(self._dispatch_llm_alert(junction))
+                    elif msg_type == "broadcast_alert":
+                        # REST 层（api_server /api/v1/llm/analyze）广播进来的云脑告警，
+                        # 校验通过后转推给全部客户端（Unity 告警面板等）。
+                        payload = self._accept_external_alert(msg.get("payload") or {})
+                        if payload is None:
+                            await ws.send(json.dumps(
+                                {"type": "error", "message": "告警广播被拒绝：功能关闭或 payload 非法"},
+                                ensure_ascii=False))
+                        else:
+                            raw = json.dumps(payload, ensure_ascii=False)
+                            for client in list(self._clients):
+                                try:
+                                    await asyncio.wait_for(client.send(raw), timeout=2.0)
+                                except Exception:
+                                    pass
                     elif msg_type == "llm_alert_status":
                         # 查询当前告警缓存/服务状态（面板重连后同步）
                         status: dict[str, Any] = {
@@ -755,6 +825,7 @@ class VisualizationServer:
                     await ws.send(json.dumps({"type": "error", "message": "无效的JSON"}))
         except Exception as e:
             print(f"[WS] 客户端断开: {peer} ({e})")
+            traceback.print_exc()
         finally:
             self._clients.discard(ws)
             print(f"[WS] 客户端断开: {peer} (剩余 {len(self._clients)} 个)")
