@@ -8,6 +8,31 @@ using UnityEngine;
 
 namespace CitySimulation.Runtime.Visualization
 {
+    /// <summary>云端 LLM 诊断结果（对应后端 type=llm_alert 消息）。</summary>
+    [Serializable]
+    public class LlmAlertData
+    {
+        public string type;
+        public string junction;
+        public string event_cn;      // JSON key "event"（C# 保留字，解析时改名）
+        public string event_en;
+        public float confidence;
+        public string advice;
+        public float latency_ms;
+        public float sim_time;
+        public string sim_clock;
+        public string scenario;
+        public string llm_backend;
+
+        /// <summary>JsonUtility 解析；"event" 是 C# 保留字，先把 key 改名为 event_cn。</summary>
+        public static LlmAlertData FromJson(string raw)
+        {
+            var renamed = System.Text.RegularExpressions.Regex.Replace(
+                raw, "\"event\"\\s*:", "\"event_cn\":");
+            return JsonUtility.FromJson<LlmAlertData>(renamed);
+        }
+    }
+
     /// <summary>
     /// WebSocket 客户端 — 连接 Python 可视化服务器，接收 SUMO 仿真状态。
     /// 使用 .NET 内置 ClientWebSocket，无需第三方库。
@@ -38,6 +63,10 @@ namespace CitySimulation.Runtime.Visualization
         public event Action<bool> OnConnectionChanged;
         /// <summary>收到场景切换确认</summary>
         public event Action<string, string> OnScenarioSwitched;
+        /// <summary>收到云端 LLM 诊断结果（type=llm_alert）</summary>
+        public event Action<LlmAlertData> OnLlmAlertReceived;
+        /// <summary>云脑诊断失败（type=llm_alert_error，如 llama-server 未启动）</summary>
+        public event Action<string> OnLlmAlertError;
 
         // ── 内部状态 ──
         ClientWebSocket _ws;
@@ -170,6 +199,18 @@ namespace CitySimulation.Runtime.Visualization
                         OnScenarioSwitched?.Invoke(msg.scenario ?? "", msg.message ?? "");
                         Debug.Log($"[SumoWS] 场景已切换: {ScenarioLabel}");
                         break;
+
+                    case "llm_alert":
+                        var alert = LlmAlertData.FromJson(raw);
+                        if (alert != null && !string.IsNullOrEmpty(alert.junction))
+                        {
+                            OnLlmAlertReceived?.Invoke(alert);
+                        }
+                        break;
+
+                    case "llm_alert_error":
+                        OnLlmAlertError?.Invoke(msg.message ?? "云脑分析失败");
+                        break;
                 }
             }
             catch (Exception e)
@@ -178,8 +219,28 @@ namespace CitySimulation.Runtime.Visualization
             }
         }
 
+        /// <summary>发送任意 JSON 指令（主线程调用）</summary>
+        public async void SendRaw(string rawJson)
+        {
+            if (!IsConnected)
+            {
+                Debug.LogWarning("[SumoWS] 未连接，无法发送");
+                return;
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(rawJson);
+            try
+            {
+                await _ws.SendAsync(bytes, WebSocketMessageType.Text, true, _cts.Token);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[SumoWS] 发送失败: {e.Message}");
+            }
+        }
+
         /// <summary>发送切换场景指令</summary>
-        public async void SwitchScenario(string scenario)
+        public void SwitchScenario(string scenario)
         {
             if (!IsConnected)
             {
@@ -187,17 +248,17 @@ namespace CitySimulation.Runtime.Visualization
                 return;
             }
 
-            var msg = $"{{\"type\":\"switch_scenario\",\"scenario\":\"{scenario}\"}}";
-            var bytes = Encoding.UTF8.GetBytes(msg);
-            try
-            {
-                await _ws.SendAsync(bytes, WebSocketMessageType.Text, true, _cts.Token);
-                Debug.Log($"[SumoWS] 已发送切换场景指令: {scenario}");
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[SumoWS] 发送失败: {e.Message}");
-            }
+            SendRaw($"{{\"type\":\"switch_scenario\",\"scenario\":\"{scenario}\"}}");
+            Debug.Log($"[SumoWS] 已发送切换场景指令: {scenario}");
+        }
+
+        /// <summary>请求一次云端 LLM 诊断；junction 为空时由后端规则自动选最异常路口</summary>
+        public void RequestLlmAlert(string junction = null)
+        {
+            var json = junction == null
+                ? "{\"type\":\"request_llm_alert\"}"
+                : $"{{\"type\":\"request_llm_alert\",\"junction\":\"{junction}\"}}";
+            SendRaw(json);
         }
 
         void OnDestroy()

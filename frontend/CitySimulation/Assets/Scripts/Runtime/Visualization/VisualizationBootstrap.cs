@@ -52,6 +52,12 @@ namespace CitySimulation.Runtime.Visualization
                 _ui = gameObject.AddComponent<TrafficVisualizationUI>();
             }
 
+            // AI 云脑诊断面板（赛道 C）：自动挂载，运行时构建 UI，无需手动搭建
+            if (GetComponent<LlmAlertPanel>() == null)
+            {
+                gameObject.AddComponent<LlmAlertPanel>();
+            }
+
             // 配置 WebSocket 客户端
             _wsClient.serverHost = serverHost;
             _wsClient.serverPort = serverPort;

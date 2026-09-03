@@ -34,9 +34,13 @@ MODEL_DIR = PROJECT_ROOT / "models" / "dqn"
 EDGE_MODEL_REGISTRY_PATH = PROJECT_ROOT / "configs" / "edge_model_registry.json"
 
 # 30 路口顺序/特征维度统一取自 configs.constants（与训练环境一致）
-from configs.constants import INTERSECTION_ORDER, FEATURES_PER_INTERSECTION
+from configs.constants import INTERSECTION_ORDER, FEATURES_PER_INTERSECTION, ACTION_NAMES
 # 状态提取复用训练环境的全局状态实现（docs/lane_mapping.json 几何映射，30路口×22维）
 from env.global_state import get_global_state
+# LLM 云脑告警：特征文本化与 llama.cpp 调用与训练/评估链路同源
+from llm_data.features import extract_intersection_raw
+from llm_data.text_format import format_window_text
+from server.llm_service import LLMService, LLMServiceError
 
 # ── 场景配置 ──
 SCENARIOS = {
@@ -62,6 +66,20 @@ SCENARIOS = {
 MIN_GREEN_SECONDS = 15
 STEP_SECONDS = 5  # 每次推进的仿真秒数
 
+# ── LLM 云脑告警配置 ──
+# 训练文本的时钟以整点起步（见 llm_data/text_format._clock），此处对齐：
+#   real_peak 07:00 / real_offpeak 14:00 / real_evening 17:00 起算仿真时间
+SCENARIO_START_HOURS = {"real_peak": 7, "real_offpeak": 14, "real_evening": 17}
+# rl4 相位无名（sumo net.xml 的 programID="rl4" 未写 name），LLM 文本需要语义相位名；
+# 与 configs.constants.ACTION_NAMES 同序（0/1/2/3 → 南北直行/南北左转/东西直行/东西左转）。
+# 训练文本形态为"南北向直行(绿灯)"，实时侧按相位状态字符串补绿灯/全红后缀。
+PHASE_SEMANTIC_CN = {
+    0: "南北向直行", 1: "南北向左转", 2: "东西向直行", 3: "东西向左转",
+}
+LLM_ALERT_DEFAULT_INTERVAL = 60.0  # 自动诊断间隔（秒，真实时间）
+LLM_ALERT_WINDOW_SEC = 35  # 伪窗口覆盖秒数（保持与训练"最近N秒、每5秒采样"格式一致）
+LLM_ALERT_SAMPLE_SEC = 5
+
 
 def find_sumo_binary(use_gui: bool = False) -> str:
     home = os.environ.get("SUMO_HOME")
@@ -77,12 +95,15 @@ class VisualizationServer:
 
     def __init__(self, scenario: str = "real_peak", port: int = 8765,
                  use_model: bool = True, use_gui: bool = False,
-                 model_override: Path | None = None) -> None:
+                 model_override: Path | None = None,
+                 llm_enabled: bool = True, llm_interval: float = LLM_ALERT_DEFAULT_INTERVAL) -> None:
         self.scenario = scenario
         self.port = port
         self.use_model = use_model
         self.use_gui = use_gui
         self.model_override = model_override
+        self.llm_enabled = llm_enabled
+        self.llm_interval = llm_interval
         self._traci: Any = None
         self._model: Any = None
         self._model_backend: str | None = None
@@ -98,6 +119,14 @@ class VisualizationServer:
         self._simulation_lock = threading.RLock()
         self._running = False
         self._step_count = 0
+        # LLM 云脑告警状态（演示用慢周期决策：60s 级一次，5~9s 一次分析）
+        self._llm_service: LLMService | None = None
+        self._last_state: np.ndarray | None = None
+        self._llm_alert: dict[str, Any] | None = None
+        self._llm_alert_clock: str | None = None
+        self._llm_alert_at: float = 0.0
+        self._llm_busy = False
+        self._llm_fail_reason: str | None = None
 
     # ── SUMO 管理 ──
 
@@ -412,6 +441,7 @@ class VisualizationServer:
         """执行一步仿真：状态提取 → DQN推理 → 应用动作 → 推进SUMO → 返回快照"""
         # 1. 提取状态
         state = self._extract_state()
+        self._last_state = state
 
         # 2. DQN 推理
         actions = self._get_dqn_actions(state)
@@ -447,6 +477,206 @@ class VisualizationServer:
         }
         return snapshot
 
+    # ── LLM 云脑告警（赛道 C：边缘 DQN 快决策 + 云端 LLM 慢周期诊断） ──
+
+    @staticmethod
+    def _clock_cn(sim_time: float, start_hour: int) -> str:
+        """仿真秒 → "HH:MM:SS" 场景时钟（与 llm_data.text_format 同口径）。"""
+        import datetime
+        return (datetime.datetime(2026, 1, 1, start_hour)
+                + datetime.timedelta(seconds=int(sim_time))).strftime("%H:%M:%S")
+
+    def _rl4_phase_state(self, tl_id: str, phase: int) -> str:
+        """rl4 相位状态后缀：按相位 state 字符串判定 绿灯/黄灯/全红。"""
+        try:
+            logic = next(
+                (candidate for candidate in self._traci.trafficlight.getAllProgramLogics(tl_id)
+                 if candidate.programID == "rl4"),
+                None,
+            )
+            if logic is not None and phase < len(logic.phases):
+                state = logic.phases[phase].state
+                if "G" in state or "g" in state:
+                    return "绿灯"
+                if "Y" in state or "y" in state:
+                    return "黄灯"
+            return "全红"
+        except Exception:
+            return "全红"
+
+    def _semantic_phase_name(self, tl_id: str, phase: int) -> str:
+        """把无名的 rl4 相位映射为训练文本同形态的语义名，如"南北向直行(绿灯)"。"""
+        base = PHASE_SEMANTIC_CN.get(int(phase) % 4, "未知相位")
+        return f"{base}({self._rl4_phase_state(tl_id, phase)})"
+
+    def _pick_candidate_junction(self) -> str:
+        """按最新 660 维状态打分选"最需诊断"的路口：排队 + 等待 + 占有率加权。
+
+        LLM 一次分析 5~9 秒，无法每步全路口分析；规则预筛把云端注意力
+        集中到全网最异常的路口（演示时异常消失则退回正常诊断）。
+        """
+        state = self._last_state
+        if state is None:
+            return INTERSECTION_ORDER[0]
+        scores: list[tuple[str, float]] = []
+        for idx, tl_id in enumerate(INTERSECTION_ORDER):
+            offset = idx * FEATURES_PER_INTERSECTION
+            queue = float(np.sum(state[offset:offset + 4]))          # 0~4
+            wait = float(np.sum(state[offset + 4:offset + 8]))       # 0~4
+            occupancy = float(np.sum(state[offset + 8:offset + 12]))  # 0~4
+            scores.append((tl_id, queue * 3.0 + wait * 2.0 + occupancy * 8.0))
+        scores.sort(key=lambda item: item[1], reverse=True)
+        return scores[0][0]
+
+    def _build_llm_window_text(self, junction: str) -> str | None:
+        """锁内取数：把当前快照外推为训练同形态的 8 采样伪窗口文本。
+
+        extract_intersection_raw 的实时快照只有"当前时刻"，而微调输入是
+        "最近 N 秒、每 5 秒采样"的多行窗口。逐行回填采样时刻构造同分布文本；
+        车辆状态行本身是当前值（最近 35 秒内状态持续的代表性样本）。
+        """
+        if self._traci is None or not self._is_traci_connected():
+            return None
+        raw = extract_intersection_raw(self._traci, junction)
+        sim_time = float(self._traci.simulation.getTime())
+        raw["phase_name"] = self._semantic_phase_name(junction, int(raw["phase"]))
+        snapshots = []
+        for back in range(LLM_ALERT_WINDOW_SEC // LLM_ALERT_SAMPLE_SEC, -1, -1):
+            snap = dict(raw)
+            snap["t"] = sim_time - back * LLM_ALERT_SAMPLE_SEC
+            snapshots.append(snap)
+        return format_window_text(
+            junction,
+            SCENARIOS[self.scenario]["label"],
+            SCENARIO_START_HOURS[self.scenario],
+            sim_time,
+            snapshots,
+            LLM_ALERT_WINDOW_SEC,
+            LLM_ALERT_SAMPLE_SEC,
+            len(self._traci.vehicle.getIDList()),
+        )
+
+    def _run_llm_analysis_blocking(self, forced_junction: str | None = None) -> dict[str, Any] | None:
+        """后台线程执行一次完整云脑诊断：取数（短占仿真锁）→ LLM HTTP（锁外）。
+
+        Returns:
+            llm_service.analyze 结果 + sim_time/sim_clock；失败返回 None。
+        """
+        if self._llm_service is None:
+            try:
+                self._llm_service = LLMService()
+            except Exception as error:  # 构造失败（如缺依赖）
+                self._llm_fail_reason = f"LLMService 初始化失败: {error}"
+                return None
+
+        if forced_junction is not None:
+            if forced_junction not in INTERSECTION_ORDER:
+                self._llm_fail_reason = f"未知路口: {forced_junction}"
+                return None
+            junction = forced_junction
+        else:
+            junction = self._pick_candidate_junction()
+
+        with self._simulation_lock:
+            text = self._build_llm_window_text(junction)
+            if text is None:
+                self._llm_fail_reason = "SUMO 未连接"
+                return None
+            sim_time = float(self._traci.simulation.getTime())
+            sim_clock = self._clock_cn(sim_time, SCENARIO_START_HOURS[self.scenario])
+
+        try:
+            result = self._llm_service.analyze(text, junction=junction)
+        except LLMServiceError as error:
+            # llama-server 未启动等场景：记录原因、不推送告警，演示不中断
+            self._llm_fail_reason = f"{error.code}: {error.message}"
+            print(f"[LLM] 云脑分析失败({junction}): {error.code} {error.message}")
+            return None
+        except Exception as error:
+            self._llm_fail_reason = str(error)
+            print(f"[LLM] 云脑分析异常({junction}): {error}")
+            return None
+
+        result["sim_time"] = sim_time
+        result["sim_clock"] = sim_clock
+        print(f"[LLM] 云脑诊断 {junction}: {result['event']} "
+              f"(置信度 {result['confidence']}, 耗时 {result['latency_ms']}ms, 仿真 {sim_clock})")
+        return result
+
+    def _make_alert_payload(self, result: dict[str, Any]) -> dict[str, Any]:
+        """构造推送给 Unity 的 llm_alert 消息（只含展示字段，不带原始文本）。"""
+        return {
+            "type": "llm_alert",
+            "junction": result.get("junction"),
+            "event": result.get("event"),
+            "event_en": result.get("event_en"),
+            "confidence": result.get("confidence"),
+            "advice": result.get("advice"),
+            "latency_ms": result.get("latency_ms"),
+            "sim_time": result.get("sim_time"),
+            "sim_clock": result.get("sim_clock"),
+            "scenario": self.scenario,
+            "llm_backend": result.get("llm_backend"),
+        }
+
+    async def _dispatch_llm_alert(self, forced_junction: str | None = None) -> None:
+        """触发一次云脑诊断并向全部客户端广播结果（busy 时丢弃本次触发）。
+
+        分析失败（llama-server 未启动等）时广播 llm_alert_error，
+        让 Unity 面板能显示"云脑离线"的具体原因而不是干等。
+        """
+        if not self.llm_enabled or self._llm_busy or not self._clients:
+            return
+        self._llm_busy = True
+        try:
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(
+                None, self._run_llm_analysis_blocking, forced_junction)
+            if result is None:
+                error_msg = {"type": "llm_alert_error",
+                             "message": self._llm_fail_reason or "云脑分析失败"}
+                raw = json.dumps(error_msg, ensure_ascii=False)
+                for ws in list(self._clients):
+                    try:
+                        await asyncio.wait_for(ws.send(raw), timeout=2.0)
+                    except Exception:
+                        pass
+                return
+            self._llm_alert = result
+            self._llm_alert_at = time.time()
+            self._llm_alert_clock = result.get("sim_clock")
+            self._llm_fail_reason = None
+            payload = self._make_alert_payload(result)
+            raw = json.dumps(payload, ensure_ascii=False)
+            disconnected = set()
+            for ws in list(self._clients):
+                try:
+                    await asyncio.wait_for(ws.send(raw), timeout=2.0)
+                except Exception:
+                    disconnected.add(ws)
+            self._clients -= disconnected
+        finally:
+            self._llm_busy = False
+
+    async def _llm_alert_loop(self) -> None:
+        """慢周期云脑诊断循环：有客户端且距上次超过间隔时自动分析一次。"""
+        while self._running:
+            try:
+                if (self._clients and not self._llm_busy
+                        and (self._llm_alert is None
+                             or time.time() - self._llm_alert_at >= self.llm_interval)):
+                    await self._dispatch_llm_alert(None)
+            except Exception as error:
+                print(f"[LLM] 云脑循环异常: {error}")
+            await asyncio.sleep(2.0)
+
+    def _reset_llm_alert(self) -> None:
+        """场景切换后丢弃旧场景的告警缓存。"""
+        self._llm_alert = None
+        self._llm_alert_clock = None
+        self._llm_alert_at = 0.0
+        self._llm_fail_reason = None
+
     # ── 场景切换 ──
 
     def _switch_scenario(self, new_scenario: str) -> dict:
@@ -463,6 +693,7 @@ class VisualizationServer:
             self._start_sumo()
             self._load_model()
             self._step_count = 0
+        self._reset_llm_alert()
 
         return {
             "type": "scenario_switched",
@@ -504,6 +735,22 @@ class VisualizationServer:
                         snapshot = await asyncio.get_event_loop().run_in_executor(
                             None, self._simulation_step)
                         await ws.send(json.dumps(snapshot, ensure_ascii=False))
+                    elif msg_type == "request_llm_alert":
+                        # 手动请求一次云脑诊断：junction 缺省时由规则预筛自动选路口
+                        junction = msg.get("junction") or None
+                        asyncio.ensure_future(self._dispatch_llm_alert(junction))
+                    elif msg_type == "llm_alert_status":
+                        # 查询当前告警缓存/服务状态（面板重连后同步）
+                        status: dict[str, Any] = {
+                            "type": "llm_alert_status",
+                            "enabled": self.llm_enabled,
+                            "interval": self.llm_interval,
+                            "busy": self._llm_busy,
+                            "fail_reason": self._llm_fail_reason,
+                            "last_alert": self._make_alert_payload(self._llm_alert)
+                            if self._llm_alert is not None else None,
+                        }
+                        await ws.send(json.dumps(status, ensure_ascii=False))
                 except json.JSONDecodeError:
                     await ws.send(json.dumps({"type": "error", "message": "无效的JSON"}))
         except Exception as e:
@@ -549,6 +796,7 @@ class VisualizationServer:
 
         # 启动广播循环
         broadcast_task = asyncio.create_task(self._broadcast_loop())
+        llm_task = asyncio.create_task(self._llm_alert_loop()) if self.llm_enabled else None
 
         try:
             await asyncio.Future()  # 永久等待
@@ -557,6 +805,8 @@ class VisualizationServer:
         finally:
             self._running = False
             broadcast_task.cancel()
+            if llm_task is not None:
+                llm_task.cancel()
             server.close()
             await server.wait_closed()
             self._close_sumo()
@@ -575,6 +825,10 @@ def main():
         help="仅用于本地联调的掩码 DQN 模型路径；不替代三场景正式模型交付",
     )
     parser.add_argument("--gui", action="store_true", help="使用 SUMO GUI（调试用）")
+    parser.add_argument("--no-llm", action="store_true",
+                        help="禁用 LLM 云脑告警（不启动 llama-server 的演示可跳过）")
+    parser.add_argument("--llm-interval", type=float, default=LLM_ALERT_DEFAULT_INTERVAL,
+                        help=f"自动云脑诊断间隔秒数 (默认: {LLM_ALERT_DEFAULT_INTERVAL:.0f}s)")
     args = parser.parse_args()
 
     server = VisualizationServer(
@@ -583,6 +837,8 @@ def main():
         use_model=not args.no_model,
         use_gui=args.gui,
         model_override=args.model_override,
+        llm_enabled=not args.no_llm,
+        llm_interval=args.llm_interval,
     )
     asyncio.run(server.run())
 
