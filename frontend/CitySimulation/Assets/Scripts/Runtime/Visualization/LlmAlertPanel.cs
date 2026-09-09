@@ -18,6 +18,7 @@ namespace CitySimulation.Runtime.Visualization
     public class LlmAlertPanel : MonoBehaviour
     {
         SumoWebSocketClient _wsClient;
+        FormalApiClosedLoopClient _formalClient;
         Font _uiFont;
 
         // ── UI ──
@@ -35,6 +36,7 @@ namespace CitySimulation.Runtime.Visualization
         float _lastAlertWallAt = -1f;
         string _scenarioLabel = "";
         bool _connected;
+        float _nextFormalAutoDiagnoseAt = -1f;
 
         // ── 颜色 ──
         static readonly Color ColorPanel = new Color(0.08f, 0.10f, 0.14f, 0.92f);
@@ -63,27 +65,47 @@ namespace CitySimulation.Runtime.Visualization
                 _uiFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             }
 
-            _wsClient = GetComponent<SumoWebSocketClient>();
-            if (_wsClient == null)
-            {
-                _wsClient = GetComponentInParent<SumoWebSocketClient>();
-            }
-
             BuildUI();
 
-            if (_wsClient != null)
+            // 优先使用 8000 正式闭环客户端。它与 DQN 使用同一 660 维快照，
+            // 可直接调用 /api/v1/llm/analyze；未启用时无缝回退到 8765 推送链路。
+            _formalClient = GetComponent<FormalApiClosedLoopClient>();
+            if (_formalClient != null && _formalClient.enabled)
             {
-                _wsClient.OnConnectionChanged += OnConnectionChanged;
-                _wsClient.OnLlmAlertReceived += OnLlmAlertReceived;
-                _wsClient.OnLlmAlertError += OnLlmAlertError;
-                _wsClient.OnScenarioSwitched += OnScenarioSwitched;
-                _connected = _wsClient.IsConnected;
+                _formalClient.OnConnectionChanged += OnConnectionChanged;
+                _formalClient.OnLlmAlertReceived += OnLlmAlertReceived;
+                _formalClient.OnLlmAlertError += OnLlmAlertError;
+                _formalClient.OnScenarioSwitched += OnScenarioSwitched;
+                _formalClient.OnSnapshotReceived += OnFormalSnapshotReceived;
+                _connected = _formalClient.IsConnected;
                 if (_connected && _statusText != null)
                 {
-                    _statusText.text = "● 云脑已连接 · 等待自动诊断…";
+                    _statusText.text = "● 正式后端已连接 · 等待状态后云脑诊断…";
                     _statusText.color = ColorConnected;
-                    // 首次连接立即请求一次诊断，避免干等一个自动周期
-                    Invoke(nameof(RequestAutoDiagnose), 2f);
+                }
+            }
+            else
+            {
+                _wsClient = GetComponent<SumoWebSocketClient>();
+                if (_wsClient == null)
+                {
+                    _wsClient = GetComponentInParent<SumoWebSocketClient>();
+                }
+
+                if (_wsClient != null)
+                {
+                    _wsClient.OnConnectionChanged += OnConnectionChanged;
+                    _wsClient.OnLlmAlertReceived += OnLlmAlertReceived;
+                    _wsClient.OnLlmAlertError += OnLlmAlertError;
+                    _wsClient.OnScenarioSwitched += OnScenarioSwitched;
+                    _connected = _wsClient.IsConnected;
+                    if (_connected && _statusText != null)
+                    {
+                        _statusText.text = "● 云脑已连接 · 等待自动诊断…";
+                        _statusText.color = ColorConnected;
+                        // 首次连接立即请求一次诊断，避免干等一个自动周期
+                        Invoke(nameof(RequestAutoDiagnose), 2f);
+                    }
                 }
             }
         }
@@ -104,6 +126,14 @@ namespace CitySimulation.Runtime.Visualization
                     _statusText.text = $"◐ 云脑分析中…（约 {Mathf.Max(1, 10 - (int)elapsed)}s）";
                     _statusText.color = ColorHeader;
                 }
+            }
+
+            // 8000 正式模式没有 8765 服务端的 60 秒定时器；前端仅在拿到
+            // 同一会话状态后按相同节奏请求云脑，且不阻塞 DQN 闭环。
+            if (_formalClient != null && _connected && _requestedAt < 0 &&
+                _nextFormalAutoDiagnoseAt > 0 && Time.time >= _nextFormalAutoDiagnoseAt)
+            {
+                RequestAutoDiagnose();
             }
         }
 
@@ -167,14 +197,14 @@ namespace CitySimulation.Runtime.Visualization
             _diagnoseBtn = CreateButton(panelGo.transform, new Vector2(10, 244), 180, 36,
                 "立即诊断", () =>
                 {
-                    _wsClient?.RequestLlmAlert(null);
+                    RequestLlmAlert(null);
                     _requestedAt = Time.time;
                     SetButtonsBusy(true);
                 });
             _j25Btn = CreateButton(panelGo.transform, new Vector2(200, 244), 190, 36,
                 "诊断 J25（施工点）", () =>
                 {
-                    _wsClient?.RequestLlmAlert("J25");
+                    RequestLlmAlert("J25");
                     _requestedAt = Time.time;
                     SetButtonsBusy(true);
                 });
@@ -276,10 +306,13 @@ namespace CitySimulation.Runtime.Visualization
 
             if (connected)
             {
-                _statusText.text = "● 云脑服务在线 · 60 秒自动诊断";
+                _statusText.text = _formalClient != null
+                    ? "● 正式后端在线 · 60 秒云脑诊断"
+                    : "● 云脑服务在线 · 60 秒自动诊断";
                 _statusText.color = ColorConnected;
                 SetButtonsBusy(false);
-                Invoke(nameof(RequestAutoDiagnose), 1.5f);
+                if (_formalClient == null)
+                    Invoke(nameof(RequestAutoDiagnose), 1.5f);
             }
             else
             {
@@ -301,11 +334,30 @@ namespace CitySimulation.Runtime.Visualization
 
         void RequestAutoDiagnose()
         {
-            if (_connected && _wsClient != null && _requestedAt < 0)
+            if (_connected && _requestedAt < 0)
             {
-                _wsClient.RequestLlmAlert(null);
+                RequestLlmAlert(null);
                 _requestedAt = Time.time;
                 SetButtonsBusy(true);
+                if (_formalClient != null)
+                    _nextFormalAutoDiagnoseAt = Time.time + 60f;
+            }
+        }
+
+        void RequestLlmAlert(string junction)
+        {
+            if (_formalClient != null)
+                _formalClient.RequestLlmAlert(junction);
+            else
+                _wsClient?.RequestLlmAlert(junction);
+        }
+
+        void OnFormalSnapshotReceived(FormalApiSnapshot snapshot)
+        {
+            // 只有收到同一正式会话的状态后才做首次诊断，避免启动竞态。
+            if (_formalClient != null && _connected && _requestedAt < 0 && _nextFormalAutoDiagnoseAt < 0)
+            {
+                _nextFormalAutoDiagnoseAt = Time.time;
             }
         }
 
@@ -341,7 +393,9 @@ namespace CitySimulation.Runtime.Visualization
 
             if (_statusText != null)
             {
-                _statusText.text = "● 云脑服务在线 · 60 秒自动诊断";
+                _statusText.text = _formalClient != null
+                    ? "● 正式后端在线 · 60 秒云脑诊断"
+                    : "● 云脑服务在线 · 60 秒自动诊断";
                 _statusText.color = ColorConnected;
             }
 
@@ -376,6 +430,14 @@ namespace CitySimulation.Runtime.Visualization
                 _wsClient.OnLlmAlertReceived -= OnLlmAlertReceived;
                 _wsClient.OnLlmAlertError -= OnLlmAlertError;
                 _wsClient.OnScenarioSwitched -= OnScenarioSwitched;
+            }
+            if (_formalClient != null)
+            {
+                _formalClient.OnConnectionChanged -= OnConnectionChanged;
+                _formalClient.OnLlmAlertReceived -= OnLlmAlertReceived;
+                _formalClient.OnLlmAlertError -= OnLlmAlertError;
+                _formalClient.OnScenarioSwitched -= OnScenarioSwitched;
+                _formalClient.OnSnapshotReceived -= OnFormalSnapshotReceived;
             }
         }
     }

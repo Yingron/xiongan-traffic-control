@@ -68,6 +68,10 @@ namespace CitySimulation.Runtime.Visualization
         public event Action<FormalApiSnapshot> OnSnapshotReceived;
         public event Action<float[], int[]> OnDecisionReady;
         public event Action<string> OnProtocolError;
+        /// <summary>云脑 REST 分析完成。复用 legacy 8765 链路相同的 UI 数据结构。</summary>
+        public event Action<LlmAlertData> OnLlmAlertReceived;
+        /// <summary>云脑 REST 分析失败；不会中断 DQN 闭环。</summary>
+        public event Action<string> OnLlmAlertError;
 
         ClientWebSocket _socket;
         CancellationTokenSource _cts;
@@ -78,6 +82,8 @@ namespace CitySimulation.Runtime.Visualization
         bool _decisionInFlight;
         bool _switchInFlight;
         float _reconnectTimer;
+        readonly System.Collections.Generic.List<FormalApiSnapshot> _llmHistory = new();
+        const int LlmHistorySize = 7;
 
         void Start()
         {
@@ -144,6 +150,7 @@ namespace CitySimulation.Runtime.Visualization
             LastSnapshot = null;
             LastActionMasks = null;
             LastActions = null;
+            _llmHistory.Clear();
 
             if (!string.IsNullOrEmpty(_sessionId))
             {
@@ -284,6 +291,7 @@ namespace CitySimulation.Runtime.Visualization
             if (!IsValidSnapshot(snapshot)) return;
 
             LastSnapshot = snapshot;
+            RememberLlmSnapshot(snapshot);
             OnSnapshotReceived?.Invoke(snapshot);
             if (!_decisionInFlight && !_switchInFlight)
             {
@@ -335,6 +343,131 @@ namespace CitySimulation.Runtime.Visualization
             _decisionInFlight = false;
             // The API broadcasts the new state to this WebSocket subscription.
             // No local simulation step is ever fabricated on the Unity side.
+        }
+
+        /// <summary>
+        /// Ask the C-backend cloud-brain endpoint to diagnose one junction from
+        /// the current formal session. If no junction is supplied, the client
+        /// selects the highest current normalized queue pressure. This call is
+        /// diagnostic-only: it never changes the DQN action or SUMO phase.
+        /// </summary>
+        public void RequestLlmAlert(string junction = null)
+        {
+            if (LastSnapshot == null || string.IsNullOrEmpty(_sessionId))
+            {
+                OnLlmAlertError?.Invoke("尚未收到正式后端状态，暂不能进行云脑诊断。");
+                return;
+            }
+            StartCoroutine(RequestLlmAlertRoutine(junction));
+        }
+
+        System.Collections.IEnumerator RequestLlmAlertRoutine(string requestedJunction)
+        {
+            var junction = NormalizeOrSelectLlmJunction(requestedJunction);
+            var prompt = BuildLlmPrompt(junction);
+            var body = $"{{\"text\":\"{EscapeJson(prompt)}\",\"junction\":\"{junction}\"}}";
+            using var request = CreateJsonRequest("llm/analyze", "POST", body);
+            yield return request.SendWebRequest();
+            if (HasRequestError(request, out var error))
+            {
+                OnLlmAlertError?.Invoke(error);
+                yield break;
+            }
+
+            var alert = LlmAlertData.FromJson(request.downloadHandler.text);
+            if (alert == null)
+            {
+                OnLlmAlertError?.Invoke("云脑响应无法解析。");
+                yield break;
+            }
+            alert.junction = string.IsNullOrEmpty(alert.junction) ? junction : alert.junction;
+            alert.scenario = CurrentScenario;
+            alert.sim_time = LastSnapshot == null ? 0f : LastSnapshot.simulation_time;
+            alert.sim_clock = $"仿真第 {alert.sim_time:F0} 秒";
+            OnLlmAlertReceived?.Invoke(alert);
+        }
+
+        void RememberLlmSnapshot(FormalApiSnapshot snapshot)
+        {
+            _llmHistory.Add(snapshot);
+            while (_llmHistory.Count > LlmHistorySize)
+            {
+                _llmHistory.RemoveAt(0);
+            }
+        }
+
+        string NormalizeOrSelectLlmJunction(string junction)
+        {
+            if (!string.IsNullOrEmpty(junction) &&
+                System.Text.RegularExpressions.Regex.IsMatch(junction, "^J(0[1-9]|[12][0-9]|30)$"))
+            {
+                return junction;
+            }
+
+            var latest = LastSnapshot;
+            var selectedIndex = 0;
+            var highestPressure = float.NegativeInfinity;
+            for (var index = 0; index < IntersectionCount; index++)
+            {
+                var offset = index * 22;
+                var pressure = latest.state_vector[offset] + latest.state_vector[offset + 1]
+                    + latest.state_vector[offset + 2] + latest.state_vector[offset + 3]
+                    + latest.state_vector[offset + 8] + latest.state_vector[offset + 9]
+                    + latest.state_vector[offset + 10] + latest.state_vector[offset + 11];
+                if (pressure > highestPressure)
+                {
+                    highestPressure = pressure;
+                    selectedIndex = index;
+                }
+            }
+            return $"J{selectedIndex + 1:D2}";
+        }
+
+        string BuildLlmPrompt(string junction)
+        {
+            var index = int.Parse(junction.Substring(1)) - 1;
+            var scenarioLabel = CurrentScenario switch
+            {
+                "real_peak" => "真实早高峰",
+                "real_offpeak" => "真实平峰",
+                "real_evening" => "真实晚高峰",
+                _ => CurrentScenario,
+            };
+            var samples = _llmHistory.Count > 0 ? _llmHistory : new System.Collections.Generic.List<FormalApiSnapshot> { LastSnapshot };
+            var builder = new StringBuilder();
+            builder.Append("【场景】").Append(scenarioLabel).Append("（正式后端实时状态）\n");
+            builder.Append("【路口 ").Append(junction).Append("】最近 ")
+                .Append(Mathf.Max(0, samples.Count - 1) * stepSeconds).Append(" 秒交通状态：\n");
+            foreach (var sample in samples)
+            {
+                var offset = index * 22;
+                var phase = sample.intersections != null && sample.intersections.Length > index
+                    ? sample.intersections[index].phase_name
+                    : "未知相位";
+                builder.Append("  仿真第 ").Append(sample.simulation_time.ToString("F0"))
+                    .Append(" 秒 | 相位:").Append(phase).Append(" | ");
+                AppendDirection(builder, "北", sample.state_vector, offset, 0);
+                AppendDirection(builder, "南", sample.state_vector, offset, 1);
+                AppendDirection(builder, "东", sample.state_vector, offset, 2);
+                AppendDirection(builder, "西", sample.state_vector, offset, 3, true);
+            }
+            builder.Append("【问题】请判断该路口当前运行状态属于正常、拥堵、溢出或事件，")
+                .Append("并根据排队、平均等待、占有率和当前相位给出中文信号管控建议。")
+                .Append("只输出 JSON：{\"event\":\"正常|拥堵|溢出|事件\",\"confidence\":0.0,\"advice\":\"中文管控建议\"}。");
+            return builder.ToString();
+        }
+
+        static void AppendDirection(StringBuilder builder, string direction, float[] state, int offset, int directionIndex, bool last = false)
+        {
+            // 660 维契约的队列和等待分别以 15 辆、120 秒归一化；这里只为
+            // 云脑展示还原单位，控制器始终使用原始归一化状态，不受该文本影响。
+            var queue = state[offset + directionIndex] * 15f;
+            var wait = state[offset + 4 + directionIndex] * 120f;
+            var occupancy = state[offset + 8 + directionIndex];
+            builder.Append(direction).Append("向:排队").Append(queue.ToString("F0"))
+                .Append("辆 平均等待").Append(wait.ToString("F0"))
+                .Append("秒 占有率").Append(occupancy.ToString("F2"));
+            builder.Append(last ? "\n" : " | ");
         }
 
         bool IsValidSnapshot(FormalApiSnapshot snapshot)
