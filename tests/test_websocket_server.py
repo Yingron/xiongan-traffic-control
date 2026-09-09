@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+import numpy as np
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
@@ -15,7 +16,16 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SUMO_HOME = PROJECT_ROOT.parent / "tools" / "sumo-1.27.1" / "sumo-1.27.1"
 os.environ.setdefault("SUMO_HOME", str(SUMO_HOME))
 
-from server.api_server import ActionsRequest, ApiError, INTERSECTION_ORDER, STATE_DIMENSION, app
+from server.api_server import (
+    ActionsRequest,
+    ApiError,
+    INTERSECTION_ORDER,
+    STATE_DIMENSION,
+    TraCISessionManager,
+    app,
+    manager,
+    model_service,
+)
 from server.websocket_server import WebSocketHub
 
 
@@ -189,6 +199,53 @@ def test_ping_and_stale_transition_errors(websocket_client: TestClient) -> None:
         assert stale["error"]["code"] == "STALE_TRANSITION"
 
 
+@pytest.mark.parametrize(
+    ("scenario", "expected_config"),
+    [
+        ("real_peak", "xiongan_real_peak.sumocfg"),
+        ("real_offpeak", "xiongan_real_offpeak.sumocfg"),
+        ("real_evening", "xiongan_real_evening.sumocfg"),
+        ("morning_peak", "xiongan_real_peak.sumocfg"),
+    ],
+)
+def test_formal_api_resolves_each_public_scenario_to_its_own_config(scenario: str, expected_config: str) -> None:
+    assert TraCISessionManager._scenario_config_path(scenario).name == expected_config
+
+
+def test_model_prediction_exposes_unity_friendly_masks_and_action_array(monkeypatch: pytest.MonkeyPatch) -> None:
+    async def fake_inference_state(session_id: str) -> tuple[int, np.ndarray]:
+        assert session_id == "sim_unity"
+        return 7, np.zeros(STATE_DIMENSION, dtype=np.float32)
+
+    async def fake_inference_masks(session_id: str) -> np.ndarray:
+        assert session_id == "sim_unity"
+        return np.tile(np.array([[1, 0, 1, 0]], dtype=np.float32), (len(INTERSECTION_ORDER), 1))
+
+    def fake_predict(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+        return {
+            "actions": {intersection_id: index % 4 for index, intersection_id in enumerate(INTERSECTION_ORDER)},
+            "inference_latency_ms": 0.1,
+            "model_contract_version": "shared-dqn-26x4-v1",
+        }
+
+    monkeypatch.setattr(manager, "inference_state", fake_inference_state)
+    monkeypatch.setattr(manager, "inference_masks", fake_inference_masks)
+    monkeypatch.setattr(model_service, "predict", fake_predict)
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/v1/model/predict",
+            json={"session_id": "sim_unity", "model_id": "shared-dqn-real-peak-masked-1m-v2", "deterministic": True},
+        )
+
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["transition_id"] == 7
+    assert body["action_mask_shape"] == [30, 4]
+    assert len(body["action_masks_flat"]) == 120
+    assert body["actions_ordered"] == [index % 4 for index in range(30)]
+
+
 @pytest.mark.integration
 def test_rest_action_is_pushed_to_websocket_from_real_sumo() -> None:
     with TestClient(app) as client:
@@ -209,6 +266,8 @@ def test_rest_action_is_pushed_to_websocket_from_real_sumo() -> None:
                 initial = websocket.receive_json()
                 assert len(initial["state_vector"]) == STATE_DIMENSION
                 assert set(initial["rewards"]) == set(INTERSECTION_ORDER)
+                assert [light["id"] for light in initial["visualization"]["traffic_lights"]] == list(INTERSECTION_ORDER)
+                assert isinstance(initial["visualization"]["vehicles"], list)
 
                 actions = {item["id"]: item["phase"] for item in initial["intersections"]}
                 response = client.post(
@@ -227,5 +286,6 @@ def test_rest_action_is_pushed_to_websocket_from_real_sumo() -> None:
                 assert pushed["transition_id"] == response.json()["transition_id"]
                 assert len(pushed["intersections"]) == len(INTERSECTION_ORDER)
                 assert set(pushed["rewards"]) == set(INTERSECTION_ORDER)
+                assert len(pushed["visualization"]["traffic_lights"]) == len(INTERSECTION_ORDER)
         finally:
             client.post("/api/v1/simulation/stop", json={"session_id": session_id})

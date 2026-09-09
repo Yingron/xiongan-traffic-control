@@ -1,13 +1,13 @@
 # Unity 前端部署、启动和使用说明（30 路口正式联调版）
 
-> 适用范围：仓库仅保留 `frontend/CitySimulation` Unity工程。它既包含配合 `server/visualization_server.py:8765` 的SUMO可视化脚本，也包含监听 `127.0.0.1:5000`、供 `frontend/pymarl` 调用的长度前缀JSON/TCP协议；目前没有直接调用C后端REST `/api/v1/model/predict` 或WebSocket `/api/v1/ws`。三种接口不可混用。
+> 适用范围：仓库仅保留 `frontend/CitySimulation` Unity工程。它支持两种运行模式：旧的 `server/visualization_server.py:8765` 可视化通道，以及正式 C 后端 `8000` REST/WebSocket 闭环；另有监听 `127.0.0.1:5000`、供 `frontend/pymarl` 调用的长度前缀 JSON/TCP 训练协议。三种接口不能在同一场景中同时启用。
 >
 > 当前 Unity 联调服务使用仓库内的正式 FP32 ONNX 边缘模型：peak 使用
 > `models/edge/peak/model.onnx`，evening 与 offpeak 使用
 > `models/edge/evening/model.onnx`。三个场景的正式模型 ID 均在
 > `configs/edge_model_registry.json` 注册为 `ready`，加载前会校验 SHA-256。
 > 30路口地图使用 `frontend/CitySimulation/Assets/Scripts/Maps/xiongan_30.json`，由
-> `python scripts/convert_to_unity_map.py` 生成。Unity 尚未直接接入 C 后端 8000 端口协议。
+> `python scripts/convert_to_unity_map.py` 生成。正式模式由 `FormalApiClosedLoopClient` 直连 C 后端 8000 端口：Unity 创建会话、订阅状态、请求 DQN/ONNX 推理并回传动作；后端在同一 TraCI 时刻返回车辆与信号灯快照。
 
 本指南面向首次接触本项目的用户，从零开始一步步完成 Unity 前端的部署与启动，最终在 Unity 编辑器中看到交通仿真动画正常运行。
 
@@ -349,6 +349,28 @@ python server/visualization_server.py --scenario real_peak --port 8765
 | 真实晚高峰 | `python server/visualization_server.py --scenario real_evening` |
 | 无模型（固定配时） | `python server/visualization_server.py --scenario real_peak --no-model` |
 | 带 SUMO GUI 调试 | `python server/visualization_server.py --scenario real_peak --gui` |
+
+### 6.2.1 正式 C 后端 8000 模式（推荐验收闭环）
+
+该模式替代本节的 8765 服务，不要同时启动两者。它使用 `server/api_server.py` 的同一
+REST/TraCI 会话完成“状态订阅 → 正式模型推理 → 30 动作回传 → SUMO 执行 → Unity 刷新”。
+
+```cmd
+uvicorn server.api_server:app --host 127.0.0.1 --port 8000
+```
+
+在 Unity 的 `VisualizationBootstrap` 中设置：
+
+| 字段 | 本机 FastAPI | Docker ONNX 部署 |
+| --- | --- | --- |
+| `useFormalApi` | ✅ | ✅ |
+| `formalApiPort` | `8000` | `8000` |
+| `useEdgeInference` | 仅在原始 SB3 `.zip` 已交付时关闭，调用 `/model/predict` | ✅，默认开启，调用正式 ONNX `/edge/predict` |
+| `serverHost` | `127.0.0.1` | `127.0.0.1` |
+
+运行后依次确认 Unity Console 出现“`[FormalApi] 已连接`”和“订阅确认”；Dashboard 应随
+状态刷新显示真实场景，且每步都能看到 30×4 掩码、30 个动作与信号灯相位变化。场景按钮会
+重启对应的 `real_peak`、`real_offpeak` 或 `real_evening` SUMO 配置，并切换其正式模型 ID。
 
 ### 6.4 验证后端服务运行
 

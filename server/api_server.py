@@ -42,14 +42,24 @@ from configs.constants import (
     STATE_DIMENSION,
     STATE_LAYOUT_VERSION,
     MIN_GREEN_SECONDS,
-    DEFAULT_SUMO_CONFIG,
     API_VERSION,
 )
 
 API_PREFIX = "/api/v1"
 STATE_LAYOUT_VERSION = "v1-30x22"
 REWARD_VERSION = "v3"
-DEFAULT_CONFIG_PATH = DEFAULT_SUMO_CONFIG
+SCENARIO_CONFIG_PATHS: dict[str, Path] = {
+    "real_peak": PROJECT_ROOT / "sumo_files" / "xiongan_real_peak.sumocfg",
+    "real_offpeak": PROJECT_ROOT / "sumo_files" / "xiongan_real_offpeak.sumocfg",
+    "real_evening": PROJECT_ROOT / "sumo_files" / "xiongan_real_evening.sumocfg",
+}
+SCENARIO_ALIASES = {
+    "morning_peak": "real_peak",
+    "peak": "real_peak",
+    "offpeak": "real_offpeak",
+    "evening_peak": "real_evening",
+    "evening": "real_evening",
+}
 
 
 class ApiError(Exception):
@@ -141,6 +151,8 @@ class SimulationSession:
     last_state: np.ndarray | None = None
     last_rewards: dict[str, float] = field(default_factory=dict)
     last_breakdowns: dict[str, dict[str, Any]] = field(default_factory=dict)
+    total_arrived: int = 0
+    total_departed: int = 0
 
 
 class TraCISessionManager:
@@ -157,6 +169,27 @@ class TraCISessionManager:
         except ImportError as error:  # pragma: no cover - deployment configuration
             raise ApiError(503, "TRACI_UNAVAILABLE", "TraCI is not installed.") from error
         return traci
+
+    @staticmethod
+    def _scenario_config_path(scenario: str) -> Path:
+        """Resolve only the three public real-demand scenarios.
+
+        Previously the API stored ``scenario`` as metadata while always
+        launching ``xiongan_30.sumocfg``.  That made an 8000-port Unity scene
+        switch visually plausible but traffic-demand incorrect.  The resolver
+        keeps the scenario and loaded SUMO configuration inseparable.
+        """
+
+        scenario = SCENARIO_ALIASES.get(scenario, scenario)
+        config_path = SCENARIO_CONFIG_PATHS.get(scenario)
+        if config_path is None:
+            raise ApiError(
+                422,
+                "INVALID_SCENARIO",
+                "scenario must be one of real_peak, real_offpeak, or real_evening.",
+                {"scenario": scenario, "supported_scenarios": sorted(SCENARIO_CONFIG_PATHS)},
+            )
+        return config_path
 
     @staticmethod
     def _sumo_binary(use_gui: bool) -> str:
@@ -302,6 +335,67 @@ class TraCISessionManager:
         return payload
 
     @staticmethod
+    def _visualization_payload(
+        traci: Any,
+        state: np.ndarray,
+        *,
+        total_arrived: int,
+        total_departed: int,
+    ) -> dict[str, Any]:
+        """Build a Unity-oriented view from the same authoritative TraCI tick.
+
+        The public 660-D state remains the control contract.  This additional
+        payload only removes the former need for Unity to open a separate 8765
+        visualization session when it is connected directly to the formal API.
+        Individual vehicle reads are best-effort: a vehicle may leave SUMO in
+        the interval between ``getIDList`` and a property lookup.
+        """
+
+        traffic_lights = []
+        for traffic_light_id in INTERSECTION_ORDER:
+            phase = int(traci.trafficlight.getPhase(traffic_light_id))
+            traffic_lights.append(
+                {
+                    "id": traffic_light_id,
+                    "phase": phase,
+                    "phase_name": ACTION_NAMES[phase],
+                }
+            )
+
+        vehicles = []
+        for vehicle_id in traci.vehicle.getIDList():
+            try:
+                x, y = traci.vehicle.getPosition(vehicle_id)
+                vehicles.append(
+                    {
+                        "id": vehicle_id,
+                        "x": float(x),
+                        "y": float(y),
+                        "angle": float(traci.vehicle.getAngle(vehicle_id)),
+                        "speed": float(traci.vehicle.getSpeed(vehicle_id)),
+                        "type": str(traci.vehicle.getTypeID(vehicle_id)),
+                    }
+                )
+            except Exception:
+                # TraCI can remove a vehicle during this short read window.
+                continue
+
+        observations = state.reshape(len(INTERSECTION_ORDER), FEATURES_PER_INTERSECTION)
+        return {
+            "traffic_lights": traffic_lights,
+            "vehicles": vehicles,
+            "metrics": {
+                "vehicle_count": len(vehicles),
+                "avg_queue": float(np.mean(np.sum(observations[:, 0:4], axis=1))),
+                "avg_wait": float(np.mean(np.sum(observations[:, 4:8], axis=1))),
+                "avg_speed": 0.0,
+                "total_arrived": total_arrived,
+                "total_departed": total_departed,
+                "simulation_time": float(traci.simulation.getTime()),
+            },
+        }
+
+    @staticmethod
     def _reward_payload(session: SimulationSession, state: np.ndarray) -> tuple[dict[str, float], dict[str, dict[str, Any]]]:
         rewards: dict[str, float] = {}
         breakdowns: dict[str, dict[str, Any]] = {}
@@ -330,32 +424,40 @@ class TraCISessionManager:
             "intersection_order": list(INTERSECTION_ORDER),
             "state_vector": state.astype(float).tolist(),
             "intersections": TraCISessionManager._intersections_payload(state),
+            "visualization": TraCISessionManager._visualization_payload(
+                traci,
+                state,
+                total_arrived=session.total_arrived,
+                total_departed=session.total_departed,
+            ),
         }
 
     async def start(self, request: StartRequest) -> dict[str, Any]:
         async with self.lock:
             if self.session is not None:
                 raise ApiError(409, "SESSION_BUSY", "A simulation session is already active.")
-            if not DEFAULT_CONFIG_PATH.exists():
+            scenario = SCENARIO_ALIASES.get(request.scenario, request.scenario)
+            config_path = self._scenario_config_path(scenario)
+            if not config_path.exists():
                 raise ApiError(
                     503,
                     "SIMULATION_ASSET_INVALID",
                     "SUMO configuration file was not found.",
-                    {"config_path": str(DEFAULT_CONFIG_PATH)},
+                    {"config_path": str(config_path), "scenario": scenario},
                 )
 
             traci = self._traci()
             session = SimulationSession(
                 session_id=f"sim_{uuid.uuid4().hex}",
-                scenario=request.scenario,
+                scenario=scenario,
                 use_gui=request.use_gui,
                 seed=request.seed,
-                config_path=DEFAULT_CONFIG_PATH,
+                config_path=config_path,
             )
             command = [
                 self._sumo_binary(request.use_gui),
                 "-c",
-                str(DEFAULT_CONFIG_PATH),
+                str(config_path),
                 "--no-step-log",
                 "--no-warnings",
                 "--time-to-teleport",
@@ -365,7 +467,7 @@ class TraCISessionManager:
                 command.extend(["--seed", str(request.seed)])
 
             try:
-                self._validate_sumo_assets(self._sumo_binary(False), DEFAULT_CONFIG_PATH)
+                self._validate_sumo_assets(self._sumo_binary(False), config_path)
                 traci.start(command, numRetries=1)
                 self._validate_intersections(traci)
                 sim_time = float(traci.simulation.getTime())
@@ -388,7 +490,7 @@ class TraCISessionManager:
                     503,
                     "SIMULATION_ASSET_INVALID",
                     "SUMO could not start with the configured simulation assets.",
-                    {"config_path": str(DEFAULT_CONFIG_PATH), "reason": str(error)},
+                    {"config_path": str(config_path), "scenario": scenario, "reason": str(error)},
                 ) from error
 
             return {
@@ -465,6 +567,8 @@ class TraCISessionManager:
 
             for _ in range(request.step_seconds):
                 traci.simulationStep()
+                session.total_arrived += int(traci.simulation.getArrivedNumber())
+                session.total_departed += int(traci.simulation.getDepartedNumber())
 
             session.previous_actions = previous_actions
             session.current_actions = applied_actions
@@ -740,6 +844,10 @@ async def predict_model_action(request: ModelPredictRequest) -> dict[str, Any]:
         "transition_id": transition_id,
         "state_layout_version": STATE_LAYOUT_VERSION,
         "deterministic": request.deterministic,
+        "action_masks": np.asarray(masks, dtype=np.float32).tolist(),
+        "action_masks_flat": np.asarray(masks, dtype=np.float32).reshape(-1).tolist(),
+        "action_mask_shape": [len(INTERSECTION_ORDER), 4],
+        "actions_ordered": [prediction["actions"][junction_id] for junction_id in INTERSECTION_ORDER],
         **prediction,
     }
 
@@ -779,12 +887,17 @@ async def predict_edge_action(request: EdgePredictRequest) -> dict[str, Any]:
     actions = edge_response.get("actions")
     if not isinstance(actions, list) or len(actions) != len(INTERSECTION_ORDER):
         raise ApiError(503, "EDGE_SERVICE_INVALID_RESPONSE", "The edge service did not return 30 actions.")
+    ordered_actions = [int(action) for action in actions]
     return {
         "session_id": request.session_id,
         "model_id": request.model_id,
         "transition_id": transition_id,
         "state_layout_version": STATE_LAYOUT_VERSION,
-        "actions": {junction_id: int(action) for junction_id, action in zip(INTERSECTION_ORDER, actions)},
+        "action_masks": np.asarray(masks, dtype=np.float32).tolist(),
+        "action_masks_flat": np.asarray(masks, dtype=np.float32).reshape(-1).tolist(),
+        "action_mask_shape": [len(INTERSECTION_ORDER), 4],
+        "actions_ordered": ordered_actions,
+        "actions": {junction_id: action for junction_id, action in zip(INTERSECTION_ORDER, ordered_actions)},
         "latency_ms": edge_response.get("latency_ms"),
         "edge_backend": edge_response.get("backend"),
     }

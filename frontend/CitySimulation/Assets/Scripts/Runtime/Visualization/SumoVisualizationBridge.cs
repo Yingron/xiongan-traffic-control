@@ -144,6 +144,29 @@ namespace CitySimulation.Runtime.Visualization
             var state = JsonUtility.FromJson<SimState>(raw);
             if (state == null) return;
 
+            ApplySimulationState(state);
+        }
+
+        /// <summary>
+        /// Apply a snapshot received from the formal API on port 8000.
+        /// The payload is produced from the same TraCI tick as the 660-D state
+        /// and is therefore safe to drive vehicles and lights directly.
+        /// </summary>
+        public void ApplyFormalSnapshot(FormalApiSnapshot snapshot)
+        {
+            if (snapshot == null || snapshot.visualization == null) return;
+            ApplySimulationState(new SimState
+            {
+                type = "state",
+                simulation_time = snapshot.simulation_time,
+                traffic_lights = snapshot.visualization.traffic_lights,
+                vehicles = snapshot.visualization.vehicles,
+                metrics = snapshot.visualization.metrics,
+            });
+        }
+
+        void ApplySimulationState(SimState state)
+        {
             UpdateVehicles(state);
             UpdateTrafficLights(state);
             CurrentMetrics = state.metrics;
