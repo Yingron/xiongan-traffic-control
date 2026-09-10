@@ -62,3 +62,11 @@ data/llm/smoke*_stats.json
 logs_llama_server.txt
 logs_viz_server.txt
 logs_api_server.txt
+
+# 报告/答辩PPT 解包中间产物（由对应 .docx/.pptx 重新生成，不入库）
+docs/unpacked/
+docs/ppt_unpacked/
+
+# 批量评估运行日志（evaluate_four_strategies.py 产物，可再生）
+logs/eval_4strategies.txt
+logs/eval_mp4.txt

@@ -497,7 +497,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 64.5, y: -0.5, z: 152}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -610,6 +610,15 @@ MonoBehaviour:
   moveSpeed: 100
   sprintMultiplier: 2
   scrollMultiplier: 1000
+  enablePresentationPresets: 1
+  overviewPosition: {x: 400, y: 900, z: -180}
+  overviewTarget: {x: 400, y: 0, z: 500}
+  overviewOrthographicSize: 560
+  northJunctionPosition: {x: 600, y: 155, z: 755}
+  northJunctionTarget: {x: 600, y: 0, z: 960}
+  centerJunctionPosition: {x: 300, y: 155, z: 270}
+  centerJunctionTarget: {x: 400, y: 0, z: 400}
+  junctionOrthographicSize: 95
 --- !u!1 &1165641870
 GameObject:
   m_ObjectHideFlags: 0
@@ -984,6 +993,8 @@ MonoBehaviour:
   mapId: xiongan_30
   buildOnAwake: 1
   rebuildOnEnableInEditMode: 0
+  frameCameraAfterBuild: 1
+  cameraPadding: 1.12
   _roads: 0
   _trafficLights: 0
   _statusMessage: 
@@ -1081,6 +1092,11 @@ MonoBehaviour:
   vehiclePrefab: {fileID: 0}
   busPrefab: {fileID: 0}
   poolSize: 80
+  maxPoolSize: 900
+  maxRenderedVehicles: 850
+  cullVehiclesByDistance: 1
+  maxRenderDistance: 900
+  presentationCamera: {fileID: 0}
   vehicleScale: 1
   vehicleYOffset: 0.35
   coordinateScale: 1
