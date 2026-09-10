@@ -81,6 +81,67 @@ class MaxPressureController:
             return 2  # EW_Straight
 
 
+class FourPhaseMaxPressureController:
+    """标准四相位 Max-Pressure 感应控制（逐相位链路排队压力）
+
+    与 MaxPressureController 的区别：后者只比较 NS/EW 直行两组压力、永远不服务
+    左转相位，在含独立左转车道与左转相位的高保真路网上会饿死左转车流；
+    本控制器对 rl4 程序的全部 4 个相位分别计算"其绿灯链路上的 halting 车辆数"
+    作为该相位的压力（与 compute_action_mask 的需求统计同一套 lane/state 对齐），
+    选择压力最大的相位，并遵守最小绿灯时间。
+
+    用法:
+        from baselines.adaptive import FourPhaseMaxPressureController
+        ctrl = FourPhaseMaxPressureController()
+        action = ctrl.get_action(env._traci, "J01", current_phase, elapsed)
+    """
+
+    def __init__(self, min_green: float = MIN_GREEN_SECONDS):
+        self._min_green = min_green
+        self._lanes_cache: dict[str, list[str]] = {}
+        self._states_cache: dict[str, list[str]] = {}
+
+    def _rl4_states(self, traci, tl_id: str) -> list[str] | None:
+        if tl_id not in self._states_cache:
+            logic = next(
+                (c for c in traci.trafficlight.getAllProgramLogics(tl_id) if c.programID == "rl4"),
+                None,
+            )
+            if logic is None or len(logic.phases) != 4:
+                self._states_cache[tl_id] = []
+                return None
+            self._states_cache[tl_id] = [p.state for p in logic.phases]
+        return self._states_cache[tl_id] or None
+
+    def phase_demands(self, traci, tl_id: str) -> list[float] | None:
+        """每个相位的压力 = 该相位绿灯链路（G/g）上的 halting 车辆数之和。"""
+        states = self._rl4_states(traci, tl_id)
+        if states is None:
+            return None
+        if tl_id not in self._lanes_cache:
+            self._lanes_cache[tl_id] = traci.trafficlight.getControlledLanes(tl_id)
+        lanes = self._lanes_cache[tl_id]
+        halting = [float(traci.lane.getLastStepHaltingNumber(lane)) for lane in lanes]
+        demands = []
+        for state_str in states:
+            green_links = [i for i, ch in enumerate(state_str) if ch in "Gg" and i < len(lanes)]
+            demands.append(sum(halting[i] for i in green_links) if green_links else -1.0)
+        return demands
+
+    def get_action(self, traci, tl_id: str, current_phase: int, elapsed: float) -> int:
+        """选择压力最大的合法相位；遵守最小绿灯；无需求时保持当前相位避免空转切换。"""
+        if elapsed < self._min_green:
+            return current_phase
+        demands = self.phase_demands(traci, tl_id)
+        if demands is None:
+            return current_phase
+        best = int(np.argmax(demands))
+        # 全空或并列时保持当前相位，避免空路口两相位间空转
+        if demands[best] <= 0 or (0 <= current_phase < 4 and demands[best] == demands[current_phase]):
+            return current_phase
+        return best
+
+
 def run_max_pressure_policy(
     intersection_id: str = "J01",
     episodes: int = 5,
