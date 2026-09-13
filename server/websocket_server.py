@@ -293,6 +293,11 @@ def snapshot_payload(
     if "state" in selected:
         payload["state_vector"] = state["state_vector"]
         payload["intersections"] = state["intersections"]
+        # The formal Unity client renders this auxiliary snapshot from the
+        # identical TraCI tick as the 660-D state.  Keep it optional for
+        # backward-compatible fake managers and non-Unity subscribers.
+        if "visualization" in state:
+            payload["visualization"] = state["visualization"]
     if "reward" in selected and rewards is not None:
         payload["reward_version"] = rewards["reward_version"]
         payload["rewards"] = rewards["rewards"]

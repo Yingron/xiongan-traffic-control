@@ -35,7 +35,12 @@ MODEL_DIR = PROJECT_ROOT / "models" / "dqn"
 EDGE_MODEL_REGISTRY_PATH = PROJECT_ROOT / "configs" / "edge_model_registry.json"
 
 # 30 路口顺序/特征维度统一取自 configs.constants（与训练环境一致）
-from configs.constants import INTERSECTION_ORDER, FEATURES_PER_INTERSECTION, ACTION_NAMES
+from configs.constants import (
+    INTERSECTION_ORDER,
+    FEATURES_PER_INTERSECTION,
+    ACTION_NAMES,
+    INTERSECTION_TEMPLATES,
+)
 # 状态提取复用训练环境的全局状态实现（docs/lane_mapping.json 几何映射，30路口×22维）
 from env.global_state import get_global_state
 # LLM 云脑告警：特征文本化与 llama.cpp 调用与训练/评估链路同源
@@ -114,7 +119,13 @@ class VisualizationServer:
         self._current_actions: dict[str, int] = {}
         self._last_requested_actions: dict[str, int] = {}
         self._last_action_masks: dict[str, list[int]] = {}
+        self._last_q_values: dict[str, list[float]] = {}
+        self._last_inference_latency_ms: float = 0.0
         self._phase_changed_at: dict[str, float] = {}
+        # Remaining minimum-green hold captured at decision time.  The snapshot is
+        # emitted after SUMO advances five seconds, so recomputing this value there
+        # would obscure why the earlier action was constrained.
+        self._last_constraint_remaining: dict[str, float] = {}
         # WebSocket 场景切换在 executor 线程执行；SUMO 步进在服务线程执行。
         # 二者必须串行，避免切换期间对已关闭 TraCI socket 继续读写。
         self._simulation_lock = threading.RLock()
@@ -184,6 +195,7 @@ class VisualizationServer:
             traci.trafficlight.setProgram(tl_id, "rl4")
             self._current_actions[tl_id] = int(traci.trafficlight.getPhase(tl_id))
             self._phase_changed_at[tl_id] = sim_time
+            self._last_constraint_remaining[tl_id] = 0.0
 
         veh_count = len(traci.vehicle.getIDList())
         print(f"[Server] SUMO 已启动 — 场景: {SCENARIOS[self.scenario]['label']} — 车辆数: {veh_count}")
@@ -300,6 +312,8 @@ class VisualizationServer:
         （22 状态 + 4 掩码，见 env/global_state.get_action_masks）。
         """
         if self._model is None:
+            self._last_q_values = {}
+            self._last_inference_latency_ms = 0.0
             return dict(self._current_actions)
 
         masks = None
@@ -322,12 +336,21 @@ class VisualizationServer:
         if self._model_backend and self._model_backend.startswith("edge-"):
             if masks is None:
                 raise RuntimeError("正式边缘模型推理需要 30×4 动作掩码")
-            predictions, _ = self._model.predict(local_states, masks)
+            q_values, latency_ms = self._model.predict_q(local_states, masks)
+            q_rows = np.asarray(q_values, dtype=np.float32)
+            predictions = np.argmax(q_rows, axis=1).astype(np.int64)
+            self._last_inference_latency_ms = float(latency_ms)
+            self._last_q_values = {
+                tl_id: [float(value) for value in q_rows[index]]
+                for index, tl_id in enumerate(INTERSECTION_ORDER)
+            }
             return {
                 tl_id: int(predictions[index])
                 for index, tl_id in enumerate(INTERSECTION_ORDER)
             }
 
+        self._last_q_values = {}
+        self._last_inference_latency_ms = 0.0
         obs_dim = int(np.prod(self._model.observation_space.shape))
         actions: dict[str, int] = {}
         for idx, tl_id in enumerate(INTERSECTION_ORDER):
@@ -354,7 +377,9 @@ class VisualizationServer:
 
             if requested != current and elapsed < MIN_GREEN_SECONDS:
                 self._current_actions[tl_id] = current
+                self._last_constraint_remaining[tl_id] = MIN_GREEN_SECONDS - elapsed
             else:
+                self._last_constraint_remaining[tl_id] = 0.0
                 if requested != current:
                     traci.trafficlight.setPhase(tl_id, requested)
                     self._phase_changed_at[tl_id] = sim_time
@@ -432,6 +457,55 @@ class VisualizationServer:
             })
         return tls
 
+    @staticmethod
+    def _template_for_junction(tl_id: str) -> str:
+        for template, junctions in INTERSECTION_TEMPLATES.items():
+            if tl_id in junctions:
+                return template
+        return "?"
+
+    def _build_control_states(self, state: np.ndarray) -> list[dict]:
+        """Build a JSON-list view of the real DQN decision contract for Unity.
+
+        The existing object-shaped requested_actions/actions/action_masks fields remain for
+        protocol compatibility.  Unity's JsonUtility cannot deserialize dictionaries, so this
+        list mirrors the same values and adds the four queue inputs and masked Q values used by
+        the deployed model.  Queue values are reconstructed from the normalized state contract
+        (15 vehicles is the documented cap), rather than invented by the presentation layer.
+        """
+        sim_time = float(self._traci.simulation.getTime())
+        rows: list[dict] = []
+        for index, tl_id in enumerate(INTERSECTION_ORDER):
+            offset = index * FEATURES_PER_INTERSECTION
+            requested = int(self._last_requested_actions.get(tl_id, self._current_actions.get(tl_id, 0)))
+            executed = int(self._current_actions.get(tl_id, requested))
+            current_phase = int(self._traci.trafficlight.getPhase(tl_id)) % 4
+            mask = self._last_action_masks.get(tl_id, [1, 1, 1, 1])
+            q_values = self._last_q_values.get(tl_id, [])
+            elapsed = max(0.0, sim_time - float(self._phase_changed_at.get(tl_id, sim_time)))
+            rows.append({
+                "id": tl_id,
+                "template": self._template_for_junction(tl_id),
+                "requested_action": requested,
+                "executed_action": executed,
+                "current_phase": current_phase,
+                "constrained": requested != executed,
+                "phase_elapsed": round(elapsed, 1),
+                # Decision-time value.  current_phase and phase_elapsed are sampled
+                # after the five-second SUMO advance and may legitimately differ
+                # from the action issued at the start of that control interval.
+                "min_green_remaining": round(
+                    max(0.0, float(self._last_constraint_remaining.get(tl_id, 0.0))), 1
+                ),
+                "action_mask": [int(value) for value in mask],
+                "q_values": [round(float(value), 4) for value in q_values],
+                "queue_nsew": [
+                    round(float(state[offset + direction]) * 15.0, 1)
+                    for direction in range(4)
+                ],
+            })
+        return rows
+
     # ── 仿真步进 ──
 
     def _simulation_step(self) -> dict:
@@ -468,6 +542,7 @@ class VisualizationServer:
             "scenario_label": SCENARIOS[self.scenario]["label"],
             "model_id": self._model_id,
             "model_backend": self._model_backend,
+            "inference_latency_ms": round(self._last_inference_latency_ms, 4),
             "simulation_time": round(float(traci.simulation.getTime()), 1),
             "traffic_lights": self._extract_traffic_lights(),
             "vehicles": self._extract_vehicles(),
@@ -477,6 +552,7 @@ class VisualizationServer:
             "requested_actions": dict(self._last_requested_actions),
             "actions": dict(self._current_actions),
             "action_masks": dict(self._last_action_masks),
+            "control_states": self._build_control_states(state),
         }
         return snapshot
 

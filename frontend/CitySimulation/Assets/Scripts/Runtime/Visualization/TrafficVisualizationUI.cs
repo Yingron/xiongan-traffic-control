@@ -7,11 +7,11 @@ namespace CitySimulation.Runtime.Visualization
     /// 可视化系统主控 UI — 场景切换按钮 + 实时指标仪表盘。
     /// 自动创建 UI 元素，无需手动搭建 Canvas。
     /// </summary>
-    [RequireComponent(typeof(SumoWebSocketClient))]
     [RequireComponent(typeof(SumoVisualizationBridge))]
     public class TrafficVisualizationUI : MonoBehaviour
     {
         SumoWebSocketClient _wsClient;
+        FormalApiClosedLoopClient _formalClient;
         SumoVisualizationBridge _bridge;
         Font _uiFont;
 
@@ -20,9 +20,13 @@ namespace CitySimulation.Runtime.Visualization
         Text _scenarioText;
         Text _metricsText;
         Text _vehicleCountText;
+        Text _formalDecisionText;
         Button _morningBtn;
         Button _eveningBtn;
         Button _flatBtn;
+        FormalApiSnapshot _formalSnapshot;
+        float[] _formalMasks;
+        int[] _formalActions;
 
         // ── 颜色 ──
         static readonly Color ColorConnected = new Color(0.2f, 0.8f, 0.2f);
@@ -40,16 +44,34 @@ namespace CitySimulation.Runtime.Visualization
             }
 
             _wsClient = GetComponent<SumoWebSocketClient>();
+            _formalClient = GetComponent<FormalApiClosedLoopClient>();
             _bridge = GetComponent<SumoVisualizationBridge>();
             BuildUI();
 
-            _wsClient.OnConnectionChanged += OnConnectionChanged;
-            _wsClient.OnScenarioSwitched += OnScenarioSwitched;
+            if (_formalClient == null && _formalDecisionText != null)
+            {
+                // Keep the legacy 8765 presentation visually unchanged.
+                _formalDecisionText.transform.parent.gameObject.SetActive(false);
+            }
+
+            if (_wsClient != null)
+            {
+                _wsClient.OnConnectionChanged += OnConnectionChanged;
+                _wsClient.OnScenarioSwitched += OnScenarioSwitched;
+            }
+            if (_formalClient != null)
+            {
+                _formalClient.OnConnectionChanged += OnConnectionChanged;
+                _formalClient.OnScenarioSwitched += OnScenarioSwitched;
+                _formalClient.OnSnapshotReceived += OnFormalSnapshotReceived;
+                _formalClient.OnDecisionReady += OnFormalDecisionReady;
+            }
         }
 
         void Update()
         {
             UpdateMetricsDisplay();
+            UpdateFormalDashboard();
         }
 
         // ── UI 构建 ──
@@ -113,6 +135,12 @@ namespace CitySimulation.Runtime.Visualization
             _metricsText = CreateText(panelGo.transform, new Vector2(10, -10), 280, 130,
                 "等待数据...", 13, TextAnchor.UpperLeft);
             _metricsText.color = new Color(0.9f, 0.9f, 0.9f);
+
+            // ── 正式 API 诊断面板：只在 8000 模式有数据时显示 ──
+            var formalPanel = CreatePanel(canvasGo.transform, new Vector2(340, -180), 400, 150);
+            _formalDecisionText = CreateText(formalPanel.transform, new Vector2(10, -10), 380, 130,
+                "Formal API: 等待 8000 端口状态...", 13, TextAnchor.UpperLeft);
+            _formalDecisionText.color = new Color(0.75f, 0.9f, 1f);
 
             // ── 右下：车辆数量 ──
             _vehicleCountText = CreateText(canvasGo.transform, new Vector2(-120, -40), 100, 30,
@@ -204,6 +232,18 @@ namespace CitySimulation.Runtime.Visualization
             UpdateScenarioDisplay(scenario);
         }
 
+        void OnFormalSnapshotReceived(FormalApiSnapshot snapshot)
+        {
+            _formalSnapshot = snapshot;
+            _bridge?.ApplyFormalSnapshot(snapshot);
+        }
+
+        void OnFormalDecisionReady(float[] masks, int[] actions)
+        {
+            _formalMasks = masks;
+            _formalActions = actions;
+        }
+
         void UpdateScenarioDisplay(string scenario)
         {
             var labels = new System.Collections.Generic.Dictionary<string, string>
@@ -234,7 +274,20 @@ namespace CitySimulation.Runtime.Visualization
 
         void SwitchScene(string scenario)
         {
-            if (_wsClient != null)
+            if (_formalClient != null)
+            {
+                _bridge?.ResetForScenarioSwitch();
+                if (_metricsText != null)
+                {
+                    _metricsText.text = "formal API 场景切换中，等待 8000 端口快照...";
+                }
+                if (_vehicleCountText != null)
+                {
+                    _vehicleCountText.text = "渲染车辆: 0";
+                }
+                _formalClient.SwitchScenario(scenario);
+            }
+            else if (_wsClient != null)
             {
                 _bridge?.ResetForScenarioSwitch();
                 if (_metricsText != null)
@@ -275,10 +328,38 @@ namespace CitySimulation.Runtime.Visualization
             }
         }
 
+        void UpdateFormalDashboard()
+        {
+            if (_formalDecisionText == null || _formalClient == null) return;
+            if (_formalSnapshot == null)
+            {
+                _formalDecisionText.text = "Formal API: 等待 8000 端口状态...";
+                return;
+            }
+
+            var j01Mask = _formalMasks != null && _formalMasks.Length >= 4
+                ? $"[{_formalMasks[0]:F0}, {_formalMasks[1]:F0}, {_formalMasks[2]:F0}, {_formalMasks[3]:F0}]"
+                : "等待推理";
+            var j01Action = _formalActions != null && _formalActions.Length >= 1
+                ? _formalActions[0].ToString()
+                : "--";
+            _formalDecisionText.text =
+                "Formal API 8000（真实闭环）\n" +
+                $"会话: {_formalSnapshot.session_id}\n" +
+                $"状态: {_formalSnapshot.state_vector?.Length ?? 0}/660，转换: {_formalSnapshot.transition_id}\n" +
+                $"全局奖励: {_formalSnapshot.global_reward:F3}\n" +
+                $"掩码 J01: {j01Mask}\n" +
+                $"DQN 动作: {(_formalActions?.Length ?? 0)}/30（J01={j01Action}）";
+        }
+
         // ── 连接状态同步 ──
         void LateUpdate()
         {
-            if (_wsClient != null && !string.IsNullOrEmpty(_wsClient.ScenarioLabel))
+            if (_formalClient != null && !string.IsNullOrEmpty(_formalClient.CurrentScenario))
+            {
+                UpdateScenarioDisplay(_formalClient.CurrentScenario);
+            }
+            else if (_wsClient != null && !string.IsNullOrEmpty(_wsClient.ScenarioLabel))
             {
                 UpdateScenarioDisplay(_wsClient.CurrentScenario);
             }
@@ -290,6 +371,13 @@ namespace CitySimulation.Runtime.Visualization
             {
                 _wsClient.OnConnectionChanged -= OnConnectionChanged;
                 _wsClient.OnScenarioSwitched -= OnScenarioSwitched;
+            }
+            if (_formalClient != null)
+            {
+                _formalClient.OnConnectionChanged -= OnConnectionChanged;
+                _formalClient.OnScenarioSwitched -= OnScenarioSwitched;
+                _formalClient.OnSnapshotReceived -= OnFormalSnapshotReceived;
+                _formalClient.OnDecisionReady -= OnFormalDecisionReady;
             }
         }
     }

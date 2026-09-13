@@ -1,0 +1,662 @@
+{
+  "J01": {
+    "tls_id": "J01",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J02": {
+    "tls_id": "J02",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "gGGgGGrgrrrr",
+      "rrrrrrGrrrrr",
+      "rrrrrrrrggrg",
+      "rrrrrrrrrrGr"
+    ]
+  },
+  "J03": {
+    "tls_id": "J03",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J04": {
+    "tls_id": "J04",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J05": {
+    "tls_id": "J05",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "rrrrggrgrrrr",
+      "rrrrrrGrrrrr",
+      "GGrgrrrrgGGg",
+      "rrGrrrrrrrrr"
+    ]
+  },
+  "J06": {
+    "tls_id": "J06",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J07": {
+    "tls_id": "J07",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "rrrrggrgrrrr",
+      "rrrrrrGrrrrr",
+      "GGrgrrrrgGGg",
+      "rrGrrrrrrrrr"
+    ]
+  },
+  "J08": {
+    "tls_id": "J08",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J09": {
+    "tls_id": "J09",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J10": {
+    "tls_id": "J10",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "rrrrggrgrrrr",
+      "rrrrrrGrrrrr",
+      "GGrgrrrrgGGg",
+      "rrGrrrrrrrrr"
+    ]
+  },
+  "J11": {
+    "tls_id": "J11",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J12": {
+    "tls_id": "J12",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J13": {
+    "tls_id": "J13",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "ggrgrrrrrrrr",
+      "rrGrrrrrrrrr",
+      "rrrrgGGgGGrg",
+      "rrrrrrrrrrGr"
+    ]
+  },
+  "J14": {
+    "tls_id": "J14",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "GGrgrrrrgGGg",
+      "rrGrrrrrrrrr",
+      "rrrrggrgrrrr",
+      "rrrrrrGrrrrr"
+    ]
+  },
+  "J15": {
+    "tls_id": "J15",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J16": {
+    "tls_id": "J16",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J17": {
+    "tls_id": "J17",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "GGrgrrrrgGGg",
+      "rrGrrrrrrrrr",
+      "rrrrggrgrrrr",
+      "rrrrrrGrrrrr"
+    ]
+  },
+  "J18": {
+    "tls_id": "J18",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J19": {
+    "tls_id": "J19",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J20": {
+    "tls_id": "J20",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J21": {
+    "tls_id": "J21",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J22": {
+    "tls_id": "J22",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J23": {
+    "tls_id": "J23",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J24": {
+    "tls_id": "J24",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J25": {
+    "tls_id": "J25",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J26": {
+    "tls_id": "J26",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "ggrgrrrrrrrr",
+      "rrGrrrrrrrrr",
+      "rrrrgGGgGGrg",
+      "rrrrrrrrrrGr"
+    ]
+  },
+  "J27": {
+    "tls_id": "J27",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "ggrgrrrrrrrr",
+      "rrGrrrrrrrrr",
+      "rrrrgGGgGGrg",
+      "rrrrrrrrrrGr"
+    ]
+  },
+  "J28": {
+    "tls_id": "J28",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J29": {
+    "tls_id": "J29",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 20,
+    "phase_states": [
+      "gGGrgrrrrrgGGrgrrrrr",
+      "rrrGrrrrrrrrrGrrrrrr",
+      "rrrrrgGGrgrrrrrgGGrg",
+      "rrrrrrrrGrrrrrrrrrGr"
+    ]
+  },
+  "J30": {
+    "tls_id": "J30",
+    "action_to_phase": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "action_semantics": {
+      "0": "NS_Straight",
+      "1": "NS_Left",
+      "2": "EW_Straight",
+      "3": "EW_Left"
+    },
+    "state_length": 12,
+    "phase_states": [
+      "ggrgrrrrrrrr",
+      "rrGrrrrrrrrr",
+      "rrrrgGGgGGrg",
+      "rrrrrrrrrrGr"
+    ]
+  }
+}

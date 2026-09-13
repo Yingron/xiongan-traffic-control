@@ -65,11 +65,17 @@ namespace CitySimulation.Runtime.Visualization
 
         // ── 当前指标 ──
         public SimMetrics CurrentMetrics { get; private set; }
-        public int ActiveVehicleCount => _activeVehicles.Count;
-        public IReadOnlyDictionary<string, GameObject> ActiveVehicleObjects => _activeVehicles;
+        // 审计/录制面板使用的算法闭环字段，直接来自服务端状态快照。
+        public SimControlState[] CurrentControlStates { get; private set; }
+        public string CurrentModelId { get; private set; } = "";
+        public string CurrentModelBackend { get; private set; } = "";
+        public float LastInferenceLatencyMs { get; private set; }
+        public int LastServerStep { get; private set; }
         public float LastSimulationTime { get; private set; }
         public string LastScenario { get; private set; } = "";
         public int ReceivedStateCount { get; private set; }
+        public int ActiveVehicleCount => _activeVehicles.Count;
+        public IReadOnlyDictionary<string, GameObject> ActiveVehicleObjects => _activeVehicles;
         public int ScenarioResetCount { get; private set; }
         public int LastScenarioResetReleasedVehicles { get; private set; }
 
@@ -185,9 +191,37 @@ namespace CitySimulation.Runtime.Visualization
             var state = JsonUtility.FromJson<SimState>(raw);
             if (state == null) return;
 
+            ApplySimulationState(state);
+        }
+
+        /// <summary>
+        /// Apply a snapshot received from the formal API on port 8000.
+        /// The payload is produced from the same TraCI tick as the 660-D state
+        /// and is therefore safe to drive vehicles and lights directly.
+        /// </summary>
+        public void ApplyFormalSnapshot(FormalApiSnapshot snapshot)
+        {
+            if (snapshot == null || snapshot.visualization == null) return;
+            ApplySimulationState(new SimState
+            {
+                type = "state",
+                simulation_time = snapshot.simulation_time,
+                traffic_lights = snapshot.visualization.traffic_lights,
+                vehicles = snapshot.visualization.vehicles,
+                metrics = snapshot.visualization.metrics,
+            });
+        }
+
+        void ApplySimulationState(SimState state)
+        {
             UpdateVehicles(state);
             UpdateTrafficLights(state);
             CurrentMetrics = state.metrics;
+            CurrentControlStates = state.control_states;
+            CurrentModelId = state.model_id ?? "";
+            CurrentModelBackend = state.model_backend ?? "";
+            LastInferenceLatencyMs = state.inference_latency_ms;
+            LastServerStep = state.step;
             LastSimulationTime = state.simulation_time;
             LastScenario = state.scenario ?? "";
             ReceivedStateCount++;
@@ -198,6 +232,11 @@ namespace CitySimulation.Runtime.Visualization
             LastScenarioResetReleasedVehicles = ReleaseAllVehicles();
             ScenarioResetCount++;
             CurrentMetrics = null;
+            CurrentControlStates = null;
+            CurrentModelId = "";
+            CurrentModelBackend = "";
+            LastInferenceLatencyMs = 0f;
+            LastServerStep = 0;
             LastSimulationTime = 0f;
             LastScenario = scenario ?? "";
             _lastPhases.Clear();
@@ -216,6 +255,16 @@ namespace CitySimulation.Runtime.Visualization
             }
             _activeVehicles.Clear();
             return released;
+        }
+
+        public SimControlState GetControlState(string junctionId)
+        {
+            if (CurrentControlStates == null || string.IsNullOrEmpty(junctionId)) return null;
+            foreach (var state in CurrentControlStates)
+            {
+                if (state != null && state.id == junctionId) return state;
+            }
+            return null;
         }
 
         // ── 车辆更新 ──
@@ -475,6 +524,13 @@ namespace CitySimulation.Runtime.Visualization
             _vehiclesToRelease.Clear();
             _lastPhases.Clear();
             CurrentMetrics = null;
+            CurrentControlStates = null;
+            CurrentModelId = "";
+            CurrentModelBackend = "";
+            LastInferenceLatencyMs = 0f;
+            LastServerStep = 0;
+            LastSimulationTime = 0f;
+            LastScenario = "";
         }
 
         void OnDestroy()
@@ -496,10 +552,14 @@ namespace CitySimulation.Runtime.Visualization
         public int step;
         public string scenario;
         public string scenario_label;
+        public string model_id;
+        public string model_backend;
+        public float inference_latency_ms;
         public float simulation_time;
         public SimTrafficLight[] traffic_lights;
         public SimVehicle[] vehicles;
         public SimMetrics metrics;
+        public SimControlState[] control_states;
     }
 
     [System.Serializable]
@@ -531,5 +591,21 @@ namespace CitySimulation.Runtime.Visualization
         public int total_arrived;
         public int total_departed;
         public float simulation_time;
+    }
+
+    [System.Serializable]
+    public class SimControlState
+    {
+        public string id;
+        public string template;
+        public int requested_action;
+        public int executed_action;
+        public int current_phase;
+        public bool constrained;
+        public float phase_elapsed;
+        public float min_green_remaining;
+        public int[] action_mask;
+        public float[] q_values;
+        public float[] queue_nsew;
     }
 }

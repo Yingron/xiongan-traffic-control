@@ -59,6 +59,42 @@ def test_sumo_and_unity_assets_expose_exactly_j01_through_j30() -> None:
     assert set(ids) == set(INTERSECTION_ORDER)
 
 
+def test_unity_presentation_map_has_only_dynamic_vehicles_and_safe_inner_buildings() -> None:
+    """Guard the visual-demo map against dead vehicles and empty inner blocks."""
+    snapshot = _read_json(UNITY_MAP)["snapshot"]
+    assert snapshot["vehicles"] == []
+
+    # 6 x 5 intersections create 5 x 4 inner blocks.  Buildings must stay
+    # inside those blocks, away from the 200 m-spaced road center lines.
+    buildings = snapshot["buildings"]
+    assert len(buildings) == 20
+    assert {item["id"] for item in buildings} == {
+        f"B{row:02d}{col:02d}" for row in range(1, 6) for col in range(1, 5)
+    }
+    for building in buildings:
+        position = building["position"]
+        assert position["x"] % 200 == 100
+        assert position["z"] % 200 == 100
+        assert building["category"] == 2
+
+
+def test_unity_cloud_brain_and_presentation_paths_are_wired() -> None:
+    visual_root = UNITY_SCRIPT_ROOT / "Runtime" / "Visualization"
+    formal_client = (visual_root / "FormalApiClosedLoopClient.cs").read_text(encoding="utf-8")
+    alert_panel = (visual_root / "LlmAlertPanel.cs").read_text(encoding="utf-8")
+    bridge = (visual_root / "SumoVisualizationBridge.cs").read_text(encoding="utf-8")
+    lights = (UNITY_SCRIPT_ROOT / "GameObjects" / "Entities" / "TrafficLightAnimator.cs").read_text(encoding="utf-8")
+    camera = (UNITY_SCRIPT_ROOT / "Camera" / "CameraMoveController.cs").read_text(encoding="utf-8")
+
+    assert 'CreateJsonRequest("llm/analyze", "POST", body)' in formal_client
+    assert "OnLlmAlertReceived" in formal_client
+    assert "RequestLlmAlert" in alert_panel
+    assert "FormalApiClosedLoopClient" in alert_panel
+    assert "maxPoolSize" in bridge and "cullVehiclesByDistance" in bridge
+    assert "LeftArrow_Green" in lights
+    assert "enablePresentationPresets" in camera
+
+
 def test_unity_runtime_defaults_to_formal_map() -> None:
     map_manager = (UNITY_SCRIPT_ROOT / "GameObjects" / "MapManager.cs").read_text(encoding="utf-8")
     function_interface = (
