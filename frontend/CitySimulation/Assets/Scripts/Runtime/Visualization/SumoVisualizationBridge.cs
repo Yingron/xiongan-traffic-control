@@ -15,6 +15,8 @@ namespace CitySimulation.Runtime.Visualization
     [DisallowMultipleComponent]
     public class SumoVisualizationBridge : MonoBehaviour
     {
+        public const string DefaultVehicleVisualResource = "Vehicle/XionganLowPolyCar";
+
         [Header("引用")]
         [Tooltip("WebSocket 客户端")]
         public SumoWebSocketClient wsClient;
@@ -73,6 +75,9 @@ namespace CitySimulation.Runtime.Visualization
         public string LastScenario { get; private set; } = "";
         public int ReceivedStateCount { get; private set; }
         public int ActiveVehicleCount => _activeVehicles.Count;
+        public IReadOnlyDictionary<string, GameObject> ActiveVehicleObjects => _activeVehicles;
+        public int ScenarioResetCount { get; private set; }
+        public int LastScenarioResetReleasedVehicles { get; private set; }
 
         // ── 信号灯查找 ──
         Dictionary<string, TrafficLightAnimator> _tlAnimators;
@@ -102,10 +107,21 @@ namespace CitySimulation.Runtime.Visualization
 
         void InitializePool()
         {
-            if (vehiclePrefab == null)
+            if (!HasUsableVehicleVisual(vehiclePrefab))
             {
-                // 使用 Resources 中的默认 Prefab
-                vehiclePrefab = Resources.Load<GameObject>("Vehicle/Truck_color03");
+                var generatedVehicle = Resources.Load<GameObject>(DefaultVehicleVisualResource);
+                if (HasUsableVehicleVisual(generatedVehicle))
+                {
+                    vehiclePrefab = generatedVehicle;
+                    Debug.Log($"[SumoBridge] 使用程序化车辆外观: Resources/{DefaultVehicleVisualResource}");
+                }
+                else
+                {
+                    Debug.LogError(
+                        $"[SumoBridge] 未找到可用车辆外观。请执行 Tools/Xiongan/Build Vehicle Visual Assets。" +
+                        $" 原 Prefab 及 Resources/{DefaultVehicleVisualResource} 均无有效 Mesh。");
+                    vehiclePrefab = null;
+                }
             }
 
             var poolParent = new GameObject("VehiclePool");
@@ -150,13 +166,32 @@ namespace CitySimulation.Runtime.Visualization
             return go;
         }
 
+        static bool HasUsableVehicleVisual(GameObject prefab)
+        {
+            if (prefab == null) return false;
+
+            var filters = prefab.GetComponentsInChildren<MeshFilter>(true);
+            foreach (var filter in filters)
+            {
+                var mesh = filter.sharedMesh;
+                if (mesh != null && mesh.vertexCount > 0 && mesh.bounds.size.sqrMagnitude > 0.0001f)
+                {
+                    var renderer = filter.GetComponent<MeshRenderer>();
+                    if (renderer != null && renderer.enabled)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         void OnStateReceived(string raw)
         {
             var state = JsonUtility.FromJson<SimState>(raw);
             if (state == null) return;
 
             ApplySimulationState(state);
-            ReceivedStateCount++;
         }
 
         /// <summary>
@@ -189,10 +224,13 @@ namespace CitySimulation.Runtime.Visualization
             LastServerStep = state.step;
             LastSimulationTime = state.simulation_time;
             LastScenario = state.scenario ?? "";
+            ReceivedStateCount++;
         }
 
         void OnScenarioSwitched(string scenario, string message)
         {
+            LastScenarioResetReleasedVehicles = ReleaseAllVehicles();
+            ScenarioResetCount++;
             CurrentMetrics = null;
             CurrentControlStates = null;
             CurrentModelId = "";
@@ -202,6 +240,21 @@ namespace CitySimulation.Runtime.Visualization
             LastSimulationTime = 0f;
             LastScenario = scenario ?? "";
             _lastPhases.Clear();
+            Debug.Log($"[SumoBridge] 场景切换显示清理: released={LastScenarioResetReleasedVehicles}, next={LastScenario}");
+        }
+
+        int ReleaseAllVehicles()
+        {
+            var released = _activeVehicles.Count;
+            foreach (var pair in _activeVehicles)
+            {
+                if (pair.Value != null)
+                {
+                    pair.Value.SetActive(false);
+                }
+            }
+            _activeVehicles.Clear();
+            return released;
         }
 
         public SimControlState GetControlState(string junctionId)

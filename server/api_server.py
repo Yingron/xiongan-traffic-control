@@ -903,17 +903,61 @@ async def predict_edge_action(request: EdgePredictRequest) -> dict[str, Any]:
     }
 
 
+# ── WebSocket 告警广播（步骤⑥：REST 云脑分析 → 8765 可视化广播）──
+# 每次 /llm/analyze 成功后，把云脑结果异步广播给 visualization_server(8765)
+# 的全部 WS 客户端（Unity 告警面板）。可视化服务未运行等失败只做节流日志，
+# 不影响 REST 应答；可用环境变量调整目标或整体关闭。
+_ALERT_WS_URL = os.environ.get("LLM_ALERT_WS_URL", "ws://127.0.0.1:8765")
+_ALERT_BROADCAST_ENABLED = os.environ.get("LLM_ALERT_BROADCAST", "1") != "0"
+_last_alert_fail_log_at: float = 0.0
+
+
+async def _broadcast_llm_alert_ws(result: dict[str, Any]) -> None:
+    """把一次云脑分析结果作为告警推送到可视化服务的广播通道。"""
+    global _last_alert_fail_log_at
+    try:
+        import websockets  # 与 visualization_server 共用同一依赖
+
+        payload = {
+            "junction": result.get("junction"),
+            "event": result.get("event"),
+            "event_en": result.get("event_en"),
+            "confidence": result.get("confidence"),
+            "advice": result.get("advice"),
+            "latency_ms": result.get("latency_ms"),
+            "llm_backend": result.get("llm_backend"),
+            "llm_model": result.get("llm_model"),
+        }
+        async with websockets.connect(_ALERT_WS_URL, open_timeout=3.0) as ws:
+            await asyncio.wait_for(
+                ws.send(json.dumps({"type": "broadcast_alert", "payload": payload}, ensure_ascii=False)),
+                timeout=3.0,
+            )
+    except Exception as error:  # 广播失败不改变 REST 语义
+        now = time.monotonic()
+        if now - _last_alert_fail_log_at > 60.0:
+            _last_alert_fail_log_at = now
+            print(f"[ALERT] WebSocket 告警广播不可达 ({_ALERT_WS_URL}): {error}；"
+                  f"REST 应答不受影响（LLM_ALERT_WS_URL 可调整，LLM_ALERT_BROADCAST=0 可关闭）")
+
+
 @app.post(f"{API_PREFIX}/llm/analyze")
 async def analyze_with_llm(request: LLMAnalyzeRequest) -> dict[str, Any]:
     """云端 LLM 事件识别与管控建议（赛道 C 云脑）。
 
     调用 llama.cpp 服务（OpenAI 兼容接口）分析一个路口的交通状态窗口文本，
     返回结构化事件判定；建议 JSON 经合法性校验后由上层决定是否干预信号。
+
+    分析成功后结果会异步经 WebSocket 广播到可视化服务(8765)，
+    所有已连接前端（Unity 告警面板）实时收到 llm_alert（步骤⑥）。
     """
     try:
         result = llm_service.analyze(request.text, junction=request.junction)
     except LLMServiceError as error:
         raise ApiError(error.status_code, error.code, error.message, error.details) from error
+    if _ALERT_BROADCAST_ENABLED and request.junction:
+        # 无 junction 的分析结果无法定位到路口，Unity 面板会忽略，不广播
+        asyncio.create_task(_broadcast_llm_alert_ws(result))
     return {
         "api_version": API_VERSION,
         "state_layout_version": STATE_LAYOUT_VERSION,
